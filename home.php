@@ -306,17 +306,13 @@
 
 			<div class="row">
 				
-				<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+				<div class="col-xl-1 col-lg-1 col-md-12 col-sm-12 col-12">
 					
 					<div class="row">
 
 						<?php
 
 							$a = 0;
-
-							$renkstringi = "#03045e,#023e8a,#0077b6,#0096c7,#00b4d8,#48cae4,#03045e";
-
-							$renkarrayi = explode(",", $renkstringi);
 
 							$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
 
@@ -332,20 +328,13 @@
 
 						?>
 
-									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+									<div class="col-12">
 
 										<a href="kategori.php?id=<?php echo $kategori_id; ?>">
-
-											<img src="<?php echo $resim; ?>" class="img-thumbnail" style="width: 100%; height: auto; padding: 20px;">
-
-											<button class="btn btn-dark btn-sm btn-block" style="font-size: 20px; background-color: black;"><?php echo $kategori_adi; ?></button>
-
-											<!--<div style="border-radius: 50px; background-color: <?php echo $renkarrayi[$a]; ?>; color: white; font-weight: bolder; text-align: center; height: 90%; padding: 30% 20% 30% 20%; font-size: 25px;">
-												
-												<?php echo $kategori_adi; ?>
-
-											</div>-->
-																		
+											<div class="d-flex">
+												<img src="<?php echo $resim; ?>" class="img-thumbnail" style="width: 100%; height: auto;">
+												<button class="btn btn-dark btn-sm btn-block" style="font-size: 20px; background-color: black;"><?php echo $kategori_adi; ?></button>								
+											</div>
 										</a>
 
 										<br/>
@@ -414,7 +403,7 @@
 
 				</div>
 
-				<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+				<div class="col-xl-4 offset-xl-7 col-lg-4 offset-lg-7 col-md-12 col-sm-12 col-12">
 							
 					<div class="div4" style="margin-top: 0px;">
 
@@ -424,65 +413,9 @@
 					
 							<?php
 
-								$icerik = file_get_contents("https://www.tcmb.gov.tr/kurlar/today.xml");
-							    
-							    $baslik = ara("<ForexSelling>", "</ForexSelling>", $icerik);
-							    
-							    $dolarsatis = $baslik[0];
+								$dolarsatis = getDolar();
 
-							    //$string = file_get_contents("https://www.lme.com/api/trading-data/fifteen-minutes-metal-block?datasourceIds=48b1eb21-2c1c-4606-a031-2e0e48804557&datasourceIds=30884874-b778-48ec-bdb2-a0a1d98de5ab&datasourceIds=53f6374a-165d-446a-b9f6-b08bbd2e46a3&datasourceIds=9632206e-db22-407f-892c-ac0fb7735b2e&datasourceIds=61f12b51-04e8-4269-987b-3d4516b20f41&datasourceIds=2908ddcb-e514-4265-9ad9-f0d27561cf52");
-								
-								//$json_a = json_decode($string, true);
-
-								$lme = 0;
-
-								$url = 'https://www.bloomberght.com/emtia/aliminyum';
-								$ch = curl_init($url);
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								$html = curl_exec($ch);
-								curl_close($ch);
-								$dom = new DOMDocument();
-								@$dom->loadHTML($html);
-								$xpath = new DOMXPath($dom);
-								$h1List = $xpath->query('//h1');
-								foreach ($h1List as $index => $item) {
-									if($index == 0){
-										$content = $item->nodeValue;
-										$lmeArray = explode(" ", $content);
-										$number = $lmeArray[72];
-										$number = str_replace(".", "", $number);
-										$number = str_replace(",", ".", $number);
-										$number = floatval($number);
-										$roundedNumber = intval($number);
-										$lme1 = $roundedNumber + 1;
-									}
-								}
-
-								$lme = $lme1;
-
-								// $url = 'https://www.bloomberght.com/emtia/aliminyum3m';
-								// $ch = curl_init($url);
-								// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								// $html = curl_exec($ch);
-								// curl_close($ch);
-								// $dom = new DOMDocument();
-								// @$dom->loadHTML($html);
-								// $xpath = new DOMXPath($dom);
-								// $h1List = $xpath->query('//h1');
-								// foreach ($h1List as $index => $item) {
-								// 	if($index == 0){
-								// 		$content = $item->nodeValue;
-								// 		$lmeArray = explode(" ", $content);
-								// 		$number = $lmeArray[74];
-								// 		$number = str_replace(".", "", $number);
-								// 		$number = str_replace(",", ".", $number);
-								// 		$number = floatval($number);
-								// 		$roundedNumber = intval($number);
-								// 		$lme2 = $roundedNumber + 1;
-								// 	}
-								// }
-
-								// if($lme2 > $lme1){ $lme = $lme2; }else{$lme = $lme1;}
+								$lme = getLME();
 
 							?>
 
