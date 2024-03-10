@@ -1,0 +1,39 @@
+<?php
+
+//TEK ÇEKİM
+
+$query = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$id}'")->fetch(PDO::FETCH_ASSOC);
+
+//TOPLU ÇEKİM
+
+$query = $db->query("SELECT * FROM firmalar ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
+
+if ( $query->rowCount() ){
+
+	foreach( $query as $row ){
+
+		$firmaid = $row['firmaid'];
+
+	}
+
+}
+
+//INSERT
+
+$query = $db->prepare("INSERT INTO siparis SET siparisboy = ?, taslak = ?, siparissaniye = ?");
+
+$insert = $query->execute(array($siparisboy,'1',$su_an));
+
+//UPDATE
+
+$query = $db->prepare("UPDATE urun SET urun_adet = ? WHERE urun_id = ?"); 
+
+$guncelle = $query->execute(array($urun_adet,$urun_id));
+
+//DELETE
+
+$sil = $db->prepare("DELETE FROM tablo WHERE id = ?");
+
+$delete = $sil->execute(array($id));
+
+?>
