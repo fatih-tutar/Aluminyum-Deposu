@@ -208,9 +208,9 @@
 
 				$adetler = $adetler.",".$adet;
 
-				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ? WHERE firma_id = ? AND durum = '0'"); 
+				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ? WHERE firma_id = ? AND durum = ?"); 
 
-				$update = $query->execute(array($urunler, $adetler));
+				$update = $query->execute(array($urunler, $adetler, $firmaId, '0'));
 
 			}else{
 

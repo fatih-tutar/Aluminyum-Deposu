@@ -363,7 +363,9 @@
 						</div>			
 					</div>
 				</div>
-				<div class="col-md-7"></div>
+				<div class="col-md-7">
+
+				</div>
 				<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
 							
 					<div class="div4" style="margin-top: 0px;">
@@ -716,6 +718,33 @@
 
 				</div>
 			</div>	
+
+			<div class="row">
+				<div class="col-md-4 col-12">
+					<?php
+						$yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '0' AND sirket_id = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
+						if($yeniSevkiyatlar->rowCount()){
+							foreach($yeniSevkiyatlar as $sevkiyat){
+								$urunler = guvenlik($sevkiyat['urunler']);
+								$firmaId = guvenlik($sevkiyat['firma_id']);
+								$adetler = guvenlik($sevkiyat['adetler']);
+								$kilolar = guvenlik($sevkiyat['kilolar']);
+								$olusturan = guvenlik($sevkiyat['olusturan']);
+								$hazirlayan = guvenlik($sevkiyat['hazirlayan']);
+								$sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
+								$aciklama = guvenlik($sevkiyat['aciklama']);
+					?>
+								<div>
+									
+								</div>
+					<?php
+							}
+						}
+					?>
+				</div>
+				<div class="col-md-4 col-12"></div>
+				<div class="col-md-4 col-12"></div>
+			</div>
 
 			<div style="margin-top:30px;">
 
