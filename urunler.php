@@ -200,21 +200,21 @@
 
 			$firmaId = $firmaidcek['firmaid'];
 
-			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
-
+			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND sirket_id = '{$uye_sirket}'", PDO::FETCH_ASSOC);
+			
 			if($sevkiyatList->rowCount()){
 
 				$urunler = $urunler.",".$urunId;
 
 				$adetler = $adetler.",".$adet;
 
-				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ? WHERE firma_id = ? AND durum = ?"); 
+				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ? WHERE firma_id = ? AND durum = ? AND sirket_id = ?"); 
 
-				$update = $query->execute(array($urunler, $adetler, $firmaId, '0'));
+				$update = $query->execute(array($urunler, $adetler, $firmaId, '0', $uye_sirket));
 
 			}else{
 
-				$query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, olusturan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket = ?");
+				$query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, olusturan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
 
 				$insert = $query->execute(array($urunId,$firmaId,$adet,'',$uye_id,$sevkTipi,$aciklama,'0','0',$su_an, $uye_sirket));	
 
@@ -1048,61 +1048,65 @@
 
 							<div class="col-md-3 col-12">
 
-								<?php if($sutunteklifbutonuizni == '1' && $uye_teklif_yetkisi == '1'){ ?>
+								<div class="row">
 
-									<div class="col-md-3 col-3">
+									<?php if($sutunteklifbutonuizni == '1' && $uye_teklif_yetkisi == '1'){ ?>
 
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa4('teklifdivi<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Teklif</button></a>
+										<div class="col-md-3 col-3 p-1">
 
-									</div>
+											<a href="#" onclick="return false" onmousedown="javascript:ackapa4('teklifdivi<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Teklif</button></a>
 
-								<?php } ?>
+										</div>
 
-								<?php if($sutunsiparisbutonuizni == '1' && $uye_siparis_yetkisi == '1'){ ?>
+									<?php } ?>
 
-									<div class="col-md-3 col-3">
-										
-										<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');">
+									<?php if($sutunsiparisbutonuizni == '1' && $uye_siparis_yetkisi == '1'){ ?>
 
-											<?php if($terminigecikmismi == 0){ ?>
+										<div class="col-md-3 col-3 p-1">
+											
+											<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');">
 
-												<button class="btn btn-info btn-sm btn-block">
+												<?php if($terminigecikmismi == 0){ ?>
 
-													<b>Sipariş</b></button>
+													<button class="btn btn-info btn-sm btn-block">
 
-											<?php }else{ ?>
+														<b>Sipariş</b></button>
 
-												<button class="btn btn-danger btn-sm btn-block">
+												<?php }else{ ?>
 
-													<b>Sipariş</b></button>
+													<button class="btn btn-danger btn-sm btn-block">
 
-											<?php } ?>
+														<b>Sipariş</b></button>
 
-										</a>
+												<?php } ?>
 
-									</div>
+											</a>
 
-								<?php } ?>
+										</div>
 
-								<?php if($sutunsevkiyatbutonuizni == '1' && $uye_sevkiyat_yetkisi == '1'){ ?>
+									<?php } ?>
 
-									<div class="col-md-3 col-3">
+									<?php if($sutunsevkiyatbutonuizni == '1' && $uye_sevkiyat_yetkisi == '1'){ ?>
 
-										<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('sevkiyatdiv<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>');"><button class="btn btn-dark btn-sm btn-block"><b>Sevkiyat</b></button></a>
+										<div class="col-md-3 col-3 p-1">
 
-									</div>
+											<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('sevkiyatdiv<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>');"><button class="btn btn-dark btn-sm btn-block"><b>Sevkiyat</b></button></a>
 
-								<?php } ?> 
+										</div>
 
-								<?php if($sutunduzenlebutonuizni == '1' && $uye_duzenleme_yetkisi == '1'){ ?>
+									<?php } ?> 
 
-									<div class="col-md-3 col-3">
+									<?php if($sutunduzenlebutonuizni == '1' && $uye_duzenleme_yetkisi == '1'){ ?>
 
-										<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('editdiv<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');"><button class="btn btn-success btn-sm btn-block"><b>Düzenle</b></button></a>
+										<div class="col-md-3 col-3 p-1">
 
-									</div>
+											<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('editdiv<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');"><button class="btn btn-success btn-sm btn-block"><b>Düzenle</b></button></a>
 
-								<?php } ?>  
+										</div>
+
+									<?php } ?>  
+								
+								</div>
 
 							</div>
 
@@ -1594,15 +1598,15 @@
 
 							<?php if (isset($_GET['sevkiyateklendi']) && $_GET['u'] == $urun_id) { ?>
 
-								<div id="sevkiyatdivi<?php echo $urun_id; ?>" class="div2">
+								<div id="sevkiyatdiv<?php echo $urun_id; ?>" class="div2">
 								
 							<?php }else{ ?>
 
-								<div id="sevkiyatdivi<?php echo $urun_id; ?>" style="display: none;" class="div2">
+								<div id="sevkiyatdiv<?php echo $urun_id; ?>" style="display: none;" class="div2">
 
 							<?php } ?>
 
-									<div class="alert alert-warning">
+									<div class="alert alert-dark">
 
 										<h5><b style="line-height: 40px;">Sevkiyat Formu</b></h5>
 									
@@ -1624,7 +1628,7 @@
 
 													<b>Adet</b>
 													
-													<input type="text" class="form-control" name="adet" placeholder="Adeti Giriniz.">
+													<input type="text" class="form-control" name="adet" placeholder="(Boy)">
 
 												</div>
 
@@ -1644,9 +1648,11 @@
 												
 												</div>
 
-												<div class="co-md-5 col-12">
+												<div class="col-md-5 col-12">
 
-													<input type="text" class="form-control" name="aciklama">
+													<b>Açıklama</b>
+
+													<input type="text" class="form-control" name="aciklama" placeholder="Sevkiyat ile ilgili açıklama yazabilirsiniz.">
 
 												</div>
 

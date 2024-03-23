@@ -720,6 +720,7 @@
 									$sutundepoadetizni = $sutunlaripatlat[18];
 									$sutundepouyariizni = $sutunlaripatlat[19];
 									$sutunrafizni = $sutunlaripatlat[20];
+									$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
 
 						?>			
 
