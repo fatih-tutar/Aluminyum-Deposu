@@ -1,0 +1,38 @@
+body{background-color:#e6ecf0;margin:0px;font-family:Trebuchet MS;}
+
+.div2{border-width:2px;border-style:solid;border-color:#d1d1d1;background-color:#F0F0F0;margin:7px;padding:10px;box-shadow:7px 7px 7px 0px;}
+
+.div3{border-width:1px;border-style:solid;border-color:#d1d1d1;background-color:#FFFFFF;margin:7px;padding:10px;box-shadow:7px 7px 7px 7px;}
+
+.div4{border-width:1px;border-style:solid;border-color:#d1d1d1;background-color:#FFFFFF;padding:5px; margin-top:10px; box-shadow:7px 7px 7px 0px;}
+
+.div5{border-width: 1px; border-style: solid; border-color: #17a2b8; padding: 5px; margin: 5px;}
+
+.incecer{border-width: 1px; border-style: solid; border-color: black; margin:0px -10px 0px -10px; padding:0px 10px 0px 10px;}
+
+.cerceve{border-width:1px;border-style:solid;border-color:#d1d1d1;background-color:#FFFFFF;margin-top:10px;}
+
+.cevapcubugu{border-style:solid;border-width: 1px;border-color:#F5F5F5;padding: 1px;}
+
+.div1{border-width:1px;border-style:solid;border-color:#d1d1d1;background-color:#FFFFFF;margin-top:10px;margin-bottom: 10px; padding: 10px;}
+
+.aramasonuclari{border-width: 1px; border-radius: 2px; border-style: solid; padding: 10px; background-color: white;}
+
+.radiusludiv{border-width:1px;border-style:solid;border-color:#d1d1d1;background-color:#FFFFFF;padding:10px; margin-bottom:30px; box-shadow:7px 7px 7px 0px;border-radius: 10px;}
+
+p{line-height: 25px;}
+
+a{text-decoration: none;color:black;}
+
+.gorsel-container {
+    width:100%;
+    overflow:hidden;
+    margin:0;
+    height:100px;
+}
+
+.gorsel-container img {
+    display:block;
+    width:100%;
+    margin:-10px 0;
+}
