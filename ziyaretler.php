@@ -10,7 +10,7 @@
 
 	}else{
 
-        if($uye_tipi != '2'){
+        if($ziyaret_yetkisi != '1'){
 
             header("Location:index.php");
 
@@ -43,8 +43,6 @@
                 
                 $ziyaretid = guvenlik($_POST['ziyaretid']);
                 $il = guvenlik($_POST['il']);
-                $ilce = guvenlik($_POST['ilce']);
-                $iskolu = guvenlik($_POST['iskolu']);
                 $musteriismi = guvenlik($_POST['musteriismi']);
                 $yetkilikisi = guvenlik($_POST['yetkilikisi']);
                 $telefon = guvenlik($_POST['telefon']);
@@ -53,11 +51,10 @@
                 $acikadres = guvenlik($_POST['acikadres']);
                 $ziyaretnotu = guvenlik($_POST['ziyaretnotu']);
 
-                $query = $db->prepare("UPDATE ziyaretler SET il = ?, ilce = ?, iskolu = ?, musteriismi = ?, yetkilikisi = ?, telefon = ?, ziyarettarihi = ?, planlanantarih = ?, acikadres = ?, ziyaretnotu = ?, saniye = ?, silik = ? WHERE id = ?");
-                $insert = $query->execute(array($il,$ilce,$iskolu,$musteriismi,$yetkilikisi,$telefon,$ziyarettarihi,$planlanantarih,$acikadres,$ziyaretnotu,$su_an,'0',$ziyaretid));
+                $query = $db->prepare("UPDATE ziyaretler SET il = ?, musteriismi = ?, yetkilikisi = ?, telefon = ?, ziyarettarihi = ?, planlanantarih = ?, acikadres = ?, ziyaretnotu = ?, saniye = ?, silik = ? WHERE id = ?");
+                $insert = $query->execute(array($il,$musteriismi,$yetkilikisi,$telefon,$ziyarettarihi,$planlanantarih,$acikadres,$ziyaretnotu,$su_an,'0',$ziyaretid));
 
-                header("Location:ziyaretler.php");
-                exit();
+                header("Location:ziyaretler.php"); exit();
 
             }
 
@@ -68,8 +65,45 @@
                 $query = $db->prepare("UPDATE ziyaretler SET silik = ? WHERE id = ?");
                 $insert = $query->execute(array('1',$ziyaretid));
 
-                header("Location:ziyaretler.php");
-                exit();
+                header("Location:ziyaretler.php"); exit();
+
+            }
+
+            if(isset($_POST['iskolukayit'])){
+
+                $iskoluadi = guvenlik($_POST['iskoluadi']);
+
+                $query = $db->prepare("INSERT INTO ziyaret_kategori SET adi = ?, saniye = ?, silik = ?, sirketid = ?");
+
+                $insert = $query->execute(array($iskoluadi,$su_an,'0',$uye_sirket));
+
+                header("Location:ziyaretler.php"); exit();
+
+            }
+
+            if(isset($_POST['iskoluguncelle'])){
+
+                $iskoluid = guvenlik($_POST['iskoluid']);
+
+                $iskoluadi = guvenlik($_POST['iskoluadi']);
+
+                $query = $db->prepare("UPDATE ziyaret_kategori SET adi = ? WHERE id = ?"); 
+
+                $guncelle = $query->execute(array($iskoluadi,$iskoluid));
+
+                header("Location:ziyaretler.php"); exit();
+
+            }
+
+            if(isset($_POST['iskolusil'])){
+
+                $iskoluid = guvenlik($_POST['iskoluid']);
+
+                $query = $db->prepare("UPDATE ziyaret_kategori SET silik = ? WHERE id = ?"); 
+
+                $guncelle = $query->execute(array('1',$iskoluid));
+
+                header("Location:ziyaretler.php"); exit();
 
             }
 
@@ -99,53 +133,158 @@
                 
         <div class="div4" style="padding-top: 20px; text-align: center;">
 
-            <a href="#" onclick="return false" onmousedown="javascript:ackapa('formdivi');"><h5><i class="fas fa-angle-double-down"></i>&nbsp;&nbsp;&nbsp;&nbsp;<b>Müşteri Ziyaret Kayıt Formu</b>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-angle-double-down"></i></h5></a>
+            <div class="row mb-3">
 
-            <div id="formdivi" style="display:none;">
+                <div class="col-4">
+
+                    <a href="ziyaretler.php"><b>Ana Sayfa</b></a>
+
+                </div>
+
+                <div class="col-4">
+                    
+                    <a href="#" onclick="return false" onmousedown="javascript:ackapa2('formdivi','iskoludivi');"><b>Kayıt</b></a>
+                
+                </div>
+                
+                <div class="col-4">
+
+                <a href="#" onclick="return false" onmousedown="javascript:ackapa2('iskoludivi','formdivi');"><b>İş Kolları</b></a>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4 col-12"></div>
+                <div class="col-md-4 col-12">
+                    <div id="formdivi" style="display:none;">
             
-                <form action="" method="POST">
+                        <form action="" method="POST">
 
-                    <div class="row">
+                            <div class="row">
+                                
+                                <div class="col-12 mb-2">
+                                    <select id="Iller" name="il" class="form-control">
+                                        <option value="0">Lütfen Bir İl Seçiniz</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <select id="Ilceler" name="ilce" class="form-control" disabled="disabled">
+                                        <option value="0">Lütfen Önce bir İl seçiniz</option>
+                                    </select>    
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <select name="iskolu" id="iskolu" class="form-control">
+                                        <option value="0">Kategori</option>
+                                        <?php
+                                            $ziyaret_kategori_list = $db->query("SELECT * FROM ziyaret_kategori WHERE silik = '0' ORDER BY adi ASC", PDO::FETCH_ASSOC);
+
+                                            if ( $ziyaret_kategori_list->rowCount() ){
+                                            
+                                                foreach( $ziyaret_kategori_list as $zkl ){
+                                            
+                                                    $iskolulisteid = guvenlik($zkl['id']);
+                                                    $iskolulisteadi = guvenlik($zkl['adi']);
+                                        ?>
+                                                    <option value="<?php echo $iskolulisteid; ?>"><?php echo $iskolulisteadi; ?></option>
+                                        <?php
+                                                    
+                                            
+                                                }
+                                            
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-12 mb-2"><input type="text" name="musteriismi" class="form-control" placeholder="Müşteri İsmi"></div>
+                                <div class="col-12 mb-2"><input type="text" name="yetkilikisi" class="form-control" placeholder="Yetkili Kişi"></div>
+                                <div class="col-12 mb-2"><input type="text" name="telefon" class="form-control" placeholder="Telefon"></div>
+                                <div class="col-12 mb-2"><input type="text" id="tarih1" name="ziyarettarihi" placeholder="Son Ziyaret Tarihi" class="form-control"></div>
+                                <div class="col-12 mb-2"><input type="text" id="tarih2" name="planlanantarih" placeholder="Planlanan Ziyaret Tarihi" class="form-control"></div>
+                                <div class="col-12 mb-2"><textarea name="acikadres" id="" class="form-control" rows="1" placeholder="Açık Adres"></textarea></div>
+                                <div class="col-12 mb-2"><textarea name="ziyaretnotu" id="" class="form-control" rows="1" placeholder="Ziyaret Notu"></textarea></div>
+                                <div class="col-12 mb-2"><button type="submit" class="btn btn-primary btn-block" name="ziyaretkayit">Kaydet</button></div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+
+                    <div id="iskoludivi" style="display:none;">
+                        <form action="" method="POST">
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <input type="text" class="form-control" name="iskoluadi" placeholder="İş kolunu giriniz.">
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary btn-block" name="iskolukayit">Kaydet</button>
+                                </div>           
+                            </div>         
+                        </form>
+
+                        <hr/>
+
+                        <?php
                         
-                        <div class="col-md-2 mb-2">
-                            <select id="Iller" name="il" class="form-control">
-                                <option value="0">Lütfen Bir İl Seçiniz</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 mb-2">
-                            <select id="Ilceler" name="ilce" class="form-control" disabled="disabled">
-                                <option value="0">Lütfen Önce bir İl seçiniz</option>
-                            </select>    
-                        </div>
-                        <div class="col-md-2 mb-2"><input type="text" name="iskolu" class="form-control" placeholder="İş Kolu"></div>
-                        <div class="col-md-2 mb-2"><input type="text" name="musteriismi" class="form-control" placeholder="Müşteri İsmi"></div>
-                        <div class="col-md-2 mb-2"><input type="text" name="yetkilikisi" class="form-control" placeholder="Yetkili Kişi"></div>
-                        <div class="col-md-2 mb-2"><input type="text" name="telefon" class="form-control" placeholder="Telefon"></div>
-                        <div class="col-md-2 mb-2"><input type="text" id="tarih1" name="ziyarettarihi" placeholder="Son Ziyaret Tarihi" class="form-control"></div>
-                        <div class="col-md-2 mb-2"><input type="text" id="tarih2" name="planlanantarih" placeholder="Planlanan Ziyaret Tarihi" class="form-control"></div>
-                        <div class="col-md-4 mb-2"><textarea name="acikadres" id="" class="form-control" rows="1" placeholder="Açık Adres"></textarea></div>
-                        <div class="col-md-4 mb-2"><textarea name="ziyaretnotu" id="" class="form-control" rows="1" placeholder="Ziyaret Notu"></textarea></div>
-                        <div class="col-md-2 mb-2"><button type="submit" class="btn btn-primary btn-block" name="ziyaretkayit">Kaydet</button></div>
+                        $ziyaret_kategori_cek = $db->query("SELECT * FROM ziyaret_kategori WHERE silik = '0' ORDER BY adi ASC", PDO::FETCH_ASSOC);
+
+                        if ( $ziyaret_kategori_cek->rowCount() ){
+
+                            foreach( $ziyaret_kategori_cek as $zkc ){
+
+                                $iskoluid = guvenlik($zkc['id']);
+
+                                $iskoluadi = guvenlik($zkc['adi']);
+
+                        ?>
+
+                                <form action="" method="POST">
+                                    <div class="row mb-1">
+                                        <div class="col-12 mb-2">
+                                            <input type="text" class="form-control" name="iskoluadi" placeholder="İş kolunu giriniz." value="<?php echo $iskoluadi; ?>">
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="hidden" name="iskoluid" value="<?php echo $iskoluid; ?>">
+                                            <button type="submit" class="btn btn-primary btn-block" name="iskoluguncelle">Güncelle</button>
+                                        </div>   
+                                        <div class="col-6">
+                                            <button type="submit" class="btn btn-danger btn-block" name="iskolusil">Sil</button>
+                                        </div>          
+                                    </div>         
+                                </form>        
+
+                        <?php
+
+                            }
+
+                        }
+                        
+                        ?>
 
                     </div>
 
-                </form>
+                </div>
 
             </div>
 
         </div>
 
         <div style="padding-top: 20px; text-align: center;">
-            <div class="d-none d-sm-block" style="border-bottom:1px solid black; position: sticky; top: 70px; z-index:999;">
+            <div class="d-none d-sm-block" style="border-bottom:1px solid black; position: sticky; top: 70px; z-index:3;">
                 <div class="row pt-2" style="background-color: white;">
-                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8;">İl</b></div>
-                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8;">İlçe</b></div>
-                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8;">İş Kolu</b></div>
-                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8;">Müşteri İsmi</b></div>
-                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8;">Yetkili Kişi</b></div>
-                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8;">Telefon</b></div>
-                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8;">Ziyaret Tarihi</b></div>
-                    <div class="col-md-2 mb-1 px-1" style="text-align:left;"><b style="color:#18a2b8;">Planlanan Tarih</b></div>
+                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8; font-size:17px;">İl</b></div>
+                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8; font-size:17px;">İlçe</b></div>
+                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8; font-size:17px;">İş Kolu</b></div>
+                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8; font-size:17px;">Müşteri İsmi</b></div>
+                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8; font-size:17px;">Yetkili Kişi</b></div>
+                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8; font-size:17px;">Telefon</b></div>
+                    <div class="col-md-1 mb-1 px-1"><b style="color:#18a2b8; font-size:17px;">Ziyaret Tarihi</b></div>
+                    <div class="col-md-2 mb-1 px-1" style="text-align:left;"><b style="color:#18a2b8; font-size:17px;">Planlanan Tarih</b></div>
                     <div class="col-md-2 mb-1 px-1" style="background-color:#06589c; border-radius:10px;">
                         <select name="" id="IlFiltre" style="border:none; text-align:center; border:none; background-color:#06589c; color:white;">
                             <option value="0">Şehir Filtreleme</option>
@@ -176,10 +315,17 @@
 
             <?php
             $i = 0;
-            if(isset($seciliSehir)){
-                $query = $db->query("SELECT * FROM ziyaretler WHERE il = '{$seciliSehir}' AND silik = '0' ORDER BY planlanantarih DESC", PDO::FETCH_ASSOC);
+            $seciliIlce = '';
+            if(isset($_GET['ilce'])){ $seciliIlce = guvenlik($_GET['ilce']); }
+            if(isset($_GET['iskolu'])){ $seciliiskolu = guvenlik($_GET['iskolu']); }
+            if(empty($seciliiskolu) === false){
+                $query = $db->query("SELECT * FROM ziyaretler WHERE iskolu = '{$seciliiskolu}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
+            }elseif(empty($seciliIlce) === false){
+                $query = $db->query("SELECT * FROM ziyaretler WHERE ilce = '{$seciliIlce}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
+            }elseif(isset($seciliSehir)){
+                $query = $db->query("SELECT * FROM ziyaretler WHERE il = '{$seciliSehir}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
             }else{
-                $query = $db->query("SELECT * FROM ziyaretler WHERE silik = '0' ORDER BY planlanantarih DESC", PDO::FETCH_ASSOC);
+                $query = $db->query("SELECT * FROM ziyaretler WHERE silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
             }
             if ( $query->rowCount() ){
                 foreach( $query as $row ){
@@ -188,6 +334,8 @@
                     $il = guvenlik($row['il']);
                     $ilce = guvenlik($row['ilce']);
                     $iskolu = guvenlik($row['iskolu']);
+                    $iskoluadicek = $db->query("SELECT * FROM ziyaret_kategori WHERE id = '{$iskolu}'")->fetch(PDO::FETCH_ASSOC);
+                    $iskoluadi = guvenlik($iskoluadicek['adi']);
                     $musteriismi = guvenlik($row['musteriismi']);
                     $yetkilikisi = guvenlik($row['yetkilikisi']);
                     $telefon = guvenlik($row['telefon']);
@@ -201,30 +349,34 @@
                     
                     <form action="" method="POST">
                         <input type="hidden" name="ziyaretid" value="<?php echo $id; ?>">
-                        <div class="row" style="background-color: <?php if($planlanantarih <= $bugunformatlitarih){ echo '#ff5050'; }else{ echo $i%2 == 0 ? 'white' : '#c4c4c4'; } ?>;">
+                        <div class="row" style="background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;">
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>İl</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="il" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php if($planlanantarih <= $bugunformatlitarih){ echo '#ff5050'; }else{ echo $i%2 == 0 ? 'white' : '#c4c4c4'; } ?>;" placeholder="İl" value="<?php echo $il; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="il" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="İl" value="<?php echo $il; ?>"></div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>İlçe</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="ilce" class="form-control p-0" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php if($planlanantarih <= $bugunformatlitarih){ echo '#ff5050'; }else{ echo $i%2 == 0 ? 'white' : '#c4c4c4'; } ?>;" placeholder="İlçe" value="<?php echo $ilce; ?>"></div>
+                            <div class="col-md-1 col-8 px-1 pt-2" style="border-right:1px solid black; text-align:left;">
+                                <a href="http://aluminyumdeposu.com/ziyaretler.php?ilce=<?php echo $ilce; ?>"><?php echo $ilce; ?></a>
+                            </div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>İş Kolu</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="iskolu" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php if($planlanantarih <= $bugunformatlitarih){ echo '#ff5050'; }else{ echo $i%2 == 0 ? 'white' : '#c4c4c4'; } ?>;" placeholder="İş Kolu" value="<?php echo $iskolu; ?>"></div>
+                            <div class="col-md-1 col-8 px-1 pt-1" style="border-right:1px solid black; text-align:left;">
+                                <a href="http://aluminyumdeposu.com/ziyaretler.php?iskolu=<?php echo $iskolu; ?>"><?php echo $iskoluadi; ?></a>
+                            </div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Müşteri İsmi</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="musteriismi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php if($planlanantarih <= $bugunformatlitarih){ echo '#ff5050'; }else{ echo $i%2 == 0 ? 'white' : '#c4c4c4'; } ?>;" placeholder="Müşteri İsmi" value="<?php echo $musteriismi; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="musteriismi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Müşteri İsmi" value="<?php echo $musteriismi; ?>"></div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Yetkili Kişi</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="yetkilikisi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php if($planlanantarih <= $bugunformatlitarih){ echo '#ff5050'; }else{ echo $i%2 == 0 ? 'white' : '#c4c4c4'; } ?>;" placeholder="Yetkili Kişi" value="<?php echo $yetkilikisi; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="yetkilikisi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Yetkili Kişi" value="<?php echo $yetkilikisi; ?>"></div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Telefon</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="telefon" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php if($planlanantarih <= $bugunformatlitarih){ echo '#ff5050'; }else{ echo $i%2 == 0 ? 'white' : '#c4c4c4'; } ?>;" placeholder="Telefon" value="<?php echo $telefon; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="telefon" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Telefon" value="<?php echo $telefon; ?>"></div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Ziyaret Tarihi</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih1<?php echo $id; ?>" name="ziyarettarihi" placeholder="Son Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php if($planlanantarih <= $bugunformatlitarih){ echo '#ff5050'; }else{ echo $i%2 == 0 ? 'white' : '#c4c4c4'; } ?>;" value="<?php echo $ziyarettarihi; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih1<?php echo $id; ?>" name="ziyarettarihi" placeholder="Son Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?php echo $ziyarettarihi; ?>"></div>
                            
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Planlanan Tarih</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih2<?php echo $id; ?>" name="planlanantarih" placeholder="Planlanan Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php if($planlanantarih <= $bugunformatlitarih){ echo '#ff5050'; }else{ echo $i%2 == 0 ? 'white' : '#c4c4c4'; } ?>;" value="<?php echo $planlanantarih; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih2<?php echo $id; ?>" name="planlanantarih" placeholder="Planlanan Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?php echo $planlanantarih; ?>"></div>
                             
                             <div class="col-md-1 col-3 px-1 py-2">
                                 <button class="btn btn-success btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3v2('adresdivi<?php echo $id; ?>','notdivi<?php echo $id; ?>');">Adres</button>

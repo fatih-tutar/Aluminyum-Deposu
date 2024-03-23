@@ -10,6 +10,8 @@
 
 	}else{
 
+	if($uye_tipi != '3'){
+
 		if (isset($_POST['kaydet'])) {
 			
 			$allow = array('pdf');
@@ -26,7 +28,7 @@
 
 		}
 
-	}
+	}}
 
 ?>
 

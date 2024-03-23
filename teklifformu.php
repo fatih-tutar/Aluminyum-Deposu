@@ -100,8 +100,8 @@
 			</div>
 
 			<div class="col-md-5"><br/>
-				
-				Tarık Türkyılmaz / tarik@osmanlialuminyum.com
+
+				<?php echo $uye_adi." / ".$uye_mail; ?>
 
 			</div>
 
@@ -213,7 +213,7 @@
 			
 			<div class="col-12" style="text-align: right; padding-right: 50px; margin: 10px;">
 				
-				<b style="font-size: 20px;"><?php echo "Toplam Tutar : ".$toplamtutar." + KDV"; ?></b>
+				<b style="font-size: 20px;"><?php echo "Toplam Tutar : ".(number_format($toplamtutar, 0, ',', '.'))." + KDV"; ?></b>
 
 			</div>
 
@@ -225,7 +225,7 @@
 
 			<div class="col-3">ÖDEME BİLGİLERİ :  NAKİT</div>
 
-			<div class="col-4">GARANTİ BANKASI ÇAĞLANAYAN ŞUBESİ</div>
+			<div class="col-4">GARANTİ BANKASI ÇAĞLAYAN ŞUBESİ</div>
 
 			<div class="col-5">HESAP ADI : OSMANLI ALÜMİNYUM SAN TİC LTD ŞTİ TL HESABI</div>
 
@@ -247,8 +247,8 @@
 			
 			<div class="col-12">
 				
-				   TESLİMAT  BİLGİLERİ : ONAY SONRASI 1  İŞ GÜNÜ TESLİM      (  TEKLİF GEÇERLİLİK SÜRESİ 5 İŞ GÜNÜDÜR  )
-
+				   <input type="text" class="form-control" name="" style="border-style: none;" value="TESLİMAT  BİLGİLERİ : ONAY SONRASI 1  İŞ GÜNÜ TESLİM      (  TEKLİF GEÇERLİLİK SÜRESİ 5 İŞ GÜNÜDÜR  )">	
+				   
 			</div>
 
 		</div>
@@ -263,7 +263,7 @@
 					
 					*   Ürün mt/gr biriminde yaklaşık gramaj alınmış olup, kg' lar +/- tolerans dâhilindedir.<br/>
 					
-					*   Yeni düzenlenen kanuna göre 1.000 TL üzeri alımlarımızda tevkifatlı fatura kesilecektir.<br/>
+					*   Yeni düzenlenen kanuna göre 2.000 TL üzeri alımlarımızda tevkifatlı fatura kesilecektir.<br/>
 					
 					*   özel  siparişlerinizde  % 20 ön ödeme alınır ( boyalı ürünlerde )<br/>
 					

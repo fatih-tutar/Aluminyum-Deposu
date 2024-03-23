@@ -151,13 +151,19 @@
 
 			<div class="col-md-2"><b>Boy</b></div>
 
-			<div class="col-md-2"><b>Miktar Adet</b></div>			
+			<div class="col-md-2"><b>Miktar Adet</b></div>	
+
+			<div class="col-md-2"><b>Kilo</b></div>	
+
+			<div class="col-md-2"><b>Kategori</b></div>			
 
 		</div>
 
 		<?php
 
 			$a = 0;
+
+			$toplamkilo = 0;
 
 			foreach ($siparisleripatlat as $key => $value) {
 				
@@ -181,19 +187,25 @@
 
 				$urun_id = $siparisbilgileri['urun_id'];
 
-				$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
+				$urunbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
 
-				$kategori_bir = $katbilcek['kategori_bir'];
+				$kategori_bir = $urunbilcek['kategori_bir'];	
+
+				$kategori_iki = $urunbilcek['kategori_iki'];
+
+				$urun_birimkg = $urunbilcek['urun_birimkg'];
 
 				$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
 
 				$kategori_bir_adi = $katadcek['kategori_adi'];
 
-				$kategori_iki = $katbilcek['kategori_iki'];
-
 				$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}'")->fetch(PDO::FETCH_ASSOC);
 
 				$kategori_iki_adi = $katadcek['kategori_adi'];
+
+				$kilo = $urun_siparis_aded * $urun_birimkg;
+
+				$toplamkilo += $kilo;
 
 			?>
 
@@ -205,11 +217,13 @@
 
 					<div class="col-md-3"><?php echo $urun_adi." ".$kategori_iki_adi; ?></div>
 
-					<div class="col-2"><?php echo $siparisboy." boyunda "; ?></div>
+					<div class="col-md-2"><?php echo $siparisboy." boyunda "; ?></div>
 
-					<div class="col-2"><?php echo $urun_siparis_aded." adet "; ?></div>
+					<div class="col-md-2"><?php echo $urun_siparis_aded." adet "; ?></div>
 
-					<div class="col-2"><?php echo $kategori_bir_adi; ?></div>
+					<div class="col-md-2"><?php echo $kilo." KG"; ?></div>
+
+					<div class="col-md-2"><?php echo $kategori_bir_adi; ?></div>
 
 				</div>
 
@@ -218,6 +232,16 @@
 			}
 
 		?>
+
+		<hr/>
+
+		<div class="row" style="padding: 20px;">
+			
+			<div class="col-md-8" style="text-align:right; font-size:18px;"><b>Toplam Kilo : </b></div>
+
+			<div class="col-md-4" style="font-size:18px;"><b><?php echo $toplamkilo." KG"; ?></b></div>			
+
+		</div>
 
 		<div class="row" style="padding: 20px;">
 			

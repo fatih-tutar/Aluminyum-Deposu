@@ -18,6 +18,8 @@ if($girdi == '0'){
 
     }else{
 
+    if($uye_tipi != '3'){
+
         if (isset($_POST['kalibiekle'])) {
             
             $musteriadi = guvenlik($_POST['musteriadi']);
@@ -84,7 +86,7 @@ if($girdi == '0'){
 
         }
 
-    }
+    }}
 
 }
 

@@ -16,6 +16,8 @@
 
 	$ilgilikisi = $query['ilgilikisi'];
 
+if($uye_tipi != '3'){
+
 	if (isset($_POST['formkaydet'])) {
 
 		$siparislistesi = guvenlik($_POST['siparislistesi']);
@@ -39,6 +41,8 @@
 		exit();
 
 	}
+
+}
 
 ?>
 

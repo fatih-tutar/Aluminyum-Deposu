@@ -75,15 +75,17 @@
 
 			<div class="row">
 
-				<div class="col-xl-4 col-lg-4 col-md-3 col-sm-2 col-1"></div>
+				<div class="col-xl-4 col-lg-4 col-md-3 col-sm-2 col-12"></div>
 				
-				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-10">
+				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-12">
 
-					<div class="div2" style="padding: 40px 40px 25px 40px;">
+					<div class="div2">
 
 						<?php echo $hata; ?>
 					
 						<form action="" method="POST">
+
+							<h2 style="text-align:center;">Kullanıcı Girişi</h2>
 
 							<div class="input-group mb-3">
 								
@@ -99,7 +101,7 @@
 
 							<div class="input-group mb-3">
 								
-								<button type="submit" class="btn btn-danger btn-block" name="giris">Giriş</button>
+								<button type="submit" class="btn btn-danger btn-block" name="giris">Giriş Yap</button>
 
 							</div>
 						
@@ -109,7 +111,7 @@
 
 				</div>
 
-				<div class="col-xl-4 col-lg-4 col-md-3 col-sm-2 col-1"></div>
+				<div class="col-xl-4 col-lg-4 col-md-3 col-sm-2 col-12"></div>
 
 			</div>
 

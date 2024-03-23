@@ -20,11 +20,15 @@
 
 		}
 
+	if($uye_tipi != '3'){
+
 		if (isset($_POST['bilgilerimiguncelle'])) {
 			
 			$uye_adi = guvenlik($_POST['uye_adi']);
 
 			$uye_mail = guvenlik($_POST['uye_mail']);
+
+			$uye_tel = guvenlik($_POST['uye_tel']);
 
 			if (empty($uye_adi) === true) {
 				
@@ -34,11 +38,15 @@
 				
 				$hata = '<br/><div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
 
+			}elseif (empty($uye_tel) === true) {
+				
+				$hata = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
+
 			}else{
 
-				$query = $db->prepare("UPDATE uyeler SET uye_adi = ?, uye_mail = ? WHERE uye_id = ?"); 
+				$query = $db->prepare("UPDATE uyeler SET uye_adi = ?, uye_mail = ?, uye_tel = ? WHERE uye_id = ?"); 
 
-				$guncelle = $query->execute(array($uye_adi,$uye_mail,$uye_id));
+				$guncelle = $query->execute(array($uye_adi,$uye_mail,$uye_tel,$uye_id));
 
 				header("Location:profil.php?id=".$uye_id."&guncellendi");
 
@@ -90,7 +98,7 @@
 
 		}
 
-	}
+	}}
 
 ?>
 
@@ -124,11 +132,13 @@
     	
 			    	<form action="" method="POST">
 			    		
-			    		<input type="text" class="form-control" style="margin-bottom: 10px;" name="uye_adi" value="<?php echo $uye_adi; ?>">
+			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="Kullanıcı Adı" name="uye_adi" value="<?php echo $uye_adi; ?>">
 
-			    		<input type="text" class="form-control" style="margin-bottom: 10px;" name="uye_mail" value="<?php echo $uye_mail; ?>">
+			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="E-posta Adresi" name="uye_mail" value="<?php echo $uye_mail; ?>">
 
-			    		<button type="submit" class="btn btn-primary btn-block" name="bilgilerimiguncelle">Güncelle</button>
+			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="Telefon Numarası" name="uye_tel" value="<?php echo $uye_tel; ?>">
+
+			    		<button type="submit" class="btn btn-primary btn-block" style="background-color: black;" name="bilgilerimiguncelle">Güncelle</button>
 
 			    	</form>
 
@@ -150,7 +160,7 @@
 
 			    		<input type="password" class="form-control" style="margin-bottom: 10px;" name="sifre_tekrar" placeholder="Yeni şifreyi tekrar ediniz.">
 
-			    		<button type="submit" class="btn btn-primary btn-block" name="sifreyidegistir">Bilgileri Güncelle</button>
+			    		<button type="submit" class="btn btn-primary btn-block" style="background-color: black;" name="sifreyidegistir">Bilgileri Güncelle</button>
 
 			    	</form>
 

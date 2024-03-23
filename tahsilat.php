@@ -18,6 +18,8 @@
 
 		}
 
+	if($uye_tipi != '3'){
+
 		if (isset($_POST['firmabilgileriguncelle'])) {
 			
 			$firmaid = guvenlik($_POST['firmaid']);
@@ -108,7 +110,7 @@
 
 		}
 
-	}
+	}}
 
 ?>
 

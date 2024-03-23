@@ -294,8 +294,8 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-2">
-					<div id="accordion">
+				<div class="col-md-2 col-12">
+					<div id="accordion" class="mb-3">
 					<?php
 						$i = 0;
 						$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
@@ -309,10 +309,10 @@
 								<div class="card">
 									<div style="background-color: white; font-size:13px;" data-toggle="collapse" data-target="#collapse<?= $i; ?>" aria-expanded="true" aria-controls="collapse<?= $i; ?>">
 										<div class="row pl-1">
-											<div class="col-md-3">
+											<div class="col-md-3 col-2">
 												<img src="<?= $resim ?>" alt="<?= $kategori_adi ?>" width="40" height="40">
 											</div>
-											<div class="col-md-9 d-flex align-items-center">
+											<div class="col-md-9 col-10 d-flex align-items-center">
 												<?php echo $kategori_adi; ?>
 											</div>
 										</div>							
@@ -328,10 +328,10 @@
 							?>		
 										<a href="urunler.php?id=<?php echo $alt_kategori_id; ?>">
 											<div class="row pl-1">
-												<div class="col-md-3">
+												<div class="col-md-3 col-2 offset-md-0 offset-1">
 													<img src="<?= $alt_kategori_resim ?>" alt="<?= $alt_kategori_adi ?>" width="35" height="35">
 												</div>
-												<div class="col-md-9 d-flex align-items-center">
+												<div class="col-md-9 col-9 d-flex align-items-center">
 													<?php echo $alt_kategori_adi; ?>
 												</div>
 											</div>		
@@ -345,122 +345,26 @@
 					<?php
 							}
 						}
-					?>					
+					?>		
+						<div class="card p-1">
+							<a href="tekliflistesi.php" target="_blank" style="font-size:13px;">
+								ÜRÜN SORGULAMA LİSTESİ
+							</a>
+						</div>	
+						<div class="card p-1">
+							<a href="kaliplistesi.php" target="_blank" style="font-size:13px;">
+								KALIP SORGULAMA EKRANI
+							</a>
+						</div>	
+						<div class="card p-1">
+							<a href="fiyatlistesi.php" target="_blank" style="font-size:13px;">
+								AYDINLATMA FİYAT LİSTESİ
+							</a>
+						</div>			
 					</div>
 				</div>
-			</div>
-			<br/><br/><br/><br/><br/><br/><br/>
-			<div class="row">
-				
-				<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
-					
-					<div class="row">
-
-						<?php
-
-							$a = 0;
-
-							$renkstringi = "#03045e,#023e8a,#0077b6,#0096c7,#00b4d8,#48cae4,#03045e";
-
-							$renkarrayi = explode(",", $renkstringi);
-
-							$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
-
-							if ( $query->rowCount() ){
-
-								foreach( $query as $row ){
-
-									$kategori_id = $row['kategori_id'];
-
-									$kategori_adi = $row['kategori_adi'];
-
-									$resim = "img/kategoriler/".$row['resim'];
-
-						?>
-
-									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
-
-										<a href="kategori.php?id=<?php echo $kategori_id; ?>">
-
-											<img src="<?php echo $resim; ?>" class="img-thumbnail" style="width: 100%; height: auto; padding: 20px;">
-
-											<button class="btn btn-dark btn-sm btn-block" style="font-size: 20px; background-color: black;"><?php echo $kategori_adi; ?></button>
-
-											<!--<div style="border-radius: 50px; background-color: <?php echo $renkarrayi[$a]; ?>; color: white; font-weight: bolder; text-align: center; height: 90%; padding: 30% 20% 30% 20%; font-size: 25px;">
-												
-												<?php echo $kategori_adi; ?>
-
-											</div>-->
-																		
-										</a>
-
-										<br/>
-
-									</div>
-
-						<?php
-
-									$a++;
-
-								}
-
-							}
-
-						?>
-
-					</div>
-
-					<hr style="margin:30px;" />
-
-					<div class="row" style="padding-bottom:1rem;">
-
-						<div class="col-md-4 col-4" style="text-align:center; padding: 0px 1px 0px 1px;">
-
-							<a href="tekliflistesi.php" target="_blank">
-
-								<button class="btn btn-primary" style="border-radius: 50px; width: 100%; height: 100px; color: white; font-weight: bolder; text-align: center; font-size: 15px;">
-									
-									ÜRÜN SORGULAMA LİSTESİ
-
-								</button>
-															
-							</a>
-
-						</div>
-
-						<div class="col-md-4 col-4" style="text-align:center; padding: 0px 1px 0px 1px;">
-
-							<a href="kaliplistesi.php" target="_blank">
-
-								<button class="btn btn-warning" style="border-radius: 50px; width: 100%; height: 100px; color: white; font-weight: bolder; text-align: center; font-size: 15px;">
-									
-									KALIP SORGULAMA EKRANI
-
-								</button>
-															
-							</a>
-
-						</div>
-
-						<div class="col-md-4 col-4" style="text-align:center; padding: 0px 1px 0px 1px;">
-							
-							<a href="fiyatlistesi.php" target="_blank">
-
-								<button class="btn btn-success" style="border-radius: 50px; width: 100%; height: 100px; color: white; font-weight: bolder; text-align: center; font-size: 15px;">
-									
-									AYDINLATMA FİYAT LİSTESİ
-
-								</button>
-															
-							</a>
-
-						</div>
-
-					</div>
-
-				</div>
-
-				<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+				<div class="col-md-7"></div>
+				<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
 							
 					<div class="div4" style="margin-top: 0px;">
 
@@ -475,6 +379,8 @@
 							    $baslik = ara("<ForexSelling>", "</ForexSelling>", $icerik);
 							    
 							    $dolarsatis = $baslik[0];
+
+								$formatted_dolar = number_format($dolarsatis, 2, '.', '');
 
 							    //$string = file_get_contents("https://www.lme.com/api/trading-data/fifteen-minutes-metal-block?datasourceIds=48b1eb21-2c1c-4606-a031-2e0e48804557&datasourceIds=30884874-b778-48ec-bdb2-a0a1d98de5ab&datasourceIds=53f6374a-165d-446a-b9f6-b08bbd2e46a3&datasourceIds=9632206e-db22-407f-892c-ac0fb7735b2e&datasourceIds=61f12b51-04e8-4269-987b-3d4516b20f41&datasourceIds=2908ddcb-e514-4265-9ad9-f0d27561cf52");
 								
@@ -534,9 +440,9 @@
 
 							<div class="row">
 								
-								<div class="col-xl-6 col-lg-12"><?php echo "<b>Dolar : </b>".$dolarsatis." TL"; ?></div>
+								<div class="col-xl-6 col-lg-12 col-6"><?php echo "<b>Dolar : </b>".$formatted_dolar." TL"; ?></div>
 
-								<div class="col-xl-6 col-lg-12"><?php echo "<b>LME : </b>".$lme." $"; ?></div>
+								<div class="col-xl-6 col-lg-12 col-6"><?php echo "<b>LME : </b>".$lme." $"; ?></div>
 
 							</div>
 
@@ -578,11 +484,11 @@
 
 						</div>
 
-				<?php
+					<?php
 
-					if (isset($_GET['fiyat']) === true && empty($_GET['fiyat']) === false) {
-						
-				?>
+						if (isset($_GET['fiyat']) === true && empty($_GET['fiyat']) === false) {
+							
+					?>
 
 						<div class="div5">
 							
@@ -592,11 +498,11 @@
 
 						</div>
 
-				<?php
+					<?php
 
-					}
+						}
 
-				?>
+					?>
 
 						<h5 style="text-align: center;"><b>ANLIK FİYATLAMA</b></h5>
 
@@ -809,8 +715,7 @@
 					</div>
 
 				</div>
-
-			</div>		
+			</div>	
 
 			<div style="margin-top:30px;">
 

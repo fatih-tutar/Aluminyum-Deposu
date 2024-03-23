@@ -18,6 +18,8 @@
 
 		}
 
+	if($uye_tipi != '3'){
+
 		if (isset($_POST['fabrikabilgileriguncelle'])) {
 			
 			$fabrika_id = guvenlik($_POST['fabrika_id']);
@@ -28,11 +30,13 @@
 
 			$fabrikaeposta = guvenlik($_POST['fabrikaeposta']);
 
+			$fabrikaiscilik = guvenlik($_POST['fabrikaiscilik']);
+
 			$fabrikaadres = guvenlik($_POST['fabrikaadres']);
 
-			$query = $db->prepare("UPDATE fabrikalar SET fabrika_adi = ?, fabrikatel = ?, fabrikaeposta = ?, fabrikaadres = ? WHERE fabrika_id = ?"); 
+			$query = $db->prepare("UPDATE fabrikalar SET fabrika_adi = ?, fabrikatel = ?, fabrikaeposta = ?, fabrikaiscilik = ?, fabrikaadres = ? WHERE fabrika_id = ?"); 
 
-			$guncelle = $query->execute(array($fabrika_adi, $fabrikatel, $fabrikaeposta, $fabrikaadres, $fabrika_id));
+			$guncelle = $query->execute(array($fabrika_adi, $fabrikatel, $fabrikaeposta, $fabrikaiscilik, $fabrikaadres, $fabrika_id));
 
 			$siraid = guvenlik($_POST['siraid']);
 
@@ -228,7 +232,17 @@
 
 		}
 
-	}
+		if(isset($_POST['siparisleregit'])){
+
+			$fabrikaid = guvenlik($_POST['fabrikaid']);
+
+			header("Location:fabrikasiparis.php?id=".$fabrikaid);
+
+			exit();
+
+		}
+
+	}}
 
 ?>
 
@@ -356,13 +370,15 @@
 
 							$id++;
 
-							$fabrika_id = $row['fabrika_id'];
+							$fabrika_id = guvenlik($row['fabrika_id']);
 
-							$fabrika_adi = $row['fabrika_adi'];
+							$fabrika_adi = guvenlik($row['fabrika_adi']);
 
-							$fabrikatel = $row['fabrikatel'];
+							$fabrikatel = guvenlik($row['fabrikatel']);
 
-							$fabrikaeposta = $row['fabrikaeposta'];
+							$fabrikaeposta = guvenlik($row['fabrikaeposta']);
+
+							$fabrikaiscilik = guvenlik($row['fabrikaiscilik']);
 
 							$fabrikaadres = guvenlik($row['fabrikaadres']);
 
@@ -374,69 +390,65 @@
 
 							$fabrikaalacaktarihv2 = date("d-m-Y",$fabrikaalacaktarih);
 
-							if($fabrikaalacaktarih == 0){
-
-									echo '<form action="" method="POST"><div class="row" style="margin:0px; padding:5px;">';							
-
-							}elseif($fabrikaalacaktarih > $bugununsaniyesi){
-
-								echo '<form action="" method="POST"><div class="row btn-primary" style="margin:0px; padding:5px;">';
-
-							}else{
-
-								echo '<form action="" method="POST"><div class="row btn-danger" style="margin:0px; padding:5px;">';
-
-							}
-
 				?>
 
-									<div class="col-md-3 col-12" style="margin-top: 7px;">
-										
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa('siparislerdivi<?php echo $fabrika_id; ?>');">
+							<div class="row">
 
-											<b><?php echo $fabrika_adi;?></b>
-												
-										</a>
+								<div class="col-md-3 col-12" style="margin-top: 7px;">
+									
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('siparislerdivi<?php echo $fabrika_id; ?>');">
 
-									</div>
-
-									<div class="col-md-2" style="margin-top: 7px;">
-
-										<b><?php echo $fabrikatel; ?></b>									
-
-									</div>
-
-									<div class="col-md-2" style="margin-top: 7px;">
-										
-										<div class="row">
+										<b><?php echo $fabrika_adi;?></b>
 											
-											<div class="col-md-9">
+									</a>
+
+								</div>
+
+								<div class="col-md-2" style="margin-top: 7px;">
+
+									<b><?php echo $fabrikatel; ?></b>									
+
+								</div>
+
+								<div class="col-md-3" style="margin-top: 7px;">
+
+									<?php
+
+									if($fabrikaalacaktarih == 0){
+
+										echo '<form action="" method="POST"><div class="row" style="margin:0px; padding:5px;">';							
+
+									}elseif($fabrikaalacaktarih > $bugununsaniyesi){
+
+										echo '<form action="" method="POST"><div class="row btn-primary" style="margin:0px; padding:5px;">';
+
+									}else{
+
+										echo '<form action="" method="POST"><div class="row btn-danger" style="margin:0px; padding:5px;">';
+
+									}
+
+									?>
+											
+											<div class="col-md-4">
 												
 												<?php if($fabrikaalacak == 0){?><input type="text" name="tutar" class="form-control" placeholder="Tutar giriniz." style="margin-bottom: 5px;"><?php }else{ ?><input type="text" name="tutar" class="form-control" value="<?php echo $fabrikaalacak; ?>" style="margin-bottom: 5px;"><?php } ?>
 
 											</div>
 
-											<div class="col-md-3">
+											<div class="col-md-2">
 												
 												<button class="btn btn-dark btn-sm" type="submit" name="kaydet"><i class="fas fa-save"></i></button>
 
 											</div>
 
-										</div>
-
-									</div>	
-
-									<div class="col-md-2" style="margin-top: 7px;">
-										
-										<div class="row">
-
-											<div class="col-md-9">
+											<div class="col-md-4">
 												
 												<?php if($fabrikaalacaktarih == 0){?><input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo "Tarih seçiniz."; ?>" class="form-control form-control-sm"><?php }else{ ?><input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo $fabrikaalacaktarihv2; ?>" class="form-control form-control-sm"><?php } ?>
 
 											</div>
 
-											<div class="col-md-3">
+											<div class="col-md-2">
 
 												<input type="hidden" id="tarih-db" name="vefat_tarih">
 
@@ -450,32 +462,38 @@
 
 										</div>
 
-									</div>	
+									</form>	
 
-									<div class="col-md-1 col-6" style="margin-top: 7px;">
+								</div>	
 
-										<button class="btn btn-success btn-sm btn-block" type="submit" name="tahsilattamamlandi">Temizle</button>																		
-										
-									</div>		
+								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<div class="col-md-1 col-6" style="margin-top: 7px;">
-
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?php echo $fabrika_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Düzenle</button></a>
-										
-									</div>
-
-									<div class="col-md-1 col-6" style="margin-top: 7px;">
-
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?php echo $fabrika_id; ?>');"><button class="btn btn-secondary btn-sm btn-block">Sil</button></a>
-										
-									</div>
-
+									<button class="btn btn-success btn-sm btn-block" type="submit" name="tahsilattamamlandi">Temizle</button>																		
+									
 								</div>
 
-							</form>
+								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-							<div id="silmedivi<?php echo $fabrika_id; ?>" class="alert alert-danger" style="display: none; text-align: right; margin-top: 15px;">
-										
+									<a href="fabrikasiparis.php?id=<?php echo $fabrika_id; ?>"><button class="btn btn-info btn-sm btn-block">Siparişler</button></a>												
+									
+								</div>		
+
+								<div class="col-md-1 col-6" style="margin-top: 7px;">
+
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?php echo $fabrika_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Düzenle</button></a>
+									
+								</div>
+
+								<div class="col-md-1 col-6" style="margin-top: 7px;">
+
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?php echo $fabrika_id; ?>');"><button class="btn btn-secondary btn-sm btn-block">Sil</button></a>
+									
+								</div>
+
+							</div>
+
+							<div id="silmedivi<?php echo $fabrika_id; ?>" class="alert alert-danger" style="display: none; text-align: right; margin-top: 15px;">												
+
 								<form action="" method="POST">
 
 									<input type="hidden" name="fabrika_id" value="<?php echo $fabrika_id; ?>">
@@ -547,6 +565,18 @@
 										</div>
 
 										<div class="row">
+
+											<div class="col-md-4 col-12" style="margin-top: 5px;">
+
+												<b>İşçilik</b><br/>
+												
+												<input type="text" name="fabrikaiscilik" class="form-control" placeholder="Sadece sayı giriniz." value="<?php echo $fabrikaiscilik; ?>">
+
+											</div>
+
+										</div>
+
+										<div class="row">
 											
 											<div class="col-md-12 col-12" style="margin-top: 5px;">
 
@@ -576,7 +606,7 @@
 
 							</div>
 
-							<div id="siparislerdivi<?php echo $fabrika_id; ?>" style="display: none;" class="div2">
+							<div id="siparislerdivi<?php echo $fabrika_id; ?>" class="div2" style="display: none; margin: 0px -20px 0px -20px;">
 
 								<div class="alert alert-primary">
 
@@ -700,7 +730,7 @@
 
 									<?php
 
-									$formcek = $db->query("SELECT * FROM siparisformlari WHERE fabrikaid = '{$fabrika_id}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
+									$formcek = $db->query("SELECT * FROM siparisformlari WHERE fabrikaid = '{$fabrika_id}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC LIMIT 10", PDO::FETCH_ASSOC);
 
 									if ( $formcek->rowCount() ){
 
@@ -718,11 +748,13 @@
 
 									?>
 
-											<div class="row">
+											<div class="row" style="margin-bottom: 3px;">
 												
-												<div class="col-6"><a onclick="return false" onmousedown="javascript:ackapa('formdivi<?php echo $formid; ?>');"><?php echo $formtarih." Tarihli Sipariş Formundaki Ürünler<br/>"; ?></a></div>
+												<div class="col-10"><a onclick="return false" onmousedown="javascript:ackapa('formdivi<?php echo $formid; ?>');"><?php echo $formtarih." Tarihli Sipariş Formundaki Ürünler<br/>"; ?></a></div>
 
-												<div class="col-6" style="text-align: right;"><form action="" method="POST"><input type="hidden" name="formid" value="<?php echo $formid; ?>"><input type="hidden" name="siparisler" value="<?php echo $siparisler; ?>"><input type="hidden" name="siraid" value="<?php echo $id; ?>"><button type="submit" name="siparisformunusil" class="btn btn-danger">Bu sipariş formunu sil</button></form></div>
+												<div class="col-1" style="text-align: right;"><a href="siparisform.php?id=<?php echo $formid; ?>" target="_blank"><button class="btn btn-warning btn-sm btn-block">Göster</button></a></div>
+
+												<div class="col-1" style="text-align: right;"><form action="" method="POST"><input type="hidden" name="formid" value="<?php echo $formid; ?>"><input type="hidden" name="siparisler" value="<?php echo $siparisler; ?>"><input type="hidden" name="siraid" value="<?php echo $id; ?>"><button type="submit" name="siparisformunusil" class="btn btn-danger btn-sm btn-block">Sil</button></form></div>
 
 											</div>
 
@@ -856,11 +888,11 @@
 
 													}
 
-												?>
-
-												<a href="siparisform.php?id=<?php echo $formid; ?>" target="_blank"><button class="btn btn-warning" style="margin-top: 10px;">Sipariş formuna gitmek için tıklayınız.</button></a>
+												?>												
 
 											<?php }else{ echo "Bu sipariş formunda ürün bulunmamaktadır."; } ?>
+
+												<hr/>
 
 											</div>
 

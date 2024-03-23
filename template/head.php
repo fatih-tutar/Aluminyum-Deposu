@@ -14,9 +14,7 @@
 
 <link href="fontawesome/css/all.css" rel="stylesheet">
 
-<link rel="stylesheet" type="text/css" href="css/main.css">
-
-<link rel="icon" type="image/png" href="icon/ihlasicon.png" />
+<link rel="stylesheet" type="text/css" href="css/style.css">
 
 <link rel="stylesheet" type="text/css" href="css/datepicker.css">
 

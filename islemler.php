@@ -52,7 +52,7 @@
 
 	  			<div class="col-2"><b>Ürün</b></div>
 
-				<div class="col-2"><b>Alt K.</b></div>
+				<div class="col-1"><b>Alt K.</b></div>
 
 				<div class="col-2"><b>Üst K.</b></div>  			
 
@@ -61,6 +61,8 @@
 	  			<div class="col-1"><b>Yeni</b></div>
 
 	  			<div class="col-1"><b>Fark</b></div>
+
+				<div class="col-1"><b>Yer</b></div>
 
 	  			<div class="col-2"><b>Tarih</b></div>
 
@@ -72,11 +74,11 @@
 
   		if (empty($islemurunid) === false) {
 
-  			$query = $db->query("SELECT * FROM islemler WHERE urunid = '{$islemurunid}' AND sirketid = '{$uye_sirket}' ORDER BY saniye DESC LIMIT 100", PDO::FETCH_ASSOC);
+  			$query = $db->query("SELECT * FROM islemler WHERE urunid = '{$islemurunid}' AND sirketid = '{$uye_sirket}' ORDER BY saniye DESC LIMIT 300", PDO::FETCH_ASSOC);
 
   		}else{
 
-  			$query = $db->query("SELECT * FROM islemler WHERE sirketid = '{$uye_sirket}' ORDER BY saniye DESC LIMIT 100", PDO::FETCH_ASSOC);
+  			$query = $db->query("SELECT * FROM islemler WHERE sirketid = '{$uye_sirket}' ORDER BY saniye DESC LIMIT 300", PDO::FETCH_ASSOC);
 
   		}	  	
 
@@ -111,6 +113,10 @@
 				$eskiadet = $row['eskiadet'];
 
 				$yeniadet = $row['yeniadet'];
+
+				$islem_tipi = $row['islem_tipi'];
+
+				$islem_yeri = $islem_tipi == 0 ? '<button class="btn btn-warning btn-sm">Mağaza</button>' : '<button class="btn btn-info btn-sm">Depo</button>';
 
 				$saniye = $row['saniye'];
 
@@ -150,7 +156,7 @@
 
 		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Alt K.</b></div>
 
-		  			<div class="col-md-2 col-8"><?php echo $kategori_iki_adi; ?></div>
+		  			<div class="col-md-1 col-8"><?php echo $kategori_iki_adi; ?></div>
 
 		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Üst K.</b></div>
 
@@ -168,7 +174,11 @@
 
 		  			<div class="col-md-1 col-8"><?php if($islem == 0){?><button class="btn btn-danger btn-sm"><?php }else{ ?><button class="btn btn-success btn-sm"><?php } ?><?php echo $fark; ?></button></div>
 
-		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Tarih</b></div>
+		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Yer</b></div>
+
+		  			<div class="col-md-1 col-8"><?php echo $islem_yeri; ?></div>
+					
+					<div class="col-4 d-block d-sm-none"><b style="color: red;">Tarih</b></div>
 
 		  			<div class="col-md-2 col-8"><?php echo $tarih; ?></div>
 

@@ -18,6 +18,8 @@
 
 	$firmatel = $firmabilgicek['firmatel'];
 
+if($uye_tipi != '3'){
+
 	if (isset($_POST['formkaydet'])) {
 
 		$tekliflistesi = guvenlik($_POST['tekliflistesi']);
@@ -41,6 +43,8 @@
 		exit();
 
 	}
+
+}
 
 ?>
 
@@ -155,6 +159,8 @@
 
 			$tekliflistesi = "";
 
+			$formtoplamkilo = 0;
+
 			$query = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$firmaid}' AND formda = '0' AND silik = '0'", PDO::FETCH_ASSOC);
 
 			if ( $query->rowCount() ){
@@ -207,6 +213,8 @@
 
 					$toplamkilo = $tadet * $urun_birimkg;
 
+					$formtoplamkilo += $toplamkilo;
+
 					$tutar = $toplamkilo * $tsatisfiyati;
 
 					$toplamtutar = $toplamtutar + $tutar;
@@ -243,11 +251,15 @@
 
 		<hr style="border:2px black solid; margin: 0px;" />
 
-		<div class="row">
+		<div class="row" style="margin-top: 10px;">
+
+			<div class="col-md-8" style="text-align:right;">
+				<b style="font-size:18px;"><?php echo "Toplam Kilo : ".$formtoplamkilo." KG"; ?></b>
+			</div>
 			
-			<div class="col-12" style="text-align: right; padding-right: 50px; margin: 10px;">
+			<div class="col-md-4" style="text-align:right;">
 				
-				<b style="font-size: 20px;"><?php echo "Toplam Tutar : ".$toplamtutar." + KDV"; ?></b>
+				<b style="font-size: 20px;"><?php echo "Toplam Tutar : ".(number_format($toplamtutar, 0, ',', '.'))." + KDV"; ?></b>
 
 			</div>
 
@@ -259,7 +271,7 @@
 
 			<div class="col-3">ÖDEME BİLGİLERİ :  NAKİT</div>
 
-			<div class="col-4">GARANTİ BANKASI ÇAĞLANAYAN ŞUBESİ</div>
+			<div class="col-4">GARANTİ BANKASI ÇAĞLAYAN ŞUBESİ</div>
 
 			<div class="col-5">HESAP ADI : OSMANLI ALÜMİNYUM SAN TİC LTD ŞTİ TL HESABI</div>
 
@@ -297,7 +309,7 @@
 					
 					*   Ürün mt/gr biriminde yaklaşık gramaj alınmış olup, kg' lar +/- tolerans dâhilindedir.<br/>
 					
-					*   Yeni düzenlenen kanuna göre 1.000 TL üzeri alımlarımızda tevkifatlı fatura kesilecektir.<br/>
+					*   Yeni düzenlenen kanuna göre 2.000 TL üzeri alımlarımızda tevkifatlı fatura kesilecektir.<br/>
 					
 					*   özel  siparişlerinizde  % 20 ön ödeme alınır ( boyalı ürünlerde )<br/>
 					

@@ -2,6 +2,8 @@
 
 	include 'fonksiyonlar/bagla.php';
 
+	header("Location:giris.php");
+
 	if ($girdi == 1) {
 		
 		header("Location:index.php");
@@ -52,7 +54,7 @@
 
 				$query = $db->prepare("INSERT INTO uyeler SET uye_adi = ?, uye_mail = ?, uye_sifre = ?, uye_firma = ?, uye_tipi = ?, uye_yetkiler = ?, uye_silik =?");
 
-				$insert = $query->execute(array($uyeadi,$eposta,$sifre,'0','0',$yeni_uye_yetki,'0'));
+				$insert = $query->execute(array($uyeadi,$eposta,$sifre,'0','0',$yeni_uye_yetki,'1'));
 
 				header("Location:uyeol.php?ut"); // ut = ÜYELİK TAMAMLANDI
 

@@ -18,6 +18,8 @@
 
 		}
 
+	if($uye_tipi != '3'){
+
 		if (isset($_POST['firmabilgileriguncelle'])) {
 
 			$siraid = guvenlik($_POST['siraid']);
@@ -180,7 +182,7 @@
 
 		}
 
-	}
+	}}
 
 ?>
 
@@ -286,6 +288,13 @@
 
 					$toplamfirmaalacak = 0;
 
+					if(!isset($_GET['s'])){
+						$i = 0;
+					}else{
+						$s = guvenlik($_GET['s']) * 20;
+						$i = $s -20;
+					}
+
 					if(isset($_GET['arananlar'])){
 
 						$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$uye_sirket}' AND firmaalacak != 0 AND firmaalacaktarih != '0' AND firmaalacaktarih > '{$bugununsaniyesi}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
@@ -300,7 +309,7 @@
 						
 					}else{
 
-						$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$uye_sirket}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$uye_sirket}' ORDER BY firmaadi ASC LIMIT $i,20", PDO::FETCH_ASSOC);
 
 					}					
 
@@ -386,7 +395,15 @@
 
 											<div class="col-md-9">
 												
-												<?php if($firmaalacaktarih == 0){?><input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo "Tarih seçiniz."; ?>" class="form-control form-control-sm"><?php }else{ ?><input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo $firmaalacaktarihv2; ?>" class="form-control form-control-sm"><?php } ?>
+												<?php if($firmaalacaktarih == 0){?>
+													
+													<input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo "Tarih seçiniz."; ?>" class="form-control form-control-sm">
+													
+												<?php }else{ ?>
+													
+													<input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo $firmaalacaktarihv2; ?>" class="form-control form-control-sm">
+													
+												<?php } ?>
 
 											</div>
 
@@ -530,7 +547,7 @@
 
 							</div>
 
-							<div id="tekliflerdivi<?php echo $firmaid; ?>" style="display: none;" class="div2">
+							<div id="tekliflerdivi<?php echo $firmaid; ?>" class="div2" style="display: none; margin: 0px -20px 0px -20px;">
 
 								<div class="alert alert-primary">
 									
@@ -674,7 +691,7 @@
 
 							<?php
 
-								$teklifformlarinicek = $db->query("SELECT * FROM teklifformlari WHERE firmaid = '{$firmaid}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY tformid DESC", PDO::FETCH_ASSOC);
+								$teklifformlarinicek = $db->query("SELECT * FROM teklifformlari WHERE firmaid = '{$firmaid}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY tformid DESC LIMIT 1", PDO::FETCH_ASSOC);
 
 									if ( $teklifformlarinicek->rowCount() ){
 
@@ -690,17 +707,19 @@
 
 							?>
 
-										<div class="alert alert-warning">
-
-											<div class="row">
+											<div class="row" style="margin-bottom: 3px;">
 												
-												<div class="col-6"><button class="btn btn-warning" onclick="return false" onmousedown="javascript:ackapa('teklifformdivi<?php echo $tformid; ?>');"><?php echo $tekliftarihi." Tarihli Teklif Formundaki Ürünler<br/>"; ?></button></div>
+												<div class="col-10"><a onclick="return false" onmousedown="javascript:ackapa('teklifformdivi<?php echo $tformid; ?>');"><?php echo $tekliftarihi." Tarihli Teklif Formundaki Ürünler<br/>"; ?></a></div>
 
-												<div class="col-6" style="text-align: right;"><form action="" method="POST"><input type="hidden" name="siraid" value="<?php echo $id; ?>"><input type="hidden" name="tformid" value="<?php echo $tformid; ?>"><input type="hidden" name="tekliflistesi" value="<?php echo $tekliflistesi; ?>"><button class="btn btn-danger" type="submit" name="teklifformunusil">Bu teklif formunu sil</button></form></div>
+												<div class="col-1" style="text-align: right;"><a href="teklifformu.php?id=<?php echo $tformid; ?>" target="_blank"><button class="btn btn-warning btn-sm btn-block">Göster</button></a></div>
+
+												<div class="col-1" style="text-align: right;"><form action="" method="POST"><input type="hidden" name="siraid" value="<?php echo $id; ?>"><input type="hidden" name="tformid" value="<?php echo $tformid; ?>"><input type="hidden" name="tekliflistesi" value="<?php echo $tekliflistesi; ?>"><button class="btn btn-danger btn-sm btn-block" type="submit" name="teklifformunusil">Sil</button></form></div>
 											
 											</div>																		
 
 											<div id="teklifformdivi<?php echo $tformid; ?>" style="display: none; padding: 10px;">
+
+												<hr/>
 
 									<?php 	if (!empty($tekliflistesi)) { ?>
 
@@ -812,15 +831,13 @@
 
 												} ?>
 
-												<a href="teklifformu.php?id=<?php echo $tformid; ?>" target="_blank"><button class="btn btn-warning" style="margin-top: 10px;">Teklif formuna gitmek için tıklayınız.</button></a>
-
 										<?php	}else{ echo "Bu teklif formunda ürün bulunmamaktadır."; }
 
 										?>
 
-											</div>
+												<hr/>
 
-										</div>
+											</div>
 
 							<?php
 
@@ -849,6 +866,16 @@
 					<div class="col-md-12" style="padding-top: 20px; padding-bottom: 10px; text-align: center;"><b style="font-size: 20px;">Toplam Tahsilat Tutarı : <?php echo $toplamfirmaalacak; ?> TL</b></div>
 
 				</div>
+
+				<hr/>
+					
+				<nav aria-label="Page navigation example">
+  					<ul class="pagination justify-content-center">
+					<?php for ($i=1; $i < 26; $i++) { 
+						echo '<li class="page-item"><a class="page-link" href="firmalar.php?s='.$i.'">'.$i.'</a></li>'; 
+					} ?>
+				  </ul>
+			 	</nav>		
 
 			</div>
 
