@@ -42,25 +42,15 @@
 
             $('#'+y).hide(0); 
 
+        }else{
+
+            $('#'+x).hide(); 
+
         }
 
     }
 
     function ackapa3(x,y,z) {
-
-        if ($('#'+x).is(":hidden")) {
-
-            $('#'+x).slideDown(0);
-
-            $('#'+y).hide(0); 
-
-            $('#'+z).hide(0); 
-
-        }
-
-    }
-
-    function ackapa3v2(x,y,z) {
 
         if ($('#'+x).is(":hidden")) {
 
@@ -89,6 +79,10 @@
             $('#'+z).hide(0); 
 
             $('#'+t).hide(0); 
+
+        }else{
+
+            $('#'+x).hide(0);
 
         }
 

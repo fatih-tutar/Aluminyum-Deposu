@@ -44,7 +44,7 @@
 
 		if (isset($_POST['kategoriekle'])) {
 
-			$sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
+			$sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
 
 			$sutunlararray = explode(",",$sutunlar);
 			
@@ -95,6 +95,8 @@
 				if(!isset($_POST['sutundepouyariadet'])){ $sutunlararray[19] = 0; }
 
 				if(!isset($_POST['sutunraf'])){ $sutunlararray[20] = 0; }
+
+				if(!isset($_POST['sutunsevkiyatbutonu'])){ $sutunlararray[21] = 0; }
 
 				$sutunlar = implode(",",$sutunlararray);
 
@@ -180,7 +182,7 @@
 
 			}
 
-			$sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
+			$sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
 
 			$sutunlararray = explode(",",$sutunlar);
 
@@ -225,6 +227,8 @@
 			if(!isset($_POST['sutundepouyariadet'])){ $sutunlararray[19] = 0; }
 
 			if(!isset($_POST['sutunraf'])){ $sutunlararray[20] = 0; }
+
+			if(!isset($_POST['sutunsevkiyatbutonu'])){ $sutunlararray[21] = 0; }
 
 			$sutunlar = implode(",",$sutunlararray);
 
@@ -631,6 +635,14 @@
 
 							<div class="form-check">
 
+								<input type="checkbox" class="form-check-input" id="sevkiyatButonuCheckCreate" name="sutunsevkiyatbutonu" checked>
+								
+								<label class="form-check-label" for="sevkiyatButonuCheckCreate">Sevkiyat Butonu <small>(1 birim)</small></label>
+							
+							</div>	
+
+							<div class="form-check">
+
 								<input type="checkbox" class="form-check-input" id="exampleCheck9" name="sutunduzenlebutonu" checked>
 								
 								<label class="form-check-label" for="exampleCheck9">Düzenle Butonu <small>(1 birim)</small></label>
@@ -997,6 +1009,14 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck8" name="sutunsiparisbutonu" <?= $sutunsiparisbutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck8">Sipariş Butonu <small>(1 birim)</small></label>
+														
+														</div>
+
+														<div class="form-check">
+
+															<input type="checkbox" class="form-check-input" id="sevkiyatButonuCheckEdit" name="sutunsevkiyatbutonu" <?= $sutunsevkiyatbutonuizni == 1 ? 'checked' : '' ?> >
+
+															<label class="form-check-label" for="sevkiyatButonuCheckEdit">Sevkiyat Butonu <small>(1 birim)</small></label>
 														
 														</div>
 
@@ -1425,6 +1445,14 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck8" name="sutunsiparisbutonu" <?= $sutunsiparisbutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck8">Sipariş Butonu <small>(1 birim)</small></label>
+														
+														</div>
+
+														<div class="form-check">
+
+															<input type="checkbox" class="form-check-input" id="sevkiyatButonuCheckUpdate" name="sutunsevkiyatbutonu" <?= $sutunsevkiyatbutonuizni == 1 ? 'checked' : '' ?> >
+
+															<label class="form-check-label" for="sevkiyatButonuCheckUpdate">Sevkiyat Butonu <small>(1 birim)</small></label>
 														
 														</div>
 

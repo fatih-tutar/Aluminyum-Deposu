@@ -10,7 +10,7 @@
 
 	}else{
 
-        if($ziyaret_yetkisi != '1'){
+        if($uye_ziyaret_yetkisi != '1'){
 
             header("Location:index.php");
 
@@ -379,10 +379,10 @@
                             <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih2<?php echo $id; ?>" name="planlanantarih" placeholder="Planlanan Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?php echo $planlanantarih; ?>"></div>
                             
                             <div class="col-md-1 col-3 px-1 py-2">
-                                <button class="btn btn-success btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3v2('adresdivi<?php echo $id; ?>','notdivi<?php echo $id; ?>');">Adres</button>
+                                <button class="btn btn-success btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3('adresdivi<?php echo $id; ?>','notdivi<?php echo $id; ?>');">Adres</button>
                             </div>
                             <div class="col-md-1 col-3 px-1 py-2">
-                                <button class="btn btn-info btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3v2('notdivi<?php echo $id; ?>','adresdivi<?php echo $id; ?>');">Not</button>
+                                <button class="btn btn-info btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3('notdivi<?php echo $id; ?>','adresdivi<?php echo $id; ?>');">Not</button>
                             </div>
                             <div class="col-md-1 col-3 px-1 py-2">
                                 <button type="submit" class="btn btn-warning btn-block btn-sm" name="ziyaretguncelle">Güncelle</button>

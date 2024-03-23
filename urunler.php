@@ -68,6 +68,8 @@
 
 		$sutunrafizni = $sutunlaripatlat[20];
 
+		$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
+
 		$a = guvenlik($_GET['a']);
 
 		$b = guvenlik($_GET['b']);
@@ -143,6 +145,82 @@
 			$insert = $query->execute(array($turunid,$tekliffirma,$teklifadet,$teklifsatisfiyat,$su_an,'0',$uye_sirket,'0'));
 
 			header("Location:urunler.php?id=".$kategori_id."&u=".$turunid."&teklifeklendi#".$turunid);
+
+			exit();
+
+		}
+
+		if (isset($_POST['siparisformu'])) {
+
+			$siparisboy = guvenlik($_POST['siparisboy']);
+			
+			$hazirlayankisi = guvenlik($_POST['hazirlayankisi']);
+
+			$urun_fabrika = guvenlik($_POST['urun_fabrika']);
+
+			$ilgilikisi = guvenlik($_POST['ilgilikisi']);
+
+			$urun_adi = guvenlik($_POST['urun_adi']);
+
+			$urun_stok = guvenlik($_POST['urun_stok']);
+
+			$urun_id = guvenlik($_POST['urun_id']);
+
+			$termin = guvenlik($_POST['termin']);
+
+			$terminsaniye = strtotime($termin);
+
+			$uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+
+			$urun_adi = $uruninfo['urun_adi'];
+
+			$query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?");
+
+			$insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',$su_an,'0',$uye_sirket,'0'));
+
+			header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&sipariseklendi#".$urun_id);
+
+			exit();
+
+		}
+
+		if (isset($_POST['sevkiyatkaydet'])) {
+
+			$urunId = guvenlik($_POST['urun_id']);
+
+			$adet =  guvenlik($_POST['adet']);
+
+			$sevkTipi =  guvenlik($_POST['sevk_tipi']);
+
+			$aciklama =  guvenlik($_POST['aciklama']);
+
+			$firma = guvenlik($_POST['firma']);
+
+			$firmaidcek = $db->query("SELECT * FROM firmalar WHERE firmaadi = '{$firma}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+
+			$firmaId = $firmaidcek['firmaid'];
+
+			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+
+			if($sevkiyatList->rowCount()){
+
+				$urunler = $urunler.",".$urunId;
+
+				$adetler = $adetler.",".$adet;
+
+				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ? WHERE firma_id = ? AND durum = '0'"); 
+
+				$update = $query->execute(array($urunler, $adetler));
+
+			}else{
+
+				$query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, olusturan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket = ?");
+
+				$insert = $query->execute(array($urunId,$firmaId,$adet,'',$uye_id,$sevkTipi,$aciklama,'0','0',$su_an, $uye_sirket));	
+
+			}			
+
+			header("Location:urunler.php?id=".$kategori_id."&u=".$urunId."&sevkiyateklendi#".$urunId);
 
 			exit();
 
@@ -299,40 +377,6 @@
 			}
 
 			header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&guncellendi#".$urun_id);
-
-			exit();
-
-		}
-
-		if (isset($_POST['siparisformu'])) {
-
-			$siparisboy = guvenlik($_POST['siparisboy']);
-			
-			$hazirlayankisi = guvenlik($_POST['hazirlayankisi']);
-
-			$urun_fabrika = guvenlik($_POST['urun_fabrika']);
-
-			$ilgilikisi = guvenlik($_POST['ilgilikisi']);
-
-			$urun_adi = guvenlik($_POST['urun_adi']);
-
-			$urun_stok = guvenlik($_POST['urun_stok']);
-
-			$urun_id = guvenlik($_POST['urun_id']);
-
-			$termin = guvenlik($_POST['termin']);
-
-			$terminsaniye = strtotime($termin);
-
-			$uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
-
-			$urun_adi = $uruninfo['urun_adi'];
-
-			$query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?");
-
-			$insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',$su_an,'0',$uye_sirket,'0'));
-
-			header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&sipariseklendi#".$urun_id);
 
 			exit();
 
@@ -1002,729 +1046,831 @@
 
 							<?php } ?>
 
-							<?php if($sutunteklifbutonuizni == '1' && $uye_teklif_yetkisi == '1'){ ?>
+							<div class="col-md-3 col-12">
 
-								<div class="col-md-1 col-4">
-								
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa3v2('teklifdivi<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Teklif</button></a>
+								<?php if($sutunteklifbutonuizni == '1' && $uye_teklif_yetkisi == '1'){ ?>
 
-								</div>
+									<div class="col-md-3 col-3">
 
-							<?php } ?>
+										<a href="#" onclick="return false" onmousedown="javascript:ackapa4('teklifdivi<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Teklif</button></a>
 
-							<?php if($sutunsiparisbutonuizni == '1' && $uye_siparis_yetkisi == '1'){ ?>
+									</div>
 
-								<div class="col-md-1 col-4">
-									
-									<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa3v2('siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>');">
+								<?php } ?>
 
-										<?php if($terminigecikmismi == 0){ ?>
+								<?php if($sutunsiparisbutonuizni == '1' && $uye_siparis_yetkisi == '1'){ ?>
 
-											<button class="btn btn-info btn-sm btn-block">
+									<div class="col-md-3 col-3">
+										
+										<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');">
 
-												<b>Sipariş</b></button>
+											<?php if($terminigecikmismi == 0){ ?>
 
-										<?php }else{ ?>
+												<button class="btn btn-info btn-sm btn-block">
 
-											<button class="btn btn-danger btn-sm btn-block">
+													<b>Sipariş</b></button>
 
-												<b>Sipariş</b></button>
+											<?php }else{ ?>
 
-										<?php } ?>
+												<button class="btn btn-danger btn-sm btn-block">
 
-									</a>
+													<b>Sipariş</b></button>
 
-								</div>
+											<?php } ?>
 
-							<?php } ?>
+										</a>
 
-							<?php if($sutunduzenlebutonuizni == '1' && $uye_duzenleme_yetkisi == '1'){ ?>
+									</div>
 
-								<div class="col-md-1 col-4">
+								<?php } ?>
 
-									<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa3v2('editdiv<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>');"><button class="btn btn-success btn-sm btn-block"><b>Düzenle</b></button></a>
+								<?php if($sutunsevkiyatbutonuizni == '1' && $uye_sevkiyat_yetkisi == '1'){ ?>
 
-								</div>
+									<div class="col-md-3 col-3">
 
-							<?php } ?>
+										<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('sevkiyatdiv<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>');"><button class="btn btn-dark btn-sm btn-block"><b>Sevkiyat</b></button></a>
+
+									</div>
+
+								<?php } ?> 
+
+								<?php if($sutunduzenlebutonuizni == '1' && $uye_duzenleme_yetkisi == '1'){ ?>
+
+									<div class="col-md-3 col-3">
+
+										<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('editdiv<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');"><button class="btn btn-success btn-sm btn-block"><b>Düzenle</b></button></a>
+
+									</div>
+
+								<?php } ?>  
+
+							</div>
 
 						</div>
 
 						<?php if($uye_teklif_yetkisi == '1'){?>
 
-					<?php if (isset($_GET['teklifeklendi']) && $_GET['u'] == $urun_id) { ?>
+							<?php if (isset($_GET['teklifeklendi']) && $_GET['u'] == $urun_id) { ?>
 
-						<div id="teklifdivi<?php echo $urun_id; ?>" class="div2">
-						
-					<?php }else{ ?>
-
-						<div id="teklifdivi<?php echo $urun_id; ?>" style="display: none;" class="div2">
-
-					<?php } ?>
-
-							<div class="alert alert-warning">
-
-								<h5><b style="line-height: 40px;">Teklif Formu</b></h5>
-							
-								<form action="" method="POST">
-									
-									<div class="row">
-
-										<div class="col-md-3 col-12 search-box">
-
-											<b>Teklif Verilen Firma</b>
-											
-											<input autofocus="autofocus" name="tekliffirma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
-	    
-	        								<ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
-
-										</div>
-										
-										<div class="col-md-2 col-12">
-
-											<b>Adet</b>
-											
-											<input type="text" class="form-control" name="teklifadet" placeholder="Teklif Adeti Giriniz.">
-
-										</div>
-
-										<div class="col-md-2 col-12">
-
-											<b>Kg Satış Fiyatı</b> (TL)
-											
-											<input type="text" class="form-control" name="teklifsatisfiyat" value="<?php echo $urun_satis; ?>">
-
-										</div>
-
-										<div class="col-md-2 col-12">
-
-											<br/>
-
-											<input type="hidden" name="turunid" value="<?php echo $urun_id; ?>">
-											
-											<button class="btn btn-warning" name="teklifkaydet">Teklif Formuna Ekle</button>
-
-										</div>
-
-									</div>
-
-								</form>
-
-							</div>
-
-							<hr/>
-
-							<div class="alert alert-success">
+								<div id="teklifdivi<?php echo $urun_id; ?>" class="div2">
 								
-								<h5><b style="line-height: 40px;">Teklif Listesi</b></h5>
+							<?php }else{ ?>
 
-								<div class="d-none d-sm-block">
+								<div id="teklifdivi<?php echo $urun_id; ?>" style="display: none;" class="div2">
 
-									<div class="row">
-										
-										<div class="col-3"><b>Firma Adı</b></div>
+							<?php } ?>
 
-										<div class="col-1"><b>Adet</b></div>
+									<div class="alert alert-warning">
 
-										<div class="col-2"><b>Satış Fiyatı</b></div>
-
-										<div class="col-2"><b>Toplam Fiyat</b></div>
-
-										<div class="col-1"><b>Tarih</b></div>
-
-									</div>
-
-								</div>
-
-					<?php
-
-						$tekliflersiralamasi = 0;
-
-						$tklfcek = $db->query("SELECT * FROM teklif WHERE turunid = '{$urun_id}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY teklifid DESC", PDO::FETCH_ASSOC);
-
-						if ( $tklfcek->rowCount() ){
-
-							foreach( $tklfcek as $tklfrow ){
-
-								$tekliflersiralamasi++;
-
-								$tverilenfirmaid = $tklfrow['tverilenfirma'];
-
-								$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
-
-								$tverilenfirmaadi = $firmabilgi['firmaadi'];
-
-								$tadet = $tklfrow['tadet'];
-
-								$tsatisfiyati = $tklfrow['tsatisfiyati'];
-
-								$tsaniye = $tklfrow['tsaniye'];
-
-								$ttarih = date("d-m-Y",$tsaniye);
-
-								$toplam_fiyat = $tadet * $urun_birimkg * $tsatisfiyati;
-
-					?>
-
-								<div class="row">
+										<h5><b style="line-height: 40px;">Teklif Formu</b></h5>
 									
-									<div class="col-4 d-block d-sm-none">Firma Adı : </div>
-
-									<div class="col-md-3 col-8"><?php echo $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
-
-									<div class="col-4 d-block d-sm-none">Adet : </div>
-									
-									<div class="col-md-1 col-8"><?php echo $tadet; ?></div>
-
-									<div class="col-4 d-block d-sm-none">Satış Fiyatı : </div>
-
-									<div class="col-md-2 col-8"><?php echo $tsatisfiyati." TL"; ?></div>
-
-									<div class="col-4 d-block d-sm-none">Toplam Fiyat : </div>
-
-									<div class="col-md-2 col-8"><?php echo $toplam_fiyat." TL"; ?></div>
-
-									<div class="col-4 d-block d-sm-none">Tarih : </div>
-
-									<div class="col-md-1 col-8"><?php echo $ttarih; ?></div>
-
-								</div>
-
-					<?php
-
-							}
-
-						}
-
-					?>
-
-							</div>
-
-						</div>
-
-					<?php if ((isset($_GET['guncellendi']) || isset($_GET['urunsilinemez'])) && $_GET['u'] == $urun_id) { ?>
-
-						<div class="div2" id="editdiv<?php echo $urun_id; ?>" >
-					
-					<?php }else{ ?>
-
-						<div class="div2" style="display: none;" id="editdiv<?php echo $urun_id; ?>" >
-
-					<?php } ?>	
-
-							<div class="alert alert-success">
-
-								<h5><b style="line-height: 40px;">Düzenleme Formu</b></h5>
-
-								<form action="" method="POST">
-
-									<div class="row">
-
-										<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
-
-										<?php if($sutunurunkoduizni == '1'){?><div class="col-md-1 col-12"><b>Ürün Kodu</b><input type="text" class="form-control" name="urun_kodu" value="<?php echo $urun_kodu; ?>"></div><?php } ?>	
-									
-										<div class="col-md-2 col-12"><b>Ürün Adı</b><input type="text" class="form-control" name="urun_adi" value="<?php echo $urun_adi; ?>"></div>
-										<div class="col-md-2 col-12">
+										<form action="" method="POST">
+											
 											<div class="row">
-												<?php if($sutunadetizni == '1'){?><div class="col-md-4 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?php echo $urun_adet; ?>"></div><?php } ?>	
-												<?php if($sutundepoadetizni == '1'){?><div class="col-md-4 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>"></div><?php } ?>	
-												<?php if($sutunrafizni == '1'){?><div class="col-md-4 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?php echo $urun_raf; ?>"></div><?php } ?>	
+
+												<div class="col-md-3 col-12 search-box">
+
+													<b>Teklif Verilen Firma</b>
+													
+													<input autofocus="autofocus" name="tekliffirma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
+				
+													<ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
+
+												</div>
+												
+												<div class="col-md-2 col-12">
+
+													<b>Adet</b>
+													
+													<input type="text" class="form-control" name="teklifadet" placeholder="Teklif Adeti Giriniz.">
+
+												</div>
+
+												<div class="col-md-2 col-12">
+
+													<b>Kg Satış Fiyatı</b> (TL)
+													
+													<input type="text" class="form-control" name="teklifsatisfiyat" value="<?php echo $urun_satis; ?>">
+
+												</div>
+
+												<div class="col-md-2 col-12">
+
+													<br/>
+
+													<input type="hidden" name="turunid" value="<?php echo $urun_id; ?>">
+													
+													<button class="btn btn-warning" name="teklifkaydet">Teklif Formuna Ekle</button>
+
+												</div>
+
 											</div>
-										</div>
-										<?php if($sutunbirimkgizni == '1'){?><div class="col-md-1 col-12"><b>Birim Kg</b><input type="text" class="form-control" name="urun_birimkg" value="<?php echo $urun_birimkg; ?>"></div><?php } ?>
 
-										<?php if($sutunsipariskiloizni == '1'){?><div class="col-md-1 col-12"><b>Sipariş Kilo</b><input type="text" class="form-control" name="urun_birimkg" value="<?php echo $urun_birimkg; ?>"></div><?php } ?>
-
-										<?php if($sutunboyolcusuizni == '1'){?><div class="col-md-1 col-12"><b>Boy Ölçüsü</b><input type="text" class="form-control" name="urun_boy_olcusu" value="<?php echo $urun_boy_olcusu; ?>"></div><?php } ?>			
-
-										<?php if($sutunalisizni == '1' && $uye_alis_yetkisi == '1'){ ?>
-
-											<div class="col-md-1 col-12">
-
-												<b>Alış</b>
-
-												<input type="text" class="form-control" name="urun_alis" value="<?php echo $urun_alis; ?>">
-
-											</div>
-
-											<div class="col-md-1 col-12" style="padding:0px; margin:0px;">
-
-												<input type="checkbox" name="hepsineuygula">&nbsp;Hepsine Uygula
-
-											</div>
-
-										<?php } ?>
-
-										<?php if($sutunmanuelsatisizni == '1' && $uye_satis_yetkisi == '1' || $uye_tipi == '2'){?>
-
-											<div class="col-md-1 col-12">
-
-												<b>Satış</b>
-
-												<input type="text" class="form-control" name="satis" value="<?php echo $urun_satis; ?>">
-
-											</div>
-
-										<?php } ?>
-
-										<?php if($sutunfabrikaizni == '1' && $uye_fabrika_yetkisi == '1'){?>
-
-										<div class="col-md-1 col-12"><b>Fabrika</b>
-											
-											<select class="form-control" id="exampleFormControlSelect1" name="urun_fabrika">
-
-										    	<?php
-
-										    	if ($urun_fabrika == 0) {
-										    		
-										    		echo "<option selected value='0'>Fabrika Seçiniz</option>";
-
-										    	}else{
-
-										    		echo "<option selected value='".$urun_fabrika."'>".$urun_fabrika_adi."</option>";
-
-										    	}
-
-										    	$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
-
-												if ( $fabrika->rowCount() ){
-
-													foreach( $fabrika as $fbrk ){
-
-														$fabrika_id = $fbrk['fabrika_id'];
-
-														$fabrika_adi = $fbrk['fabrika_adi'];
-
-														echo "<option value='".$fabrika_id."'>".$fabrika_adi."</option>";
-
-													}
-
-												}
-
-										    	?>
-										   
-										    </select>
-
-										</div>
-
-										<?php } ?>
-
-										<?php if($sutunsiparisadediizni == '1'){?><div class="col-md-1 col-12"><b><small>Sipariş Adedi</small></b><input type="text" class="form-control" name="urun_stok" value="<?php echo $urun_stok; ?>"></div><?php } ?>
-
-										<?php if($sutunuyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Uyarı Adet</b><input type="text" class="form-control" name="urun_uyari_stok_adedi" value="<?php echo $urun_uyari_stok_adedi; ?>"></div><?php } ?>
-
-										<?php if($sutundepouyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Depo Uyarı</b><input type="text" class="form-control" name="urun_depo_uyari_adet" value="<?php echo $urun_depo_uyari_adet; ?>"></div><?php } ?>
-
-										<div class="col-md-1 col-12">
-
-											<b>Liste Sıra</b>
-
-											<input type="hidden" name="urun_eski_sira" value="<?php echo $urun_sira; ?>">
-
-											<select class="form-control" id="exampleFormControlSelect1" name="urun_yeni_sira">
-												<?php
-
-													$sirayicek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
-
-													if ( $sirayicek->rowCount() ){
-
-														foreach( $sirayicek as $sc ){
-
-															$siralama_urun_sira = $sc['urun_sira'];
-
-															if ($urun_sira == $siralama_urun_sira) {
-
-																echo '<option selected value='.$siralama_urun_sira.'>'.$siralama_urun_sira.'</option>';
-																
-															}else{
-
-																echo '<option value='.$siralama_urun_sira.'>'.$siralama_urun_sira.'</option>';
-
-															}
-
-														}
-
-													}
-
-												?>
-										    </select>
-
-										</div>
-
-										<div class="col-md-10 col-12">
-											
-											<b>Ürün Açıklama</b>
-											
-											<input type="text" name="urun_aciklama" value="<?php echo $urun_aciklama; ?>" placeholder="Ürün açıklaması girebilirsiniz." class="form-control">
-										
-										</div>
-
-										<div class="col-md-2 col-12"><br/><button type="submit" class="btn btn-info btn-block" name="guncellemeformu">Güncelle</button></div>
+										</form>
 
 									</div>
 
-									<br/>
+									<hr/>
 
-									<div class="row">
-
-										<?php if($sutunmusteriismiizni == '1'){?><div class="col-md-2 col-12"><b>Müşteri İsmi</b><input type="text" class="form-control" name="musteri_ismi" value="<?php echo $musteri_ismi; ?>"></div><?php } ?>
-
-										<?php if($sutuntarihizni == '1'){?><div class="col-md-2 col-12"><b>Tarih</b><input type="text" id="tarih<?php echo ($urunlistesira+500); ?>" name="tarih" value="<?php echo $tarih; ?>" class="form-control form-control-sm"></div><?php } ?>
+									<div class="alert alert-success">
 										
-										<?php if($sutunterminizni == '1'){?><div class="col-md-2 col-12"><b>Termin</b><input type="text" id="tarih<?php echo $urunlistesira; ?>" name="termin" value="<?php echo $termin; ?>" class="form-control form-control-sm"></div><?php } ?>
-									
-									</div>
+										<h5><b style="line-height: 40px;">Teklif Listesi</b></h5>
 
-								</form>
+										<div class="d-none d-sm-block">
 
-							</div>
+											<div class="row">
+												
+												<div class="col-3"><b>Firma Adı</b></div>
 
-							<div style="text-align: right;">
+												<div class="col-1"><b>Adet</b></div>
 
-								<form action="" method="POST">
+												<div class="col-2"><b>Satış Fiyatı</b></div>
 
-									<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+												<div class="col-2"><b>Toplam Fiyat</b></div>
 
-									<input type="hidden" name="urun_adet" value="<?php echo $urun_adet; ?>">
+												<div class="col-1"><b>Tarih</b></div>
 
-									<input type="hidden" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>">
+											</div>
 
-									<input type="hidden" name="urun_sira" value="<?php echo $urun_sira; ?>">
-										
-									<button type="submit" name="urunsil" class="btn btn-danger">Ürünü Sil</button>
+										</div>
 
-								</form>
+										<?php
 
-							</div>
+											$tekliflersiralamasi = 0;
 
-						</div>
+											$tklfcek = $db->query("SELECT * FROM teklif WHERE turunid = '{$urun_id}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY teklifid DESC", PDO::FETCH_ASSOC);
 
-						<?php if ((isset($_GET['siparisalindi']) || isset($_GET['sipariseklendi'])) && $_GET['u'] == $urun_id) { ?>
+											if ( $tklfcek->rowCount() ){
 
-							<div id="siparisdiv<?php echo $urun_id; ?>" class="div2">
-							
-						<?php }else{ ?>
+												foreach( $tklfcek as $tklfrow ){
 
-							<div style="display: none;" id="siparisdiv<?php echo $urun_id; ?>" class="div2">
+													$tekliflersiralamasi++;
 
-						<?php } ?>
+													$tverilenfirmaid = $tklfrow['tverilenfirma'];
 
-							<form action="" method="POST">
+													$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-								<div class="alert alert-info">
+													$tverilenfirmaadi = $firmabilgi['firmaadi'];
 
-								<h5><b style="line-height: 40px;">Sipariş Formu</b></h5>
+													$tadet = $tklfrow['tadet'];
 
-								<div class="row">
+													$tsatisfiyati = $tklfrow['tsatisfiyati'];
 
-									<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+													$tsaniye = $tklfrow['tsaniye'];
 
-									<div class="col-md-2 col-12">
+													$ttarih = date("d-m-Y",$tsaniye);
 
-										<b>Hazırlayan Kişi</b><br/>
+													$toplam_fiyat = $tadet * $urun_birimkg * $tsatisfiyati;
 
-										<select name="hazirlayankisi" class="form-control">
+										?>
 
-											<option selected>Hazırlayan Kişiyi Seçiniz</option>
-											
-											<?php
+													<div class="row">
+														
+														<div class="col-4 d-block d-sm-none">Firma Adı : </div>
 
-												$calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+														<div class="col-md-3 col-8"><?php echo $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
 
-												if ( $calisanlaricek->rowCount() ){
+														<div class="col-4 d-block d-sm-none">Adet : </div>
+														
+														<div class="col-md-1 col-8"><?php echo $tadet; ?></div>
 
-													foreach( $calisanlaricek as $cc ){
+														<div class="col-4 d-block d-sm-none">Satış Fiyatı : </div>
 
-														$hazirlayanadi = $cc['uye_adi'];
+														<div class="col-md-2 col-8"><?php echo $tsatisfiyati." TL"; ?></div>
 
-											?>
+														<div class="col-4 d-block d-sm-none">Toplam Fiyat : </div>
 
-														<option value="<?php echo $hazirlayanadi; ?>"><?php echo $hazirlayanadi; ?></option>
+														<div class="col-md-2 col-8"><?php echo $toplam_fiyat." TL"; ?></div>
 
-											<?php
+														<div class="col-4 d-block d-sm-none">Tarih : </div>
 
-													}
+														<div class="col-md-2 col-8"><?php echo $ttarih; ?></div>
 
-												}
+													</div>
 
-											?>
-
-										</select>
-
-									</div>
-								
-									<div class="col-md-2 col-12">
-
-										<b>Talep Edilen Fabrika</b><br/>
-										
-										<select class="form-control" id="exampleFormControlSelect1" name="urun_fabrika">
-
-									    	<?php
-
-									    	if ($urun_fabrika == 0) {
-									    		
-									    		echo "<option selected value='0'>Fabrika Seçiniz</option>";
-
-									    	}else{
-
-									    		echo "<option selected value='".$urun_fabrika."'>".$urun_fabrika_adi."</option>";
-
-									    	}
-
-									    	$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
-
-											if ( $fabrika->rowCount() ){
-
-												foreach( $fabrika as $fbrk ){
-
-													$fabrika_id = $fbrk['fabrika_id'];
-
-													$fabrika_adi = $fbrk['fabrika_adi'];
-
-													echo "<option value='".$fabrika_id."'>".$fabrika_adi."</option>";
+										<?php
 
 												}
 
 											}
 
-									    	?>
-									   
-									    </select>
-
-									</div>
-
-									<div class="col-md-2 col-12"><b>İlgili Kişi</b><br/><input type="text" class="form-control" name="ilgilikisi" placeholder="İlgili Kişinin İsmini Yazınız"></div>
-
-									<div class="col-md-1 col-12"><b>Miktar</b><br/><input type="text" class="form-control" name="urun_stok" value="<?php echo $urun_stok; ?>"></div>
-
-									<div class="col-md-1 col-12"><b>Boy</b><br/><input type="text" name="siparisboy" value="6 metre" class="form-control"></div>
-
-									<div class="col-md-4 col-12">
-										
-										<div class="row">
-											
-											<div class="col-md-5 col-12"><b>Termin</b><br/><input type="text" name="termin" value="<?php echo $tarihf2; ?>" id="tarih<?php echo $urunlistesira; ?>" class="form-control"></div>
-			
-											<div class="col-md-7 col-12" style="padding-top: 25px;"><button type="submit" class="btn btn-info btn-sm" name="siparisformu">Sipariş Listesine Ekle</button></div>
-
-										</div>
-
-									</div>									
-
-								</div>
-
-								</div>
-
-							</form>	
-
-							<hr/>
-
-							<div class="alert alert-danger">
-
-								<h5><b style="line-height: 40px;">Sipariş Listesi</b></h5>
-
-								<div class="d-none d-sm-block">
-
-									<div class="row">
-													
-										<div class="col-2"><b>Hazırlayan Kişi</b></div>
-
-										<div class="col-2"><b>Talep Edilen Fabrika</b></div>
-
-										<div class="col-2"><b>İlgili Kişi</b></div>
-
-										<div class="col-1"><b>Miktar</b></div>
-
-										<div class="col-1"><b>Tarih</b></div>
-
-										<div class="col-1"><b>Termin</b></div>
+										?>
 
 									</div>
 
 								</div>
-							
-								<?php
 
-									$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '1' AND sirketid = '{$uye_sirket}' AND silik = '0'", PDO::FETCH_ASSOC);
+						<?php } ?>
 
-									if ( $sipariscek->rowCount() ){
+						<?php if($uye_siparis_yetkisi == '1'){ ?>
 
-										foreach( $sipariscek as $row ){
+							<?php if ((isset($_GET['siparisalindi']) || isset($_GET['sipariseklendi'])) && $_GET['u'] == $urun_id) { ?>
 
-											$siparis_id = $row['siparis_id'];
+								<div id="siparisdiv<?php echo $urun_id; ?>" class="div2">
+								
+							<?php }else{ ?>
 
-											$hazirlayankisi = $row['hazirlayankisi'];
+								<div style="display: none;" id="siparisdiv<?php echo $urun_id; ?>" class="div2">
 
-											$urun_siparis_aded = $row['urun_siparis_aded'];
+							<?php } ?>
 
-											$urun_fabrika_id = $row['urun_fabrika_id'];
+									<form action="" method="POST">
 
-											$ilgilikisi = $row['ilgilikisi'];
+										<div class="alert alert-info">
 
-											$siparissaniye = $row['siparissaniye'];
-
-											$terminsaniye = $row['terminsaniye'];
-
-											$siparistarih = date("d-m-Y", $siparissaniye);
-
-											$termintarih = date("d-m-Y", $terminsaniye);
-
-											$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
-
-											$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
-
-								?>
-
-											<form action="" method="POST">
-
-												<div class="row" style="margin: 2px;">
-
-													<div class="col-4 d-block d-sm-none">Hazırlayan :</div>
-													
-													<div class="col-md-2 col-8"><?php echo $hazirlayankisi; ?></div>
-
-													<div class="col-4 d-block d-sm-none">Fabrika :</div>
-
-													<div class="col-md-2 col-8"><?php echo $urun_fabrika_adi; ?></div>
-
-													<div class="col-4 d-block d-sm-none">İlgili Kişi :</div>
-
-													<div class="col-md-2 col-8"><?php echo $ilgilikisi; ?></div>
-
-													<div class="col-4 d-block d-sm-none">Miktar :</div>
-
-													<div class="col-md-1 col-8"><input type="text" name="eklenenadet" class="form-control form-control-sm" value="<?php echo $urun_siparis_aded; ?>"></div>
-
-													<div class="col-4 d-block d-sm-none">Tarih :</div>
-
-													<div class="col-md-1 col-8"><?php echo $siparistarih; ?></div>
-
-													<div class="col-4 d-block d-sm-none">Termin :</div>
-
-													<div class="col-md-1 col-8"><?php echo $termintarih; ?></div>
-
-													<div class="col-md-1 col-6">
-														
-														<input type="hidden" name="siparis_id" value="<?php echo $siparis_id; ?>">
-
-														<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
-
-														<input type="hidden" name="urun_adet" value="<?php echo $urun_adet; ?>">
-														
-														<button type="submit" name="siparisalindi" class="btn btn-danger btn-sm">Mağazaya Gönderildi</button>
-
-													</div>
-
-													<div class="col-md-1 col-6">
-
-														<input type="hidden" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>">
-														
-														<button type="submit" name="deposiparisalindi" class="btn btn-danger btn-sm">Depoya Gönderildi</button>
-
-													</div>
-
-												</div>
-
-											</form>
-
-								<?php
-
-										}
-
-									}
-
-								?>
-
-							</div>
-
-							<hr/>
-
-							<div class="alert alert-success">
-
-								<h5><b style="line-height: 40px;">Geçmiş Siparişler</b></h5>
-
-								<div class="d-none d-sm-block">
-
-									<div class="row">
-												
-										<div class="col-2"><b>Hazırlayan Kişi</b></div>
-
-										<div class="col-2"><b>Talep Edilen Fabrika</b></div>
-
-										<div class="col-2"><b>İlgili Kişi</b></div>
-
-										<div class="col-2"><b>Miktar</b></div>
-
-										<div class="col-2"><b>Tarih</b></div>
-
-									</div>
-
-								</div>
-							
-								<?php
-
-									$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '0' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
-
-									if ( $sipariscek->rowCount() ){
-
-										foreach( $sipariscek as $row ){
-
-											$hazirlayankisi = $row['hazirlayankisi'];
-
-											$urun_siparis_aded = $row['urun_siparis_aded'];
-
-											$urun_fabrika_id = $row['urun_fabrika_id'];
-
-											$ilgilikisi = $row['ilgilikisi'];
-
-											$siparissaniye = $row['siparissaniye'];
-
-											$siparistarih = date("d-m-Y", $siparissaniye);
-
-											$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
-
-											$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
-
-								?>
+											<h5><b style="line-height: 40px;">Sipariş Formu</b></h5>
 
 											<div class="row">
 
-												<div class="col-4 d-block d-sm-none">Hazırlyan</div>
+												<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+
+												<div class="col-md-2 col-12">
+
+													<b>Hazırlayan Kişi</b><br/>
+
+													<select name="hazirlayankisi" class="form-control">
+
+														<option selected>Hazırlayan Kişiyi Seçiniz</option>
+														
+														<?php
+
+															$calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+
+															if ( $calisanlaricek->rowCount() ){
+
+																foreach( $calisanlaricek as $cc ){
+
+																	$hazirlayanadi = $cc['uye_adi'];
+
+														?>
+
+																	<option value="<?php echo $hazirlayanadi; ?>"><?php echo $hazirlayanadi; ?></option>
+
+														<?php
+
+																}
+
+															}
+
+														?>
+
+													</select>
+
+												</div>
+											
+												<div class="col-md-2 col-12">
+
+													<b>Talep Edilen Fabrika</b><br/>
+													
+													<select class="form-control" id="exampleFormControlSelect1" name="urun_fabrika">
+
+														<?php
+
+														if ($urun_fabrika == 0) {
+															
+															echo "<option selected value='0'>Fabrika Seçiniz</option>";
+
+														}else{
+
+															echo "<option selected value='".$urun_fabrika."'>".$urun_fabrika_adi."</option>";
+
+														}
+
+														$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
+
+														if ( $fabrika->rowCount() ){
+
+															foreach( $fabrika as $fbrk ){
+
+																$fabrika_id = $fbrk['fabrika_id'];
+
+																$fabrika_adi = $fbrk['fabrika_adi'];
+
+																echo "<option value='".$fabrika_id."'>".$fabrika_adi."</option>";
+
+															}
+
+														}
+
+														?>
 												
-												<div class="col-md-2 col-8"><?php echo $hazirlayankisi; ?></div>
+													</select>
 
-												<div class="col-4 d-block d-sm-none">Fabrika</div>
+												</div>
 
-												<div class="col-md-2 col-8"><?php echo $urun_fabrika_adi; ?></div>
+												<div class="col-md-2 col-12"><b>İlgili Kişi</b><br/><input type="text" class="form-control" name="ilgilikisi" placeholder="İlgili Kişinin İsmini Yazınız"></div>
 
-												<div class="col-4 d-block d-sm-none">İlgili Kişi</div>
+												<div class="col-md-1 col-12"><b>Miktar</b><br/><input type="text" class="form-control" name="urun_stok" value="<?php echo $urun_stok; ?>"></div>
 
-												<div class="col-md-2 col-8"><?php echo $ilgilikisi; ?></div>
+												<div class="col-md-1 col-12"><b>Boy</b><br/><input type="text" name="siparisboy" value="6 metre" class="form-control"></div>
 
-												<div class="col-4 d-block d-sm-none">Adet</div>
+												<div class="col-md-4 col-12">
+													
+													<div class="row">
+														
+														<div class="col-md-5 col-12"><b>Termin</b><br/><input type="text" name="termin" value="<?php echo $tarihf2; ?>" id="tarih<?php echo $urunlistesira; ?>" class="form-control"></div>
 
-												<div class="col-md-2 col-8"><?php echo $urun_siparis_aded; ?></div>
+														<div class="col-md-7 col-12" style="padding-top: 25px;"><button type="submit" class="btn btn-info btn-sm" name="siparisformu">Sipariş Listesine Ekle</button></div>
 
-												<div class="col-4 d-block d-sm-none">Tarih</div>
+													</div>
 
-												<div class="col-md-2 col-8"><?php echo $siparistarih; ?></div>
+												</div>									
 
 											</div>
 
-								<?php
+										</div>
 
-										}
+									</form>	
 
-									}
+									<hr/>
 
-								?>
+									<div class="alert alert-danger">
 
-							</div>
-						
-						</div>
+										<h5><b style="line-height: 40px;">Sipariş Listesi</b></h5>
+
+										<div class="d-none d-sm-block">
+
+											<div class="row">
+															
+												<div class="col-2"><b>Hazırlayan Kişi</b></div>
+
+												<div class="col-2"><b>Talep Edilen Fabrika</b></div>
+
+												<div class="col-2"><b>İlgili Kişi</b></div>
+
+												<div class="col-1"><b>Miktar</b></div>
+
+												<div class="col-1"><b>Tarih</b></div>
+
+												<div class="col-1"><b>Termin</b></div>
+
+											</div>
+
+										</div>
+									
+										<?php
+
+											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '1' AND sirketid = '{$uye_sirket}' AND silik = '0'", PDO::FETCH_ASSOC);
+
+											if ( $sipariscek->rowCount() ){
+
+												foreach( $sipariscek as $row ){
+
+													$siparis_id = $row['siparis_id'];
+
+													$hazirlayankisi = $row['hazirlayankisi'];
+
+													$urun_siparis_aded = $row['urun_siparis_aded'];
+
+													$urun_fabrika_id = $row['urun_fabrika_id'];
+
+													$ilgilikisi = $row['ilgilikisi'];
+
+													$siparissaniye = $row['siparissaniye'];
+
+													$terminsaniye = $row['terminsaniye'];
+
+													$siparistarih = date("d-m-Y", $siparissaniye);
+
+													$termintarih = date("d-m-Y", $terminsaniye);
+
+													$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+
+													$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
+
+										?>
+
+													<form action="" method="POST">
+
+														<div class="row" style="margin: 2px;">
+
+															<div class="col-4 d-block d-sm-none">Hazırlayan :</div>
+															
+															<div class="col-md-2 col-8"><?php echo $hazirlayankisi; ?></div>
+
+															<div class="col-4 d-block d-sm-none">Fabrika :</div>
+
+															<div class="col-md-2 col-8"><?php echo $urun_fabrika_adi; ?></div>
+
+															<div class="col-4 d-block d-sm-none">İlgili Kişi :</div>
+
+															<div class="col-md-2 col-8"><?php echo $ilgilikisi; ?></div>
+
+															<div class="col-4 d-block d-sm-none">Miktar :</div>
+
+															<div class="col-md-1 col-8"><input type="text" name="eklenenadet" class="form-control form-control-sm" value="<?php echo $urun_siparis_aded; ?>"></div>
+
+															<div class="col-4 d-block d-sm-none">Tarih :</div>
+
+															<div class="col-md-1 col-8"><?php echo $siparistarih; ?></div>
+
+															<div class="col-4 d-block d-sm-none">Termin :</div>
+
+															<div class="col-md-1 col-8"><?php echo $termintarih; ?></div>
+
+															<div class="col-md-1 col-6">
+																
+																<input type="hidden" name="siparis_id" value="<?php echo $siparis_id; ?>">
+
+																<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+
+																<input type="hidden" name="urun_adet" value="<?php echo $urun_adet; ?>">
+																
+																<button type="submit" name="siparisalindi" class="btn btn-danger btn-sm">Mağazaya Gönderildi</button>
+
+															</div>
+
+															<div class="col-md-1 col-6">
+
+																<input type="hidden" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>">
+																
+																<button type="submit" name="deposiparisalindi" class="btn btn-danger btn-sm">Depoya Gönderildi</button>
+
+															</div>
+
+														</div>
+
+													</form>
+
+										<?php
+
+												}
+
+											}
+
+										?>
+
+									</div>
+
+									<hr/>
+
+									<div class="alert alert-success">
+
+										<h5><b style="line-height: 40px;">Geçmiş Siparişler</b></h5>
+
+										<div class="d-none d-sm-block">
+
+											<div class="row">
+														
+												<div class="col-2"><b>Hazırlayan Kişi</b></div>
+
+												<div class="col-2"><b>Talep Edilen Fabrika</b></div>
+
+												<div class="col-2"><b>İlgili Kişi</b></div>
+
+												<div class="col-2"><b>Miktar</b></div>
+
+												<div class="col-2"><b>Tarih</b></div>
+
+											</div>
+
+										</div>
+									
+										<?php
+
+											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '0' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
+
+											if ( $sipariscek->rowCount() ){
+
+												foreach( $sipariscek as $row ){
+
+													$hazirlayankisi = $row['hazirlayankisi'];
+
+													$urun_siparis_aded = $row['urun_siparis_aded'];
+
+													$urun_fabrika_id = $row['urun_fabrika_id'];
+
+													$ilgilikisi = $row['ilgilikisi'];
+
+													$siparissaniye = $row['siparissaniye'];
+
+													$siparistarih = date("d-m-Y", $siparissaniye);
+
+													$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+
+													$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
+
+										?>
+
+													<div class="row">
+
+														<div class="col-4 d-block d-sm-none">Hazırlyan</div>
+														
+														<div class="col-md-2 col-8"><?php echo $hazirlayankisi; ?></div>
+
+														<div class="col-4 d-block d-sm-none">Fabrika</div>
+
+														<div class="col-md-2 col-8"><?php echo $urun_fabrika_adi; ?></div>
+
+														<div class="col-4 d-block d-sm-none">İlgili Kişi</div>
+
+														<div class="col-md-2 col-8"><?php echo $ilgilikisi; ?></div>
+
+														<div class="col-4 d-block d-sm-none">Adet</div>
+
+														<div class="col-md-2 col-8"><?php echo $urun_siparis_aded; ?></div>
+
+														<div class="col-4 d-block d-sm-none">Tarih</div>
+
+														<div class="col-md-2 col-8"><?php echo $siparistarih; ?></div>
+
+													</div>
+
+										<?php
+
+												}
+
+											}
+
+										?>
+
+									</div>
+
+								</div>
 
 						<?php } ?>
+
+						<?php if($uye_sevkiyat_yetkisi == '1'){?>
+
+							<?php if (isset($_GET['sevkiyateklendi']) && $_GET['u'] == $urun_id) { ?>
+
+								<div id="sevkiyatdivi<?php echo $urun_id; ?>" class="div2">
+								
+							<?php }else{ ?>
+
+								<div id="sevkiyatdivi<?php echo $urun_id; ?>" style="display: none;" class="div2">
+
+							<?php } ?>
+
+									<div class="alert alert-warning">
+
+										<h5><b style="line-height: 40px;">Sevkiyat Formu</b></h5>
+									
+										<form action="" method="POST">
+											
+											<div class="row">
+
+												<div class="col-md-3 col-12 search-box">
+
+													<b>Firma</b>
+													
+													<input autofocus="autofocus" name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
+
+													<ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
+
+												</div>
+												
+												<div class="col-md-1 col-12">
+
+													<b>Adet</b>
+													
+													<input type="text" class="form-control" name="adet" placeholder="Adeti Giriniz.">
+
+												</div>
+
+												<div class="col-md-2 col-12">
+
+													<b>Sevk Tipi</b>
+
+													<select name="sevk_tipi" id="sevk_tipi" class="form-control">
+
+														<option value="null">Sevk tipi seçiniz.</option>
+														<option value="0">Müşteri Çağlayan</option>
+														<option value="1">Müşteri Alkop</option>
+														<option value="2">Tarafımızca sevk</option>
+														<option value="3">Ambara tarafımızca sevk</option>
+
+													</select>
+												
+												</div>
+
+												<div class="co-md-5 col-12">
+
+													<input type="text" class="form-control" name="aciklama">
+
+												</div>
+
+												<div class="col-md-1 col-12">
+
+													<br/>
+
+													<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+													
+													<button class="btn btn-warning" name="sevkiyatkaydet">Kaydet</button>
+
+												</div>
+
+											</div>
+
+										</form>
+
+									</div>
+
+								</div>
+
+							<?php } ?>
+
+						<?php if($uye_duzenleme_yetkisi == '1'){ ?>
+
+							<?php if ((isset($_GET['guncellendi']) || isset($_GET['urunsilinemez'])) && $_GET['u'] == $urun_id) { ?>
+
+								<div class="div2" id="editdiv<?php echo $urun_id; ?>" >
+							
+							<?php }else{ ?>
+
+								<div class="div2" style="display: none;" id="editdiv<?php echo $urun_id; ?>" >
+
+							<?php } ?>	
+
+									<div class="alert alert-success">
+
+										<h5><b style="line-height: 40px;">Düzenleme Formu</b></h5>
+
+										<form action="" method="POST">
+
+											<div class="row">
+
+												<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+
+												<?php if($sutunurunkoduizni == '1'){?><div class="col-md-1 col-12"><b>Ürün Kodu</b><input type="text" class="form-control" name="urun_kodu" value="<?php echo $urun_kodu; ?>"></div><?php } ?>	
+											
+												<div class="col-md-2 col-12"><b>Ürün Adı</b><input type="text" class="form-control" name="urun_adi" value="<?php echo $urun_adi; ?>"></div>
+												<div class="col-md-2 col-12">
+													<div class="row">
+														<?php if($sutunadetizni == '1'){?><div class="col-md-4 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?php echo $urun_adet; ?>"></div><?php } ?>	
+														<?php if($sutundepoadetizni == '1'){?><div class="col-md-4 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>"></div><?php } ?>	
+														<?php if($sutunrafizni == '1'){?><div class="col-md-4 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?php echo $urun_raf; ?>"></div><?php } ?>	
+													</div>
+												</div>
+												<?php if($sutunbirimkgizni == '1'){?><div class="col-md-1 col-12"><b>Birim Kg</b><input type="text" class="form-control" name="urun_birimkg" value="<?php echo $urun_birimkg; ?>"></div><?php } ?>
+
+												<?php if($sutunsipariskiloizni == '1'){?><div class="col-md-1 col-12"><b>Sipariş Kilo</b><input type="text" class="form-control" name="urun_birimkg" value="<?php echo $urun_birimkg; ?>"></div><?php } ?>
+
+												<?php if($sutunboyolcusuizni == '1'){?><div class="col-md-1 col-12"><b>Boy Ölçüsü</b><input type="text" class="form-control" name="urun_boy_olcusu" value="<?php echo $urun_boy_olcusu; ?>"></div><?php } ?>			
+
+												<?php if($sutunalisizni == '1' && $uye_alis_yetkisi == '1'){ ?>
+
+													<div class="col-md-1 col-12">
+
+														<b>Alış</b>
+
+														<input type="text" class="form-control" name="urun_alis" value="<?php echo $urun_alis; ?>">
+
+													</div>
+
+													<div class="col-md-1 col-12" style="padding:0px; margin:0px;">
+
+														<input type="checkbox" name="hepsineuygula">&nbsp;Hepsine Uygula
+
+													</div>
+
+												<?php } ?>
+
+												<?php if($sutunmanuelsatisizni == '1' && $uye_satis_yetkisi == '1' || $uye_tipi == '2'){?>
+
+													<div class="col-md-1 col-12">
+
+														<b>Satış</b>
+
+														<input type="text" class="form-control" name="satis" value="<?php echo $urun_satis; ?>">
+
+													</div>
+
+												<?php } ?>
+
+												<?php if($sutunfabrikaizni == '1' && $uye_fabrika_yetkisi == '1'){?>
+
+												<div class="col-md-1 col-12"><b>Fabrika</b>
+													
+													<select class="form-control" id="exampleFormControlSelect1" name="urun_fabrika">
+
+														<?php
+
+														if ($urun_fabrika == 0) {
+															
+															echo "<option selected value='0'>Fabrika Seçiniz</option>";
+
+														}else{
+
+															echo "<option selected value='".$urun_fabrika."'>".$urun_fabrika_adi."</option>";
+
+														}
+
+														$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+
+														if ( $fabrika->rowCount() ){
+
+															foreach( $fabrika as $fbrk ){
+
+																$fabrika_id = $fbrk['fabrika_id'];
+
+																$fabrika_adi = $fbrk['fabrika_adi'];
+
+																echo "<option value='".$fabrika_id."'>".$fabrika_adi."</option>";
+
+															}
+
+														}
+
+														?>
+												
+													</select>
+
+												</div>
+
+												<?php } ?>
+
+												<?php if($sutunsiparisadediizni == '1'){?><div class="col-md-1 col-12"><b><small>Sipariş Adedi</small></b><input type="text" class="form-control" name="urun_stok" value="<?php echo $urun_stok; ?>"></div><?php } ?>
+
+												<?php if($sutunuyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Uyarı Adet</b><input type="text" class="form-control" name="urun_uyari_stok_adedi" value="<?php echo $urun_uyari_stok_adedi; ?>"></div><?php } ?>
+
+												<?php if($sutundepouyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Depo Uyarı</b><input type="text" class="form-control" name="urun_depo_uyari_adet" value="<?php echo $urun_depo_uyari_adet; ?>"></div><?php } ?>
+
+												<div class="col-md-1 col-12">
+
+													<b>Liste Sıra</b>
+
+													<input type="hidden" name="urun_eski_sira" value="<?php echo $urun_sira; ?>">
+
+													<select class="form-control" id="exampleFormControlSelect1" name="urun_yeni_sira">
+														<?php
+
+															$sirayicek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
+
+															if ( $sirayicek->rowCount() ){
+
+																foreach( $sirayicek as $sc ){
+
+																	$siralama_urun_sira = $sc['urun_sira'];
+
+																	if ($urun_sira == $siralama_urun_sira) {
+
+																		echo '<option selected value='.$siralama_urun_sira.'>'.$siralama_urun_sira.'</option>';
+																		
+																	}else{
+
+																		echo '<option value='.$siralama_urun_sira.'>'.$siralama_urun_sira.'</option>';
+
+																	}
+
+																}
+
+															}
+
+														?>
+													</select>
+
+												</div>
+
+												<div class="col-md-10 col-12">
+													
+													<b>Ürün Açıklama</b>
+													
+													<input type="text" name="urun_aciklama" value="<?php echo $urun_aciklama; ?>" placeholder="Ürün açıklaması girebilirsiniz." class="form-control">
+												
+												</div>
+
+												<div class="col-md-2 col-12"><br/><button type="submit" class="btn btn-info btn-block" name="guncellemeformu">Güncelle</button></div>
+
+											</div>
+
+											<br/>
+
+											<div class="row">
+
+												<?php if($sutunmusteriismiizni == '1'){?><div class="col-md-2 col-12"><b>Müşteri İsmi</b><input type="text" class="form-control" name="musteri_ismi" value="<?php echo $musteri_ismi; ?>"></div><?php } ?>
+
+												<?php if($sutuntarihizni == '1'){?><div class="col-md-2 col-12"><b>Tarih</b><input type="text" id="tarih<?php echo ($urunlistesira+500); ?>" name="tarih" value="<?php echo $tarih; ?>" class="form-control form-control-sm"></div><?php } ?>
+												
+												<?php if($sutunterminizni == '1'){?><div class="col-md-2 col-12"><b>Termin</b><input type="text" id="tarih<?php echo $urunlistesira; ?>" name="termin" value="<?php echo $termin; ?>" class="form-control form-control-sm"></div><?php } ?>
+											
+											</div>
+
+										</form>
+
+									</div>
+
+									<div style="text-align: right;">
+
+										<form action="" method="POST">
+
+											<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+
+											<input type="hidden" name="urun_adet" value="<?php echo $urun_adet; ?>">
+
+											<input type="hidden" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>">
+
+											<input type="hidden" name="urun_sira" value="<?php echo $urun_sira; ?>">
+												
+											<button type="submit" name="urunsil" class="btn btn-danger">Ürünü Sil</button>
+
+										</form>
+
+									</div>
+
+								</div>
+
+						<?php } ?>		
 
 						<hr style="border: 1px solid black;" />
 
@@ -1738,11 +1884,11 @@
 
 			<?php if($toplam_yetkisi == '1' || $uye_tipi == '2'){ ?> 
 
-			<div class="row">
+				<div class="row">
 
-				<div class="col-md-12"><b style="font-size: 20px;">Toplam Ürün : <?php echo $toplam_urun_kg; ?> Kg</b></div>
+					<div class="col-md-12"><b style="font-size: 20px;">Toplam Ürün : <?php echo $toplam_urun_kg; ?> Kg</b></div>
 
-			</div>
+				</div>
 
 			<?php } ?>
 

@@ -10,7 +10,7 @@
 
 	}else{
 
-		if($gelen_giden_yetkisi != '1'){
+		if($uye_gelen_giden_yetkisi != '1'){
 
 			header("Location:index.php");
 

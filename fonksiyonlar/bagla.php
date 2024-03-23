@@ -63,6 +63,16 @@
 		$uye_duzenleme_yetkisi = $uye_yetkileri_arrayi[4];
 
 		$uye_islemleri_gorme_yetkisi = $uye_yetkileri_arrayi[5];
+
+		$uye_gelen_giden_yetkisi = $uye_yetkileri_arrayi[6];
+
+		$uye_satis_yetkisi = $uye_yetkileri_arrayi[7];
+ 
+		$uye_toplam_gorme_yetkisi = $uye_yetkileri_arrayi[8];
+
+		$uye_ziyaret_yetkisi = $uye_yetkileri_arrayi[9];
+
+		$uye_sevkiyat_yetkisi = $uye_yetkileri_arrayi[10];
  
 		//ŞİRKET BİLGİLERİ
 
