@@ -188,7 +188,9 @@
 
 			$urunId = guvenlik($_POST['urun_id']);
 
-			$adet =  guvenlik($_POST['adet']);
+			$adet = guvenlik($_POST['adet']);
+
+			$fiyat = guvenlik($_POST['fiyat']);
 
 			$sevkTipi =  guvenlik($_POST['sevk_tipi']);
 
@@ -200,23 +202,31 @@
 
 			$firmaId = $firmaidcek['firmaid'];
 
-			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND sirket_id = '{$uye_sirket}'", PDO::FETCH_ASSOC);
+			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 			
-			if($sevkiyatList->rowCount()){
+			if($sevkiyatList){
+
+				$urunler = guvenlik($sevkiyatList['urunler']);
+
+				$adetler = guvenlik($sevkiyatList['adetler']);
+
+				$fiyatlar = guvenlik($sevkiyatList['fiyatlar']);
 
 				$urunler = $urunler.",".$urunId;
 
 				$adetler = $adetler.",".$adet;
 
-				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ? WHERE firma_id = ? AND durum = ? AND sirket_id = ?"); 
+				$fiyatlar = $fiyatlar."-".$fiyat;
 
-				$update = $query->execute(array($urunler, $adetler, $firmaId, '0', $uye_sirket));
+				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND sirket_id = ?"); 
+
+				$update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', $uye_sirket));
 
 			}else{
 
-				$query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, olusturan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
+				$query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
 
-				$insert = $query->execute(array($urunId,$firmaId,$adet,'',$uye_id,$sevkTipi,$aciklama,'0','0',$su_an, $uye_sirket));	
+				$insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$uye_id,'',$sevkTipi,$aciklama,'0','0',$su_an, $uye_sirket));	
 
 			}			
 
@@ -1558,7 +1568,7 @@
 
 													<div class="row">
 
-														<div class="col-4 d-block d-sm-none">Hazırlyan</div>
+														<div class="col-4 d-block d-sm-none">Hazırlayan</div>
 														
 														<div class="col-md-2 col-8"><?php echo $hazirlayankisi; ?></div>
 
@@ -1614,7 +1624,7 @@
 											
 											<div class="row">
 
-												<div class="col-md-3 col-12 search-box">
+												<div class="col-md-2 col-12 search-box">
 
 													<b>Firma</b>
 													
@@ -1646,6 +1656,11 @@
 
 													</select>
 												
+												</div>
+
+												<div class="col-md-1 col-12">
+													<b>Fiyat</b>
+													<input type="text" class="form-control" name="fiyat" placeholder="TL">
 												</div>
 
 												<div class="col-md-5 col-12">

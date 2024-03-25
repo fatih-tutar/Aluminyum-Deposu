@@ -93,13 +93,13 @@
 
 		if (isset($_POST['hesapla'])) {
 			
-			$dolarkuru = guvenlik($_POST['dolarkuru']);
+			$doPosturu = guvenlik($_POST['dolarkuru']);
 
-			$lme = guvenlik($_POST['lme']);
+			$lmePost = guvenlik($_POST['lme']);
 
 			$iscilik = guvenlik($_POST['iscilik']);
 
-			$toplam = ($lme + $iscilik) * $dolarkuru;
+			$toplam = ($lmePost + $iscilik) * $dolarPost;
 
 			header("Location:index.php?fiyat=".$toplam);
 
@@ -421,74 +421,10 @@
 						<h5 style="text-align: center;"><b>Fiyat Hesaplama</b></h5>
 			
 						<div class="div5">
-					
-							<?php
-
-								$icerik = file_get_contents("https://www.tcmb.gov.tr/kurlar/today.xml");
-							    
-							    $baslik = ara("<ForexSelling>", "</ForexSelling>", $icerik);
-							    
-							    $dolarsatis = $baslik[0];
-
-							    //$string = file_get_contents("https://www.lme.com/api/trading-data/fifteen-minutes-metal-block?datasourceIds=48b1eb21-2c1c-4606-a031-2e0e48804557&datasourceIds=30884874-b778-48ec-bdb2-a0a1d98de5ab&datasourceIds=53f6374a-165d-446a-b9f6-b08bbd2e46a3&datasourceIds=9632206e-db22-407f-892c-ac0fb7735b2e&datasourceIds=61f12b51-04e8-4269-987b-3d4516b20f41&datasourceIds=2908ddcb-e514-4265-9ad9-f0d27561cf52");
-								
-								//$json_a = json_decode($string, true);
-
-								$lme = 0;
-
-								$url = 'https://www.bloomberght.com/emtia/aliminyum';
-								$ch = curl_init($url);
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								$html = curl_exec($ch);
-								curl_close($ch);
-								$dom = new DOMDocument();
-								@$dom->loadHTML($html);
-								$xpath = new DOMXPath($dom);
-								$h1List = $xpath->query('//h1');
-								foreach ($h1List as $index => $item) {
-									if($index == 0){
-										$content = $item->nodeValue;
-										$lmeArray = explode(" ", $content);
-										$number = $lmeArray[72];
-										$number = str_replace(".", "", $number);
-										$number = str_replace(",", ".", $number);
-										$number = floatval($number);
-										$roundedNumber = intval($number);
-										$lme1 = $roundedNumber + 1;
-									}
-								}
-
-								$lme = $lme1;
-
-								// $url = 'https://www.bloomberght.com/emtia/aliminyum3m';
-								// $ch = curl_init($url);
-								// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								// $html = curl_exec($ch);
-								// curl_close($ch);
-								// $dom = new DOMDocument();
-								// @$dom->loadHTML($html);
-								// $xpath = new DOMXPath($dom);
-								// $h1List = $xpath->query('//h1');
-								// foreach ($h1List as $index => $item) {
-								// 	if($index == 0){
-								// 		$content = $item->nodeValue;
-								// 		$lmeArray = explode(" ", $content);
-								// 		$number = $lmeArray[74];
-								// 		$number = str_replace(".", "", $number);
-								// 		$number = str_replace(",", ".", $number);
-								// 		$number = floatval($number);
-								// 		$roundedNumber = intval($number);
-								// 		$lme2 = $roundedNumber + 1;
-								// 	}
-								// }
-
-								// if($lme2 > $lme1){ $lme = $lme2; }else{$lme = $lme1;}
-
-							?>
 
 							<div class="row">
 								
-								<div class="col-xl-6 col-lg-12"><?php echo "<b>Dolar : </b>".$dolarsatis." TL"; ?></div>
+								<div class="col-xl-6 col-lg-12"><?php echo "<b>Dolar : </b>".$dolar." TL"; ?></div>
 
 								<div class="col-xl-6 col-lg-12"><?php echo "<b>LME : </b>".$lme." $"; ?></div>
 
@@ -506,7 +442,7 @@
 									
 									<div class="col-3">Dolar</div>
 
-									<div class="col-9"><input type="text" class="form-control" name="dolarkuru" value="<?php echo $dolarsatis; ?>"></div>
+									<div class="col-9"><input type="text" class="form-control" name="dolarkuru" value="<?php echo $dolar; ?>"></div>
 
 								</div>
 
@@ -572,7 +508,7 @@
 
 									$fabrikaiscilik = guvenlik($row['fabrikaiscilik']);
 
-									$fiyat = ($lme + $fabrikaiscilik) * $dolarsatis / 1000;
+									$fiyat = ($lme + $fabrikaiscilik) * $dolar / 1000;
 
 									$fiyat2=floor($fiyat*100/100*102)/100;
 
@@ -758,7 +694,7 @@
 
 					<div class="div4">
 						
-						<b>Toplam Ürün Tonaj</b> : <?php echo $uye_adi; ?>
+						<b>Kullanıcı</b> : <?php echo $uye_adi; ?>
 
 					</div>
 

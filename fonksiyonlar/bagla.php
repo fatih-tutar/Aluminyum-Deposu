@@ -84,6 +84,12 @@
 
 		$sirketyedekalmasaniye = $sirketbilgileri['yedekalmasaniye'];
 
+		// KURLAR
+
+		$dolar = getDolar();
+
+		$lme = getLME();
+
 	}
 
 	if (giris_yapti_mi() === true ) {

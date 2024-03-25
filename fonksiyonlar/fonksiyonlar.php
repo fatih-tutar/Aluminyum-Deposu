@@ -1,5 +1,69 @@
 <?php
 
+	function getUsername($userId){
+		global $db;
+		$user = $db->query("SELECT uye_adi FROM uyeler WHERE uye_id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		return $user['uye_adi'];
+	}
+
+	function getCategoryInfo($categoryId){
+		global $db;
+		$category = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		return $category;
+	}
+
+	function getSatis($urunId){
+
+		$urun_alis = getUrunInfo($urunId)['urun_alis'];
+		$urun_satis = getUrunInfo($urunId)['satis'];
+
+		if($urun_satis == 0){
+
+			$categoryId = getUrunInfo($urunId)['kategori_bir'];
+
+			$ust_kategori_kar_yuzdesi = getCategoryInfo($categoryId)['karyuzdesi'];
+
+			$urun_satis = $urun_alis * ($ust_kategori_kar_yuzdesi + 100) / 100;
+
+			$urun_satis = round($urun_satis, 2);
+		}
+
+		return $urun_satis;
+	}
+
+	function getCategoryShortName($categoryId){
+		global $db;
+		$category = $db->query("SELECT kategori_adi FROM kategori WHERE kategori_id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		$categoryName = $category['kategori_adi'];
+		$categoryNameArray = explode(" ",$categoryName);
+		$categoryShortName = $categoryNameArray[0];
+		return $categoryShortName;
+	}
+
+	function getCategoryName($categoryId){
+		global $db;
+		$category = $db->query("SELECT kategori_adi FROM kategori WHERE kategori_id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		$categoryName = $category['kategori_adi'];
+		return $categoryName;
+	}
+
+	function getUrunInfo($urunId){
+		global $db;
+		$urunInfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urunId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		return $urunInfo;
+	}
+
+	function getdmY($saniye){
+		return date('d.m.Y', $saniye);
+	}
+
+	function getFirmaAdi($firmaId){
+		global $db;
+		$query = $db->query("SELECT firmaadi FROM firmalar WHERE firmaid = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
+		$firmaAdi = $query['firmaadi'];
+		return $firmaAdi;
+	}
+
 	function getDolar(){
 		$icerik = file_get_contents("https://www.tcmb.gov.tr/kurlar/today.xml");
 		
@@ -7,7 +71,9 @@
 		
 		$dolarsatis = $baslik[0];
 
-		return $dolarsatis;
+		$formatted_dolar = number_format($dolarsatis, 2, '.', '');
+
+		return $formatted_dolar;
 	}
 
 	function getLME(){

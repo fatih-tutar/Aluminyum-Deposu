@@ -93,13 +93,13 @@
 
 		if (isset($_POST['hesapla'])) {
 			
-			$dolarkuru = guvenlik($_POST['dolarkuru']);
+			$dolarPost = guvenlik($_POST['dolarkuru']);
 
-			$lme = guvenlik($_POST['lme']);
+			$lmePost = guvenlik($_POST['lme']);
 
 			$iscilik = guvenlik($_POST['iscilik']);
 
-			$toplam = ($lme + $iscilik) * $dolarkuru;
+			$toplam = ($lmePost + $iscilik) * $dolarPost;
 
 			header("Location:index.php?fiyat=".$toplam);
 
@@ -255,6 +255,43 @@
 
         }
 
+		if(isset($_POST['sevkiyathazir'])){
+			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
+			$malzemeAdeti = guvenlik($_POST['malzemeAdeti']);
+			$kilolar = "";
+			$isEmtpyKilo = false;
+			for($i = 0; $i < $malzemeAdeti; $i++){
+				if(empty(guvenlik($_POST['kilo_'.$i]))){ $isEmtpyKilo = true; }
+				if(empty($kilolar)){
+					$kilolar = guvenlik($_POST['kilo_'.$i]);
+				}else{
+					$kilolar = $kilolar.",".guvenlik($_POST['kilo_'.$i]);
+				}
+			}
+			if($isEmtpyKilo == false){
+				$query = $db->prepare("UPDATE sevkiyat SET kilolar = ?, durum = ?, hazirlayan = ? WHERE id = ?");
+				$update = $query->execute(array($kilolar,'1',$uye_id,$sevkiyatID));
+			}
+			header("Location: home.php");
+			exit();
+		}
+
+		if(isset($_POST['faturahazir'])){
+			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
+			$query = $db->prepare("UPDATE sevkiyat SET durum = ? WHERE id = ?");
+			$update = $query->execute(array('2',$sevkiyatID));
+			header("Location: home.php");
+			exit();
+		}
+
+		if(isset($_POST['arsivegonder'])){
+			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
+			$query = $db->prepare("UPDATE sevkiyat SET durum = ? WHERE id = ?");
+			$update = $query->execute(array('3',$sevkiyatID));
+			header("Location: home.php");
+			exit();
+		}
+
 	}
 
 ?>
@@ -283,6 +320,34 @@
 			    width:100%;
 			    margin:-20px 20;
 			}
+			.sevkCardBlue{
+				background-color: #17a2b8;
+				border-radius: 5px;
+				color: white;
+				margin-bottom: 5px;
+			}
+			.sevkCardYellow{
+				background-color: #ffc107;
+				border-radius: 5px;
+				color: white;
+				margin-bottom: 5px;
+			}
+			.sevkCardGreen{
+				background-color: #28a745;
+				border-radius: 5px;
+				color: white;
+				margin-bottom: 5px;
+			}
+			.text-fiyat {
+				font-size: 17px; 
+				font-weight: bold;
+			}
+			@media (max-width:576px) {
+				.text-fiyat {
+					font-size: 15px; 
+					font-weight: normal;
+				}
+			}
 		</style>
 	</head>
 	<body>
@@ -295,17 +360,17 @@
 			</div>
 			<div class="row">
 				<div class="col-md-2 col-12">
-					<div id="accordion" class="mb-3">
-					<?php
-						$i = 0;
-						$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
-						if ( $query->rowCount() ){
-							foreach( $query as $row ){
-								$kategori_id = $row['kategori_id'];
-								$kategori_adi = $row['kategori_adi'];
-								$resim = "img/kategoriler/".$row['resim'];
-								$i++;
-					?>
+					<div id="accordion" class="mt-2">
+						<?php
+							$i = 0;
+							$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
+							if ( $query->rowCount() ){
+								foreach( $query as $row ){
+									$kategori_id = $row['kategori_id'];
+									$kategori_adi = $row['kategori_adi'];
+									$resim = "img/kategoriler/".$row['resim'];
+									$i++;
+						?>
 								<div class="card">
 									<div style="background-color: white; font-size:13px;" data-toggle="collapse" data-target="#collapse<?= $i; ?>" aria-expanded="true" aria-controls="collapse<?= $i; ?>">
 										<div class="row pl-1">
@@ -342,10 +407,10 @@
 							?>
 									</div>
 								</div>
-					<?php
+						<?php
+								}
 							}
-						}
-					?>		
+						?>		
 						<div class="card p-1">
 							<a href="tekliflistesi.php" target="_blank" style="font-size:13px;">
 								ÜRÜN SORGULAMA LİSTESİ
@@ -363,86 +428,69 @@
 						</div>			
 					</div>
 				</div>
-				<div class="col-md-7">
+				<div class="col-md-4">
+					<div class="div4 mt-2">
+						<h5 style="text-align: center;"><b>ANLIK FİYATLAMA</b></h5>
 
-				</div>
-				<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+						<div>
 							
-					<div class="div4" style="margin-top: 0px;">
+							<?php
+
+								$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+
+								if ( $query->rowCount() ){
+
+									foreach( $query as $row ){
+
+										$id++;
+
+										$fabrika_id = guvenlik($row['fabrika_id']);
+
+										$fabrika_adi = guvenlik($row['fabrika_adi']);
+
+										$fabrikaiscilik = guvenlik($row['fabrikaiscilik']);
+
+										$fiyat = ($lme + $fabrikaiscilik) * $dolar / 1000;
+
+										$fiyat2=floor($fiyat*100/100*102)/100;
+
+										$fiyat1=floor($fiyat*100/100*101)/100;
+
+										$fiyat=floor($fiyat*100)/100;
+
+										if($fabrikaiscilik != 0){ 
+
+							?>
+
+										<div class="row">
+											
+											<div class="col-md-7 col-7 text-fiyat" style="border-right: 2px solid black;"><?php echo $fabrika_adi; ?></div>
+
+											<div class="col-md-5 col-5 px-1 pr-3 text-fiyat">
+												<div class="d-flex justify-content-between">
+													<div><?php echo $fiyat."₺"; ?></div>
+													<div><?php echo $fiyat2."₺"; ?></div>
+												</div>
+											</div>
+
+										</div><hr style="margin: 1px; border: 1px solid black;" />
+
+
+							<?php } } } ?>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">		
+					<div class="div4 mt-2">
 
 						<h5 style="text-align: center;"><b>Fiyat Hesaplama</b></h5>
 			
 						<div class="div5">
-					
-							<?php
-
-								$icerik = file_get_contents("https://www.tcmb.gov.tr/kurlar/today.xml");
-							    
-							    $baslik = ara("<ForexSelling>", "</ForexSelling>", $icerik);
-							    
-							    $dolarsatis = $baslik[0];
-
-								$formatted_dolar = number_format($dolarsatis, 2, '.', '');
-
-							    //$string = file_get_contents("https://www.lme.com/api/trading-data/fifteen-minutes-metal-block?datasourceIds=48b1eb21-2c1c-4606-a031-2e0e48804557&datasourceIds=30884874-b778-48ec-bdb2-a0a1d98de5ab&datasourceIds=53f6374a-165d-446a-b9f6-b08bbd2e46a3&datasourceIds=9632206e-db22-407f-892c-ac0fb7735b2e&datasourceIds=61f12b51-04e8-4269-987b-3d4516b20f41&datasourceIds=2908ddcb-e514-4265-9ad9-f0d27561cf52");
-								
-								//$json_a = json_decode($string, true);
-
-								$lme = 0;
-
-								$url = 'https://www.bloomberght.com/emtia/aliminyum';
-								$ch = curl_init($url);
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								$html = curl_exec($ch);
-								curl_close($ch);
-								$dom = new DOMDocument();
-								@$dom->loadHTML($html);
-								$xpath = new DOMXPath($dom);
-								$h1List = $xpath->query('//h1');
-								foreach ($h1List as $index => $item) {
-									if($index == 0){
-										$content = $item->nodeValue;
-										$lmeArray = explode(" ", $content);
-										$number = $lmeArray[72];
-										$number = str_replace(".", "", $number);
-										$number = str_replace(",", ".", $number);
-										$number = floatval($number);
-										$roundedNumber = intval($number);
-										$lme1 = $roundedNumber + 1;
-									}
-								}
-
-								$lme = $lme1;
-
-								// $url = 'https://www.bloomberght.com/emtia/aliminyum3m';
-								// $ch = curl_init($url);
-								// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								// $html = curl_exec($ch);
-								// curl_close($ch);
-								// $dom = new DOMDocument();
-								// @$dom->loadHTML($html);
-								// $xpath = new DOMXPath($dom);
-								// $h1List = $xpath->query('//h1');
-								// foreach ($h1List as $index => $item) {
-								// 	if($index == 0){
-								// 		$content = $item->nodeValue;
-								// 		$lmeArray = explode(" ", $content);
-								// 		$number = $lmeArray[74];
-								// 		$number = str_replace(".", "", $number);
-								// 		$number = str_replace(",", ".", $number);
-								// 		$number = floatval($number);
-								// 		$roundedNumber = intval($number);
-								// 		$lme2 = $roundedNumber + 1;
-								// 	}
-								// }
-
-								// if($lme2 > $lme1){ $lme = $lme2; }else{$lme = $lme1;}
-
-							?>
 
 							<div class="row">
 								
-								<div class="col-xl-6 col-lg-12 col-6"><?php echo "<b>Dolar : </b>".$formatted_dolar." TL"; ?></div>
+								<div class="col-xl-6 col-lg-12 col-6"><?php echo "<b>Dolar : </b>".$dolar." TL"; ?></div>
 
 								<div class="col-xl-6 col-lg-12 col-6"><?php echo "<b>LME : </b>".$lme." $"; ?></div>
 
@@ -460,7 +508,7 @@
 									
 									<div class="col-3">Dolar</div>
 
-									<div class="col-9"><input type="text" class="form-control" name="dolarkuru" value="<?php echo $dolarsatis; ?>"></div>
+									<div class="col-9"><input type="text" class="form-control" name="dolarkuru" value="<?php echo $dolar; ?>"></div>
 
 								</div>
 
@@ -486,11 +534,11 @@
 
 						</div>
 
-					<?php
+						<?php
 
-						if (isset($_GET['fiyat']) === true && empty($_GET['fiyat']) === false) {
-							
-					?>
+							if (isset($_GET['fiyat']) === true && empty($_GET['fiyat']) === false) {
+								
+						?>
 
 						<div class="div5">
 							
@@ -500,61 +548,16 @@
 
 						</div>
 
-					<?php
-
-						}
-
-					?>
-
-						<h5 style="text-align: center;"><b>ANLIK FİYATLAMA</b></h5>
-
-						<div class="div5">
-							
 						<?php
 
-							$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
-
-							if ( $query->rowCount() ){
-
-								foreach( $query as $row ){
-
-									$id++;
-
-									$fabrika_id = guvenlik($row['fabrika_id']);
-
-									$fabrika_adi = guvenlik($row['fabrika_adi']);
-
-									$fabrikaiscilik = guvenlik($row['fabrikaiscilik']);
-
-									$fiyat = ($lme + $fabrikaiscilik) * $dolarsatis / 1000;
-
-									$fiyat2=floor($fiyat*100/100*102)/100;
-
-									$fiyat1=floor($fiyat*100/100*101)/100;
-
-									$fiyat=floor($fiyat*100)/100;
-
-									if($fabrikaiscilik != 0){ 
+							}
 
 						?>
 
-									<div class="row">
-										
-										<div class="col-md-5 col-5" style="font-size: 17px; font-weight: bold; border-right: 2px solid black;"><?php echo $fabrika_adi; ?></div>
-
-										<div class="col-md-3 col-3" style="font-size: 17px; font-weight: bold;"><?php echo $fiyat." TL"; ?></div>
-										<div class="col-md-3 col-3" style="font-size: 17px; font-weight: bold;"><?php echo $fiyat2." TL"; ?></div>
-
-									</div><hr style="margin: 1px; border: 1px solid black;" />
-
-
-						<?php } } } ?>
-
-						</div>
-
 					</div>
-
-					<div class="div4">
+				</div>
+				<div class="col-md-3">
+					<div class="div4 mt-2">
 						
 						<h5 style="text-align: center;"><b>Ağırlık Hesaplama</b></h5>
 
@@ -712,40 +715,323 @@
 
 					<div class="div4">
 						
-						<b>Toplam Ürün Tonaj</b> : <?php echo $uye_adi; ?>
+						<b>Kullanıcı</b> : <?php echo $uye_adi; ?>
 
 					</div>
-
 				</div>
 			</div>	
-
-			<div class="row">
-				<div class="col-md-4 col-12">
-					<?php
-						$yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '0' AND sirket_id = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
-						if($yeniSevkiyatlar->rowCount()){
-							foreach($yeniSevkiyatlar as $sevkiyat){
-								$urunler = guvenlik($sevkiyat['urunler']);
-								$firmaId = guvenlik($sevkiyat['firma_id']);
-								$adetler = guvenlik($sevkiyat['adetler']);
-								$kilolar = guvenlik($sevkiyat['kilolar']);
-								$olusturan = guvenlik($sevkiyat['olusturan']);
-								$hazirlayan = guvenlik($sevkiyat['hazirlayan']);
-								$sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
-								$aciklama = guvenlik($sevkiyat['aciklama']);
-					?>
-								<div>
-									
-								</div>
-					<?php
-							}
-						}
-					?>
+			<div class="row mb-3 mt-3">
+				<div class="col-md-2"></div>
+				<div class="col-md-10">
+					<div class="row">
+						<div class="col-md-4 col-12">
+							<div class="sevkCardBlue p-1" style="text-align:center; font-size:25px;">
+								Alınan Siparişler
+							</div>
+							<?php
+								$yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '0' AND sirket_id = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
+								if($yeniSevkiyatlar->rowCount()){
+									foreach($yeniSevkiyatlar as $sevkiyat){
+										$sevkiyatID = guvenlik($sevkiyat['id']);
+										$urunler = guvenlik($sevkiyat['urunler']);
+										$urunArray = explode(",",$urunler);
+										$firmaId = guvenlik($sevkiyat['firma_id']);
+										$firmaAdi = getFirmaAdi($firmaId);
+										$adetler = guvenlik($sevkiyat['adetler']);
+										$adetArray = explode(",",$adetler);
+										$kilolar = guvenlik($sevkiyat['kilolar']);
+										$fiyatlar = guvenlik($sevkiyat['fiyatlar']);
+										$fiyatArray = explode("-",$fiyatlar);
+										$olusturan = guvenlik($sevkiyat['olusturan']);
+										$hazirlayan = guvenlik($sevkiyat['hazirlayan']);
+										$sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
+										$sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
+										$aciklama = guvenlik($sevkiyat['aciklama']);
+										$saniye = guvenlik($sevkiyat['saniye']);
+										$tarih = getdmY($saniye);
+							?>
+										<div class="sevkCardBlue p-2 pb-2 pb-sm-0">
+											<form action="" method="POST">
+												<div class="row">
+													<div class="col-md-7 col-6"><b>Firma :</b> <?= $firmaAdi ?></div>
+													<div class="col-md-5 col-6" style="text-align:right;">Tarih : <?= $tarih ?></div>
+												</div>
+												<hr class="my-1" style="border-top:1px solid white;"/>
+												<div class="d-none d-sm-block">
+													<div class="row">
+														<div class="col-md-4"><b>Ürün</b></div>
+														<div class="col-md-2"><b>Cinsi</b></div>
+														<div class="col-md-2"><b>Adet</b></div>
+														<div class="col-md-2"><b>Kg</b></div>
+														<div class="col-md-2"><b>Fiyat</b></div>
+													</div>
+													<hr class="my-1" style="border-top:1px solid white;"/>
+												</div>
+												<?php
+													$totalWeight = 0;
+													$totalPrice = 0;
+													$malzemeAdeti = 0;
+													foreach($urunArray as $key => $urunId){
+														$urun = getUrunInfo($urunId);
+												?>
+														<div class="row mb-1">
+															<div class="col-4 d-block d-sm-none">Ürün Adı : </div>
+															<div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
+															<div class="col-4 d-block d-sm-none">Cinsi : </div>
+															<div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
+															<div class="col-4 d-block d-sm-none">Adet : </div>
+															<div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
+															<div class="col-4 d-block d-sm-none">Kilo : </div>
+															<div class="col-md-2 col-8"><input type="text" name="kilo_<?= $key ?>" class="form-control form-control-sm" style="height:25px;"></div>
+															<div class="col-4 d-block d-sm-none">Fiyat : </div>
+															<div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
+														</div>
+														<hr class="my-1" style="border-top:1px solid white;"/>
+												<?php
+														$malzemeAdeti++;
+													}
+												?>
+												<div class="row">
+													<div class="col-md-6 col-12"></div>
+													<div class="col-md-2 col-4"><b>Toplam</b></div>
+													<div class="col-md-2 col-4"></div>
+													<div class="col-md-2 col-4 px-0"></div>
+												</div>
+												<hr class="my-1" style="border-top:1px solid white;"/>
+												<div class="row">
+													<div class="col-12"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
+												</div>
+												<div class="row">
+													<div class="col-12"><b>Siparişi Hazırlayan : </b><?= getUsername($hazirlayan) ?></div>
+												</div>
+												<div class="row">
+													<div class="col-12"><b>Sevk Tipi: </b><?= $sevkTipleri[$sevkTipi] ?></div>
+												</div>
+												<div class="row">
+													<div class="col-12"><b>Açıklama: </b><?= $aciklama ?></div>
+												</div>
+												<div class="row">
+													<div class="col-md-6 col-12 mb-2">
+														<a href="sevkiyatformu.php?id=<?= $sevkiyatID ?>" target="_blank">
+															<button class="btn btn-light btn-block btn-sm">Siparişi yazdır</button>
+														</a>
+													</div>
+													<div class="col-md-6 col-12">
+														<input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
+														<input type="hidden" name="malzemeAdeti" value="<?= $malzemeAdeti ?>">
+														<button type="submit" name="sevkiyathazir" class="btn btn-light btn-block btn-sm">Sevkiyat Hazır</button>
+													</div>
+												</div>
+											</form>
+										</div>
+							<?php
+									}
+								}
+							?>
+						</div>
+						<div class="col-md-4 col-12">
+							<div class="sevkCardYellow p-1" style="text-align:center; font-size:25px;">
+								Hazırlanan Siparişler
+							</div>
+							<?php
+								$yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '1' AND sirket_id = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
+								if($yeniSevkiyatlar->rowCount()){
+									foreach($yeniSevkiyatlar as $sevkiyat){
+										$sevkiyatID = guvenlik($sevkiyat['id']);
+										$urunler = guvenlik($sevkiyat['urunler']);
+										$urunArray = explode(",",$urunler);
+										$firmaId = guvenlik($sevkiyat['firma_id']);
+										$firmaAdi = getFirmaAdi($firmaId);
+										$adetler = guvenlik($sevkiyat['adetler']);
+										$adetArray = explode(",",$adetler);
+										$kilolar = guvenlik($sevkiyat['kilolar']);
+										$kiloArray = explode(",",$kilolar);
+										$fiyatlar = guvenlik($sevkiyat['fiyatlar']);
+										$fiyatArray = explode("-",$fiyatlar);
+										$olusturan = guvenlik($sevkiyat['olusturan']);
+										$hazirlayan = guvenlik($sevkiyat['hazirlayan']);
+										$sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
+										$sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
+										$aciklama = guvenlik($sevkiyat['aciklama']);
+										$saniye = guvenlik($sevkiyat['saniye']);
+										$tarih = getdmY($saniye);
+							?>
+										<div class="sevkCardYellow p-2">
+											<form action="" method="POST">
+												<div class="row">
+													<div class="col-md-7 col-6"><b>Firma :</b> <?= $firmaAdi ?></div>
+													<div class="col-md-5 col-6" style="text-align:right;">Tarih : <?= $tarih ?></div>
+												</div>
+												<hr class="my-1" style="border-top:1px solid white;"/>
+												<div class="d-none d-sm-block">
+													<div class="row">
+														<div class="col-md-4"><b>Ürün</b></div>
+														<div class="col-md-2"><b>Cinsi</b></div>
+														<div class="col-md-2"><b>Adet</b></div>
+														<div class="col-md-2"><b>Kg</b></div>
+														<div class="col-md-2"><b>Fiyat</b></div>
+													</div>
+													<hr class="my-1" style="border-top:1px solid white;"/>
+												</div>
+												<?php
+													$totalWeight = 0;
+													$totalPrice = 0;
+													$malzemeAdeti = 0;
+													foreach($urunArray as $key => $urunId){
+														$urun = getUrunInfo($urunId);
+												?>
+														<div class="row mb-1">
+															<div class="col-4 d-block d-sm-none">Ürün Adı : </div>
+															<div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
+															<div class="col-4 d-block d-sm-none">Cinsi : </div>
+															<div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
+															<div class="col-4 d-block d-sm-none">Adet : </div>
+															<div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
+															<div class="col-4 d-block d-sm-none">Kilo : </div>
+															<div class="col-md-2 col-8"><?= $kiloArray[$key] ?></div>
+															<div class="col-4 d-block d-sm-none">Fiyat : </div>
+															<div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
+														</div>
+														<hr class="my-1" style="border-top:1px solid white;"/>
+												<?php
+														$malzemeAdeti++;
+													}
+												?>
+												<div class="row">
+													<div class="col-md-6 col-12"></div>
+													<div class="col-md-2 col-4"><b>Toplam</b></div>
+													<div class="col-md-2 col-4"></div>
+													<div class="col-md-2 col-4 px-0"></div>
+												</div>
+												<hr class="my-1" style="border-top:1px solid white;"/>
+												<div class="row">
+													<div class="col-12"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
+												</div>
+												<div class="row">
+													<div class="col-12"><b>Siparişi Hazırlayan : </b><?= getUsername($hazirlayan) ?></div>
+												</div>
+												<div class="row">
+													<div class="col-12"><b>Sevk Tipi: </b><?= $sevkTipleri[$sevkTipi] ?></div>
+												</div>
+												<div class="row">
+													<div class="col-12"><b>Açıklama: </b><?= $aciklama ?></div>
+												</div>
+												<div class="row">
+													<div class="col-md-12 col-12">
+														<input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
+														<button type="submit" name="faturahazir" class="btn btn-light btn-block btn-sm">Fatura Hazır</button>
+													</div>
+												</div>
+											</form>
+										</div>
+							<?php
+									}
+								}
+							?>
+						</div>
+						<div class="col-md-4 col-12">
+							<div class="sevkCardGreen p-1" style="text-align:center; font-size:25px;">
+								Faturası Kesilenler
+							</div>
+							<?php
+								$yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '2' AND sirket_id = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
+								if($yeniSevkiyatlar->rowCount()){
+									foreach($yeniSevkiyatlar as $sevkiyat){
+										$sevkiyatID = guvenlik($sevkiyat['id']);
+										$urunler = guvenlik($sevkiyat['urunler']);
+										$urunArray = explode(",",$urunler);
+										$firmaId = guvenlik($sevkiyat['firma_id']);
+										$firmaAdi = getFirmaAdi($firmaId);
+										$adetler = guvenlik($sevkiyat['adetler']);
+										$adetArray = explode(",",$adetler);
+										$kilolar = guvenlik($sevkiyat['kilolar']);
+										$kiloArray = explode(",",$kilolar);
+										$fiyatlar = guvenlik($sevkiyat['fiyatlar']);
+										$fiyatArray = explode("-",$fiyatlar);
+										$olusturan = guvenlik($sevkiyat['olusturan']);
+										$hazirlayan = guvenlik($sevkiyat['hazirlayan']);
+										$sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
+										$sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
+										$aciklama = guvenlik($sevkiyat['aciklama']);
+										$saniye = guvenlik($sevkiyat['saniye']);
+										$tarih = getdmY($saniye);
+							?>
+										<div class="sevkCardGreen p-2">
+											<form action="" method="POST">
+												<div class="row">
+													<div class="col-md-7 col-6"><b>Firma :</b> <?= $firmaAdi ?></div>
+													<div class="col-md-5 col-6" style="text-align:right;">Tarih : <?= $tarih ?></div>
+												</div>
+												<hr class="my-1" style="border-top:1px solid white;"/>
+												<div class="d-none d-sm-block">
+													<div class="row">
+														<div class="col-md-4"><b>Ürün</b></div>
+														<div class="col-md-2"><b>Cinsi</b></div>
+														<div class="col-md-2"><b>Adet</b></div>
+														<div class="col-md-2"><b>Kg</b></div>
+														<div class="col-md-2"><b>Fiyat</b></div>
+													</div>
+													<hr class="my-1" style="border-top:1px solid white;"/>
+												</div>
+												<?php
+													$totalWeight = 0;
+													$totalPrice = 0;
+													$malzemeAdeti = 0;
+													foreach($urunArray as $key => $urunId){
+														$urun = getUrunInfo($urunId);
+												?>
+														<div class="row mb-1">
+															<div class="col-4 d-block d-sm-none">Ürün Adı : </div>
+															<div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
+															<div class="col-4 d-block d-sm-none">Cinsi : </div>
+															<div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
+															<div class="col-4 d-block d-sm-none">Adet : </div>
+															<div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
+															<div class="col-4 d-block d-sm-none">Kilo : </div>
+															<div class="col-md-2 col-8"><?= $kiloArray[$key] ?></div>
+															<div class="col-4 d-block d-sm-none">Fiyat : </div>
+															<div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
+														</div>
+														<hr class="my-1" style="border-top:1px solid white;"/>
+												<?php
+														$malzemeAdeti++;
+													}
+												?>
+												<div class="row">
+													<div class="col-md-6 col-12"></div>
+													<div class="col-md-2 col-4"><b>Toplam</b></div>
+													<div class="col-md-2 col-4"></div>
+													<div class="col-md-2 col-4 px-0"></div>
+												</div>
+												<hr class="my-1" style="border-top:1px solid white;"/>
+												<div class="row">
+													<div class="col-12"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
+												</div>
+												<div class="row">
+													<div class="col-12"><b>Siparişi Hazırlayan : </b><?= getUsername($hazirlayan) ?></div>
+												</div>
+												<div class="row">
+													<div class="col-12"><b>Sevk Tipi: </b><?= $sevkTipleri[$sevkTipi] ?></div>
+												</div>
+												<div class="row">
+													<div class="col-12"><b>Açıklama: </b><?= $aciklama ?></div>
+												</div>
+												<div class="row">
+													<div class="col-md-12 col-12">
+														<input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
+														<button type="submit" name="arsivegonder" class="btn btn-light btn-block btn-sm">Arşive Gönder</button>
+													</div>
+												</div>
+											</form>
+										</div>
+							<?php
+									}
+								}
+							?>
+						</div>
+					</div>
 				</div>
-				<div class="col-md-4 col-12"></div>
-				<div class="col-md-4 col-12"></div>
 			</div>
-
 			<div style="margin-top:30px;">
 
 				<div class="row">
