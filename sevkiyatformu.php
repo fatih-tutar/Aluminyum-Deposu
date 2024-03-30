@@ -10,11 +10,17 @@
     $urunler = guvenlik($sevkiyat['urunler']);
     $urunArray = explode(",",$urunler);
     $firmaId = guvenlik($sevkiyat['firma_id']);
-    $firmaAdi = getFirmaAdi($firmaId);
+    $firmaInfos = getFirmaInfos($firmaId);
     $adetler = guvenlik($sevkiyat['adetler']);
     $adetArray = explode(",",$adetler);
     $kilolar = guvenlik($sevkiyat['kilolar']);
-    $kiloArray = explode(",",$kilolar);
+    if(strpos($kilolar, ',')){
+        $kiloArray = explode(",",$kilolar);
+        $toplamkg = 0;
+        foreach($kiloArray as $kilo){
+            $toplamkg += $kilo;
+        }
+    }
     $fiyatlar = guvenlik($sevkiyat['fiyatlar']);
     $fiyatArray = explode("-",$fiyatlar);
     $olusturan = guvenlik($sevkiyat['olusturan']);
@@ -39,7 +45,7 @@
 
         <div class="row">
             
-            <div class="col-md-4" style="text-align: center;"><img src="img/file/<?php echo $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
+            <div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
 
             <div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
@@ -63,32 +69,50 @@
 
         </div>
 
-        <div class="row" style="padding: 20px;">
+        <div class="row m-3">
             
-            <div class="col-md-2">
+            <div class="col-md-1">
                 
-                <b>Firma Adı :</b>
+                <b>Firma :</b>
 
             </div>
 
-            <div class="col-md-5">
+            <div class="col-md-3">
                 
-                <?php echo $firmaAdi."<br/>"?>
+                <?= $firmaInfos['firmaadi']."<br/>"?>
 
             </div>
 
-            <div class="col-md-5" style="text-align:right;">
-                <?php echo "Tarih : ".$tarih; ?>
+            <div class="col-md-3">
+                
+                <?= $firmaInfos['firmatel']."<br/>"?>
+
             </div>
 
+            <div class="col-md-3">
+                
+                <?= $firmaInfos['firmaeposta']."<br/>"?>
+
+            </div>
+
+            <div class="col-md-2" style="text-align:right;">
+                <?= "Tarih : ".$tarih; ?>
+            </div>
+
+        </div>
+
+        <div class="row m-3">
+            <div class="col-md-11">
+                <b>Adres : </b><?= $firmaInfos['firmaadres'] ?>
+            </div>
         </div>
 
         <div class="row" style="padding: 20px;">
             <div class="col-md-4"><b>Ürün</b></div>
             <div class="col-md-2"><b>Cinsi</b></div>
+            <div class="col-md-2"><b>Raf</b></div>
             <div class="col-md-2"><b>Adet</b></div>
             <div class="col-md-2"><b>Kg</b></div>
-            <div class="col-md-2"><b>Fiyat</b></div>
         </div>
 
         <?php
@@ -104,12 +128,12 @@
                     <div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
                     <div class="col-4 d-block d-sm-none">Cinsi : </div>
                     <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
+                    <div class="col-4 d-block d-sm-none">Raf : </div>
+                    <div class="col-md-4 col-8"><?= $urun['urun_raf'] ?></div>
                     <div class="col-4 d-block d-sm-none">Adet : </div>
                     <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
                     <div class="col-4 d-block d-sm-none">Kilo : </div>
-                    <div class="col-md-2 col-8"><?= $kiloArray[$key] ?></div>
-                    <div class="col-4 d-block d-sm-none">Fiyat : </div>
-                    <div class="col-md-2 col-8"><?= $fiyatArray[$key].' TL' ?></div>
+                    <div class="col-md-2 col-8"><?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?></div>
                 </div>
         <?php
             }
@@ -118,18 +142,18 @@
         <hr style="border:2px black solid; margin: 0px;" />
 
         <div class="row" style="padding: 20px;">
-            <div class="col-md-6 col-12"></div>
-            <div class="col-md-2 col-4"><b>Toplam</b></div>
-            <div class="col-md-2 col-4"></div>
-            <div class="col-md-2 col-4"><?= $totalPrice.' TL' ?></div>
+            <div class="col-md-8 col-12"></div>
+            <div class="col-md-2 col-4"><b>Toplam Kilo</b></div>
+            <div class="col-md-2 col-4"><?= strpos($kilolar,",") ? $toplamkg : $kilolar ?></div>
         </div>
 
         <div class="row" style="padding: 20px;">
             <div class="col-md-4"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
             <div class="col-md-4"><b>Siparişi Hazırlayan : </b><?= getUsername($hazirlayan) ?></div>
-            <div class="col-md-4"><b>Sevk Tipi: </b><?= $sevkTipleri[$sevkTipi] ?></div>
+            <div class="col-md-4"><b>Faturayı Kesen : </b><?= getUsername($faturaci) ?></div>
         </div>
         <div class="row" style="padding: 20px;">
+            <div class="col-md-4"><b>Sevk Tipi: </b><?= $sevkTipleri[$sevkTipi] ?></div>
             <div class="col-md-8"><b>Açıklama: </b><?= $aciklama ?></div>
         </div>
 
