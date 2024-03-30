@@ -258,17 +258,19 @@
 		if(isset($_POST['sevkiyathazir'])){
 			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
 			$malzemeAdeti = guvenlik($_POST['malzemeAdeti']);
-			$kilolar = "";
-			$isEmtpyKilo = false;
-			for($i = 0; $i < $malzemeAdeti; $i++){
-				if(empty(guvenlik($_POST['kilo_'.$i]))){ $isEmtpyKilo = true; }
-				if(empty($kilolar)){
-					$kilolar = guvenlik($_POST['kilo_'.$i]);
-				}else{
-					$kilolar = $kilolar.",".guvenlik($_POST['kilo_'.$i]);
-				}
+			$kilolar = guvenlik($_POST['kilolar']);
+			if(empty($kilolar)){
+				for($i = 0; $i < $malzemeAdeti; $i++){
+					if(!empty(guvenlik($_POST['kilo_'.$i]))){ 
+						if($i == 0){
+							$kilolar = guvenlik($_POST['kilo_'.$i]);
+						}else{
+							$kilolar = $kilolar.",".guvenlik($_POST['kilo_'.$i]);
+						}
+					}
+				}	
 			}
-			if($isEmtpyKilo == false){
+			if(!empty($kilolar)){
 				$query = $db->prepare("UPDATE sevkiyat SET kilolar = ?, durum = ?, hazirlayan = ? WHERE id = ?");
 				$update = $query->execute(array($kilolar,'1',$uye_id,$sevkiyatID));
 			}
@@ -278,8 +280,16 @@
 
 		if(isset($_POST['faturahazir'])){
 			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
+			$query = $db->prepare("UPDATE sevkiyat SET durum = ?, faturaci = ? WHERE id = ?");
+			$update = $query->execute(array('2',$uye_id,$sevkiyatID));
+			header("Location: home.php");
+			exit();
+		}
+
+		if(isset($_POST['alinanagerial'])){
+			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
 			$query = $db->prepare("UPDATE sevkiyat SET durum = ? WHERE id = ?");
-			$update = $query->execute(array('2',$sevkiyatID));
+			$update = $query->execute(array('0',$sevkiyatID));
 			header("Location: home.php");
 			exit();
 		}
@@ -288,6 +298,14 @@
 			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
 			$query = $db->prepare("UPDATE sevkiyat SET durum = ? WHERE id = ?");
 			$update = $query->execute(array('3',$sevkiyatID));
+			header("Location: home.php");
+			exit();
+		}
+
+		if(isset($_POST['hazirlananagerial'])){
+			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
+			$query = $db->prepare("UPDATE sevkiyat SET durum = ? WHERE id = ?");
+			$update = $query->execute(array('1',$sevkiyatID));
 			header("Location: home.php");
 			exit();
 		}
@@ -307,7 +325,6 @@
 		<?php include 'template/head.php'; ?>
 
 		<style type="text/css">
-			
 			.gorsel-container {
 			    width:100%;
 			    overflow:hidden;
@@ -360,832 +377,84 @@
 			</div>
 			<div class="row">
 				<div class="col-md-2 col-12">
-					<div id="accordion" class="mt-2">
-						<?php
-							$i = 0;
-							$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
-							if ( $query->rowCount() ){
-								foreach( $query as $row ){
-									$kategori_id = $row['kategori_id'];
-									$kategori_adi = $row['kategori_adi'];
-									$resim = "img/kategoriler/".$row['resim'];
-									$i++;
-						?>
-								<div class="card">
-									<div style="background-color: white; font-size:13px;" data-toggle="collapse" data-target="#collapse<?= $i; ?>" aria-expanded="true" aria-controls="collapse<?= $i; ?>">
-										<div class="row pl-1">
-											<div class="col-md-3 col-2">
-												<img src="<?= $resim ?>" alt="<?= $kategori_adi ?>" width="40" height="40">
-											</div>
-											<div class="col-md-9 col-10 d-flex align-items-center">
-												<?php echo $kategori_adi; ?>
-											</div>
-										</div>							
-									</div>
-									<div id="collapse<?= $i; ?>" class="collapse px-2" style="border-top:1px solid grey; font-size:11px;" aria-labelledby="heading<?= $i; ?>" data-parent="#accordion">
-							<?php
-								$cek = $db->query("SELECT * FROM kategori WHERE kategori_ust = '{$kategori_id}' AND kategori_tipi = '1' AND sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
-								if ( $cek->rowCount() ){
-									foreach( $cek as $wor ){
-										$alt_kategori_id = $wor['kategori_id'];
-										$alt_kategori_adi = $wor['kategori_adi'];
-										$alt_kategori_resim = "img/kategoriler/".$wor['resim'];
-							?>		
-										<a href="urunler.php?id=<?php echo $alt_kategori_id; ?>">
-											<div class="row pl-1">
-												<div class="col-md-3 col-2 offset-md-0 offset-1">
-													<img src="<?= $alt_kategori_resim ?>" alt="<?= $alt_kategori_adi ?>" width="35" height="35">
-												</div>
-												<div class="col-md-9 col-9 d-flex align-items-center">
-													<?php echo $alt_kategori_adi; ?>
-												</div>
-											</div>		
-										</a>
-							<?php
-									}
-								}
-							?>
-									</div>
-								</div>
-						<?php
-								}
-							}
-						?>		
-						<div class="card p-1">
-							<a href="tekliflistesi.php" target="_blank" style="font-size:13px;">
-								ÜRÜN SORGULAMA LİSTESİ
-							</a>
-						</div>	
-						<div class="card p-1">
-							<a href="kaliplistesi.php" target="_blank" style="font-size:13px;">
-								KALIP SORGULAMA EKRANI
-							</a>
-						</div>	
-						<div class="card p-1">
-							<a href="fiyatlistesi.php" target="_blank" style="font-size:13px;">
-								AYDINLATMA FİYAT LİSTESİ
-							</a>
-						</div>			
-					</div>
+					<?php include 'template/sidebar.php'; ?>
 				</div>
-				<div class="col-md-4">
-					<div class="div4 mt-2">
-						<h5 style="text-align: center;"><b>ANLIK FİYATLAMA</b></h5>
-
-						<div>
-							
-							<?php
-
-								$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
-
-								if ( $query->rowCount() ){
-
-									foreach( $query as $row ){
-
-										$id++;
-
-										$fabrika_id = guvenlik($row['fabrika_id']);
-
-										$fabrika_adi = guvenlik($row['fabrika_adi']);
-
-										$fabrikaiscilik = guvenlik($row['fabrikaiscilik']);
-
-										$fiyat = ($lme + $fabrikaiscilik) * $dolar / 1000;
-
-										$fiyat2=floor($fiyat*100/100*102)/100;
-
-										$fiyat1=floor($fiyat*100/100*101)/100;
-
-										$fiyat=floor($fiyat*100)/100;
-
-										if($fabrikaiscilik != 0){ 
-
-							?>
-
-										<div class="row">
-											
-											<div class="col-md-7 col-7 text-fiyat" style="border-right: 2px solid black;"><?php echo $fabrika_adi; ?></div>
-
-											<div class="col-md-5 col-5 px-1 pr-3 text-fiyat">
-												<div class="d-flex justify-content-between">
-													<div><?php echo $fiyat."₺"; ?></div>
-													<div><?php echo $fiyat2."₺"; ?></div>
-												</div>
-											</div>
-
-										</div><hr style="margin: 1px; border: 1px solid black;" />
-
-
-							<?php } } } ?>
-
-						</div>
-					</div>
-				</div>
-				<div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">		
-					<div class="div4 mt-2">
-
-						<h5 style="text-align: center;"><b>Fiyat Hesaplama</b></h5>
-			
-						<div class="div5">
-
-							<div class="row">
-								
-								<div class="col-xl-6 col-lg-12 col-6"><?php echo "<b>Dolar : </b>".$dolar." TL"; ?></div>
-
-								<div class="col-xl-6 col-lg-12 col-6"><?php echo "<b>LME : </b>".$lme." $"; ?></div>
-
-							</div>
-
-						</div>
-
-						<div class="div5">
-							
-							<h5><b>Hesaplama</b></h5>
-
-							<form action="" method="POST">
-
-								<div class="row" style="margin-bottom: 5px;">
-									
-									<div class="col-3">Dolar</div>
-
-									<div class="col-9"><input type="text" class="form-control" name="dolarkuru" value="<?php echo $dolar; ?>"></div>
-
-								</div>
-
-								<div class="row" style="margin-bottom: 5px;">
-									
-									<div class="col-3">LME</div>
-
-									<div class="col-9"><input type="text" class="form-control" name="lme" value="<?php echo $lme; ?>"></div>
-
-								</div>
-
-								<div class="row" style="margin-bottom: 5px;">
-									
-									<div class="col-3">İşçilik</div>
-
-									<div class="col-9"><input type="text" class="form-control" name="iscilik" placeholder="İşçilik Giriniz."></div>
-
-								</div>
-
-								<button type="submit" name="hesapla" class="btn btn-primary btn-block btn-sm" style="background-color:black;">Hesapla</button>
-
-							</form>
-
-						</div>
-
-						<?php
-
-							if (isset($_GET['fiyat']) === true && empty($_GET['fiyat']) === false) {
-								
-						?>
-
-						<div class="div5">
-							
-							<h5><b>Fiyat</b></h5>
-
-							<?php echo $_GET['fiyat']." TL"; ?>
-
-						</div>
-
-						<?php
-
-							}
-
-						?>
-
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="div4 mt-2">
-						
-						<h5 style="text-align: center;"><b>Ağırlık Hesaplama</b></h5>
-
-						<select name="malzemetipi" id="selectkutuID" class="form-control" onchange="degergoster();" style="margin-bottom: 5px;">
-
-							<option value="0">Malzeme Tipini Seçiniz</option>
-							
-							<option value="1">Alüminyum Levha</option>
-
-							<option value="2">Alüminyum Köşebent</option>
-
-							<option value="3">Alüminyum Çubuk</option>
-
-							<option value="4">Alüminyum Kutu</option>
-
-							<option value="5">Alüminyum Boru</option>
-
-						</select>
-
-						<?php if(isset($mt) && $mt == '1'){ ?><div id="malzeme1"><?php }else{ ?><div id="malzeme1" style="display: none;"><?php } ?>
-							
-							<hr/>
-							
-							<h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Levha Bilgilerini Doldurunuz</b></h6>
-
-							<form action="" method="POST">
-
-								<input type="hidden" name="malzemetipi" value="1">
-
-								<div class="row"><div class="col-3"><b>Kalıklık</b></div><div class="col-9"><?php if(isset($_GET['k'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="kalinlik" value="<?php echo $kalinlik ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="kalinlik" placeholder="KALINLIK"><?php } ?></div></div>
-
-								<div class="row"><div class="col-3"><b>En</b></div><div class="col-9"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" value="<?php echo $en; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" placeholder="EN"><?php } ?></div></div>
-
-								<div class="row"><div class="col-3"><b>Boy</b></div><div class="col-9"><?php if(isset($_GET['b'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?php echo $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
-
-								<div class="row"><div class="col-3"><b>Adet</b></div><div class="col-9"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?php echo $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-								
-								<button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px; background-color: black;" name="levhahesapla">Hesapla</button>
-
-							</form>
-
-							<?php if(isset($toplam1)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?php echo $toplam1." KG"; ?></ins></b></h5><?php } ?>
-
-						</div>
-
-						<?php if(isset($mt) && $mt == '2'){ ?><div id="malzeme2"><?php }else{ ?><div id="malzeme2" style="display: none;"><?php } ?>
-							
-							<hr/>
-							
-							<h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Köşebent Bilgilerini Doldurunuz</b></h6>
-
-							<form action="" method="POST">
-
-								<input type="hidden" name="malzemetipi" value="2">
-
-								<div class="row"><div class="col-4"><b>A (mm)</b></div><div class="col-8"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" value="<?php echo $amm ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" placeholder="A (mm)"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>B (mm)</b></div><div class="col-8"><?php if(isset($_GET['b'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" value="<?php echo $bmm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" placeholder="B (mm)"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?php echo $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Boy</b></div><div class="col-8"><?php if(isset($_GET['boy'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?php echo $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?php echo $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-								
-								<button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="kosebenthesapla">Hesapla</button>
-
-							</form>
-
-							<?php if(isset($toplam2)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?php echo $toplam2." KG"; ?></ins></b></h5><?php } ?>
-
-						</div>
-
-						<?php if(isset($mt) && $mt == '3'){ ?><div id="malzeme3"><?php }else{ ?><div id="malzeme3" style="display: none;"><?php } ?>
-							
-							<hr/>
-							
-							<h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Çubuk Bilgilerini Doldurunuz</b></h6>
-
-							<form action="" method="POST">
-
-								<input type="hidden" name="malzemetipi" value="3">
-
-								<div class="row"><div class="col-4"><b>Çap</b></div><div class="col-8"><?php if(isset($_GET['c'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="cap" value="<?php echo $cap ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="cap" placeholder="ÇAP"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Uzunluk</b></div><div class="col-8"><?php if(isset($_GET['u'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="uzunluk" value="<?php echo $uzunluk; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="uzunluk" placeholder="UZUNLUK"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?php echo $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-								
-								<button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="cubukhesapla">Hesapla</button>
-
-							</form>
-
-							<?php if(isset($toplam3)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?php echo $toplam3." KG"; ?></ins></b></h5><?php } ?>
-
-						</div>
-
-						<?php if(isset($mt) && $mt == '4'){ ?><div id="malzeme4"><?php }else{ ?><div id="malzeme4" style="display: none;"><?php } ?>
-							
-							<hr/>
-							
-							<h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Kutu Bilgilerini Doldurunuz</b></h6>
-
-							<form action="" method="POST">
-
-								<input type="hidden" name="malzemetipi" value="4">
-
-								<div class="row"><div class="col-4"><b>A (mm)</b></div><div class="col-8"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" value="<?php echo $amm ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" placeholder="A (mm)"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>B (mm)</b></div><div class="col-8"><?php if(isset($_GET['b'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" value="<?php echo $bmm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" placeholder="B (mm)"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?php echo $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Boy</b></div><div class="col-8"><?php if(isset($_GET['boy'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?php echo $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?php echo $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-								
-								<button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="kutuhesapla">Hesapla</button>
-
-							</form>
-
-							<?php if(isset($toplam4)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?php echo $toplam4." KG"; ?></ins></b></h5><?php } ?>
-
-						</div>
-
-						<?php if(isset($mt) && $mt == '5'){ ?><div id="malzeme5"><?php }else{ ?><div id="malzeme5" style="display: none;"><?php } ?>
-							
-							<hr/>
-							
-							<h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Boru Bilgilerini Doldurunuz</b></h6>
-
-							<form action="" method="POST">
-
-								<input type="hidden" name="malzemetipi" value="5">
-
-								<div class="row"><div class="col-4"><b>İç Çap</b></div><div class="col-8"><?php if(isset($_GET['iccap'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="iccap" value="<?php echo $iccap ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="iccap" placeholder="İç Çap"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Dış Çap</b></div><div class="col-8"><?php if(isset($_GET['discap'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="discap" value="<?php echo $discap; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="discap" placeholder="Dış Çap"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?php echo $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Boy</b></div><div class="col-8"><?php if(isset($_GET['boy'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?php echo $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
-
-								<div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?php echo $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-								
-								<button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="boruhesapla">Hesapla</button>
-
-							</form>
-
-							<?php if(isset($toplam5)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?php echo $toplam5." KG"; ?></ins></b></h5><?php } ?>
-
-						</div>
-
-					</div>
-
-					<div class="div4">
-						
-						<b>Kullanıcı</b> : <?php echo $uye_adi; ?>
-
-					</div>
-				</div>
-			</div>	
-			<div class="row mb-3 mt-3">
-				<div class="col-md-2"></div>
 				<div class="col-md-10">
 					<div class="row">
-						<div class="col-md-4 col-12">
-							<div class="sevkCardBlue p-1" style="text-align:center; font-size:25px;">
-								Alınan Siparişler
-							</div>
-							<?php
-								$yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '0' AND sirket_id = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
-								if($yeniSevkiyatlar->rowCount()){
-									foreach($yeniSevkiyatlar as $sevkiyat){
-										$sevkiyatID = guvenlik($sevkiyat['id']);
-										$urunler = guvenlik($sevkiyat['urunler']);
-										$urunArray = explode(",",$urunler);
-										$firmaId = guvenlik($sevkiyat['firma_id']);
-										$firmaAdi = getFirmaAdi($firmaId);
-										$adetler = guvenlik($sevkiyat['adetler']);
-										$adetArray = explode(",",$adetler);
-										$kilolar = guvenlik($sevkiyat['kilolar']);
-										$fiyatlar = guvenlik($sevkiyat['fiyatlar']);
-										$fiyatArray = explode("-",$fiyatlar);
-										$olusturan = guvenlik($sevkiyat['olusturan']);
-										$hazirlayan = guvenlik($sevkiyat['hazirlayan']);
-										$sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
-										$sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
-										$aciklama = guvenlik($sevkiyat['aciklama']);
-										$saniye = guvenlik($sevkiyat['saniye']);
-										$tarih = getdmY($saniye);
-							?>
-										<div class="sevkCardBlue p-2 pb-2 pb-sm-0">
-											<form action="" method="POST">
-												<div class="row">
-													<div class="col-md-7 col-6"><b>Firma :</b> <?= $firmaAdi ?></div>
-													<div class="col-md-5 col-6" style="text-align:right;">Tarih : <?= $tarih ?></div>
-												</div>
-												<hr class="my-1" style="border-top:1px solid white;"/>
-												<div class="d-none d-sm-block">
-													<div class="row">
-														<div class="col-md-4"><b>Ürün</b></div>
-														<div class="col-md-2"><b>Cinsi</b></div>
-														<div class="col-md-2"><b>Adet</b></div>
-														<div class="col-md-2"><b>Kg</b></div>
-														<div class="col-md-2"><b>Fiyat</b></div>
-													</div>
-													<hr class="my-1" style="border-top:1px solid white;"/>
-												</div>
-												<?php
-													$totalWeight = 0;
-													$totalPrice = 0;
-													$malzemeAdeti = 0;
-													foreach($urunArray as $key => $urunId){
-														$urun = getUrunInfo($urunId);
-												?>
-														<div class="row mb-1">
-															<div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-															<div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
-															<div class="col-4 d-block d-sm-none">Cinsi : </div>
-															<div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
-															<div class="col-4 d-block d-sm-none">Adet : </div>
-															<div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
-															<div class="col-4 d-block d-sm-none">Kilo : </div>
-															<div class="col-md-2 col-8"><input type="text" name="kilo_<?= $key ?>" class="form-control form-control-sm" style="height:25px;"></div>
-															<div class="col-4 d-block d-sm-none">Fiyat : </div>
-															<div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
-														</div>
-														<hr class="my-1" style="border-top:1px solid white;"/>
-												<?php
-														$malzemeAdeti++;
-													}
-												?>
-												<div class="row">
-													<div class="col-md-6 col-12"></div>
-													<div class="col-md-2 col-4"><b>Toplam</b></div>
-													<div class="col-md-2 col-4"></div>
-													<div class="col-md-2 col-4 px-0"></div>
-												</div>
-												<hr class="my-1" style="border-top:1px solid white;"/>
-												<div class="row">
-													<div class="col-12"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
-												</div>
-												<div class="row">
-													<div class="col-12"><b>Siparişi Hazırlayan : </b><?= getUsername($hazirlayan) ?></div>
-												</div>
-												<div class="row">
-													<div class="col-12"><b>Sevk Tipi: </b><?= $sevkTipleri[$sevkTipi] ?></div>
-												</div>
-												<div class="row">
-													<div class="col-12"><b>Açıklama: </b><?= $aciklama ?></div>
-												</div>
-												<div class="row">
-													<div class="col-md-6 col-12 mb-2">
-														<a href="sevkiyatformu.php?id=<?= $sevkiyatID ?>" target="_blank">
-															<button class="btn btn-light btn-block btn-sm">Siparişi yazdır</button>
-														</a>
-													</div>
-													<div class="col-md-6 col-12">
-														<input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
-														<input type="hidden" name="malzemeAdeti" value="<?= $malzemeAdeti ?>">
-														<button type="submit" name="sevkiyathazir" class="btn btn-light btn-block btn-sm">Sevkiyat Hazır</button>
-													</div>
-												</div>
-											</form>
-										</div>
-							<?php
-									}
-								}
-							?>
-						</div>
-						<div class="col-md-4 col-12">
-							<div class="sevkCardYellow p-1" style="text-align:center; font-size:25px;">
-								Hazırlanan Siparişler
-							</div>
-							<?php
-								$yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '1' AND sirket_id = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
-								if($yeniSevkiyatlar->rowCount()){
-									foreach($yeniSevkiyatlar as $sevkiyat){
-										$sevkiyatID = guvenlik($sevkiyat['id']);
-										$urunler = guvenlik($sevkiyat['urunler']);
-										$urunArray = explode(",",$urunler);
-										$firmaId = guvenlik($sevkiyat['firma_id']);
-										$firmaAdi = getFirmaAdi($firmaId);
-										$adetler = guvenlik($sevkiyat['adetler']);
-										$adetArray = explode(",",$adetler);
-										$kilolar = guvenlik($sevkiyat['kilolar']);
-										$kiloArray = explode(",",$kilolar);
-										$fiyatlar = guvenlik($sevkiyat['fiyatlar']);
-										$fiyatArray = explode("-",$fiyatlar);
-										$olusturan = guvenlik($sevkiyat['olusturan']);
-										$hazirlayan = guvenlik($sevkiyat['hazirlayan']);
-										$sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
-										$sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
-										$aciklama = guvenlik($sevkiyat['aciklama']);
-										$saniye = guvenlik($sevkiyat['saniye']);
-										$tarih = getdmY($saniye);
-							?>
-										<div class="sevkCardYellow p-2">
-											<form action="" method="POST">
-												<div class="row">
-													<div class="col-md-7 col-6"><b>Firma :</b> <?= $firmaAdi ?></div>
-													<div class="col-md-5 col-6" style="text-align:right;">Tarih : <?= $tarih ?></div>
-												</div>
-												<hr class="my-1" style="border-top:1px solid white;"/>
-												<div class="d-none d-sm-block">
-													<div class="row">
-														<div class="col-md-4"><b>Ürün</b></div>
-														<div class="col-md-2"><b>Cinsi</b></div>
-														<div class="col-md-2"><b>Adet</b></div>
-														<div class="col-md-2"><b>Kg</b></div>
-														<div class="col-md-2"><b>Fiyat</b></div>
-													</div>
-													<hr class="my-1" style="border-top:1px solid white;"/>
-												</div>
-												<?php
-													$totalWeight = 0;
-													$totalPrice = 0;
-													$malzemeAdeti = 0;
-													foreach($urunArray as $key => $urunId){
-														$urun = getUrunInfo($urunId);
-												?>
-														<div class="row mb-1">
-															<div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-															<div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
-															<div class="col-4 d-block d-sm-none">Cinsi : </div>
-															<div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
-															<div class="col-4 d-block d-sm-none">Adet : </div>
-															<div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
-															<div class="col-4 d-block d-sm-none">Kilo : </div>
-															<div class="col-md-2 col-8"><?= $kiloArray[$key] ?></div>
-															<div class="col-4 d-block d-sm-none">Fiyat : </div>
-															<div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
-														</div>
-														<hr class="my-1" style="border-top:1px solid white;"/>
-												<?php
-														$malzemeAdeti++;
-													}
-												?>
-												<div class="row">
-													<div class="col-md-6 col-12"></div>
-													<div class="col-md-2 col-4"><b>Toplam</b></div>
-													<div class="col-md-2 col-4"></div>
-													<div class="col-md-2 col-4 px-0"></div>
-												</div>
-												<hr class="my-1" style="border-top:1px solid white;"/>
-												<div class="row">
-													<div class="col-12"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
-												</div>
-												<div class="row">
-													<div class="col-12"><b>Siparişi Hazırlayan : </b><?= getUsername($hazirlayan) ?></div>
-												</div>
-												<div class="row">
-													<div class="col-12"><b>Sevk Tipi: </b><?= $sevkTipleri[$sevkTipi] ?></div>
-												</div>
-												<div class="row">
-													<div class="col-12"><b>Açıklama: </b><?= $aciklama ?></div>
-												</div>
-												<div class="row">
-													<div class="col-md-12 col-12">
-														<input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
-														<button type="submit" name="faturahazir" class="btn btn-light btn-block btn-sm">Fatura Hazır</button>
-													</div>
-												</div>
-											</form>
-										</div>
-							<?php
-									}
-								}
-							?>
-						</div>
-						<div class="col-md-4 col-12">
-							<div class="sevkCardGreen p-1" style="text-align:center; font-size:25px;">
-								Faturası Kesilenler
-							</div>
-							<?php
-								$yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '2' AND sirket_id = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
-								if($yeniSevkiyatlar->rowCount()){
-									foreach($yeniSevkiyatlar as $sevkiyat){
-										$sevkiyatID = guvenlik($sevkiyat['id']);
-										$urunler = guvenlik($sevkiyat['urunler']);
-										$urunArray = explode(",",$urunler);
-										$firmaId = guvenlik($sevkiyat['firma_id']);
-										$firmaAdi = getFirmaAdi($firmaId);
-										$adetler = guvenlik($sevkiyat['adetler']);
-										$adetArray = explode(",",$adetler);
-										$kilolar = guvenlik($sevkiyat['kilolar']);
-										$kiloArray = explode(",",$kilolar);
-										$fiyatlar = guvenlik($sevkiyat['fiyatlar']);
-										$fiyatArray = explode("-",$fiyatlar);
-										$olusturan = guvenlik($sevkiyat['olusturan']);
-										$hazirlayan = guvenlik($sevkiyat['hazirlayan']);
-										$sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
-										$sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
-										$aciklama = guvenlik($sevkiyat['aciklama']);
-										$saniye = guvenlik($sevkiyat['saniye']);
-										$tarih = getdmY($saniye);
-							?>
-										<div class="sevkCardGreen p-2">
-											<form action="" method="POST">
-												<div class="row">
-													<div class="col-md-7 col-6"><b>Firma :</b> <?= $firmaAdi ?></div>
-													<div class="col-md-5 col-6" style="text-align:right;">Tarih : <?= $tarih ?></div>
-												</div>
-												<hr class="my-1" style="border-top:1px solid white;"/>
-												<div class="d-none d-sm-block">
-													<div class="row">
-														<div class="col-md-4"><b>Ürün</b></div>
-														<div class="col-md-2"><b>Cinsi</b></div>
-														<div class="col-md-2"><b>Adet</b></div>
-														<div class="col-md-2"><b>Kg</b></div>
-														<div class="col-md-2"><b>Fiyat</b></div>
-													</div>
-													<hr class="my-1" style="border-top:1px solid white;"/>
-												</div>
-												<?php
-													$totalWeight = 0;
-													$totalPrice = 0;
-													$malzemeAdeti = 0;
-													foreach($urunArray as $key => $urunId){
-														$urun = getUrunInfo($urunId);
-												?>
-														<div class="row mb-1">
-															<div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-															<div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
-															<div class="col-4 d-block d-sm-none">Cinsi : </div>
-															<div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
-															<div class="col-4 d-block d-sm-none">Adet : </div>
-															<div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
-															<div class="col-4 d-block d-sm-none">Kilo : </div>
-															<div class="col-md-2 col-8"><?= $kiloArray[$key] ?></div>
-															<div class="col-4 d-block d-sm-none">Fiyat : </div>
-															<div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
-														</div>
-														<hr class="my-1" style="border-top:1px solid white;"/>
-												<?php
-														$malzemeAdeti++;
-													}
-												?>
-												<div class="row">
-													<div class="col-md-6 col-12"></div>
-													<div class="col-md-2 col-4"><b>Toplam</b></div>
-													<div class="col-md-2 col-4"></div>
-													<div class="col-md-2 col-4 px-0"></div>
-												</div>
-												<hr class="my-1" style="border-top:1px solid white;"/>
-												<div class="row">
-													<div class="col-12"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
-												</div>
-												<div class="row">
-													<div class="col-12"><b>Siparişi Hazırlayan : </b><?= getUsername($hazirlayan) ?></div>
-												</div>
-												<div class="row">
-													<div class="col-12"><b>Sevk Tipi: </b><?= $sevkTipleri[$sevkTipi] ?></div>
-												</div>
-												<div class="row">
-													<div class="col-12"><b>Açıklama: </b><?= $aciklama ?></div>
-												</div>
-												<div class="row">
-													<div class="col-md-12 col-12">
-														<input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
-														<button type="submit" name="arsivegonder" class="btn btn-light btn-block btn-sm">Arşive Gönder</button>
-													</div>
-												</div>
-											</form>
-										</div>
-							<?php
-									}
-								}
-							?>
-						</div>
+						<?php include 'tools/anlikfiyatlama.php'; ?>
+						<?php include 'tools/fiyathesaplama.php'; ?>
+						<?php include 'tools/agirlikhesaplama.php'; ?>
 					</div>
-				</div>
-			</div>
-			<div style="margin-top:30px;">
+					<?php include 'tools/isplani.php'; ?>
 
-				<div class="row">
-
-					<div class="col-12" style="background-color:white; padding-top:10px;"><h3>Gelecek 30 Günlük İşler</h3></div>
-
-				</div>
-
-				<?php
-
-					$i = 0;
-					
-					$plan_cek = $db->query("SELECT * FROM plan WHERE plan_silik = '0' AND plan_durum = '0' ORDER BY plan_tarihi ASC", PDO::FETCH_ASSOC);
-
-					if ( $plan_cek->rowCount() ){
-					
-						foreach( $plan_cek as $plancek ){
-
-							$i++;
-					
-							$plan_id = guvenlik($plancek['plan_id']);
-
-							$plan = guvenlik($plancek['plan']);
-
-							$plan_tarihi = guvenlik($plancek['plan_tarihi']);
-
-							$gecmis = 0;
-
-							if($plan_tarihi < $su_an){ $gecmis = 1; }
-
-							$plan_tarihi = date("d-m-Y",$plan_tarihi);
-
-							$plan_tekrar = guvenlik($plancek['plan_tekrar']);
-
-							$plan_durum = guvenlik($plancek['plan_durum']);
-
-				?>
-
-						<div><form action="" method="POST">
-
-						<?php if($gecmis == '0'){ ?>
-							
-							<div class="row mb-1" style="background-color:#52c0c0; padding:20px 10px; margin:-10px;">
-
-						<?php }else{ ?>
-							
-							<div class="row mb-1" style="background-color:#ad3f3f; padding:20px 10px; margin:-10px;">
-
-						<?php } ?>
-
-								<div class="col-md-2">
-
-									<input type="hidden" name="plan_id" value="<?php echo $plan_id; ?>">
-										
-									<input type="text" id="tarih<?php echo $plan_id; ?>" name="plan_tarihi" value="<?php echo $plan_tarihi; ?>" class="form-control form-control-sm" style="border-style:none; font-size:1.1rem;">
-
-								</div>
-
-								<div class="col-md-4"><input type="text" name="plan" class="form-control form-control-sm" placeholder="İş planına eklenecek görev" value="<?php echo $plan; ?>" style="border-style:none; font-size:1.1rem;"></div>
-
-								<div class="col-md-3">
-
-									<div class="row">
-										<div class="col-md-6">
-											<select name="plan_tekrar" id="plan_tekrar" class="form-control form-control-sm" style="border-style:none; font-size:1.1rem;">
-
-											<?php if($plan_tekrar == '0'){ ?>
-
-												<option value="0" selected>Tekrarsız</option>
-												<option value="1">Aylık Tekrarlı</option>
-												
-											<?php }else{ ?>
-
-												<option value="0">Tekrarsız</option>
-												<option value="1" selected>Aylık Tekrarlı</option>
-												
-											<?php } ?>
-
-											</select>
-										</div>
-										<div class="col-md-6">
-											<select name="plan_durum" id="plan_durum" class="form-control form-control-sm" style="border-style:none; font-size:1.1rem;">
-
-											<?php if($plan_durum == '0'){ ?>
-
-												<option value="0" selected>Sırada</option>
-												<option value="1">Tamamlandı</option>
-												
-											<?php }else{ ?>
-
-												<option value="0">Sırada</option>
-												<option value="1" selected>Tamamlandı</option>
-												
-											<?php } ?>
-
-											</select>
-										</div>
-									</div>
-								</div>
-
-								<div class="col-md-1 col-6"><button type="submit" class="btn btn-primary btn-block btn-sm" name="plan_duzenle" >Düzenle</button></div>
-
-								<div class="col-md-2 col-6">
-
-									<div id="sildivi<?php echo $plan_id; ?>">
-
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa2('silmeonaydivi<?php echo $plan_id; ?>','sildivi<?php echo $plan_id; ?>');">
-									
-											<button class="btn btn-danger btn-block btn-sm">Sil</button>
-										
-										</a>
-
-									</div>
-
-									<div id="silmeonaydivi<?php echo $plan_id; ?>" style="display:none;">
-								
-										<div class="row">
-
-											<div class="col-md-6">
-
-												<button type="submit" name="plan_sil" class="btn btn-success btn-sm btn-block">Evet</button>
-
-											</div>
+					<form action="" method="POST">
 											
-											<div class="col-md-6">
+						<div class="row">
 
-												<a href="#" onclick="return false" onmousedown="javascript:ackapa2('sildivi<?php echo $plan_id; ?>','silmeonaydivi<?php echo $plan_id; ?>');">
-										
-													<button class="btn btn-danger btn-block btn-sm">Hayır</button>
-												
-												</a>
+							<div class="col-md-2 col-12 search-box">
 
-											</div>
-
-										</div>
-
-									</div>
+								<b>Firma</b>
 								
-								</div>
+								<input autofocus="autofocus" name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
+
+								<ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
+
+							</div>
+							
+							<div class="col-md-1 col-12">
+
+								<b>Adet</b>
+								
+								<input type="text" class="form-control" name="adet" placeholder="(Boy)">
 
 							</div>
 
-						</form></div>
+							<div class="col-md-2 col-12">
 
-				<?php
-				
-						}
-					
-					}
-				
-				?>
-			
-			</div>
+								<b>Sevk Tipi</b>
 
+								<select name="sevk_tipi" id="sevk_tipi" class="form-control">
+
+									<option value="null">Sevk tipi seçiniz.</option>
+									<option value="0">Müşteri Çağlayan</option>
+									<option value="1">Müşteri Alkop</option>
+									<option value="2">Tarafımızca sevk</option>
+									<option value="3">Ambara tarafımızca sevk</option>
+
+								</select>
+							
+							</div>
+
+							<div class="col-md-1 col-12">
+								<b>Fiyat</b>
+								<input type="text" class="form-control" name="fiyat" placeholder="TL">
+							</div>
+
+							<div class="col-md-5 col-12">
+
+								<b>Açıklama</b>
+
+								<input type="text" class="form-control" name="aciklama" placeholder="Sevkiyat ile ilgili açıklama yazabilirsiniz.">
+
+							</div>
+
+							<div class="col-md-1 col-12">
+
+								<br/>
+
+								<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+								
+								<button class="btn btn-warning" name="sevkiyatkaydet">Kaydet</button>
+
+							</div>
+
+						</div>
+
+					</form>
+
+					<?php include 'tools/sevkiyattakibi.php'; ?>
+				</div>
+			</div>	
 		</div>
 
 		<br/><br/><br/><br/><br/><br/>
