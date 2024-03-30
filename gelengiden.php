@@ -60,15 +60,23 @@
 
 				$giden = str_replace(",",".",$giden);
 
+				$alkop_gelen = guvenlik($_POST['alkop_gelen']);
+
+				$alkop_gelen = str_replace(",",".",$alkop_gelen);
+
+				$alkop_giden = guvenlik($_POST['alkop_giden']);
+
+				$alkop_giden = str_replace(",",".",$alkop_giden);
+
 				$tarih = guvenlik($_POST['tarih']);
 
 				$saniye = strtotime($tarih);
 
 				if(tarihvarmi($tarih) == 0){
 
-					$query = $db->prepare("INSERT INTO gelengiden SET gelen = ?, giden = ?, tarih = ?, saniye = ?, silik = ?");
+					$query = $db->prepare("INSERT INTO gelengiden SET gelen = ?, giden = ?, alkop_gelen = ?, alkop_giden = ?, tarih = ?, saniye = ?, silik = ?");
 
-					$insert = $query->execute(array($gelen,$giden,$tarih,$saniye,'0'));
+					$insert = $query->execute(array($gelen,$giden,$alkop_gelen,$alkop_giden,$tarih,$saniye,'0'));
 
 					header("Location:gelengiden.php");
 
@@ -94,9 +102,17 @@
 
 				$giden = str_replace(",",".",$giden);
 
-				$query = $db->prepare("UPDATE gelengiden SET gelen = ?, giden = ? WHERE id = ?"); 
+				$alkop_gelen = guvenlik($_POST['alkop_gelen']);
 
-				$guncelle = $query->execute(array($gelen,$giden,$id));
+				$alkop_gelen = str_replace(",",".",$alkop_gelen);
+
+				$alkop_giden = guvenlik($_POST['alkop_giden']);
+
+				$alkop_giden = str_replace(",",".",$alkop_giden);
+
+				$query = $db->prepare("UPDATE gelengiden SET gelen = ?, giden = ?, alkop_gelen = ?, alkop_giden = ? WHERE id = ?"); 
+
+				$guncelle = $query->execute(array($gelen,$giden,$alkop_gelen,$alkop_giden,$id));
 
 				header("Location:gelengiden.php");
 
@@ -120,6 +136,13 @@
 
     <?php include 'template/head.php'; ?>
 
+	<style>
+		.font-column-title {
+			font-weight: bold; 
+			font-size: 23px;
+		}
+	</style>
+
   </head>
 
   <body>
@@ -128,7 +151,7 @@
 
     <?php echo $hata; ?>
 
-    <div class="container">
+    <div class="container-fluid">
     	
     	<div class="row">
     		
@@ -172,29 +195,34 @@
 
 	    				<div class="row">
 	    					
-	    					<div class="col-md-3 d-none d-sm-block" style="font-weight: bold; font-size: 25px;">Tarih</div>
+	    					<div class="col-md-2 d-none d-sm-block font-column-title">Tarih</div>
 
-	    					<div class="col-md-3 d-none d-sm-block" style="font-weight: bold; font-size: 25px;">Giden Ürün</div>
+	    					<div class="col-md-2 d-none d-sm-block font-column-title">Mağaza Giden</div>
 
-	    					<div class="col-md-2 d-none d-sm-block" style="font-weight: bold; font-size: 25px;">Gelen Ürün</div>
+	    					<div class="col-md-2 d-none d-sm-block font-column-title">Mağaza Gelen</div>
 
-	    					<div class="col-md-2 col-6">
+							<div class="col-md-2 d-none d-sm-block font-column-title">Alkop Giden</div>
 
-	    						<?php if($ozet == 0){ ?>
-
-	    							<a href="gelengiden.php?ozet=1"><button class="btn btn-info btn-block btn-lg">Özet Göster</button></a>
-
-	    						<?php }else{ ?>
-
-	    							<a href="gelengiden.php?ozet=0"><button class="btn btn-info btn-block btn-lg">Özeti Kapat</button></a>
-
-	    						<?php } ?>
-
-	    					</div>
+	    					<div class="col-md-2 d-none d-sm-block font-column-title">Alkop Gelen</div>
 
 	    					<div class="col-md-2 col-6">
-	    						
-	    						<a href="ggrapor.php" target="_blank"><button class="btn btn-secondary btn-lg btn-block">Rapor</button></a>
+
+								<div class="row">
+									<div class="col-md-6 col-6 p-0">
+									<?php if($ozet == 0){ ?>
+
+										<a href="gelengiden.php?ozet=1"><button class="btn btn-info btn-block btn-sm">Özet Göster</button></a>
+
+									<?php }else{ ?>
+
+										<a href="gelengiden.php?ozet=0"><button class="btn btn-info btn-block btn-sm">Özeti Kapat</button></a>
+
+									<?php } ?>
+									</div>
+									<div class="col-md-6 col-6">
+										<a href="ggrapor.php" target="_blank"><button class="btn btn-secondary btn-sm btn-block">Rapor</button></a>
+									</div>
+								</div>
 
 	    					</div>
 
@@ -206,7 +234,7 @@
 
 	    				<div class="row">
     					
-	    					<div class="col-md-3 col-12" style="font-weight: bold;">
+	    					<div class="col-md-2 col-12" style="font-weight: bold;">
 								
 									<input type="text" id="tarih" name="tarih" value="<?php echo $bugunformatlitarih; ?>" class="form-control form-control-lg">
 
@@ -214,11 +242,15 @@
 
 	    					</div>
 
-	    					<div class="col-md-3 col-12" style="font-weight: bold;"><input type="text" name="giden" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
+	    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="giden" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
 
-	    					<div class="col-md-3 col-12" style="font-weight: bold;"><input type="text" name="gelen" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
+	    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="gelen" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
 
-	    					<div class="col-md-3 col-12"><button type="submit" name="gelengidenkayit" class="btn btn-success btn-block btn-lg">Bugünü Kaydet</button></div>
+							<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="alkop_giden" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
+
+	    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="alkop_gelen" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
+
+	    					<div class="col-md-2 col-12"><button type="submit" name="gelengidenkayit" class="btn btn-success btn-block btn-sm">Bugünü Kaydet</button></div>
 
 	    				</div>
 
@@ -226,7 +258,18 @@
 
 	    			<?php
 
-	    				$haftalikGidenToplam = 0; $aylikGidenToplam = 0; $yillikGidenToplam = 0; $haftalikGelenToplam = 0; $aylikGelenToplam = 0; $yillikGelenToplam = 0;
+	    				$haftalikGidenToplam = 0; 
+						$aylikGidenToplam = 0; 
+						$yillikGidenToplam = 0; 
+						$haftalikGelenToplam = 0; 
+						$aylikGelenToplam = 0; 
+						$yillikGelenToplam = 0;
+						$haftalikAlkopGidenToplam = 0; 
+						$aylikAlkopGidenToplam = 0; 
+						$yillikAlkopGidenToplam = 0; 
+						$haftalikAlkopGelenToplam = 0; 
+						$aylikAlkopGelenToplam = 0; 
+						$yillikAlkopGelenToplam = 0;
 
 	    				$query = $db->query("SELECT * FROM gelengiden WHERE silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
 
@@ -237,6 +280,8 @@
 									$id = guvenlik($row['id']);
 									$gelen = guvenlik($row['gelen']);
 									$giden = guvenlik($row['giden']);
+									$alkopGelen = guvenlik($row['alkop_gelen']);
+									$alkopGiden = guvenlik($row['alkop_giden']);
 									$tarih = guvenlik($row['tarih']);
 									$saniye = guvenlik($row['saniye']);
 									$date = new DateTime($tarih);
@@ -252,11 +297,15 @@
 
 											<div class="row">
 											
-												<div class="col-md-3 col-12"><?php echo $hafta.". Hafta Toplam"; ?></div>
+												<div class="col-md-2 col-12"><?php echo $hafta.". Hafta Toplam"; ?></div>
 
-												<div class="col-md-3 col-6"><?php echo $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
+												<div class="col-md-2 col-6"><?php echo $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-												<div class="col-md-3 col-6"><?php echo $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
+												<div class="col-md-2 col-6"><?php echo $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
+
+												<div class="col-md-2 col-6"><?php echo $haftalikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+
+												<div class="col-md-2 col-6"><?php echo $haftalikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 											</div>
 
@@ -264,7 +313,10 @@
 
 						<?php
 
-										$haftalikGidenToplam = 0; $haftalikGelenToplam = 0;
+										$haftalikGidenToplam = 0; 
+										$haftalikGelenToplam = 0;
+										$haftalikAlkopGidenToplam = 0; 
+										$haftalikAlkopGelenToplam = 0;
 
 										$hafizahafta = $hafta;
 
@@ -278,19 +330,25 @@
 										
 											<div class="row">
 												
-												<div class="col-md-3 col-12"><?php echo ayAdi($ay+1)." ayı toplamı"; ?></div>
+												<div class="col-md-2 col-12"><?php echo ayAdi($ay+1)." ayı toplamı"; ?></div>
 
-												<div class="col-md-3 col-6"><?php echo $aylikGidenToplam." <small>(Giden)</small>"; ?></div>
+												<div class="col-md-2 col-6"><?php echo $aylikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-												<div class="col-md-3 col-6"><?php echo $aylikGelenToplam." <small>(Gelen)</small>"; ?></div>
+												<div class="col-md-2 col-6"><?php echo $aylikGelenToplam." <small>(Gelen)</small>"; ?></div>
+
+												<div class="col-md-2 col-6"><?php echo $aylikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+
+												<div class="col-md-2 col-6"><?php echo $aylikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 											</div>
 
 										</div>
 
 						<?php
-
-										$aylikGidenToplam = 0; $aylikGelenToplam = 0;
+										$aylikGidenToplam = 0; 
+										$aylikGelenToplam = 0;
+										$aylikAlkopGidenToplam = 0; 
+										$aylikAlkopGelenToplam = 0;
 
 										$hafizaay = $ay;
 
@@ -304,11 +362,15 @@
 
 											<div class="row">
 												
-												<div class="col-md-3 col-12">Yıllık Toplam</div>
+												<div class="col-md-2 col-12">Yıllık Toplam</div>
 
-												<div class="col-md-3 col-6"><?php echo $yillikGidenToplam." <small>(Giden)</small>"; ?></div>
+												<div class="col-md-2 col-6"><?php echo $yillikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-												<div class="col-md-3 col-6"><?php echo $yillikGelenToplam." <small>(Gelen)</small>"; ?></div>
+												<div class="col-md-2 col-6"><?php echo $yillikGelenToplam." <small>(Gelen)</small>"; ?></div>
+
+												<div class="col-md-2 col-6"><?php echo $yillikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+
+												<div class="col-md-2 col-6"><?php echo $yillikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 											</div>
 
@@ -316,15 +378,30 @@
 
 						<?php
 
-										$yillikGidenToplam = 0; $yillikGelenToplam = 0;
+										$yillikGidenToplam = 0; 
+										$yillikGelenToplam = 0;
+										$yillikAlkopGidenToplam = 0; 
+										$yillikAlkopGelenToplam = 0;
 
 										$hafizayil = $yil;
 
 									}
 
-									$haftalikGelenToplam += $gelen; $aylikGelenToplam += $gelen; $yillikGelenToplam += $gelen; 
+									$haftalikGelenToplam += $gelen; 
+									$aylikGelenToplam += $gelen; 
+									$yillikGelenToplam += $gelen; 
 
-									$haftalikGidenToplam += $giden; $aylikGidenToplam += $giden; $yillikGidenToplam += $giden; 
+									$haftalikGidenToplam += $giden; 
+									$aylikGidenToplam += $giden; 
+									$yillikGidenToplam += $giden; 
+
+									$haftalikAlkopGelenToplam += $alkopGelen; 
+									$aylikAlkopGelenToplam += $alkopGelen; 
+									$yillikAlkopGelenToplam += $alkopGelen; 
+
+									$haftalikAlkopGidenToplam += $alkopGiden; 
+									$aylikAlkopGidenToplam += $alkopGiden; 
+									$yillikAlkopGidenToplam += $alkopGiden; 
 
 						?>
 
@@ -334,11 +411,15 @@
 
 					    				<div class="row mb-1">
 				    					
-					    					<div class="col-md-3 col-12" style="font-weight: bold; font-size: 18px; padding: 1px 0px 5px 20px;"><?php echo $tarih; ?></div>
+					    					<div class="col-md-2 col-12" style="font-weight: bold; font-size: 18px; padding: 1px 0px 5px 20px;"><?php echo $tarih; ?></div>
 
-					    					<div class="col-md-3 col-12" style="font-weight: bold;"><input type="text" name="giden" value="<?php echo $giden; ?>" class="form-control form-control-lg"></div>
+					    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="giden" value="<?php echo $giden; ?>" class="form-control form-control-lg"></div>
 
-					    					<div class="col-md-3 col-12" style="font-weight: bold;"><input type="text" name="gelen" value="<?php echo $gelen; ?>" class="form-control form-control-lg"></div>
+					    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="gelen" value="<?php echo $gelen; ?>" class="form-control form-control-lg"></div>
+
+											<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="alkop_giden" value="<?php echo $alkopGiden; ?>" class="form-control form-control-lg"></div>
+
+					    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="alkop_gelen" value="<?php echo $alkopGelen; ?>" class="form-control form-control-lg"></div>
 
 					    					<div class="col-md-2 col-12">
 
@@ -366,11 +447,15 @@
 
 								<div class="row">
 								
-									<div class="col-md-3 col-12"><?php echo ($hafta-1).". Hafta Toplam"; ?></div>
+									<div class="col-md-2 col-12"><?php echo ($hafta-1).". Hafta Toplam"; ?></div>
 
-									<div class="col-md-3 col-6"><?php echo $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
+									<div class="col-md-2 col-6"><?php echo $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-									<div class="col-md-3 col-6"><?php echo $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
+									<div class="col-md-2 col-6"><?php echo $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
+
+									<div class="col-md-2 col-6"><?php echo $haftalikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+
+									<div class="col-md-2 col-6"><?php echo $haftalikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 								</div>
 
@@ -380,11 +465,15 @@
 										
 								<div class="row">
 									
-									<div class="col-md-3 col-12"><?php echo ayAdi($ay)." ayı toplamı"; ?></div>
+									<div class="col-md-2 col-12"><?php echo ayAdi($ay)." ayı toplamı"; ?></div>
 
-									<div class="col-md-3 col-6"><?php echo $aylikGidenToplam." <small>(Giden)</small>"; ?></div>
+									<div class="col-md-2 col-6"><?php echo $aylikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-									<div class="col-md-3 col-6"><?php echo $aylikGelenToplam." <small>(Gelen)</small>"; ?></div>
+									<div class="col-md-2 col-6"><?php echo $aylikGelenToplam." <small>(Gelen)</small>"; ?></div>
+
+									<div class="col-md-2 col-6"><?php echo $aylikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+
+									<div class="col-md-2 col-6"><?php echo $aylikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 								</div>
 
@@ -394,11 +483,15 @@
 
 								<div class="row">
 									
-									<div class="col-md-3 col-12"><?php echo $yil." Yılı Toplamı" ?></div>
+									<div class="col-md-2 col-12"><?php echo $yil." Yılı Toplamı" ?></div>
 
-									<div class="col-md-3 col-6"><?php echo $yillikGidenToplam." <small>(Giden)</small>"; ?></div>
+									<div class="col-md-2 col-6"><?php echo $yillikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-									<div class="col-md-3 col-6"><?php echo $yillikGelenToplam." <small>(Gelen)</small>"; ?></div>
+									<div class="col-md-2 col-6"><?php echo $yillikGelenToplam." <small>(Gelen)</small>"; ?></div>
+
+									<div class="col-md-2 col-6"><?php echo $yillikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+
+									<div class="col-md-2 col-6"><?php echo $yillikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 								</div>
 
