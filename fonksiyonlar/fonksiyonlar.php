@@ -57,6 +57,12 @@
 		return date('d.m.Y', $saniye);
 	}
 
+	function getFirmaInfos($firmaId){
+		global $db;
+		$firmaInfos = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
+		return $firmaInfos;
+	}
+
 	function getFirmaAdi($firmaId){
 		global $db;
 		$query = $db->query("SELECT firmaadi FROM firmalar WHERE firmaid = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
