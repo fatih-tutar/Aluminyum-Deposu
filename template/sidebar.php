@@ -54,7 +54,12 @@
     <?php
             }
         }
-    ?>		
+    ?>	
+    <div class="card p-1">
+        <a href="fiyatlistesi.php" target="_blank" class="sidebar-font">
+            AYDINLATMA FİYAT LİSTESİ
+        </a>
+    </div>		
     <div class="card p-1">
         <a href="tekliflistesi.php" target="_blank" class="sidebar-font">
             ÜRÜN SORGULAMA LİSTESİ
@@ -63,11 +68,6 @@
     <div class="card p-1">
         <a href="kaliplistesi.php" target="_blank" class="sidebar-font">
             KALIP SORGULAMA EKRANI
-        </a>
-    </div>	
-    <div class="card p-1">
-        <a href="fiyatlistesi.php" target="_blank" class="sidebar-font">
-            AYDINLATMA FİYAT LİSTESİ
         </a>
     </div>	
     <div class="card p-1">
@@ -84,17 +84,7 @@
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi','isplanidivi');" class="sidebar-font">
             AĞIRLIK HESAPLAMA
         </a>
-    </div>	
-    <div class="card p-1">
-        <a href="#" onclick="return false" onmousedown="javascript:ackapa4('isplanidivi','agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi');" class="sidebar-font">
-            İŞ PLANI
-        </a>
-    </div>	
-    <div class="card p-1">
-        <a href="plan.php" target="_blank" class="sidebar-font">
-            PLAN
-        </a>
-    </div>
+    </div>		
     <div class="card p-1">
         <a href="fabrikalar.php" target="_blank" class="sidebar-font">
             FABRİKALAR
@@ -110,6 +100,11 @@
             KALIPLAR
         </a>
     </div>	
+    <div class="card p-1">
+        <a href="#" onclick="return false" onmousedown="javascript:ackapa4('isplanidivi','agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi');" class="sidebar-font">
+            İŞ PLANI
+        </a>
+    </div>
     <div class="card p-1">
         <a href="sevkiyatarsiv.php" target="_blank" class="sidebar-font">
             SEVKİYAT ARŞİVİ

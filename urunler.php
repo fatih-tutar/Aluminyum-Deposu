@@ -628,7 +628,7 @@
 					<div class="col-md-2 col-2">
 						<div class="row">
 							<?php if($sutunadetizni == '1'){?><div class="col-md-4 col-4" style="text-align: center;"><b>Adet</b></div><?php } ?>
-							<?php if($sutundepoadetizni == '1'){?><div class="col-md-4 col-4" style="text-align: center;"><b>Depo</b></div><?php } ?>
+							<?php if($sutundepoadetizni == '1'){?><div class="col-md-4 col-4" style="text-align: center;"><b>Alkop</b></div><?php } ?>
 							<?php if($sutunrafizni == '1'){?><div class="col-md-4 col-4" style="text-align: center;"><b>Raf</b></div><?php } ?>
 						</div>
 					</div>
@@ -974,7 +974,7 @@
 
 									<?php if($sutundepoadetizni == '1'){?>								
 
-									<div class="col-4 d-block d-sm-none">Depo Adet : </div>
+									<div class="col-4 d-block d-sm-none">Alkop Adet : </div>
 
 									<div class="col-md-4 col-8" style="text-align: left;"><button class="btn btn-info btn-sm btn-block"><b><?php echo $urun_depo_adet; ?></b></button></div>
 

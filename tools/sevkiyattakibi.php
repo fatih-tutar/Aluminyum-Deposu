@@ -1,3 +1,79 @@
+<div class="div4 p-2 mb-4">
+    <form action="" method="POST">
+                                
+        <div class="row">
+
+            <div class="col-md-5 col-12 urun-search-box">
+
+                <b>Ürün</b>
+
+                <input autofocus="autofocus" name="urun" id="uruninputu" type="text" class="form-control" autocomplete="off" placeholder="Ürün Adı"/>
+
+                <ul class="list-group urunliveresult" id="urunsonuc" style="position: absolute; z-index: 1;"></ul>
+
+            </div>
+
+            <div class="col-md-3 col-12 search-box">
+
+                <b>Firma</b>
+                
+                <input autofocus="autofocus" name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
+
+                <ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
+
+            </div>
+            
+            <div class="col-md-1 col-12">
+
+                <b>Adet</b>
+                
+                <input type="text" class="form-control" name="adet" placeholder="(Boy)">
+
+            </div>
+
+            <div class="col-md-2 col-12">
+
+                <b>Sevk Tipi</b>
+
+                <select name="sevk_tipi" id="sevk_tipi" class="form-control">
+
+                    <option value="null">Sevk tipi seçiniz.</option>
+                    <option value="0">Müşteri Çağlayan</option>
+                    <option value="1">Müşteri Alkop</option>
+                    <option value="2">Tarafımızca sevk</option>
+                    <option value="3">Ambara tarafımızca sevk</option>
+
+                </select>
+            
+            </div>
+
+            <div class="col-md-1 col-12">
+                <b>Fiyat</b>
+                <input type="text" class="form-control" name="fiyat" placeholder="TL">
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-10 col-12">
+
+                <b>Açıklama</b>
+
+                <input type="text" class="form-control" name="aciklama" placeholder="Sevkiyat ile ilgili açıklama yazabilirsiniz.">
+
+            </div>
+
+            <div class="col-md-2 col-12">
+                <br/>
+                <button class="btn btn-warning btn-block" name="sevkiyatkaydet">Kaydet</button>
+
+            </div>
+
+        </div>
+
+    </form>
+</div>
 <div id="sevkiyattakibidivi" class="row">
     <div class="col-md-4 col-12">
         <div class="sevkCardBlue p-1" style="text-align:center; font-size:25px;">
@@ -61,7 +137,7 @@
                                 ?>
                                         <div class="row mb-1">
                                             <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-                                            <div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
+                                            <div class="col-md-4 col-8"><?= $urun['urun_adi'].' '. getCategoryShortName($urun['kategori_iki']) ?></div>
                                             <div class="col-4 d-block d-sm-none">Cinsi : </div>
                                             <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
                                             <div class="col-4 d-block d-sm-none">Adet : </div>
@@ -92,12 +168,15 @@
                                     <div class="col-12"><b>Açıklama: </b><?= $aciklama ?></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6 col-12 mb-2">
+                                    <div class="col-md-2">
+                                        <button type="submit" name="sevkiyatsil" class="btn btn-danger btn-block btn-sm">Sil</button>
+                                    </div>
+                                    <div class="col-md-5 col-12 mb-2">
                                         <a href="sevkiyatformu.php?id=<?= $sevkiyatID ?>" target="_blank" class="btn btn-light btn-block btn-sm">
                                             Siparişi yazdır
                                         </a>
                                     </div>
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-md-5 col-12">
                                         <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
                                         <input type="hidden" name="malzemeAdeti" value="<?= $malzemeAdeti ?>">
                                         <button type="submit" name="sevkiyathazir" class="btn btn-light btn-block btn-sm">Sevkiyat Hazır</button>
@@ -173,7 +252,7 @@
                                 ?>
                                         <div class="row mb-1">
                                             <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-                                            <div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
+                                            <div class="col-md-4 col-8"><?= $urun['urun_adi'].' '. getCategoryShortName($urun['kategori_iki']) ?></div>
                                             <div class="col-4 d-block d-sm-none">Cinsi : </div>
                                             <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
                                             <div class="col-4 d-block d-sm-none">Adet : </div>
@@ -287,7 +366,7 @@
                                 ?>
                                         <div class="row mb-1">
                                             <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-                                            <div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
+                                            <div class="col-md-4 col-8"><?= $urun['urun_adi'].' '. getCategoryShortName($urun['kategori_iki']) ?></div>
                                             <div class="col-4 d-block d-sm-none">Cinsi : </div>
                                             <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
                                             <div class="col-4 d-block d-sm-none">Adet : </div>

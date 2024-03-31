@@ -278,6 +278,14 @@
 			exit();
 		}
 
+		if(isset($_POST['sevkiyatsil'])){
+			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
+			$query = $db->prepare("UPDATE sevkiyat SET silik = ? WHERE id = ?");
+			$update = $query->execute(array('1',$sevkiyatID));
+			header("Location: home.php");
+			exit();
+		}
+
 		if(isset($_POST['faturahazir'])){
 			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
 			$query = $db->prepare("UPDATE sevkiyat SET durum = ?, faturaci = ? WHERE id = ?");
@@ -310,6 +318,62 @@
 			exit();
 		}
 
+		if (isset($_POST['sevkiyatkaydet'])) {
+
+			$urun = $_POST['urun'];
+
+			$urunArray = explode("/",$urun);
+
+			$urun = trim($urunArray[0]);
+
+			$urunId = getUrunID($urun);
+
+			$adet = guvenlik($_POST['adet']);
+
+			$fiyat = guvenlik($_POST['fiyat']);
+
+			$sevkTipi =  guvenlik($_POST['sevk_tipi']);
+
+			$aciklama =  guvenlik($_POST['aciklama']);
+
+			$firma = guvenlik($_POST['firma']);
+
+			$firmaId = getFirmaID($firma);
+
+			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+			
+			if($sevkiyatList){
+
+				$urunler = guvenlik($sevkiyatList['urunler']);
+
+				$adetler = guvenlik($sevkiyatList['adetler']);
+
+				$fiyatlar = guvenlik($sevkiyatList['fiyatlar']);
+
+				$urunler = $urunler.",".$urunId;
+
+				$adetler = $adetler.",".$adet;
+
+				$fiyatlar = $fiyatlar."-".$fiyat;
+
+				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND sirket_id = ?"); 
+
+				$update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', $uye_sirket));
+
+			}else{
+
+				$query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
+
+				$insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$uye_id,'',$sevkTipi,$aciklama,'0','0',$su_an, $uye_sirket));	
+
+			}			
+
+			header("Location:home.php");
+
+			exit();
+
+		}
+
 	}
 
 ?>
@@ -340,19 +404,19 @@
 			.sevkCardBlue{
 				background-color: #17a2b8;
 				border-radius: 5px;
-				color: white;
+				color: black;
 				margin-bottom: 5px;
 			}
 			.sevkCardYellow{
 				background-color: #ffc107;
 				border-radius: 5px;
-				color: white;
+				color: black;
 				margin-bottom: 5px;
 			}
 			.sevkCardGreen{
 				background-color: #28a745;
 				border-radius: 5px;
-				color: white;
+				color: black;
 				margin-bottom: 5px;
 			}
 			.text-fiyat {
@@ -386,72 +450,6 @@
 						<?php include 'tools/agirlikhesaplama.php'; ?>
 					</div>
 					<?php include 'tools/isplani.php'; ?>
-
-					<form action="" method="POST">
-											
-						<div class="row">
-
-							<div class="col-md-2 col-12 search-box">
-
-								<b>Firma</b>
-								
-								<input autofocus="autofocus" name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
-
-								<ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
-
-							</div>
-							
-							<div class="col-md-1 col-12">
-
-								<b>Adet</b>
-								
-								<input type="text" class="form-control" name="adet" placeholder="(Boy)">
-
-							</div>
-
-							<div class="col-md-2 col-12">
-
-								<b>Sevk Tipi</b>
-
-								<select name="sevk_tipi" id="sevk_tipi" class="form-control">
-
-									<option value="null">Sevk tipi seçiniz.</option>
-									<option value="0">Müşteri Çağlayan</option>
-									<option value="1">Müşteri Alkop</option>
-									<option value="2">Tarafımızca sevk</option>
-									<option value="3">Ambara tarafımızca sevk</option>
-
-								</select>
-							
-							</div>
-
-							<div class="col-md-1 col-12">
-								<b>Fiyat</b>
-								<input type="text" class="form-control" name="fiyat" placeholder="TL">
-							</div>
-
-							<div class="col-md-5 col-12">
-
-								<b>Açıklama</b>
-
-								<input type="text" class="form-control" name="aciklama" placeholder="Sevkiyat ile ilgili açıklama yazabilirsiniz.">
-
-							</div>
-
-							<div class="col-md-1 col-12">
-
-								<br/>
-
-								<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
-								
-								<button class="btn btn-warning" name="sevkiyatkaydet">Kaydet</button>
-
-							</div>
-
-						</div>
-
-					</form>
-
 					<?php include 'tools/sevkiyattakibi.php'; ?>
 				</div>
 			</div>	

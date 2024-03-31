@@ -77,6 +77,48 @@
 
     }); 
 
+    $(document).ready(function(){
+
+        var p = 0;
+
+        $('.urun-search-box input[type="text"]').on("keyup input", function(){
+
+            /* Input Box'da değişiklik olursa aşağıdaki durumu çalıştırıyoruz. */
+
+            var inputVal = $(this).val();
+
+            var resultDropdown = $(this).siblings(".urunliveresult");
+
+            if(inputVal.length < 10){
+
+                $.get('urun-live-search.php', {term: inputVal}).done(function(data){
+
+                    /* Gelen sonucu ekrana yazdırıyoruz. */
+
+                    resultDropdown.html(data);
+
+                });
+
+            }//else{
+
+            // resultDropdown.empty();
+
+            //}
+
+        });
+
+        /* Sonuç listesinden üzerinde tıklanıp bir öğe seçilirse input box'a yazdırıyoruz. */
+
+        $(document).on("click", ".urunliveresult li", function(){
+
+            $(this).parents(".urun-search-box").find('input[type="text"]').val($(this).text());
+
+            $(this).parent(".urunliveresult").empty();
+
+        });
+
+    }); 
+
     function yuzdeinputuac(){
 
         $durum = document.getElementById('yuzdeinputu').style.display;

@@ -30,6 +30,7 @@
     $aciklama = guvenlik($sevkiyat['aciklama']);
     $saniye = guvenlik($sevkiyat['saniye']);
     $tarih = getdmY($saniye);
+    $saat = getHis($saniye);
 
 ?>
 <!DOCTYPE html>
@@ -71,13 +72,9 @@
 
         <div class="row m-3">
             
-            <div class="col-md-1">
+            <div class="col-md-4">
                 
                 <b>Firma :</b>
-
-            </div>
-
-            <div class="col-md-3">
                 
                 <?= $firmaInfos['firmaadi']."<br/>"?>
 
@@ -85,25 +82,28 @@
 
             <div class="col-md-3">
                 
-                <?= $firmaInfos['firmatel']."<br/>"?>
+                <b>Tel : </b><?= $firmaInfos['firmatel']."<br/>"?>
 
             </div>
 
             <div class="col-md-3">
                 
-                <?= $firmaInfos['firmaeposta']."<br/>"?>
+                <b>E-posta : </b><?= $firmaInfos['firmaeposta']."<br/>"?>
 
             </div>
 
-            <div class="col-md-2" style="text-align:right;">
-                <?= "Tarih : ".$tarih; ?>
+            <div class="col-md-2">
+                <b>Tarih : </b><?= $tarih ?>
             </div>
 
         </div>
 
         <div class="row m-3">
-            <div class="col-md-11">
+            <div class="col-md-10">
                 <b>Adres : </b><?= $firmaInfos['firmaadres'] ?>
+            </div>
+            <div class="col-md-2">
+                <b>Saat &nbsp;: </b><?= $saat ?>
             </div>
         </div>
 
@@ -111,8 +111,13 @@
             <div class="col-md-4"><b>Ürün</b></div>
             <div class="col-md-2"><b>Cinsi</b></div>
             <div class="col-md-2"><b>Raf</b></div>
-            <div class="col-md-2"><b>Adet</b></div>
-            <div class="col-md-2"><b>Kg</b></div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-4"><b>Adet</b></div>
+                    <div class="col-md-4"><b>Kg</b></div>
+                    <div class="col-md-4"><b>Fiyat</b></div>
+                </div>
+            </div>    
         </div>
 
         <?php
@@ -125,15 +130,21 @@
 
                 <div class="row" style="padding: 20px;">
                     <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-                    <div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
+                    <div class="col-md-4 col-8"><?= $urun['urun_adi'].' '.getCategoryShortName($urun['kategori_iki']) ?></div>
                     <div class="col-4 d-block d-sm-none">Cinsi : </div>
                     <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
                     <div class="col-4 d-block d-sm-none">Raf : </div>
-                    <div class="col-md-4 col-8"><?= $urun['urun_raf'] ?></div>
-                    <div class="col-4 d-block d-sm-none">Adet : </div>
-                    <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
-                    <div class="col-4 d-block d-sm-none">Kilo : </div>
-                    <div class="col-md-2 col-8"><?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?></div>
+                    <div class="col-md-2 col-8"><?= $urun['urun_raf'] ?></div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-4 d-block d-sm-none">Adet : </div>
+                            <div class="col-md-4 col-8"><?= $adetArray[$key] ?></div>
+                            <div class="col-4 d-block d-sm-none">Kilo : </div>
+                            <div class="col-md-4 col-8"><?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?></div>  
+                            <div class="col-4 d-block d-sm-none">Fiyat : </div>
+                            <div class="col-md-4 col-8"><?= $fiyatArray[$key].' TL'; ?></div>
+                        </div>
+                    </div>
                 </div>
         <?php
             }
@@ -144,7 +155,7 @@
         <div class="row" style="padding: 20px;">
             <div class="col-md-8 col-12"></div>
             <div class="col-md-2 col-4"><b>Toplam Kilo</b></div>
-            <div class="col-md-2 col-4"><?= strpos($kilolar,",") ? $toplamkg : $kilolar ?></div>
+            <div class="col-md-2 col-4"><?= strpos($kilolar,",") ? $toplamkg : $kilolar ?> KG</div>
         </div>
 
         <div class="row" style="padding: 20px;">

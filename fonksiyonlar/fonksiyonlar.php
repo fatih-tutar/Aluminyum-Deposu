@@ -53,6 +53,17 @@
 		return $urunInfo;
 	}
 
+	function getUrunID($urunAdi){
+		global $db;
+		$query = $db->query("SELECT urun_id FROM urun WHERE urun_adi = '{$urunAdi}'")->fetch(PDO::FETCH_ASSOC);
+		$urunId = $query['urun_id'];
+		return $urunId;
+	}
+
+	function getHis($saniye){
+		return date('H:i:s', $saniye);
+	}
+
 	function getdmY($saniye){
 		return date('d.m.Y', $saniye);
 	}
@@ -61,6 +72,13 @@
 		global $db;
 		$firmaInfos = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
 		return $firmaInfos;
+	}
+
+	function getFirmaID($firmaAdi){
+		global $db;
+		$query = $db->query("SELECT firmaid FROM firmalar WHERE firmaadi = '{$firmaAdi}'")->fetch(PDO::FETCH_ASSOC);
+		$firmaid = $query['firmaid'];
+		return $firmaid;
 	}
 
 	function getFirmaAdi($firmaId){
