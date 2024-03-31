@@ -14,7 +14,7 @@
 			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
 			$query = $db->prepare("UPDATE sevkiyat SET durum = ? WHERE id = ?");
 			$update = $query->execute(array('2',$sevkiyatID));
-			header("Location: home.php");
+			header("Location: index.php");
 			exit();
 		}
 
