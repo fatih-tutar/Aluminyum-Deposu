@@ -3,6 +3,10 @@
                                 
         <div class="row">
 
+            <div class="col-12">
+                <h3><b>Müşteri Sipariş Formu</b></h3>
+            </div>
+
             <div class="col-md-5 col-12 urun-search-box">
 
                 <b>Ürün</b>
@@ -168,15 +172,15 @@
                                     <div class="col-12"><b>Açıklama: </b><?= $aciklama ?></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-2 pr-0">
                                         <button type="submit" name="sevkiyatsil" class="btn btn-danger btn-block btn-sm">Sil</button>
                                     </div>
-                                    <div class="col-md-5 col-12 mb-2">
+                                    <div class="col-md-5 col-5 mb-2">
                                         <a href="sevkiyatformu.php?id=<?= $sevkiyatID ?>" target="_blank" class="btn btn-light btn-block btn-sm">
                                             Siparişi yazdır
                                         </a>
                                     </div>
-                                    <div class="col-md-5 col-12">
+                                    <div class="col-md-5 col-5">
                                         <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
                                         <input type="hidden" name="malzemeAdeti" value="<?= $malzemeAdeti ?>">
                                         <button type="submit" name="sevkiyathazir" class="btn btn-light btn-block btn-sm">Sevkiyat Hazır</button>

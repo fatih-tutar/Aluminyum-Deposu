@@ -444,7 +444,7 @@
 					<?php include 'template/sidebar.php'; ?>
 				</div>
 				<div class="col-md-10">
-					<div class="row">
+					<div class="row mx-1">
 						<?php include 'tools/anlikfiyatlama.php'; ?>
 						<?php include 'tools/fiyathesaplama.php'; ?>
 						<?php include 'tools/agirlikhesaplama.php'; ?>

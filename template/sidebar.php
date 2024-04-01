@@ -57,17 +57,17 @@
     ?>	
     <div class="card p-1">
         <a href="fiyatlistesi.php" target="_blank" class="sidebar-font">
-            AYDINLATMA FİYAT LİSTESİ
+            AYDINLATMA FİYAT
         </a>
     </div>		
     <div class="card p-1">
         <a href="tekliflistesi.php" target="_blank" class="sidebar-font">
-            ÜRÜN SORGULAMA LİSTESİ
+            ÜRÜN SORGULAMA
         </a>
     </div>	
     <div class="card p-1">
         <a href="kaliplistesi.php" target="_blank" class="sidebar-font">
-            KALIP SORGULAMA EKRANI
+            KALIP SORGULAMA
         </a>
     </div>	
     <div class="card p-1">

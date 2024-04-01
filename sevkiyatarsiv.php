@@ -38,7 +38,7 @@
 
     <?php include 'template/banner.php' ?>
     
-    <div class="div4">
+    <div class="div4 d-none d-sm-block">
         <div class="row">
             <div class="col-md-2">Firma</div>
             <div class="col-md-1">Ürünler</div>
@@ -85,25 +85,33 @@
                     $aciklama = guvenlik($sevkiyat['aciklama']);
                     $saniye = guvenlik($sevkiyat['saniye']);
                     $tarih = getdmY($saniye);
+                    $saat = getHis($saniye);
         ?>
                     <div class="p-2">
                         <form action="" method="POST">
                             <div class="row">
-                                <div class="col-md-2 col-6"><b>Firma :</b> <?= $firmaAdi ?></div>
-                                <div class="col-md-1 col-2">
+                                <div class="col-4 d-block d-sm-none"><b>Firma</b></div>
+                                <div class="col-md-2 col-8"><?= $firmaAdi ?></div>
+                                <div class="col-4 d-block d-sm-none"><b>Ürün</b></div>
+                                <div class="col-md-1 col-8">
                                     <a href="#" onclick="return false" onmousedown="javascript:ackapa4('faturali-siparis-<?= $sevkiyatID ?>');">
                                         Ürünler
                                     </a>
                                 </div>
-                                <div class="col-md-1"><?= strpos($kilolar,",") ? $toplamkg : $kilolar ?></div>
+                                <div class="col-4 d-block d-sm-none"><b>Kilo</b></div>
+                                <div class="col-md-1 col-8"><?= strpos($kilolar,",") ? $toplamkg : $kilolar ?></div>
                                 <div class="col-md-5">
                                     <div class="row">
-                                        <div class="col-md-4"><?= getUsername($olusturan) ?></div>
-                                        <div class="col-md-4"><?= getUsername($hazirlayan) ?></div>
-                                        <div class="col-md-4"><?= getUsername($faturaci) ?></div>
+                                        <div class="col-4 d-block d-sm-none"><b>Oluşturan</b></div>
+                                        <div class="col-md-4 col-8"><?= getUsername($olusturan) ?></div>
+                                        <div class="col-4 d-block d-sm-none"><b>Hazırlayan</b></div>
+                                        <div class="col-md-4 col-8"><?= getUsername($hazirlayan) ?></div>
+                                        <div class="col-4 d-block d-sm-none"><b>Faturacı</b></div>
+                                        <div class="col-md-4 col-8"><?= getUsername($faturaci) ?></div>
                                     </div>
                                 </div>
-                                <div class="col-md-1 col-6"><?= $tarih ?></div>
+                                <div class="col-4 d-block d-sm-none"><b>Tarih / Saat</b></div>
+                                <div class="col-md-1 col-8"><?= $tarih." / ".$saat ?></div>
                                 <div class="col-md-1 col-6">
                                     <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
                                     <button type="submit" name="faturasikesilenegerial" class="btn btn-dark btn-block btn-sm">Geri Al</button>

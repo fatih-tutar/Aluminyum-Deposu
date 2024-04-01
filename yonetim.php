@@ -295,35 +295,35 @@
 					<div class="div4">
 							
 						<h4>Kullanıcı Bilgileri ve Yetkilendirme</h4>
+						<div class="d-none d-sm-block">
+							<div class="row">
+								
+								<div class="col-md-1 col-3"><b>Adı</b></div>
 
-						<div class="row">
-							
-							<div class="col-md-1 col-3"><b>Adı</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Pasiflik</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Pasiflik</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Alış</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Alış</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Satış</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Satış</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Fabrika</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Fabrika</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Teklif</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Teklif</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Sipariş</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Sipariş</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Düzenleme</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Düzenleme</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>İşlemler</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>İşlemler</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Gelen/Giden</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Gelen/Giden</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Toplam Göster</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Toplam Göster</b></div>
+								<div class="col-md-1 col-3" style="text-align: center;"><b>Ziyaretler</b></div>
 
-							<div class="col-md-1 col-3" style="text-align: center;"><b>Ziyaretler</b></div>
-
+							</div>
 						</div>
-
 						<?php
 
 							$query = $db->query("SELECT * FROM uyeler WHERE uye_firma = '$uye_firma' AND uye_tipi != '2' AND uye_silik = '0' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
@@ -354,9 +354,11 @@
 
 										<div class="row">
 											
-											<div class="col-md-1 col-4" style="text-align: left;"><input type="text" class="form-control" name="kullanici_adi" value="<?php echo $kullanici_adi; ?>" ></div>
-
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none"><b>Ad Soyad</b></div>
+											<div class="col-md-1 col-8" style="text-align: left;"><input type="text" class="form-control form-control-sm" name="kullanici_adi" value="<?php echo $kullanici_adi; ?>" ></div>
+											
+											<div class="col-4 d-block d-sm-none"><b>Pasiflik</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -366,7 +368,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none px-0x"><b>Alış</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -376,7 +379,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none"><b>Satış</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -386,7 +390,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none px-0"><b>Fabrika</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -396,7 +401,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none"><b>Teklif</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -406,7 +412,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none px-0"><b>Sipariş</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -416,7 +423,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none"><b>Düzenleme</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -426,7 +434,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none px-0"><b>İşlemler</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -436,7 +445,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none pr-0"><b>Gelen Giden</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -446,7 +456,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none px-0"><b>Toplam Göster</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
@@ -456,7 +467,8 @@
 
 											</div>
 
-											<div class="col-md-1 col-3" style="text-align: center;">
+											<div class="col-4 d-block d-sm-none"><b>Ziyaretler</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
 
 												<div class="form-check">
 
