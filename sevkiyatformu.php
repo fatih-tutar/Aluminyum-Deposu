@@ -42,7 +42,7 @@
     <?php include 'template/head.php'; ?>
 </head>
 <body>
-    <div class="container" style="background: white;">
+    <div class="container-fluid pt-5" style="background: white;">
 
         <div class="row">
             
@@ -154,8 +154,13 @@
 
         <div class="row" style="padding: 20px;">
             <div class="col-md-8 col-12"></div>
-            <div class="col-md-2 col-4"><b>Toplam Kilo</b></div>
-            <div class="col-md-2 col-4"><?= strpos($kilolar,",") ? $toplamkg : $kilolar ?> KG</div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-4 col-8"><b>Toplam Kilo</b></div>
+                    <div class="col-md-4 col-8"><?= strpos($kilolar,",") ? $toplamkg : $kilolar ?> KG</div>  
+                    <div class="col-md-4 col-8"></div>
+                </div>
+            </div>
         </div>
 
         <div class="row" style="padding: 20px;">

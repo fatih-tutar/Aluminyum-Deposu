@@ -33,7 +33,7 @@
                     
                     $firmaadi = $row['firmaadi'];
 
-                    echo '<li class="list-group-item" id="li'.$p.'">'.$firmaadi.'</li>';
+                    echo '<li id="li'.$p.'" class="list-group-item" style="cursor:pointer;">'.$firmaadi.'</li>';
 
                     $p++;
 

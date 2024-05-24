@@ -318,6 +318,37 @@
 			exit();
 		}
 
+		if(isset($_POST['sevkiyattanurunsil'])){
+			$malzemeIndex = guvenlik($_POST['sevkiyattanurunsil']); 
+			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
+			$sevkiyat = getSevkiyatInfo($sevkiyatID);
+			$sevkiyatUrunler = $sevkiyat['urunler'];
+
+			$urunArray = explode(",",$sevkiyatUrunler);
+			unset($urunArray[$malzemeIndex]);
+			$sevkiyatUrunler = implode(",",$urunArray);
+			
+			$sevkiyatAdetler = $sevkiyat['adetler'];
+			$adetArray = explode(",",$sevkiyatAdetler);
+			unset($adetArray[$malzemeIndex]);
+			$sevkiyatAdetler = implode(",",$adetArray);
+
+			$sevkiyatKilolar = $sevkiyat['kilolar'];
+			$kiloArray = explode(",",$sevkiyatKilolar);
+			unset($kiloArray[$malzemeIndex]);
+			$sevkiyatKilolar = implode(",",$kiloArray);
+
+			$sevkiyatFiyatlar = $sevkiyat['fiyatlar'];
+			$fiyatArray = explode("-",$sevkiyatFiyatlar);
+			unset($fiyatArray[$malzemeIndex]);
+			$sevkiyatFiyatlar = implode("-",$fiyatArray);
+
+			$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, kilolar = ?, fiyatlar  = ? WHERE id = ?");
+			$update = $query->execute(array($sevkiyatUrunler,$sevkiyatAdetler,$sevkiyatKilolar,$sevkiyatFiyatlar,$sevkiyatID));
+			header("Location: index.php");
+			exit();
+		}
+
 		if (isset($_POST['sevkiyatkaydet'])) {
 
 			$urun = $_POST['urun'];
@@ -326,7 +357,11 @@
 
 			$urun = trim($urunArray[0]);
 
-			$urunId = getUrunID($urun);
+			$kategori_iki = trim($urunArray[1]);
+
+			$kategori_bir = trim($urunArray[2]);
+
+			$urunId = getUrunID($urun,$kategori_iki,$kategori_bir);
 
 			$adet = guvenlik($_POST['adet']);
 
@@ -340,7 +375,7 @@
 
 			$firmaId = getFirmaID($firma);
 
-			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 			
 			if($sevkiyatList){
 
@@ -356,9 +391,9 @@
 
 				$fiyatlar = $fiyatlar."-".$fiyat;
 
-				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND sirket_id = ?"); 
+				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?"); 
 
-				$update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', $uye_sirket));
+				$update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $uye_sirket));
 
 			}else{
 

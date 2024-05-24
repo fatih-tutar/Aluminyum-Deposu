@@ -1,5 +1,11 @@
 <?php
 
+	function getSevkiyatInfo($sevkiyatID){
+		global $db;
+		$sevkiyat = $db->query("SELECT * FROM sevkiyat WHERE id = '{$sevkiyatID}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		return $sevkiyat;
+	}
+
 	function getUsername($userId){
 		global $db;
 		$user = $db->query("SELECT uye_adi FROM uyeler WHERE uye_id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
@@ -10,6 +16,20 @@
 		global $db;
 		$category = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 		return $category;
+	}
+
+	function getCategoryID($categoryName,$categoryType){
+		global $db;
+		$query = $db->query("SELECT kategori_id FROM kategori WHERE kategori_adi = '{$categoryName}' AND kategori_tipi = '{$categoryType}'")->fetch(PDO::FETCH_ASSOC);
+		$categoryID = $query['kategori_id'];
+		return $categoryID;
+	}
+
+	function getSubCategoryID($categoryName,$mainCategory){
+		global $db;
+		$query = $db->query("SELECT kategori_id FROM kategori WHERE kategori_adi = '{$categoryName}' AND kategori_ust = '{$mainCategory}' AND kategori_tipi = '1'")->fetch(PDO::FETCH_ASSOC);
+		$categoryID = $query['kategori_id'];
+		return $categoryID;
 	}
 
 	function getSatis($urunId){
@@ -53,9 +73,11 @@
 		return $urunInfo;
 	}
 
-	function getUrunID($urunAdi){
+	function getUrunID($urunAdi,$kategori_iki,$kategori_bir){
 		global $db;
-		$query = $db->query("SELECT urun_id FROM urun WHERE urun_adi = '{$urunAdi}'")->fetch(PDO::FETCH_ASSOC);
+		$category1ID = getCategoryID($kategori_bir,'0');
+		$category2ID = getSubCategoryID($kategori_iki,$category1ID);
+		$query = $db->query("SELECT urun_id FROM urun WHERE urun_adi = '{$urunAdi}' AND kategori_iki = '{$category2ID}' AND kategori_bir = '{$category1ID}' ")->fetch(PDO::FETCH_ASSOC);
 		$urunId = $query['urun_id'];
 		return $urunId;
 	}

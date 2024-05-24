@@ -16,7 +16,7 @@
                 $i++;
     ?>
             <div class="card">
-                <div class="sidebar-font" style="background-color: white;" data-toggle="collapse" data-target="#collapse<?= $i; ?>" aria-expanded="true" aria-controls="collapse<?= $i; ?>">
+                <div class="sidebar-font" style="background-color: white; cursor:pointer;" data-toggle="collapse" data-target="#collapse<?= $i; ?>" aria-expanded="true" aria-controls="collapse<?= $i; ?>">
                     <div class="row pl-1">
                         <div class="col-md-3 col-2">
                             <img src="<?= $resim ?>" alt="<?= $kategori_adi ?>" width="40" height="40">

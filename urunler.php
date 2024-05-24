@@ -202,7 +202,7 @@
 
 			$firmaId = $firmaidcek['firmaid'];
 
-			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+			$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 			
 			if($sevkiyatList){
 
@@ -218,9 +218,9 @@
 
 				$fiyatlar = $fiyatlar."-".$fiyat;
 
-				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND sirket_id = ?"); 
+				$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?"); 
 
-				$update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', $uye_sirket));
+				$update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0','0', $uye_sirket));
 
 			}else{
 

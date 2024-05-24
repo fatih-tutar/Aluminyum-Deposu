@@ -75,6 +75,13 @@
 
         });
 
+        $(document).on("click", function(e){
+            var container = $(".search-box");
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                container.find(".liveresult").empty();
+            }
+        });
+
     }); 
 
     $(document).ready(function(){
@@ -115,6 +122,13 @@
 
             $(this).parent(".urunliveresult").empty();
 
+        });
+
+        $(document).on("click", function(e){
+            var container = $(".urun-search-box");
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                container.find(".urunliveresult").empty();
+            }
         });
 
     }); 

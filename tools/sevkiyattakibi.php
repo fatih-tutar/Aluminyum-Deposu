@@ -151,6 +151,11 @@
                                             <div class="col-4 d-block d-sm-none">Fiyat : </div>
                                             <div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
                                         </div>
+                                        <div class="row">
+                                            <div class="offset-md-10 col-md-2">
+                                                <button type="submit" name="sevkiyattanurunsil" value="<?= $malzemeAdeti ?>" style="border-style:none; background-color:#17a2b8;">Sil</button>
+                                            </div>
+                                        </div>
                                         <hr class="my-1" style="border-top:1px solid white;"/>
                                 <?php
                                         $malzemeAdeti++;
@@ -159,7 +164,7 @@
                                 <div class="row">
                                     <div class="col-md-6 col-12"></div>
                                     <div class="col-md-2 col-4"><b>Toplam</b></div>
-                                    <div class="col-md-4 col-4"><input type="text" class="form-control form-control-sm" placeholder="TOPLAM KG" name="kilolar" value="<?= strpos($kilolar,",") ? $toplamkg : $kilolar ?>"></div>
+                                    <div class="col-md-4 col-8"><input type="text" class="form-control form-control-sm" placeholder="TOPLAM KG" name="kilolar" value="<?= strpos($kilolar,",") ? $toplamkg : $kilolar ?>"></div>
                                 </div>
                                 <hr class="my-1" style="border-top:1px solid white;"/>
                                 <div class="row">

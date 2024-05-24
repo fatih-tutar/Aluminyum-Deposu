@@ -37,11 +37,11 @@
 
                     $kategori_iki = guvenlik($row['kategori_iki']);
 
-                    $urun_kategori_bir = getCategoryShortName($kategori_bir);
+                    $urun_kategori_bir = getCategoryName($kategori_bir);
                     
                     $urun_kategori_iki = getCategoryName($kategori_iki);
 
-                    echo '<li class="list-group-item" id="li'.$p.'">'.$urun_adi.' / '.$urun_kategori_iki.' ('.$urun_kategori_bir.')</li>';
+                    echo '<li id="li'.$p.'" class="list-group-item" style="cursor:pointer;">'.$urun_adi.' / '.$urun_kategori_iki.' / '.$urun_kategori_bir.'</li>';
 
                     $p++;
 
