@@ -170,11 +170,12 @@
 							foreach( $urunlergelsin as $row ){
 						
 								$urun_adet = guvenlik($row['urun_adet']);
+								$urun_palet = guvenlik($row['urun_palet']);
 								$urun_depo_adet = guvenlik($row['urun_depo_adet']);
 								$urun_birimkg = guvenlik($row['urun_birimkg']);
 
 								$magaza_carpim = $urun_adet * $urun_birimkg;
-								$depo_carpim = $urun_depo_adet * $urun_birimkg;
+								$depo_carpim = ($urun_depo_adet + $urun_palet) * $urun_birimkg;
 
 								$magaza_tonaj += $magaza_carpim;
 								$depo_tonaj += $depo_carpim;
@@ -185,9 +186,9 @@
 					
 					?>
 
-					<h1><b>Mağaza Toplam Tonaj : <span style="color:red;"><?php echo $magaza_tonaj." KG"; ?></span></b></h1>
+					<h1><b>Çağlayan Toplam Tonaj : <span style="color:red;"><?php echo $magaza_tonaj." KG"; ?></span></b></h1>
 
-					<h1><b>Depo Toplam Tonaj : <span style="color:red;"><?php echo $depo_tonaj." KG"; ?><span></b></h1>
+					<h1><b>Alkop Toplam Tonaj : <span style="color:red;"><?php echo $depo_tonaj." KG"; ?><span></b></h1>
 
 				</div>
 
@@ -197,9 +198,9 @@
 	    					
 	    					<div class="col-md-2 d-none d-sm-block font-column-title">Tarih</div>
 
-	    					<div class="col-md-2 d-none d-sm-block font-column-title">Mağaza Giden</div>
+	    					<div class="col-md-2 d-none d-sm-block font-column-title">Çağlayan Giden</div>
 
-	    					<div class="col-md-2 d-none d-sm-block font-column-title">Mağaza Gelen</div>
+	    					<div class="col-md-2 d-none d-sm-block font-column-title">Çağlayan Gelen</div>
 
 							<div class="col-md-2 d-none d-sm-block font-column-title">Alkop Giden</div>
 

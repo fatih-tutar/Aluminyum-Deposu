@@ -70,6 +70,8 @@
 
 		$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
 
+		$sutunpaletizni = $sutunlaripatlat[22];
+
 		$a = guvenlik($_GET['a']);
 
 		$b = guvenlik($_GET['b']);
@@ -82,17 +84,19 @@
 
 			$urun_adet = guvenlik($_POST['urun_adet']);
 
+			$urun_palet = guvenlik($_POST['urun_palet']);
+
 			$urun_depo_adet = guvenlik($_POST['urun_depo_adet']);
 
 			$urun_sira = guvenlik($_POST['urun_sira']);
 
-			if ($urun_adet != 0 || $urun_depo_adet != 0) {
+			if ($urun_adet != 0 || $urun_depo_adet != 0 || $urun_palet != 0) {
 
 				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&urunsilinemez");
 
 				exit();
 
-			}elseif ($urun_adet == 0 && $urun_depo_adet == 0) {
+			}elseif ($urun_adet == 0 && $urun_depo_adet == 0 && $urun_palet == 0) {
 
 				$siralar = $db->query("SELECT * FROM urun WHERE urun_sira > '{$urun_sira}' AND kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
 
@@ -246,6 +250,8 @@
 
 			$urun_adet = guvenlik($_POST['urun_adet']);
 
+			$urun_palet = guvenlik($_POST['urun_palet']);
+
 			$urun_depo_adet = guvenlik($_POST['urun_depo_adet']);
 
 			$urun_raf = guvenlik($_POST['urun_raf']);
@@ -253,6 +259,8 @@
 			$eskiadeticek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC); 
 
 			$eskiadet = $eskiadeticek['urun_adet'];
+
+			$eskipalet = $eskiadeticek['urun_palet'];
 
 			$eskidepoadet = $eskiadeticek['urun_depo_adet'];
 
@@ -354,9 +362,9 @@
 
 			// BÜTÜN BİLGİLER BURADA GÜNCELLENİYOR
 
-			$query = $db->prepare("UPDATE urun SET urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, satis = ?, urun_fabrika = ?, urun_aciklama = ?, urun_stok = ?, musteri_ismi = ?,urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, tarih = ?, termin = ? WHERE urun_id = ?"); 
+			$query = $db->prepare("UPDATE urun SET urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, satis = ?, urun_fabrika = ?, urun_aciklama = ?, urun_stok = ?, musteri_ismi = ?,urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, tarih = ?, termin = ? WHERE urun_id = ?"); 
 
-			$guncelle = $query->execute(array($urun_kodu,$urun_adi,$urun_adet,$urun_depo_adet,$urun_raf,$urun_birimkg,$urun_boy_olcusu,$urun_alis,$satis,$urun_fabrika,$urun_aciklama,$urun_stok,$musteri_ismi,$urun_uyari_stok_adedi,$urun_depo_uyari_adet,$urun_yeni_sira,$tarih,$termin,$urun_id));
+			$guncelle = $query->execute(array($urun_kodu,$urun_adi,$urun_adet,$urun_palet,$urun_depo_adet,$urun_raf,$urun_birimkg,$urun_boy_olcusu,$urun_alis,$satis,$urun_fabrika,$urun_aciklama,$urun_stok,$musteri_ismi,$urun_uyari_stok_adedi,$urun_depo_uyari_adet,$urun_yeni_sira,$tarih,$termin,$urun_id));
 
 			if ($urun_adet != $eskiadet) {
 				
@@ -366,11 +374,11 @@
 
 			}
 			
-			if ($urun_depo_adet != $eskidepoadet) {
+			if ($urun_depo_adet != $eskidepoadet || $urun_palet != $eskipalet) {
 				
 				$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-				$islemiekle = $islem->execute(array($uye_id,$urun_id,$eskidepoadet,$urun_depo_adet,$su_an,'1',$uye_sirket));
+				$islemiekle = $islem->execute(array($uye_id,$urun_id,($eskidepoadet+$eskipalet),($urun_depo_adet+$urun_palet),$su_an,'1',$uye_sirket));
 
 			}
 
@@ -625,20 +633,18 @@
 					<?php if($sutunurunkoduizni == '1'){?><div class="col-md-1 col-1" style="text-align: center;"><b>Ürün Kodu</b></div><?php } ?>
 					
 					<div class="col-md-2 col-2"><b>Ürün Adı</b></div>
-					<div class="col-md-2 col-2">
+					<div class="col-md-4 col-4">
 						<div class="row">
-							<?php if($sutunadetizni == '1'){?><div class="col-md-4 col-4" style="text-align: center;"><b>Adet</b></div><?php } ?>
-							<?php if($sutundepoadetizni == '1'){?><div class="col-md-4 col-4" style="text-align: center;"><b>Alkop</b></div><?php } ?>
-							<?php if($sutunrafizni == '1'){?><div class="col-md-4 col-4" style="text-align: center;"><b>Raf</b></div><?php } ?>
+							<?php if($sutunadetizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Adet</b></div><?php } ?>
+							<?php if($sutunpaletizni == '1'){?><div class="col-2" style="text-align: center;"><b>Palet</b></div><?php } ?>
+							<?php if($sutundepoadetizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Alkop</b></div><?php } ?>
+							<?php if($sutunrafizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Raf</b></div><?php } ?>
+							<?php if($sutunbirimkgizni == '1'){?><div class="col-md-2 col-2 px-0" style="text-align: center;"><b>Birim Kg</b></div><?php } ?>
+							<?php if($sutunsipariskiloizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Sipariş Kilo</b></div><?php } ?>
+							<?php if($sutunboyolcusuizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Boy Ölçüsü</b></div><?php } ?>
+							<?php if($sutuntoplamizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Toplam</b></div><?php } ?>
 						</div>
 					</div>
-					<?php if($sutunbirimkgizni == '1'){?><div class="col-md-1 col-1" style="text-align: center;"><b>Birim Kg</b></div><?php } ?>
-
-					<?php if($sutunsipariskiloizni == '1'){?><div class="col-md-1 col-1" style="text-align: center;"><b>Sipariş Kilo</b></div><?php } ?>
-
-					<?php if($sutunboyolcusuizni == '1'){?><div class="col-md-1 col-1" style="text-align: center;"><b>Boy Ölçüsü</b></div><?php } ?>
-
-					<?php if($sutuntoplamizni == '1'){?><div class="col-md-1 col-1" style="text-align: center;"><b>Toplam</b></div><?php } ?>
 
 					<?php if($sutunalisizni == '1' && $uye_alis_yetkisi == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Alış</b></div><?php  } ?>
 
@@ -866,6 +872,8 @@
 
 						$urun_adet = $orw['urun_adet'];
 
+						$urun_palet = $orw['urun_palet'];
+
 						$urun_depo_adet = $orw['urun_depo_adet'];
 
 						$urun_raf = $orw['urun_raf'];
@@ -892,7 +900,7 @@
 
 						$urun_aciklama = $orw['urun_aciklama'];
 
-						$carpim = ($urun_adet + $urun_depo_adet)  * $urun_birimkg;
+						$carpim = ($urun_adet + $urun_palet + $urun_depo_adet)  * $urun_birimkg;
 
 						$toplam_urun_kg = $toplam_urun_kg + $carpim;
 
@@ -938,7 +946,7 @@
 
 								</div>
 
-							<?php }elseif($urun_adet < $urun_uyari_stok_adedi || $urun_depo_adet < $urun_depo_uyari_adet){ ?>
+							<?php }elseif($urun_adet < $urun_uyari_stok_adedi || ($urun_depo_adet + $urun_palet) < $urun_depo_uyari_adet){ ?>
 
 								<div class="col-4 d-block d-sm-none"><b style="color: red;">Ürün Adı :</b></div>
 
@@ -960,7 +968,7 @@
 
 							<?php } ?>		
 
-							<div class="col-md-2 col-12">
+							<div class="col-md-4 col-12">
 
 								<div class="row">
 
@@ -968,7 +976,15 @@
 
 									<div class="col-4 d-block d-sm-none">Adet : </div>
 
-									<div class="col-md-4 col-8" style="text-align: left;"><button class="btn btn-warning btn-sm btn-block"><b><?php echo $urun_adet; ?></b></button></div>
+									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-warning btn-sm btn-block"><b><?php echo $urun_adet; ?></b></button></div>
+
+									<?php } ?>
+
+									<?php if($sutunpaletizni == '1'){?>								
+
+									<div class="col-4 d-block d-sm-none">Palet : </div>
+
+									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-default btn-sm btn-block"><b><?php echo $urun_palet; ?></b></button></div>
 
 									<?php } ?>
 
@@ -976,7 +992,7 @@
 
 									<div class="col-4 d-block d-sm-none">Alkop Adet : </div>
 
-									<div class="col-md-4 col-8" style="text-align: left;"><button class="btn btn-info btn-sm btn-block"><b><?php echo $urun_depo_adet; ?></b></button></div>
+									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-info btn-sm btn-block"><b><?php echo $urun_depo_adet; ?></b></button></div>
 
 									<?php } ?>
 
@@ -984,45 +1000,45 @@
 
 									<div class="col-4 d-block d-sm-none">Raf : </div>
 
-									<div class="col-md-4 col-8" style="text-align: left;"><?php echo $urun_raf; ?></div>
+									<div class="col-md-2 col-8" style="text-align: left;"><?php echo $urun_raf; ?></div>
+
+									<?php } ?>
+
+									<?php if($sutunbirimkgizni == '1'){?>
+
+									<div class="col-4 d-block d-sm-none">Birim Kg : </div>
+
+									<div class="col-md-2 col-8" style="text-align:center;"><small><?php echo $urun_birimkg." kg"; ?></small></div>
+
+									<?php } ?>
+
+									<?php if($sutunsipariskiloizni == '1'){ ?>
+
+									<div class="col-4 d-block d-sm-none">Sipariş Kilo : </div>
+
+									<div class="col-md-2 col-8" style="text-align: center;"><button class="btn btn-danger btn-sm btn-block"><b><?php echo $urun_birimkg." kg"; ?></b></button></div>
+
+									<?php } ?>
+
+									<?php if($sutunboyolcusuizni == '1'){ ?>
+
+									<div class="col-4 d-block d-sm-none">Boy Ölçüsü : </div>
+
+									<div class="col-md-2 col-8"><?php echo $urun_boy_olcusu; ?></div>
+
+									<?php } ?>
+
+									<?php if($sutuntoplamizni == '1'){?>
+
+									<div class="col-4 d-block d-sm-none">Toplam : </div>
+
+									<div class="col-md-2 col-8 px-0" style="text-align:center;"><small><?php echo $carpim." kg"; ?></small></div>
 
 									<?php } ?>
 
 								</div>
 							
 							</div>
-
-							<?php if($sutunbirimkgizni == '1'){?>
-
-								<div class="col-4 d-block d-sm-none">Birim Kg : </div>
-
-								<div class="col-md-1 col-8" style="text-align:center;"><small><?php echo $urun_birimkg." kg"; ?></small></div>
-
-							<?php } ?>
-
-							<?php if($sutunsipariskiloizni == '1'){ ?>
-
-								<div class="col-4 d-block d-sm-none">Sipariş Kilo : </div>
-
-								<div class="col-md-1 col-8" style="text-align: center;"><button class="btn btn-danger btn-sm btn-block"><b><?php echo $urun_birimkg." kg"; ?></b></button></div>
-
-							<?php } ?>
-
-							<?php if($sutunboyolcusuizni == '1'){ ?>
-
-								<div class="col-4 d-block d-sm-none">Boy Ölçüsü : </div>
-
-								<div class="col-md-1 col-8"><?php echo $urun_boy_olcusu; ?></div>
-
-							<?php } ?>
-
-							<?php if($sutuntoplamizni == '1'){?>
-
-								<div class="col-4 d-block d-sm-none">Toplam : </div>
-
-								<div class="col-md-1 col-8" style="text-align:center;"><small><?php echo $carpim." kg"; ?></small></div>
-
-							<?php } ?>
 
 							<?php if($sutunalisizni == '1' && $uye_alis_yetkisi == '1'){ ?>
 
@@ -1497,6 +1513,8 @@
 															<div class="col-md-1 col-6">
 
 																<input type="hidden" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>">
+
+																<input type="hidden" name="urun_palet" value="<?php echo $urun_palet; ?>">
 																
 																<button type="submit" name="deposiparisalindi" class="btn btn-danger btn-sm">Depoya Gönderildi</button>
 
@@ -1716,13 +1734,15 @@
 												<?php if($sutunurunkoduizni == '1'){?><div class="col-md-1 col-12"><b>Ürün Kodu</b><input type="text" class="form-control" name="urun_kodu" value="<?php echo $urun_kodu; ?>"></div><?php } ?>	
 											
 												<div class="col-md-2 col-12"><b>Ürün Adı</b><input type="text" class="form-control" name="urun_adi" value="<?php echo $urun_adi; ?>"></div>
-												<div class="col-md-2 col-12">
-													<div class="row">
-														<?php if($sutunadetizni == '1'){?><div class="col-md-4 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?php echo $urun_adet; ?>"></div><?php } ?>	
-														<?php if($sutundepoadetizni == '1'){?><div class="col-md-4 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>"></div><?php } ?>	
-														<?php if($sutunrafizni == '1'){?><div class="col-md-4 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?php echo $urun_raf; ?>"></div><?php } ?>	
-													</div>
-												</div>
+												
+												<?php if($sutunadetizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?php echo $urun_adet; ?>"></div><?php } ?>	
+
+												<?php if($sutunpaletizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Palet</b><input type="text" class="form-control" name="urun_palet" value="<?php echo $urun_palet; ?>"></div><?php } ?>	
+														
+												<?php if($sutundepoadetizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>"></div><?php } ?>	
+														
+												<?php if($sutunrafizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?php echo $urun_raf; ?>"></div><?php } ?>	
+													
 												<?php if($sutunbirimkgizni == '1'){?><div class="col-md-1 col-12"><b>Birim Kg</b><input type="text" class="form-control" name="urun_birimkg" value="<?php echo $urun_birimkg; ?>"></div><?php } ?>
 
 												<?php if($sutunsipariskiloizni == '1'){?><div class="col-md-1 col-12"><b>Sipariş Kilo</b><input type="text" class="form-control" name="urun_birimkg" value="<?php echo $urun_birimkg; ?>"></div><?php } ?>
@@ -1878,6 +1898,8 @@
 											<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
 
 											<input type="hidden" name="urun_adet" value="<?php echo $urun_adet; ?>">
+
+											<input type="hidden" name="urun_palet" value="<?php echo $urun_palet; ?>">
 
 											<input type="hidden" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>">
 

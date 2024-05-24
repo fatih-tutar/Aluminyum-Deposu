@@ -98,6 +98,8 @@
 
 				if(!isset($_POST['sutunsevkiyatbutonu'])){ $sutunlararray[21] = 0; }
 
+				if(!isset($_POST['sutunpalet'])){ $sutunlararray[22] = 0; }
+
 				$sutunlar = implode(",",$sutunlararray);
 
 			}else if($kategori_tipi == '1'){
@@ -154,9 +156,9 @@
 
 			$sonurunsirasi++;
 
-			$query = $db->prepare("INSERT INTO urun SET kategori_bir = ?, kategori_iki = ?, urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, urun_fabrika = ?, urun_stok = ?, urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, musteri_ismi = ?, tarih = ?, termin = ?, satis = ?, sirketid = ?");
+			$query = $db->prepare("INSERT INTO urun SET kategori_bir = ?, kategori_iki = ?, urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, urun_fabrika = ?, urun_stok = ?, urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, musteri_ismi = ?, tarih = ?, termin = ?, satis = ?, sirketid = ?");
 
-			$insert = $query->execute(array($kategori_bir,$kategori_iki,'',$urun_adi,'','','','','','','','','','',$sonurunsirasi,'','','','',$uye_sirket));
+			$insert = $query->execute(array($kategori_bir,$kategori_iki,'',$urun_adi,'','','','','','','','','','','',$sonurunsirasi,'','','','',$uye_sirket));
 
 			header("Location:kategoriler.php");
 
@@ -229,6 +231,8 @@
 			if(!isset($_POST['sutunraf'])){ $sutunlararray[20] = 0; }
 
 			if(!isset($_POST['sutunsevkiyatbutonu'])){ $sutunlararray[21] = 0; }
+
+			if(!isset($_POST['sutunpalet'])){ $sutunlararray[22] = 0; }
 
 			$sutunlar = implode(",",$sutunlararray);
 
@@ -461,9 +465,17 @@
 
 							<div class="form-check">
 
-								<input type="checkbox" class="form-check-input" id="exampleCheck1" name="sutunadet" checked>
+								<input type="checkbox" class="form-check-input" id="sutunAdetCheck" name="sutunadet" checked>
 								
-								<label class="form-check-label" for="exampleCheck1">Adet <small>(1 birim)</small></label>
+								<label class="form-check-label" for="sutunAdetCheck">Adet <small>(1 birim)</small></label>
+							
+							</div>
+
+							<div class="form-check">
+
+								<input type="checkbox" class="form-check-input" id="sutunPaletCheck" name="sutunpalet" checked>
+								
+								<label class="form-check-label" for="sutunPaletCheck">Palet <small>(1 birim)</small></label>
 							
 							</div>
 
@@ -721,6 +733,7 @@
 									$sutundepouyariizni = $sutunlaripatlat[19];
 									$sutunrafizni = $sutunlaripatlat[20];
 									$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
+									$sutunpaletizni = $sutunlaripatlat[22];
 
 						?>			
 
@@ -833,17 +846,25 @@
 
 														<div class="form-check">
 
-															<input type="checkbox" class="form-check-input" id="exampleCheck1" name="sutunadet" <?= $sutunadetizni == 1 ? 'checked' : '' ?> >
+															<input type="checkbox" class="form-check-input" id="checkAdet" name="sutunadet" <?= $sutunadetizni == 1 ? 'checked' : '' ?> >
 
-															<label class="form-check-label" for="exampleCheck1">Adet <small>(1 birim)</small></label>
+															<label class="form-check-label" for="checkAdet">Adet <small>(1 birim)</small></label>
 														
 														</div>
 
 														<div class="form-check">
 
-															<input type="checkbox" class="form-check-input" id="exampleCheck11" name="sutundepoadet" <?= $sutundepoadetizni == 1 ? 'checked' : '' ?> >
+															<input type="checkbox" class="form-check-input" id="checkPalet" name="sutunpalet" <?= $sutunpaletizni == 1 ? 'checked' : '' ?> >
 
-															<label class="form-check-label" for="exampleCheck11">Depo Adet <small>(1 birim)</small></label>
+															<label class="form-check-label" for="checkPalet">Palet <small>(1 birim)</small></label>
+														
+														</div>
+
+														<div class="form-check">
+
+															<input type="checkbox" class="form-check-input" id="checkDepoAdet" name="sutundepoadet" <?= $sutundepoadetizni == 1 ? 'checked' : '' ?> >
+
+															<label class="form-check-label" for="checkDepoAdet">Depo Adet <small>(1 birim)</small></label>
 														
 														</div>
 
@@ -1156,6 +1177,10 @@
 									$sutundepouyariizni = $sutunlaripatlat[19];
 
 									$sutunrafizni = $sutunlaripatlat[20];
+									
+									$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
+
+									$sutunpaletizni = $sutunlaripatlat[22];
 
 						?>			
 
@@ -1275,17 +1300,25 @@
 
 														<div class="form-check">
 
-															<input type="checkbox" class="form-check-input" id="exampleCheck1" name="sutunadet" <?= $sutunadetizni == 1 ? 'checked' : '' ?> >
+															<input type="checkbox" class="form-check-input" id="adetControl" name="sutunadet" <?= $sutunadetizni == 1 ? 'checked' : '' ?> >
 
-															<label class="form-check-label" for="exampleCheck1">Adet <small>(1 birim)</small></label>
+															<label class="form-check-label" for="adetControl">Adet <small>(1 birim)</small></label>
 														
 														</div>
 
 														<div class="form-check">
 
-															<input type="checkbox" class="form-check-input" id="exampleCheck11" name="sutundepoadet" <?= $sutundepoadetizni == 1 ? 'checked' : '' ?> >
+															<input type="checkbox" class="form-check-input" id="paletControl" name="sutunpalet" <?= $sutunpaletizni == 1 ? 'checked' : '' ?> >
 
-															<label class="form-check-label" for="exampleCheck11">Depo Adet <small>(1 birim)</small></label>
+															<label class="form-check-label" for="paletControl">Palet <small>(1 birim)</small></label>
+														
+														</div>
+
+														<div class="form-check">
+
+															<input type="checkbox" class="form-check-input" id="depoAdetControl" name="sutundepoadet" <?= $sutundepoadetizni == 1 ? 'checked' : '' ?> >
+
+															<label class="form-check-label" for="depoAdetControl">Depo Adet <small>(1 birim)</small></label>
 														
 														</div>
 
