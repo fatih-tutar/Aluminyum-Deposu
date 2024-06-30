@@ -73,6 +73,12 @@
 		$uye_ziyaret_yetkisi = $uye_yetkileri_arrayi[9];
 
 		$uye_sevkiyat_yetkisi = $uye_yetkileri_arrayi[10];
+
+		$uye_adet_yetkisi = $uye_yetkileri_arrayi[11];
+
+		$uye_palet_yetkisi = $uye_yetkileri_arrayi[12];
+
+		$uye_alkop_yetkisi = $uye_yetkileri_arrayi[13];
  
 		//ŞİRKET BİLGİLERİ
 

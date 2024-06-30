@@ -70,7 +70,7 @@
 
 			if(isset($_POST['pasiflik'])){ $kullanici_pasiflik = 1; }
 
-			$kullanici_yetkileri = '0,0,0,0,0,0,0,0,0,0';
+			$kullanici_yetkileri = '0,0,0,0,0,0,0,0,0,0,0';
 
 			$kullanici_yetkileri_arrayi = explode(",", $kullanici_yetkileri);
 
@@ -93,6 +93,14 @@
 			if(isset($_POST['toplamgorme'])){ $kullanici_yetkileri_arrayi[8] = 1; }
 
 			if(isset($_POST['ziyaretyetki'])){ $kullanici_yetkileri_arrayi[9] = 1; }
+
+			if(isset($_POST['sevkiyatyetki'])){ $kullanici_yetkileri_arrayi[10] = 1; }
+
+			if(isset($_POST['yetkiadet'])){ $kullanici_yetkileri_arrayi[11] = 1; }
+
+			if(isset($_POST['yetkipalet'])){ $kullanici_yetkileri_arrayi[12] = 1; }
+
+			if(isset($_POST['yetkialkop'])){ $kullanici_yetkileri_arrayi[13] = 1; }
 
 			$kullanici_yetkileri = implode(",", $kullanici_yetkileri_arrayi);
 
@@ -128,7 +136,7 @@
 
 			$yeni_uye_sifre = "81dc9bdb52d04dc20036dbd8313ed055";
 
-			$yeni_uye_yetki = "0,0,0,0,0,0";
+			$yeni_uye_yetki = "0,0,0,0,0,0,0,0,0,0,0,0,0";
 
 			if (empty($yeni_uye_adi)) {
 				
@@ -300,15 +308,33 @@
 								
 								<div class="col-md-1 col-3"><b>Adı</b></div>
 
-								<div class="col-md-1 col-3" style="text-align: center;"><b>Pasiflik</b></div>
+								<div class="col-md-1 col-3">
+									<div class="row">
+										<div class="col-md-6 p-0" style="text-align: center;"><b>Pasiflik</b></div>
+										<div class="col-md-6 p-0" style="text-align: center;"><b>Adet</b></div>
+									</div>
+								</div>
 
-								<div class="col-md-1 col-3" style="text-align: center;"><b>Alış</b></div>
+								<div class="col-md-1 col-3">
+									<div class="row">
+										<div class="col-md-6 p-0" style="text-align: center;"><b>Palet</b></div>
+										<div class="col-md-6 p-0" style="text-align: center;"><b>Alkop</b></div>
+									</div>
+								</div>
 
-								<div class="col-md-1 col-3" style="text-align: center;"><b>Satış</b></div>
+								<div class="col-md-1 col-3">
+									<div class="row">
+										<div class="col-md-6 p-0" style="text-align: center;"><b>Alış</b></div>
+										<div class="col-md-6 p-0" style="text-align: center;"><b>Satış</b></div>
+									</div>
+								</div>
 
-								<div class="col-md-1 col-3" style="text-align: center;"><b>Fabrika</b></div>
-
-								<div class="col-md-1 col-3" style="text-align: center;"><b>Teklif</b></div>
+								<div class="col-md-1 col-3">
+									<div class="row">
+										<div class="col-md-6 p-0" style="text-align: center;"><b>Fabrika</b></div>
+										<div class="col-md-6 p-0" style="text-align: center;"><b>Teklif</b></div>
+									</div>
+								</div>
 
 								<div class="col-md-1 col-3" style="text-align: center;"><b>Sipariş</b></div>
 
@@ -357,127 +383,111 @@
 											<div class="col-4 d-block d-sm-none"><b>Ad Soyad</b></div>
 											<div class="col-md-1 col-8" style="text-align: left;"><input type="text" class="form-control form-control-sm" name="kullanici_adi" value="<?php echo $kullanici_adi; ?>" ></div>
 											
-											<div class="col-4 d-block d-sm-none"><b>Pasiflik</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($kullanici_pasiflik == '1'){ ?><input type="checkbox" class="form-check-input" id="pasiflikcheck" name="pasiflik" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="pasiflikcheck" name="pasiflik"><?php } ?>
-												
+											<div class="col-md-1 col-12">
+												<div class="row">
+													<div class="col-4 d-block d-sm-none"><b>Pasiflik</b></div>
+													<div class="col-md-6 col-2" style="text-align: center;">
+														<div class="form-check">
+															<input type="checkbox" class="form-check-input" id="pasiflikcheck" name="yetkiadet" <?= $kullanici_pasiflik == '1' ? 'checked' : '' ?>>
+														</div>
+													</div>
+													<div class="col-4 d-block d-sm-none px-0x"><b>Adet</b></div>
+													<div class="col-md-6 col-2" style="text-align: center;">
+														<div class="form-check">
+															<input type="checkbox" class="form-check-input" id="yetkiadetcheck" name="yetkiadet" <?= $yetkiler_arrayi[11] == '1' ? 'checked' : '' ?>>
+														</div>
+													</div>
 												</div>
-
 											</div>
 
-											<div class="col-4 d-block d-sm-none px-0x"><b>Alış</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[0] == '1'){ ?><input type="checkbox" class="form-check-input" id="alisyetkicheck" name="yetkialis" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="alisyetkicheck" name="yetkialis"><?php } ?>
-												
+											<div class="col-md-1 col-12">
+												<div class="row">
+													<div class="col-4 d-block d-sm-none"><b>Palet</b></div>
+													<div class="col-md-6 col-2" style="text-align: center;">
+														<div class="form-check">
+															<input type="checkbox" class="form-check-input" id="yetkipaletcheck" name="yetkipalet" <?= $yetkiler_arrayi[12] == '1' ? 'checked' : '' ?>>
+														</div>
+													</div>
+													<div class="col-4 d-block d-sm-none px-0x"><b>Alkop</b></div>
+													<div class="col-md-6 col-2" style="text-align: center;">
+														<div class="form-check">
+															<input type="checkbox" class="form-check-input" id="yetkialkopcheck" name="yetkialkop" <?= $yetkiler_arrayi[13] == '1' ? 'checked' : '' ?>>
+														</div>
+													</div>
 												</div>
-
 											</div>
 
-											<div class="col-4 d-block d-sm-none"><b>Satış</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
+											<div class="col-md-1 col-12">
+												<div class="row">
+													<div class="col-4 d-block d-sm-none"><b>Alış</b></div>
+													<div class="col-md-6 col-2" style="text-align: center;">
+														<div class="form-check">
+															<input type="checkbox" class="form-check-input" id="alisyetkicheck" name="yetkialis" <?= $yetkiler_arrayi[0] == '1' ? 'checked' : '' ?>>
+														</div>
+													</div>
+													<div class="col-4 d-block d-sm-none"><b>Satış</b></div>
+													<div class="col-md-6 col-2" style="text-align: center;">
+														<div class="form-check">
+															<input type="checkbox" class="form-check-input" id="satisyetkicheck" name="yetkisatis" <?= $yetkiler_arrayi[7] == '1' ? 'checked' : '' ?>>
+														</div>
+													</div>
 
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[7] == '1'){ ?><input type="checkbox" class="form-check-input" id="satisyetkicheck" name="yetkisatis" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="satisyetkicheck" name="yetkisatis"><?php } ?>
-												
 												</div>
-
-											</div>
-
-											<div class="col-4 d-block d-sm-none px-0"><b>Fabrika</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[1] == '1'){ ?><input type="checkbox" class="form-check-input" id="Fabrikayetkicheck" name="yetkifabrika" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="Fabrikayetkicheck" name="yetkifabrika"><?php } ?>
-												
-												</div>
-
-											</div>
-
-											<div class="col-4 d-block d-sm-none"><b>Teklif</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[2] == '1'){ ?><input type="checkbox" class="form-check-input" id="teklifyetkicheck" name="yetkiteklif" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="teklifyetkicheck" name="yetkiteklif"><?php } ?>
-												
-												</div>
-
-											</div>
-
-											<div class="col-4 d-block d-sm-none px-0"><b>Sipariş</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[3] == '1'){ ?><input type="checkbox" class="form-check-input" id="siparisyetkicheck" name="yetkisiparis" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="siparisyetkicheck" name="yetkisiparis"><?php } ?>
-												
-												</div>
-
-											</div>
-
-											<div class="col-4 d-block d-sm-none"><b>Düzenleme</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[4] == '1'){ ?><input type="checkbox" class="form-check-input" id="duzenlemeyetkicheck" name="yetkiduzenleme" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="duzenlemeyetkicheck" name="yetkiduzenleme"><?php } ?>
-												
-												</div>
-
-											</div>
-
-											<div class="col-4 d-block d-sm-none px-0"><b>İşlemler</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[5] == '1'){ ?><input type="checkbox" class="form-check-input" id="islemlerigormeyetkicheck" name="yetkiislemlerigorme" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="islemlerigormeyetkicheck" name="yetkiislemlerigorme"><?php } ?>
-												
-												</div>
-
-											</div>
-
-											<div class="col-4 d-block d-sm-none pr-0"><b>Gelen Giden</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[6] == '1'){ ?><input type="checkbox" class="form-check-input" id="gelengidenigormeyetkicheck" name="gelengidenigorme" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="gelengidenigormeyetkicheck" name="gelengidenigorme"><?php } ?>
-												
-												</div>
-
-											</div>
-
-											<div class="col-4 d-block d-sm-none px-0"><b>Toplam Göster</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[8] == '1'){ ?><input type="checkbox" class="form-check-input" id="toplamyetkicheck" name="toplamgorme" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="toplamyetkicheck" name="toplamgorme"><?php } ?>
-												
-												</div>
-
-											</div>
-
-											<div class="col-4 d-block d-sm-none"><b>Ziyaretler</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-
-												<div class="form-check">
-
-													<?php if($yetkiler_arrayi[9] == '1'){ ?><input type="checkbox" class="form-check-input" id="ziyaretyetkicheck" name="ziyaretyetki" checked><?php }else{ ?><input type="checkbox" class="form-check-input" id="ziyaretyetkicheck" name="ziyaretyetki"><?php } ?>
-												
-												</div>
-
 											</div>
 											
+											<div class="col-md-1 col-12">
+												<div class="row">
+													<div class="col-4 d-block d-sm-none"><b>Fabrika</b></div>
+													<div class="col-md-6 col-2" style="text-align: center;">
+														<div class="form-check">
+															<input type="checkbox" class="form-check-input" id="Fabrikayetkicheck" name="yetkifabrika" <?= $yetkiler_arrayi[1] == '1' ? 'checked' : '' ?>>
+														</div>
+													</div>
+													<div class="col-4 d-block d-sm-none"><b>Teklif</b></div>
+													<div class="col-md-6 col-2" style="text-align: center;">
+														<div class="form-check">
+															<input type="checkbox" class="form-check-input" id="teklifyetkicheck" name="yetkiteklif" <?= $yetkiler_arrayi[2] == '1' ? 'checked' : '' ?>>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="col-4 d-block d-sm-none"><b>Sipariş</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
+												<div class="form-check">
+													<input type="checkbox" class="form-check-input" id="siparisyetkicheck" name="yetkisiparis" <?= $yetkiler_arrayi[3] == '1' ? 'checked' : '' ?>>
+												</div>
+											</div>
+											<div class="col-4 d-block d-sm-none"><b>Düzenleme</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
+												<div class="form-check">
+													<input type="checkbox" class="form-check-input" id="duzenlemeyetkicheck" name="yetkiduzenleme" <?= $yetkiler_arrayi[4] == '1' ? 'checked' : '' ?>>
+												</div>
+											</div>
+											<div class="col-4 d-block d-sm-none"><b>İşlemler</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
+												<div class="form-check">
+													<input type="checkbox" class="form-check-input" id="islemlerigormeyetkicheck" name="yetkiislemlerigorme" <?= $yetkiler_arrayi[5] == '1' ? 'checked' : '' ?>>
+												</div>
+											</div>
+											<div class="col-4 d-block d-sm-none pr-0"><b>Gelen Giden</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
+												<div class="form-check">
+													<input type="checkbox" class="form-check-input" id="gelengidenigormeyetkicheck" name="gelengidenigorme" <?= $yetkiler_arrayi[6] == '1' ? 'checked' : '' ?>>
+												</div>
+											</div>
+											<div class="col-4 d-block d-sm-none"><b>Toplam Göster</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
+												<div class="form-check">
+													<input type="checkbox" class="form-check-input" id="toplamyetkicheck" name="toplamgorme" <?= $yetkiler_arrayi[8] == '1' ? 'checked' : '' ?>>
+												</div>
+											</div>
+											<div class="col-4 d-block d-sm-none"><b>Ziyaretler</b></div>
+											<div class="col-md-1 col-2" style="text-align: center;">
+												<div class="form-check">
+													<input type="checkbox" class="form-check-input" id="ziyaretyetkicheck" name="ziyaretyetki" <?= $yetkiler_arrayi[9] == '1' ? 'checked' : '' ?>>
+												</div>
+											</div>											
 											<div class="col-md-12 col-12" style="text-align:right;">
 												
 												<button type="submit" class="btn btn-warning btn-sm" name="bilgileriguncelle">Kaydet</button>

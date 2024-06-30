@@ -1735,11 +1735,11 @@
 											
 												<div class="col-md-2 col-12"><b>Ürün Adı</b><input type="text" class="form-control" name="urun_adi" value="<?php echo $urun_adi; ?>"></div>
 												
-												<?php if($sutunadetizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?php echo $urun_adet; ?>"></div><?php } ?>	
+												<?php if($sutunadetizni == '1' && $uye_adet_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?php echo $urun_adet; ?>"></div><?php } ?>	
 
-												<?php if($sutunpaletizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Palet</b><input type="text" class="form-control" name="urun_palet" value="<?php echo $urun_palet; ?>"></div><?php } ?>	
+												<?php if($sutunpaletizni == '1' && $uye_palet_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Palet</b><input type="text" class="form-control" name="urun_palet" value="<?php echo $urun_palet; ?>"></div><?php } ?>	
 														
-												<?php if($sutundepoadetizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>"></div><?php } ?>	
+												<?php if($sutundepoadetizni == '1' && $uye_alkop_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>"></div><?php } ?>	
 														
 												<?php if($sutunrafizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?php echo $urun_raf; ?>"></div><?php } ?>	
 													
