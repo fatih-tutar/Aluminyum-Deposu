@@ -70,7 +70,7 @@
 
 			if(isset($_POST['pasiflik'])){ $kullanici_pasiflik = 1; }
 
-			$kullanici_yetkileri = '0,0,0,0,0,0,0,0,0,0,0';
+			$kullanici_yetkileri = '0,0,0,0,0,0,0,0,0,0,0,0,0,0';
 
 			$kullanici_yetkileri_arrayi = explode(",", $kullanici_yetkileri);
 
@@ -136,7 +136,7 @@
 
 			$yeni_uye_sifre = "81dc9bdb52d04dc20036dbd8313ed055";
 
-			$yeni_uye_yetki = "0,0,0,0,0,0,0,0,0,0,0,0,0";
+			$yeni_uye_yetki = "0,0,0,0,0,0,0,0,0,0,0,0,0,0";
 
 			if (empty($yeni_uye_adi)) {
 				
