@@ -984,7 +984,7 @@
 
 									<div class="col-4 d-block d-sm-none">Palet : </div>
 
-									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-default btn-sm btn-block"><b><?php echo $urun_palet; ?></b></button></div>
+									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-dark btn-sm btn-block"><b><?php echo $urun_palet; ?></b></button></div>
 
 									<?php } ?>
 
@@ -1000,7 +1000,7 @@
 
 									<div class="col-4 d-block d-sm-none">Raf : </div>
 
-									<div class="col-md-2 col-8" style="text-align: left;"><?php echo $urun_raf; ?></div>
+									<div class="col-md-2 col-8" style="text-align: left;"><b><?php echo $urun_raf; ?></b></div>
 
 									<?php } ?>
 
