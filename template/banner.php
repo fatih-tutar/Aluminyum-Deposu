@@ -116,9 +116,13 @@
 
 <?php
 
-if(($su_an - (60 * 60 * 7)) > $sirketyedekalmasaniye && $uye_tipi == '2'){
+if(giris_yapti_mi() === true){
 
-	otomatikyedekal($su_an, $uye_sirket, $sayfa);
+	if(($su_an - (60 * 60 * 7)) > $sirketyedekalmasaniye && $uye_tipi == '2'){
+
+		otomatikyedekal($su_an, $uye_sirket, $sayfa);
+
+	}
 
 }
 

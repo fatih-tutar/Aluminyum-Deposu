@@ -90,6 +90,8 @@
 
 		$sirketyedekalmasaniye = $sirketbilgileri['yedekalmasaniye'];
 
+		$sirketfiyatlistesi = guvenlik($sirketbilgileri['fiyatlistesi']);
+
 		// KURLAR
 
 		$dolar = getDolar();
