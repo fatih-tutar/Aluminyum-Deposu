@@ -264,6 +264,18 @@
 
 			$eskidepoadet = $eskiadeticek['urun_depo_adet'];
 
+			if(!isset($_POST['urun_adet'])){
+				$urun_adet = $eskiadet;
+			}
+
+			if(!isset($_POST['urun_palet'])){
+				$urun_palet = $eskipalet;
+			}
+
+			if(!isset($_POST['urun_depo_adet'])){
+				$urun_depo_adet = $eskidepoadet;
+			}
+
 			$urun_birimkg = guvenlik($_POST['urun_birimkg']);
 
 			$urun_boy_olcusu = guvenlik($_POST['urun_boy_olcusu']);
