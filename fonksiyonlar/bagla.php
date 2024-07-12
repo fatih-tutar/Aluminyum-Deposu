@@ -26,6 +26,12 @@
 
 	include 'fonksiyonlar.php';
 
+	// Osmanlı Alüminyum İçin
+
+	$fiyatlistesi = $db->query("SELECT * FROM sirketler WHERE sirketid = '2'")->fetch(PDO::FETCH_ASSOC);
+
+	$sirketfiyatlistesi = guvenlik($fiyatlistesi['fiyatlistesi']);
+
 	$site_adresi = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 
 	if(giris_yapti_mi() === true){

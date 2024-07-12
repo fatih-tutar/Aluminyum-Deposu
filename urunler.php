@@ -71,7 +71,7 @@
 		$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
 
 		$sutunpaletizni = $sutunlaripatlat[22];
-
+		
 		$a = guvenlik($_GET['a']);
 
 		$b = guvenlik($_GET['b']);
@@ -1937,7 +1937,7 @@
 
 			?>
 
-			<?php if($toplam_yetkisi == '1' || $uye_tipi == '2'){ ?> 
+			<?php if($uye_tipi == '2'){ ?> 
 
 				<div class="row">
 
