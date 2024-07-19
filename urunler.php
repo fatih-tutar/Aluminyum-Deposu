@@ -71,10 +71,6 @@
 		$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
 
 		$sutunpaletizni = $sutunlaripatlat[22];
-		
-		$a = guvenlik($_GET['a']);
-
-		$b = guvenlik($_GET['b']);
 
 	if($uye_tipi != '3'){
 
