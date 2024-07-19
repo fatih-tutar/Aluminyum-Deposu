@@ -25,6 +25,7 @@
     $fiyatArray = explode("-",$fiyatlar);
     $olusturan = guvenlik($sevkiyat['olusturan']);
     $hazirlayan = guvenlik($sevkiyat['hazirlayan']);
+    $faturaci = guvenlik($sevkiyat['faturaci']);
     $sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
     $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
     $aciklama = guvenlik($sevkiyat['aciklama']);
