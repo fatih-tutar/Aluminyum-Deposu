@@ -288,9 +288,9 @@
 
 			$musteri_ismi = guvenlik($_POST['musteri_ismi']);
 
-			$tarih = guvenlik($_POST['tarih']);
+			$tarih = guvenlik($_POST['tarih'] ?? null);
 
-			$termin = guvenlik($_POST['termin']);
+			$termin = guvenlik($_POST['termin'] ?? null);
 
 			$urun_uyari_stok_adedi = guvenlik($_POST['urun_uyari_stok_adedi']);
 
