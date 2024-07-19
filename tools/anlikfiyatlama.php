@@ -11,8 +11,6 @@
 
                 foreach( $query as $row ){
 
-                    $id++;
-
                     $fabrika_id = guvenlik($row['fabrika_id']);
 
                     $fabrika_adi = guvenlik($row['fabrika_adi']);
