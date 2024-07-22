@@ -240,7 +240,7 @@
 
 			$urun_id = guvenlik($_POST['urun_id']);
 
-			$urun_kodu = guvenlik($_POST['urun_kodu']);
+			$urun_kodu = guvenlik($_POST['urun_kodu'] ?? null);
 
 			$urun_adi = guvenlik($_POST['urun_adi']);
 
@@ -274,11 +274,11 @@
 
 			$urun_birimkg = guvenlik($_POST['urun_birimkg']);
 
-			$urun_boy_olcusu = guvenlik($_POST['urun_boy_olcusu']);
+			$urun_boy_olcusu = guvenlik($_POST['urun_boy_olcusu'] ?? null);
 
 			$urun_alis = guvenlik($_POST['urun_alis']);
 
-			$satis = guvenlik($_POST['satis']);
+			$satis = guvenlik($_POST['satis'] ?? null);
 
 			$urun_fabrika = guvenlik($_POST['urun_fabrika']);
 
@@ -286,7 +286,7 @@
 
 			$urun_stok = guvenlik($_POST['urun_stok']);
 
-			$musteri_ismi = guvenlik($_POST['musteri_ismi']);
+			$musteri_ismi = guvenlik($_POST['musteri_ismi'] ?? null);
 
 			$tarih = guvenlik($_POST['tarih'] ?? null);
 
