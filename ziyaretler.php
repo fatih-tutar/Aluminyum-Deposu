@@ -296,8 +296,6 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <div id="adresdivi<?php echo $id; ?>" class="col-md-12 mb-1 px-1" style="display:none;"><textarea name="acikadres" id="" class="form-control" rows="1" placeholder="Açık Adres"><?php echo $acikadres; ?></textarea></div>
-                    <div id="notdivi<?php echo $id; ?>" class="col-md-12 mb-1 px-1" style="display:none;"><textarea name="ziyaretnotu" id="" class="form-control" rows="1" placeholder="Ziyaret Notu"><?php echo $ziyaretnotu; ?></textarea></div>
                 </div>
             </div>
 
