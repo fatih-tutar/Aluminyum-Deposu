@@ -246,9 +246,9 @@
 
 			$urun_adet = guvenlik($_POST['urun_adet']);
 
-			$urun_palet = guvenlik($_POST['urun_palet']);
+			$urun_palet = guvenlik($_POST['urun_palet'] ?? null);
 
-			$urun_depo_adet = guvenlik($_POST['urun_depo_adet']);
+			$urun_depo_adet = guvenlik($_POST['urun_depo_adet'] ?? null);
 
 			$urun_raf = guvenlik($_POST['urun_raf']);
 
