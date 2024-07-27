@@ -258,7 +258,7 @@
 		{
 			$alfabedizi = "abcçdefgğhıijklmnoöqprsştuüvwxyzwqABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZWQ0123456789.,_-:/\@<>*# ";
 
-			if (!preg_match("/[".$value."]/i", $alfabedizi)) {
+			if (!preg_match("/[" . preg_quote($value, '/') . "]/i", $alfabedizi)) {
 
 				unset($veri_patlat[$key]);
 				
