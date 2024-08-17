@@ -307,18 +307,6 @@
 
 									<div class="col-md-1 col-8"><?php echo $termintarih; ?></div>
 
-									<div class="col-md-1 col-12">
-										
-										<input type="hidden" name="siparis_id" value="<?php echo $siparis_id; ?>">
-
-										<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
-
-										<input type="hidden" name="urun_adet" value="<?php echo $urun_adet; ?>">
-										
-										<button type="submit" name="siparisalindi" class="btn btn-danger btn-sm">Sipariş Alındı</button>
-
-									</div>
-
 								</div>
 
 							</form>
