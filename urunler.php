@@ -160,8 +160,6 @@
 
 			$ilgilikisi = guvenlik($_POST['ilgilikisi']);
 
-			$urun_adi = guvenlik($_POST['urun_adi']);
-
 			$urun_stok = guvenlik($_POST['urun_stok']);
 
 			$urun_id = guvenlik($_POST['urun_id']);
