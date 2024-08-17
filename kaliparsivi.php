@@ -178,7 +178,7 @@
 
 	    				<h5><b>Açıklama</b></h5>
 
-			    		<input type="text" name="aciklama" class="form-control" placeholder="Buraya açıklama girebilirsiniz." value="<?php echo $aciklama; ?>">
+			    		<input type="text" name="aciklama" class="form-control" placeholder="Buraya açıklama girebilirsiniz.">
 
 	    			</div>
 
