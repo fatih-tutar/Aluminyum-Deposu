@@ -157,7 +157,7 @@
                             <div class="row">
 
                                 <div class="col-md-5 col-12"><input type="text" name="plan" class="form-control" placeholder="İş planına eklenecek görev"></div>
-                                <div class="col-md-2 col-12"><input type="text" id="tarih<?php echo $id; ?>" name="plan_tarihi" placeholder="Tarih seçiniz" class="form-control"></div>
+                                <div class="col-md-2 col-12"><input type="text" id="tarih1" name="plan_tarihi" placeholder="Tarih seçiniz" class="form-control"></div>
                                 <div class="col-md-3 col-12"><input type="checkbox" class="form-check-input" id="checkboxaylik" name="plan_tekrar"><label class="form-check-label" for="checkboxaylik" style="font-size:12px;">Aylık olarak hatırlatılmasını istiyorsanız işaretleyiniz.</label></div>
                                 <div class="col-md-2 col-12"><button type="submit" class="btn btn-primary btn-block" name="plan_ekle">Kaydet</button></div>
 

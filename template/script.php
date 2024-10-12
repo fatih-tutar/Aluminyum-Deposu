@@ -10,6 +10,28 @@
 
 <script type="text/javascript">
 
+    function hesaplaGunFarki() {
+        var baslangicTarihi = document.getElementById("izin_baslangic_tarihi").value;
+        var bitisTarihi = document.getElementById("ise_baslama_tarihi").value;
+
+        if (baslangicTarihi && bitisTarihi) {
+            var baslangic = new Date(baslangicTarihi);
+            var bitis = new Date(bitisTarihi);
+
+            var farkZaman = bitis.getTime() - baslangic.getTime();
+            var gunFarki = farkZaman / (1000 * 3600 * 24); // Milisaniyeleri gün cinsinden hesaplama
+
+            if (gunFarki >= 0) {
+                document.getElementById("gun_sayisi").value = gunFarki;
+            } else {
+                document.getElementById("gun_sayisi").value = 0;
+            }
+        }
+    }
+    // Her iki tarih girişini dinleyen olay tetikleyicisi
+    document.getElementById("izin_baslangic_tarihi").addEventListener("change", hesaplaGunFarki);
+    document.getElementById("ise_baslama_tarihi").addEventListener("change", hesaplaGunFarki);
+
     $( function() {
 
         for (var id = 1; id < 1000; id++) {
