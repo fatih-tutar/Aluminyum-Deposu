@@ -57,57 +57,134 @@
     ?>	
     <div class="card p-1">
         <a href="fiyatlistesi.php" target="_blank" class="sidebar-font">
-            AYDINLATMA FİYAT
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/aydinlatma_fiyat.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    AYDINLATMA FİYAT
+                </div>
+            </div>	
         </a>
     </div>		
     <div class="card p-1">
         <a href="tekliflistesi.php" target="_blank" class="sidebar-font">
-            ÜRÜN SORGULAMA
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/urun_sorgulama.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    ÜRÜN SORGULAMA
+                </div>
+            </div>	
         </a>
     </div>	
     <div class="card p-1">
         <a href="kaliplistesi.php" target="_blank" class="sidebar-font">
-            KALIP SORGULAMA
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/kalip_sorgulama.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    KALIP SORGULAMA
+                </div>
+            </div>	
         </a>
     </div>	
     <div class="card p-1">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('anlikfiyatlamadivi','fiyathesaplamadivi','agirlikhesaplamadivi','isplanidivi');" class="sidebar-font">
-            ANLIK FİYATLAMA
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/anlik_fiyatlama.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    ANLIK FİYATLAMA
+                </div>
+            </div>
         </a>
     </div>	
     <div class="card p-1">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('fiyathesaplamadivi','agirlikhesaplamadivi','anlikfiyatlamadivi','isplanidivi');" class="sidebar-font">
-            FİYAT HESAPLAMA
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/fiyat_hesaplama.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    FİYAT HESAPLAMA
+                </div>
+            </div>
         </a>
     </div>	
     <div class="card p-1">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi','isplanidivi');" class="sidebar-font">
-            AĞIRLIK HESAPLAMA
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/agirlik_hesaplama.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    AĞIRLIK HESAPLAMA
+                </div>
+            </div>
         </a>
     </div>		
     <div class="card p-1">
         <a href="fabrikalar.php" target="_blank" class="sidebar-font">
-            FABRİKALAR
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/fabrikalar.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    FABRİKALAR
+                </div>
+            </div>
         </a>
     </div>
     <div class="card p-1">
         <a href="firmalar.php" target="_blank" class="sidebar-font">
-            FİRMALAR
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/firmalar.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    FİRMALAR
+                </div>
+            </div>
         </a>
     </div>
     <div class="card p-1">
         <a href="kaliplar.php" target="_blank" class="sidebar-font">
-            KALIPLAR
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/kaliplar.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    KALIPLAR
+                </div>
+            </div>
         </a>
     </div>	
     <div class="card p-1">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('isplanidivi','agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi');" class="sidebar-font">
-            İŞ PLANI
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/is_plani.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    İŞ PLANI
+                </div>
+            </div>
         </a>
     </div>
     <div class="card p-1">
         <a href="sevkiyatarsiv.php" target="_blank" class="sidebar-font">
-            SEVKİYAT ARŞİVİ
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                    <img src="img/sidebar/sevkiyat_arsivi.png" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    SEVKİYAT ARŞİVİ
+                </div>
+            </div>
         </a>
     </div>	
 </div>
