@@ -27,4 +27,6 @@ $lme1 = $roundedNumber + 1;
 
 $lme = $lme1;
 
+echo $lme;
+
 ?>
