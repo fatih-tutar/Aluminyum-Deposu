@@ -1,5 +1,43 @@
 <?php
 
+	function iseGirisTarihiGetir($uyeId) {
+		global $db;
+		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}'")->fetch(PDO::FETCH_ASSOC);
+		return $uye['ise_giris_tarihi'];
+	}
+
+	function kullanilanIzinHesapla($uyeId) {
+		global $db;
+		$yil = date("Y");
+		$kullanilanIzin = $db->query("SELECT SUM(gun_sayisi) as toplam_kullanilan FROM izinler WHERE izinli = '{$uyeId}' AND YEAR(izin_baslangic_tarihi) = '{$yil}' AND durum = '1' AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
+		return !$kullanilanIzin['toplam_kullanilan'] ? 0 : $kullanilanIzin['toplam_kullanilan'];
+	}
+
+	function yillikIzinHesapla($uyeId) {
+		global $db;
+		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}'")->fetch(PDO::FETCH_ASSOC);
+		$iseGirisTarihi = $uye['ise_giris_tarihi'];
+		$bugun = new DateTime();
+		$baslamaTarihi = new DateTime($iseGirisTarihi);
+		$fark = $bugun->diff($baslamaTarihi);
+		$yilFarki = $fark->y;
+		if ($yilFarki < 1) {
+			return 0; // 0-1 yıl arası izin hakkı yok
+		} elseif ($yilFarki >= 1 && $yilFarki < 5) {
+			return 14; // 1-5 yıl arası 14 gün izin
+		} elseif ($yilFarki >= 5 && $yilFarki < 15) {
+			return 20; // 5-15 yıl arası 20 gün izin
+		} else {
+			return 26; // 15 yıldan fazla ise 26 gün izin
+		}
+	}
+
+	function getLastLeaveDate($izinli) {
+		global $db;
+		$lastLeave = $db->query("SELECT * FROM izinler WHERE izinli = '{$izinli}' ORDER BY izin_baslangic_tarihi DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		return $lastLeave['ise_baslama_tarihi'];
+	}
+
 	function getSevkiyatInfo($sevkiyatID){
 		global $db;
 		$sevkiyat = $db->query("SELECT * FROM sevkiyat WHERE id = '{$sevkiyatID}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
