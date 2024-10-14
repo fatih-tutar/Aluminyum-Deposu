@@ -1,41 +1,57 @@
 <?php 
-
 	include 'fonksiyonlar/bagla.php'; 
-
 	if ($girdi != '1') {
-		
 		header("Location:giris.php");
-
 		exit();
-
 	}else{
-
-
+        if(isset($_POST['izin_kaydet'])) {
+            $izinli = isset($_POST['izinli']) && !empty($_POST['izinli']) ? guvenlik($_POST['izinli']) : $uye_id;
+            $izinBaslangicTarihi = guvenlik($_POST['izin_baslangic_tarihi']);
+            $iseBaslamaTarihi = guvenlik($_POST['ise_baslama_tarihi']);
+            $gunSayisi = guvenlik($_POST['gun_sayisi']);
+            $query = $db->prepare("INSERT INTO izinler SET izinli = ?, izin_baslangic_tarihi = ?, ise_baslama_tarihi = ?, gun_sayisi = ?, durum = ?, silik = ?, saniye = ?");
+            $insert = $query->execute(array($izinli, $izinBaslangicTarihi, $iseBaslamaTarihi, $gunSayisi, '0', '0', $su_an));
+            header("Location: izin.php");
+            exit();
+        }
 	}
-
 ?>
 
 <!DOCTYPE html>
-
 <html>
-
   <head>
-
     <title>İzinler</title>
-
     <?php include 'template/head.php'; ?>
-
   </head>
-
   <body>
-
     <?php include 'template/banner.php' ?>
-
     <div class="container-fluid">
         <div class="div4" style="padding-top: 20px; text-align: center;">
             <a href="#" onclick="return false" onmousedown="javascript:ackapa('formdivi');"><h5><i class="fas fa-angle-double-down"></i>&nbsp;&nbsp;&nbsp;&nbsp;<b>İzin Giriş Formu</b>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-angle-double-down"></i></h5></a>
             <div id="formdivi" style="display: none;">
                 <form action="" method="POST">
+                    <div class="row mb-2">
+                        <?php if($uye_tipi == 2) { ?>
+                        <div class="col-md-3 col-12">
+                            <b>Çalışan</b>
+                            <select name="izinli" id="izinli" class="form-control">
+                                <option selected>İzin Verilecek Kişiyi Seçiniz</option>                        
+                                <?php
+                                    $calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' AND uye_tipi != '2' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+                                    if ( $calisanlaricek->rowCount() ){
+                                        foreach( $calisanlaricek as $cc ){
+                                            $calisanId = guvenlik($cc['uye_id']);
+                                            $calisanAdi = guvenlik($cc['uye_adi']);
+                                ?>
+                                            <option value="<?php echo $calisanId; ?>"><?php echo $calisanAdi; ?></option>
+                                <?php
+                                        }
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <?php } ?>
+                    </div>
                     <div class="row">
                         <div class="col-md-3 col-12">
                             <b>İzin Başlangıç Tarihi</b><br/>
@@ -58,22 +74,16 @@
             </div>
         </div>
     </div>
-
     <?php include 'template/script.php'; ?>
-
     <script>
-
         function hesaplaGunFarki() {
             var baslangicTarihi = document.getElementById("izin_baslangic_tarihi").value;
             var bitisTarihi = document.getElementById("ise_baslama_tarihi").value;
-
             if (baslangicTarihi && bitisTarihi) {
                 var baslangic = new Date(baslangicTarihi);
                 var bitis = new Date(bitisTarihi);
-
                 var farkZaman = bitis.getTime() - baslangic.getTime();
                 var gunFarki = farkZaman / (1000 * 3600 * 24); // Milisaniyeleri gün cinsinden hesaplama
-
                 if (gunFarki >= 0) {
                     document.getElementById("gun_sayisi").value = gunFarki;
                 } else {
@@ -83,9 +93,7 @@
         }
         // Her iki tarih girişini dinleyen olay tetikleyicisi
         document.getElementById("izin_baslangic_tarihi").addEventListener("change", hesaplaGunFarki);
-        document.getElementById("ise_baslama_tarihi").addEventListener("change", hesaplaGunFarki);
-        
+        document.getElementById("ise_baslama_tarihi").addEventListener("change", hesaplaGunFarki);      
     </script>
-
 </body>
 </html>
