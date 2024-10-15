@@ -97,22 +97,23 @@
                 </form>
             </div>
         </div>
-        <div class="div4">
+        <div class="div4 pt-3 mt-4">
             <h2 style="text-align:center;"><?= date("Y", time())." YILI İZİN PLANLAMASI" ?></h2>
-            <div class="row">
-                <div class="col-md-2">Ad Soyad</div>
-                <div class="col-md-2">İşe Giriş Tarihi</div>
-                <div class="col-md-1">Toplam Hakediş</div>
-                <div class="col-md-2">İzin Başlama Tarihi</div>
-                <div class="col-md-2">İşe Başlama Tarihi</div>
-                <div class="col-md-1">Onay</div>
-                <div class="col-md-1">Kullanılan İzin</div>
-                <div class="col-md-1">İzin</div>
+            <div class="row m-0">
+                <div class="col-md-2"><b>Ad Soyad</b></div>
+                <div class="col-md-2"><b>İşe Giriş Tarihi</b></div>
+                <div class="col-md-1 px-0"><b>Toplam Hakediş</b></div>
+                <div class="col-md-2"><b>İzin Başlama Tarihi</b></div>
+                <div class="col-md-2"><b>İşe Başlama Tarihi</b></div>
+                <div class="col-md-1"><b>Onay</b></div>
+                <div class="col-md-1 px-0"><b>Kullanılan İzin</b></div>
+                <div class="col-md-1"><b>İzin</b></div>
             </div>
+            <hr/>
             <?php
                 $izinler = $db->query("SELECT * FROM izinler WHERE sirket = '{$uye_sirket}' AND 'izin_baslangic_tarihi' > '{$tarihv3}' AND silik = '0' ORDER BY saniye");
                 if($izinler->rowCount()) {
-                    foreach($izinler as $izin) {
+                    foreach($izinler as $key => $izin) {
                         $izinli = guvenlik($izin['izinli']);
                         $izinliAdi = getUsername($izinli);
                         $izinBaslangicTarihi = guvenlik($izin['izin_baslangic_tarihi']);
@@ -121,7 +122,7 @@
                         $onay = guvenlik($izin['durum']);
                         $kalanIzin = yillikIzinHesapla($izinli) - kullanilanIzinHesapla($izinli)
             ?>
-                        <div class="row">
+                        <div class="row" style="margin: 0; <?= $key%2 == 0 ? 'background-color:#c6c6c6;' : ''; ?>">
                             <div class="col-md-2"><?= $izinliAdi; ?></div>
                             <div class="col-md-2"><?= iseGirisTarihiGetir($izinli); ?></div>
                             <div class="col-md-1"><?= yillikIzinHesapla($izinli); ?></div>
@@ -136,7 +137,7 @@
                 }
             ?>
         </div>
-        <div class="div4">
+        <div class="div4 pt-3 mt-4">
             <h3 style="text-align:center;">İZİN KULLANIM KURALLARI</h3>
             <ul>
                 <li>İZİN TALEPLERİ, 1 OCAK İLE 31 MART TARİHLERİ ARASINDA OLUŞTURULMALI VE BU TALEPLERİN YÖNETİM ONAYI BEKLENMELİDİR; BU TARİH ARALIĞI DIŞINDA KESİNLİKLE İZİN TALEP EDİLEMEZ.</li>
@@ -147,19 +148,42 @@
                 <li>YÖNETİMİN İNSİYATİFİYLE BELİRLEDİĞİ MÜCBİR SEBEBLER HARİÇ, BU KURALAR DIŞINA ÇIKILAMAZ; TÜM ÇALIŞANLARIN BU KURALLARA UYMASI BEKLENMEKTEDİR.</li>
             </ul>
         </div>
-        <div class="div4">
+        <div class="div4 pt-3 mt-4">
             <h3 style="text-align:center;">GENEL İZİN TABLOSU</h3>
-            <div class="row">
-                <div class="col-md-3">Adı Soyadı</div>
-                <div class="col-md-3">İşe Giriş Tarihi</div>
-                <div class="col-md-2">Toplam Hakediş</div>
-                <div class="col-md-2">Kullanılan İzin</div>
-                <div class="col-md-2">Kalan İzin</div>
+            <div class="row m-0">
+                <div class="col-md-3"><b>Adı Soyadı</b></div>
+                <div class="col-md-3"><b>İşe Giriş Tarihi</b></div>
+                <div class="col-md-2"><b>Toplam Hakediş</b></div>
+                <div class="col-md-2"><b>Kullanılan İzin</b></div>
+                <div class="col-md-2"><b>Kalan İzin</b></div>
             </div>
+            <hr/>
             <?php
-                
+                $uyeler = $db->query("SELECT * FROM uyeler WHERE uye_tipi != '2' AND uye_firma = '{$uye_sirket}' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+                if ( $uyeler->rowCount() ){
+                    foreach( $uyeler as $key => $uye ){
+                        $uyeId = guvenlik($uye['uye_id']);
+                        $uyeAdi = guvenlik($uye['uye_adi']);
+                        $iseGirisTarihi = guvenlik($uye['ise_giris_tarihi']);
+                        $toplamHakedis = yillikIzinHesapla($uyeId);
+                        $kullanilanIzin = kullanilanIzinHesapla($uyeId);
+                        $kalanIzin = $toplamHakedis - $kullanilanIzin;
             ?>
+                        <div class="row" style="margin: 0; <?= $key%2 == 0 ? 'background-color:#c6c6c6;' : ''; ?>">
+                            <div class="col-md-3"><?= $uyeAdi ?></div>
+                            <div class="col-md-3"><?= $iseGirisTarihi ?></div>
+                            <div class="col-md-2"><?= $toplamHakedis ?></div>
+                            <div class="col-md-2"><?= $kullanilanIzin ?></div>
+                            <div class="col-md-2"><?= $kalanIzin ?></div>
+                        </div>
+            <?php
+                    }
+                }
+            ?>
+            <p>TOPLAM HAKEDİŞ KISIM Yıllık izin ücreti hesaplama işlemi için öncelikle bir iş yerinde minimum 1 yıl çalışmış olmanız gerekir. Eğer 1 yıl çalıştıysanız, yıllık izin süreniz 14 gün olacaktır.</p>
+            <p>5 yıldan fazla 15 yıldan az çalıştıysanız 20 gün, 15 yıl (dahil) ve daha fazla çalıştıysanız en az 26 gün ücretli izin hakkınız VARDIR.</p>
         </div>
+        <br/><br/><br/><br/><br/>
     </div>
     <?php include 'template/script.php'; ?>
     <script>
