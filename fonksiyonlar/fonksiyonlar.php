@@ -1,5 +1,21 @@
 <?php
 
+	function izinTarihKontrol($izinBaslangicTarihi, $iseBaslamaTarihi, $ofis) {
+		global $db;
+		$izin = $db->query("SELECT * FROM izinler WHERE ofis = '{$ofis}' AND (
+		('{$izinBaslangicTarihi}' >= izin_baslangic_tarihi AND '{$izinBaslangicTarihi}' < ise_baslama_tarihi) 
+		OR 
+		('{$iseBaslamaTarihi}' >= izin_baslangic_tarihi AND '{$iseBaslamaTarihi}' < ise_baslama_tarihi))");
+		return $izin->rowCount();
+	}
+
+	function getOfisType($uyeId) {
+		global $db;
+		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}'")->fetch(PDO::FETCH_ASSOC);
+		$yetkiArray = explode(",", $uye['uye_yetkiler']);
+		return $yetkiArray[14];
+	}
+
 	function iseGirisTarihiGetir($uyeId) {
 		global $db;
 		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}'")->fetch(PDO::FETCH_ASSOC);
