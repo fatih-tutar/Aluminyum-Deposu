@@ -9,33 +9,56 @@
 		exit();
 
 	}else{
-    $array = [];
+    $users = [];
     $people = $db->query("SELECT * FROM organizasyon", PDO::FETCH_ASSOC);
     if ( $people->rowCount() ){
       foreach( $people as $key => $person ){
-        $array[$key] = [
+        $users[$key] = [
           'ad' => guvenlik($person['ad']),
-          'unvan' => guvenlik($person['unvan'])
+          'unvan' => guvenlik($person['unvan']),
+          'foto' => guvenlik($person['foto'])
         ];
       }
     }
 
     if(isset($_POST['organizasyonkaydet'])) {
       $organizasyonVerileri = $_POST['organizasyon'];
+      $fileVerileri = $_FILES['organizasyon'];
+
+      //var_dump($fileVerileri); exit();
 
       foreach ($organizasyonVerileri as $index => $veri) {
           $ad = guvenlik($veri['ad']);
           $unvan = guvenlik($veri['unvan']);
-          
-          // Veritabanı güncelleme sorgusu
-          $update = $db->prepare("UPDATE organizasyon SET ad = ?, unvan = ? WHERE id = ?");
-          $update->execute([$ad, $unvan, $index + 1]);  // id'yi $index ile kullanabilirsin
-      }
-      header("Location:organizasyon.php");
-      exit();
-    }
+  
+          // Dosya işlemleri
+          if (isset($fileVerileri['name'][$index]['uploadfile']) && $fileVerileri['error'][$index]['uploadfile'] === UPLOAD_ERR_OK) {
+              $temp = explode(".", $fileVerileri['name'][$index]['uploadfile']);
+              $dosyaadi = $temp[0];
+              $extension = end($temp);
+              $randomsayi = rand(0, 10000);
+              $upload_file = $dosyaadi . $randomsayi . "." . $extension;
 
-    $uye_tipi=1;
+              // print_r($temp)."<br/>";
+              // echo $dosyaadi."<br/>".$extension."<br/>".$randomsayi."<br/>".$upload_file; exit();
+              
+              // Dosya yükleme işlemi
+              move_uploaded_file($fileVerileri['tmp_name'][$index]['uploadfile'], "img/organizasyon/" . $upload_file);
+              
+              // Veritabanına kaydetme
+              $update = $db->prepare("UPDATE organizasyon SET ad = ?, unvan = ?, foto = ? WHERE id = ?");
+              $update->execute([$ad, $unvan, $upload_file, $index + 1]);  // id'yi $index ile kullanabilirsin
+          } else {
+              // Dosya yüklenmedi, sadece ad ve unvan güncellenir
+              $update = $db->prepare("UPDATE organizasyon SET ad = ?, unvan = ? WHERE id = ?");
+              $update->execute([$ad, $unvan, $index + 1]);  // id'yi $index ile kullanabilirsin
+          }
+        }
+        
+        header("Location:organizasyon.php");
+        exit();
+    }
+  
 	}
 
 ?>
@@ -82,15 +105,17 @@
         border-right:3px solid #276274;
         border-left:3px solid #276274;
         padding-top:50px; 
+        z-index: 0;
       }
       .widthy40 {
-        width: 40%;
+        width: 35%;
       }
       .widthy50 {
         width: 50%;
       }
       .org-card {
         width:250px;
+        z-index: 2;
       }
       .expand-left {
         transform: translateX(-60%);
@@ -98,8 +123,15 @@
       .expand-right {
         transform: translateX(50%); 
       }
-      .expand-right-30 {
+      .expand-right-40 {
+        transform: translateX(40%); 
+      }
+      .expand-right--40 {
         transform: translateX(-40%); 
+      }
+      .expand-bottom-right {
+        transform: translateX(120%); 
+        margin-top: 275px;
       }
       .label {
         width:290px;
@@ -125,7 +157,22 @@
         height: 70px;
         border-radius: 50%; /* Yuvarlak bir profil resmi için */
       }
-
+      .upload-button {
+        position: absolute;
+        bottom: -20px;
+        width:120px; 
+        font-size:10px;
+      }
+      .zi-1 {
+        z-index: 1;
+      }
+      .right-side-frame {
+        width:465px; 
+        height:380px; 
+        position:absolute; 
+        right:-465px; 
+        top:100px;
+      }
     </style>
 
   </head>
@@ -134,24 +181,27 @@
 
     <?php include 'template/banner.php' ?>
     <br/>
-    <form action="" method="POST">
-      <div class="ortali">
-        <div class="org-card">
+    <form action="" method="POST" enctype="multipart/form-data" style="margin-left:-220px;">
+      <div class="ortali" style="margin-left:-45px;">
+        <div class="org-card relative">
           <div class="bg1 white label ortali relative">
-            <img src="img/pp.png" alt="profile picture" class="profile-pic">
+              <img src="img/<?= empty($users[0]['foto']) ? 'pp.png' : 'organizasyon/'.$users[0]['foto'] ?>" alt="profile picture" class="profile-pic">
             <?php if($uye_tipi == 2) { ?>
-              <input type="text" name="organizasyon[0][unvan]" value="<?= $array[0]['unvan'] ?>">
+              <input type="text" name="organizasyon[0][unvan]" value="<?= $users[0]['unvan'] ?>">
             <?php }else{ ?>
-              <?= $array[0]['unvan'] ?>
+              <?= $users[0]['unvan'] ?>
             <?php } ?>
           </div>
           <div class="bg2 white label ortali">
             <?php if($uye_tipi == 2) { ?>
-              <input type="text" name="organizasyon[0][ad]" value="<?= $array[0]['ad'] ?>">
+              <input type="text" name="organizasyon[0][ad]" value="<?= $users[0]['ad'] ?>">
             <?php }else{ ?>
-              <b><?= $array[0]['ad'] ?></b>
+              <b><?= $users[0]['ad'] ?></b>
             <?php } ?>
           </div>
+          <?php if($uye_tipi == 2) { ?>
+            <input type="file" name="organizasyon[0][uploadfile]" class="upload-button">
+          <?php } ?>
         </div>
       </div>
       <div class="ortali">
@@ -159,310 +209,380 @@
         <div class="dik-cubuk"></div>
       </div>
       <div class="ortali">
-        <div class="border-full widthy40">
+        <div class="border-full relative widthy40">
           <div class="ortali relative space-between">
-            <div class="org-card expand-left">
+            <div class="org-card expand-left relative">
               <div class="bg1 white label ortali">
-                <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                <img src="img/<?= empty($users[1]['foto']) ? 'pp.png' : 'organizasyon/'.$users[1]['foto'] ?>" alt="profile picture" class="profile-pic">
                 <?php if($uye_tipi == 2) { ?>
-                  <input type="text" name="organizasyon[1][unvan]" value="<?= $array[1]['unvan'] ?>">
+                  <input type="text" name="organizasyon[1][unvan]" value="<?= $users[1]['unvan'] ?>">
                 <?php }else{ ?>
-                  <?= $array[1]['unvan'] ?>
+                  <?= $users[1]['unvan'] ?>
                 <?php } ?>
               </div>
               <div class="bg2 white label ortali">
               <?php if($uye_tipi == 2) { ?>
-                <input type="text" name="organizasyon[1][ad]" value="<?= $array[1]['ad'] ?>">
+                <input type="text" name="organizasyon[1][ad]" value="<?= $users[1]['ad'] ?>">
               <?php }else{ ?>
-                <b><?= $array[1]['ad'] ?></b>
+                <b><?= $users[1]['ad'] ?></b>
               <?php } ?>
               </div>
+              <?php if($uye_tipi == 2) { ?>
+                <input type="file" name="organizasyon[1][uploadfile]" class="upload-button">
+              <?php } ?>
             </div>
-            <div class="org-card expand-right">
+            <div class="org-card expand-right-40 relative">
               <div class="bg1 white label ortali">
-                <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                <img src="img/<?= empty($users[2]['foto']) ? 'pp.png' : 'organizasyon/'.$users[2]['foto'] ?>" alt="profile picture" class="profile-pic">
                 <?php if($uye_tipi == 2) { ?>
-                  <input type="text" name="organizasyon[2][unvan]" value="<?= $array[2]['unvan'] ?>">
+                  <input type="text" name="organizasyon[2][unvan]" value="<?= $users[2]['unvan'] ?>">
                 <?php }else{ ?>
-                  <?= $array[2]['unvan'] ?>
+                  <?= $users[2]['unvan'] ?>
                 <?php } ?>
               </div>
               <div class="bg2 white label ortali">
                 <?php if($uye_tipi == 2) { ?>
-                  <input type="text" name="organizasyon[2][ad]" value="<?= $array[2]['ad'] ?>">
+                  <input type="text" name="organizasyon[2][ad]" value="<?= $users[2]['ad'] ?>">
                 <?php }else{ ?>
-                  <b><?= $array[2]['ad'] ?></b>
+                  <b><?= $users[2]['ad'] ?></b>
                 <?php } ?>
               </div>
+              <?php if($uye_tipi == 2) { ?>
+                <input type="file" name="organizasyon[2][uploadfile]" class="upload-button">
+              <?php } ?>
             </div>
           </div>
           <div class="label"></div>
           <div class="ortali relative space-between">
-            <div class="org-card expand-left">
+            <div class="org-card expand-left relative">
               <div class="bg1 white label ortali">
-                <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                <img src="img/<?= empty($users[3]['foto']) ? 'pp.png' : 'organizasyon/'.$users[3]['foto'] ?>" alt="profile picture" class="profile-pic">
                 <?php if($uye_tipi == 2) { ?>
-                  <input type="text" name="organizasyon[3][unvan]" value="<?= $array[3]['unvan'] ?>">
+                  <input type="text" name="organizasyon[3][unvan]" value="<?= $users[3]['unvan'] ?>">
                 <?php }else{ ?>
-                  <?= $array[3]['unvan'] ?>
+                  <?= $users[3]['unvan'] ?>
                 <?php } ?>
               </div>
               <div class="bg2 white label ortali">
                 <?php if($uye_tipi == 2) { ?>
-                  <input type="text" name="organizasyon[3][ad]" value="<?= $array[3]['ad'] ?>">
+                  <input type="text" name="organizasyon[3][ad]" value="<?= $users[3]['ad'] ?>">
                 <?php }else{ ?>
-                  <b><?= $array[3]['ad'] ?></b>
+                  <b><?= $users[3]['ad'] ?></b>
                 <?php } ?>
               </div>
+              <?php if($uye_tipi == 2) { ?>
+                <input type="file" name="organizasyon[3][uploadfile]" class="upload-button">
+              <?php } ?>
             </div>
-            <div class="org-card expand-right">
+            <div class="org-card expand-right-40 relative">
               <div class="bg1 white label ortali">
-                <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                <img src="img/<?= empty($users[4]['foto']) ? 'pp.png' : 'organizasyon/'.$users[4]['foto'] ?>" alt="profile picture" class="profile-pic">
                 <?php if($uye_tipi == 2) { ?>
-                  <input type="text" name="organizasyon[4][unvan]" value="<?= $array[4]['unvan'] ?>">
+                  <input type="text" name="organizasyon[4][unvan]" value="<?= $users[4]['unvan'] ?>">
                 <?php }else{ ?>
-                  <?= $array[4]['unvan'] ?>
+                  <?= $users[4]['unvan'] ?>
                 <?php } ?>
               </div>
               <div class="bg2 white label ortali">
                 <?php if($uye_tipi == 2) { ?>
-                  <input type="text" name="organizasyon[4][ad]" value="<?= $array[4]['ad'] ?>">
+                  <input type="text" name="organizasyon[4][ad]" value="<?= $users[4]['ad'] ?>">
                 <?php }else{ ?>
-                  <b><?= $array[4]['ad'] ?></b>
+                  <b><?= $users[4]['ad'] ?></b>
                 <?php } ?>
               </div>
+              <?php if($uye_tipi == 2) { ?>
+                <input type="file" name="organizasyon[4][uploadfile]" class="upload-button">
+              <?php } ?>
             </div>
           </div>
           <div class="label"></div>
           <div class="ortali relative space-between">
-            <div class="border-full widthy50 height-480 expand-left bg3">
+            <div class="border-full widthy50 height-480 expand-left bg3 zi-1">
               <div class="ortali relative space-between">
-                <div class="org-card expand-left">
+                <div class="org-card expand-left relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[5]['foto']) ? 'pp.png' : 'organizasyon/'.$users[5]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[5][unvan]" value="<?= $array[5]['unvan'] ?>">
+                      <input type="text" name="organizasyon[5][unvan]" value="<?= $users[5]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[5]['unvan'] ?>
+                      <?= $users[5]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[5][ad]" value="<?= $array[5]['ad'] ?>">
+                      <input type="text" name="organizasyon[5][ad]" value="<?= $users[5]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[5]['ad'] ?></b>
+                      <b><?= $users[5]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[5][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
-                <div class="org-card expand-right-30">
+                <div class="org-card expand-right--40 relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[6]['foto']) ? 'pp.png' : 'organizasyon/'.$users[6]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[6][unvan]" value="<?= $array[6]['unvan'] ?>">
+                      <input type="text" name="organizasyon[6][unvan]" value="<?= $users[6]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[6]['unvan'] ?>
+                      <?= $users[6]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[6][ad]" value="<?= $array[6]['ad'] ?>">
+                      <input type="text" name="organizasyon[6][ad]" value="<?= $users[6]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[6]['ad'] ?></b>
+                      <b><?= $users[6]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[6][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
               </div>
               <div class="label"></div>
               <div class="ortali relative space-between">
-                <div class="org-card expand-left">
+                <div class="org-card expand-left relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[7]['foto']) ? 'pp.png' : 'organizasyon/'.$users[7]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[7][unvan]" value="<?= $array[6]['unvan'] ?>">
+                      <input type="text" name="organizasyon[7][unvan]" value="<?= $users[6]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[7]['unvan'] ?>
+                      <?= $users[7]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[7][ad]" value="<?= $array[7]['ad'] ?>">
+                      <input type="text" name="organizasyon[7][ad]" value="<?= $users[7]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[7]['ad'] ?></b>
+                      <b><?= $users[7]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[7][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
-                <div class="org-card expand-right-30">
+                <div class="org-card expand-right--40 relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[8]['foto']) ? 'pp.png' : 'organizasyon/'.$users[8]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[8][unvan]" value="<?= $array[8]['unvan'] ?>">
+                      <input type="text" name="organizasyon[8][unvan]" value="<?= $users[8]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[8]['unvan'] ?>
+                      <?= $users[8]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[8][ad]" value="<?= $array[8]['ad'] ?>">
+                      <input type="text" name="organizasyon[8][ad]" value="<?= $users[8]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[8]['ad'] ?></b>
+                      <b><?= $users[8]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[8][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
               </div>
               <div class="label"></div>
               <div class="ortali relative space-between">
-                <div class="org-card expand-left">
+                <div class="org-card expand-left relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[9]['foto']) ? 'pp.png' : 'organizasyon/'.$users[9]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[9][unvan]" value="<?= $array[9]['unvan'] ?>">
+                      <input type="text" name="organizasyon[9][unvan]" value="<?= $users[9]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[9]['unvan'] ?>
+                      <?= $users[9]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[9][ad]" value="<?= $array[9]['ad'] ?>">
+                      <input type="text" name="organizasyon[9][ad]" value="<?= $users[9]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[9]['ad'] ?></b>
+                      <b><?= $users[9]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[9][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
-                <div class="org-card expand-right-30">
+                <div class="org-card expand-right--40 relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[10]['foto']) ? 'pp.png' : 'organizasyon/'.$users[10]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[10][unvan]" value="<?= $array[10]['unvan'] ?>">
+                      <input type="text" name="organizasyon[10][unvan]" value="<?= $users[10]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[10]['unvan'] ?>
+                      <?= $users[10]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[10][ad]" value="<?= $array[10]['ad'] ?>">
+                      <input type="text" name="organizasyon[10][ad]" value="<?= $users[10]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[10]['ad'] ?></b>
+                      <b><?= $users[10]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[10][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
               </div>
             </div>
-            <div class="border-full widthy50 expand-right bg3">
+            <div class="border-full widthy50 expand-right bg3 zi-1">
               <div class="ortali relative space-between">
-                <div class="org-card expand-left">
+                <div class="org-card expand-left relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[11]['foto']) ? 'pp.png' : 'organizasyon/'.$users[11]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[11][unvan]" value="<?= $array[11]['unvan'] ?>">
+                      <input type="text" name="organizasyon[11][unvan]" value="<?= $users[11]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[11]['unvan'] ?>
+                      <?= $users[11]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[11][ad]" value="<?= $array[11]['ad'] ?>">
+                      <input type="text" name="organizasyon[11][ad]" value="<?= $users[11]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[11]['ad'] ?></b>
+                      <b><?= $users[11]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[11][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
-                <div class="org-card expand-right-30">
+                <div class="org-card expand-right--40 relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[12]['foto']) ? 'pp.png' : 'organizasyon/'.$users[12]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[12][unvan]" value="<?= $array[12]['unvan'] ?>">
+                      <input type="text" name="organizasyon[12][unvan]" value="<?= $users[12]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[12]['unvan'] ?>
+                      <?= $users[12]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[12][ad]" value="<?= $array[12]['ad'] ?>">
+                      <input type="text" name="organizasyon[12][ad]" value="<?= $users[12]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[12]['ad'] ?></b>
+                      <b><?= $users[12]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[12][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
               </div>
               <div class="label"></div>
               <div class="ortali relative space-between">
-                <div class="org-card expand-left">
+                <div class="org-card expand-left relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[13]['foto']) ? 'pp.png' : 'organizasyon/'.$users[13]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[13][unvan]" value="<?= $array[13]['unvan'] ?>">
+                      <input type="text" name="organizasyon[13][unvan]" value="<?= $users[13]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[13]['unvan'] ?>
+                      <?= $users[13]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[13][ad]" value="<?= $array[13]['ad'] ?>">
+                      <input type="text" name="organizasyon[13][ad]" value="<?= $users[13]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[13]['ad'] ?></b>
+                      <b><?= $users[13]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[13][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
-                <div class="org-card expand-right-30">
+                <div class="org-card expand-right--40 relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[14]['foto']) ? 'pp.png' : 'organizasyon/'.$users[14]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[14][unvan]" value="<?= $array[14]['unvan'] ?>">
+                      <input type="text" name="organizasyon[14][unvan]" value="<?= $users[14]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[14]['unvan'] ?>
+                      <?= $users[14]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[14][ad]" value="<?= $array[14]['ad'] ?>">
+                      <input type="text" name="organizasyon[14][ad]" value="<?= $users[14]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[14]['ad'] ?></b>
+                      <b><?= $users[14]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[14][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
               </div>
               <div class="label"></div>
               <div class="ortali relative space-between">
-                <div class="org-card expand-left">
+                <div class="org-card expand-left relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[15]['foto']) ? 'pp.png' : 'organizasyon/'.$users[15]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[15][unvan]" value="<?= $array[15]['unvan'] ?>">
+                      <input type="text" name="organizasyon[15][unvan]" value="<?= $users[15]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[15]['unvan'] ?>
+                      <?= $users[15]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[15][ad]" value="<?= $array[15]['ad'] ?>">
+                      <input type="text" name="organizasyon[15][ad]" value="<?= $users[15]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[15]['ad'] ?></b>
+                      <b><?= $users[15]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[15][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
-                <div class="org-card expand-right-30">
+                <div class="org-card expand-right--40 relative">
                   <div class="bg1 white label ortali">
-                    <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                    <img src="img/<?= empty($users[16]['foto']) ? 'pp.png' : 'organizasyon/'.$users[16]['foto'] ?>" alt="profile picture" class="profile-pic">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[16][unvan]" value="<?= $array[16]['unvan'] ?>">
+                      <input type="text" name="organizasyon[16][unvan]" value="<?= $users[16]['unvan'] ?>">
                     <?php }else{ ?>
-                      <?= $array[16]['unvan'] ?>
+                      <?= $users[16]['unvan'] ?>
                     <?php } ?>
                   </div>
                   <div class="bg2 white label ortali">
                     <?php if($uye_tipi == 2) { ?>
-                      <input type="text" name="organizasyon[16][ad]" value="<?= $array[16]['ad'] ?>">
+                      <input type="text" name="organizasyon[16][ad]" value="<?= $users[16]['ad'] ?>">
                     <?php }else{ ?>
-                      <b><?= $array[16]['ad'] ?></b>
+                      <b><?= $users[16]['ad'] ?></b>
                     <?php } ?>
                   </div>
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="file" name="organizasyon[16][uploadfile]" class="upload-button">
+                  <?php } ?>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="border-full right-side-frame">
+            <div class="org-card expand-bottom-right relative">
+              <div class="bg1 white label ortali">
+                <img src="img/<?= empty($users[17]['foto']) ? 'pp.png' : 'organizasyon/'.$users[17]['foto'] ?>" alt="profile picture" class="profile-pic">
+                <?php if($uye_tipi == 2) { ?>
+                  <input type="text" name="organizasyon[11][unvan]" value="<?= $users[17]['unvan'] ?>">
+                <?php }else{ ?>
+                  <?= $users[11]['unvan'] ?>
+                <?php } ?>
+              </div>
+              <div class="bg2 white label ortali">
+                <?php if($uye_tipi == 2) { ?>
+                  <input type="text" name="organizasyon[11][ad]" value="<?= $users[17]['ad'] ?>">
+                <?php }else{ ?>
+                  <b><?= $users[11]['ad'] ?></b>
+                <?php } ?>
+              </div>
+              <?php if($uye_tipi == 2) { ?>
+                <input type="file" name="organizasyon[11][uploadfile]" class="upload-button">
+              <?php } ?>
             </div>
           </div>
         </div>
       </div>
-      <div class="ortali mt-3">
+      <div class="ortali mt-5">
         <?php if($uye_tipi == 2) { ?>
           <button type="submit" class="btn btn-info" name="organizasyonkaydet" style="width:300px; font-size:25px;">Kaydet</button>
         <?php } ?>

@@ -66,47 +66,47 @@
 			$fiyat5 = uppercase_tr(guvenlik($_POST['fiyat5']))." TL";;
 			$fiyat6 = uppercase_tr(guvenlik($_POST['fiyat6']))." TL";;
 
-      $temp1 = explode(".", $_FILES['uploadfile1']['name']);
-      $dosyaadi1 = $temp1[0];
-      $extension1 = end($temp1);
-      $randomsayi1 = rand(0,10000);
-    	$upload_file1 = $dosyaadi1.$randomsayi1.".".$extension1;
-      move_uploaded_file($_FILES['uploadfile1']['tmp_name'], "img/fiyatlar/".$upload_file1);
+			$temp1 = explode(".", $_FILES['uploadfile1']['name']);
+			$dosyaadi1 = $temp1[0];
+			$extension1 = end($temp1);
+			$randomsayi1 = rand(0,10000);
+			$upload_file1 = $dosyaadi1.$randomsayi1.".".$extension1;
+			move_uploaded_file($_FILES['uploadfile1']['tmp_name'], "img/fiyatlar/".$upload_file1);
 
-      $temp2 = explode(".", $_FILES['uploadfile2']['name']);
-      $dosyaadi2 = $temp2[0];
-      $extension2 = end($temp2);
-      $randomsayi2 = rand(0,10000);
-    	$upload_file2 = $dosyaadi2.$randomsayi2.".".$extension2;
-      move_uploaded_file($_FILES['uploadfile2']['tmp_name'], "img/fiyatlar/".$upload_file2);
+			$temp2 = explode(".", $_FILES['uploadfile2']['name']);
+			$dosyaadi2 = $temp2[0];
+			$extension2 = end($temp2);
+			$randomsayi2 = rand(0,10000);
+			$upload_file2 = $dosyaadi2.$randomsayi2.".".$extension2;
+			move_uploaded_file($_FILES['uploadfile2']['tmp_name'], "img/fiyatlar/".$upload_file2);
 
-      //satırların doluluğunu kontrol ederek insert into işlemini kaç kere tekrarlayacağımıza karar vereceğiz
+			//satırların doluluğunu kontrol ederek insert into işlemini kaç kere tekrarlayacağımıza karar vereceğiz
 
-      $dolusatirsayisi = 0;
+			$dolusatirsayisi = 0;
 
-      for ($i=0; $i < 6; $i++) { 
-      	if(!empty($_POST['model'.$i.''])){ $dolusatirsayisi++; }
-      }
+			for ($i=0; $i < 6; $i++) { 
+				if(!empty($_POST['model'.$i.''])){ $dolusatirsayisi++; }
+			}
 
-      for ($k=0; $k < $dolusatirsayisi; $k++) { 
+			for ($k=0; $k < $dolusatirsayisi; $k++) { 
 
-      	$kodadi = "kod".($k+1); $kod = $_POST[$kodadi];
+				$kodadi = "kod".($k+1); $kod = $_POST[$kodadi];
 
-      	$modeladi = "model".($k+1); $model = $_POST[$modeladi];
+				$modeladi = "model".($k+1); $model = $_POST[$modeladi];
 
-      	$adetmetreadi = "adetmetre".($k+1); $adetmetre = $_POST[$adetmetreadi];
+				$adetmetreadi = "adetmetre".($k+1); $adetmetre = $_POST[$adetmetreadi];
 
-      	$fiyatadi = "fiyat".($k+1); $fiyat = $_POST[$fiyatadi];
-      	
-      	$query = $db->prepare("INSERT INTO fiyatlar SET urunno = ?, kod = ?, model = ?, adetmetre = ?, fiyat = ?, resim1 = ?, resim2 = ?, aciklama = ?, saniye = ?, silik = ?, sira = ?");
+				$fiyatadi = "fiyat".($k+1); $fiyat = $_POST[$fiyatadi];
+				
+				$query = $db->prepare("INSERT INTO fiyatlar SET urunno = ?, kod = ?, model = ?, adetmetre = ?, fiyat = ?, resim1 = ?, resim2 = ?, aciklama = ?, saniye = ?, silik = ?, sira = ?");
 
 				$insert = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$upload_file1,$upload_file2,$aciklama,$su_an,'0',$yenisira));
 
-      }    
+			}    
 
-      header("Location:fiyatlar.php");
+			header("Location:fiyatlar.php");
 
-      exit();
+			exit();
 
 		}
 
