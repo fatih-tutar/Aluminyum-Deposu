@@ -37,7 +37,7 @@
         ?>		
                     <a href="urunler.php?id=<?php echo $alt_kategori_id; ?>">
                         <div class="row pl-1">
-                            <div class="col-md-3 col-2 offset-md-0 offset-1">
+                            <div class="col-md-3 col-2 offset-md-0 ">
                                 <img src="<?= $alt_kategori_resim ?>" alt="<?= $alt_kategori_adi ?>" width="35" height="35">
                             </div>
                             <div class="col-md-9 col-9 d-flex align-items-center">
@@ -58,7 +58,7 @@
     <div class="card p-1">
         <a href="fiyatlistesi.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/aydinlatma_fiyat.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -70,7 +70,7 @@
     <div class="card p-1">
         <a href="tekliflistesi.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/urun_sorgulama.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -82,7 +82,7 @@
     <div class="card p-1">
         <a href="kaliplistesi.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/kalip_sorgulama.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -94,7 +94,7 @@
     <div class="card p-1">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('anlikfiyatlamadivi','fiyathesaplamadivi','agirlikhesaplamadivi','isplanidivi');" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/anlik_fiyatlama.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -106,7 +106,7 @@
     <div class="card p-1">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('fiyathesaplamadivi','agirlikhesaplamadivi','anlikfiyatlamadivi','isplanidivi');" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/fiyat_hesaplama.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -118,7 +118,7 @@
     <div class="card p-1">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi','isplanidivi');" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/agirlik_hesaplama.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -130,7 +130,7 @@
     <div class="card p-1">
         <a href="fabrikalar.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/fabrikalar.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -142,7 +142,7 @@
     <div class="card p-1">
         <a href="firmalar.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/firmalar.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -154,7 +154,7 @@
     <div class="card p-1">
         <a href="kaliplar.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/kaliplar.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -166,7 +166,7 @@
     <div class="card p-1">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('isplanidivi','agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi');" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/is_plani.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
@@ -178,7 +178,7 @@
     <div class="card p-1">
         <a href="sevkiyatarsiv.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 offset-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/sevkiyat_arsivi.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">

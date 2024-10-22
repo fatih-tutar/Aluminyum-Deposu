@@ -138,7 +138,7 @@
 
 			$yeni_uye_sifre = "81dc9bdb52d04dc20036dbd8313ed055";
 
-			$yeni_uye_yetki = "0,0,0,0,0,0,0,0,0,0,0,0,0,0";
+			$yeni_uye_yetki = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
 
 			if (empty($yeni_uye_adi)) {
 				
@@ -407,7 +407,7 @@
 													<div class="col-4 d-block d-sm-none"><b>Pasiflik</b></div>
 													<div class="col-md-6 col-2" style="text-align: center;">
 														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="pasiflikcheck" name="yetkiadet" <?= $kullanici_pasiflik == '1' ? 'checked' : '' ?>>
+															<input type="checkbox" class="form-check-input" id="pasiflikcheck" name="pasiflik" <?= $kullanici_pasiflik == '1' ? 'checked' : '' ?>>
 														</div>
 													</div>
 													<div class="col-4 d-block d-sm-none px-0x"><b>Adet</b></div>
@@ -493,7 +493,7 @@
 													<div class="col-4 d-block d-sm-none"><b>Düzenle</b></div>
 													<div class="col-md-6 col-2" style="text-align: center;">
 														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="duzenlemeyetkicheck" name="yetkiduzenleme" <?= $yetkiler_arrayi[3] == '1' ? 'checked' : '' ?>>
+															<input type="checkbox" class="form-check-input" id="duzenlemeyetkicheck" name="yetkiduzenleme" <?= $yetkiler_arrayi[4] == '1' ? 'checked' : '' ?>>
 														</div>
 													</div>
 													<div class="col-4 d-block d-sm-none"><b>İşlemler</b></div>
