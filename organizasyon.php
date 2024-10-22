@@ -97,7 +97,7 @@
         color: white;
       }
       .dik-cubuk {
-        height:30px; 
+        height:54px; 
         border-left:3px solid #276274;
       }
       .border-full {
@@ -130,8 +130,8 @@
         transform: translateX(-40%); 
       }
       .expand-bottom-right {
-        transform: translateX(120%); 
-        margin-top: 275px;
+        transform: translateX(110%); 
+        margin-top: 159px;
       }
       .label {
         width:290px;
@@ -182,6 +182,9 @@
     <?php include 'template/banner.php' ?>
     <br/>
     <form action="" method="POST" enctype="multipart/form-data" style="margin-left:-220px;">
+      <div class="ortali mb-4">
+        <h2><b>ORGANİZASYON ŞEMASI</b></h2>
+      </div>
       <div class="ortali" style="margin-left:-45px;">
         <div class="org-card relative">
           <div class="bg1 white label ortali relative">
@@ -559,25 +562,52 @@
             </div>
           </div>
           <div class="border-full right-side-frame">
-            <div class="org-card expand-bottom-right relative">
-              <div class="bg1 white label ortali">
-                <img src="img/<?= empty($users[17]['foto']) ? 'pp.png' : 'organizasyon/'.$users[17]['foto'] ?>" alt="profile picture" class="profile-pic">
+            <div style="border-bottom:3px solid #276274; height:115px;"></div>
+            <div class="expand-bottom-right relative" style="width:290px;"> 
+              <div class="org-card">
+                <div class="bg1 white label ortali">
+                  <img src="img/<?= empty($users[17]['foto']) ? 'pp.png' : 'organizasyon/'.$users[17]['foto'] ?>" alt="profile picture" class="profile-pic">
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="text" name="organizasyon[17][unvan]" value="<?= $users[17]['unvan'] ?>">
+                  <?php }else{ ?>
+                    <?= $users[11]['unvan'] ?>
+                  <?php } ?>
+                </div>
+                <div class="bg2 white label ortali">
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="text" name="organizasyon[17][ad]" value="<?= $users[17]['ad'] ?>">
+                  <?php }else{ ?>
+                    <b><?= $users[11]['ad'] ?></b>
+                  <?php } ?>
+                </div>
                 <?php if($uye_tipi == 2) { ?>
-                  <input type="text" name="organizasyon[11][unvan]" value="<?= $users[17]['unvan'] ?>">
-                <?php }else{ ?>
-                  <?= $users[11]['unvan'] ?>
+                  <input type="file" name="organizasyon[17][uploadfile]" class="upload-button">
                 <?php } ?>
               </div>
-              <div class="bg2 white label ortali">
+              <div class="ortali">
+                <div></div>
+                <div class="dik-cubuk"></div>
+              </div>
+              <div class="org-card">
+                <div class="bg1 white label ortali relative">
+                  <img src="img/pp.png" alt="profile picture" class="profile-pic">
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="text" name="organizasyon[18][unvan]" value="<?= $users[18]['unvan'] ?>">
+                  <?php }else{ ?>
+                    <?= $users[18]['unvan'] ?>
+                  <?php } ?>
+                </div>
+                <div class="bg2 white label ortali">
+                  <?php if($uye_tipi == 2) { ?>
+                    <input type="text" name="organizasyon[18][ad]" value="<?= $users[18]['ad'] ?>">
+                  <?php }else{ ?>
+                    <b><?= $users[18]['ad'] ?></b>
+                  <?php } ?>
+                </div>
                 <?php if($uye_tipi == 2) { ?>
-                  <input type="text" name="organizasyon[11][ad]" value="<?= $users[17]['ad'] ?>">
-                <?php }else{ ?>
-                  <b><?= $users[11]['ad'] ?></b>
+                  <input type="file" name="organizasyon[18][uploadfile]" class="upload-button">
                 <?php } ?>
               </div>
-              <?php if($uye_tipi == 2) { ?>
-                <input type="file" name="organizasyon[11][uploadfile]" class="upload-button">
-              <?php } ?>
             </div>
           </div>
         </div>

@@ -33,6 +33,30 @@
                 exit();
             }
         }
+
+        if(isset($_POST['izinonayla'])) {
+            $id = guvenlik($_POST['id']);
+            $query = $db->prepare("UPDATE izinler SET durum = ? WHERE id = ?");
+            $update = $query->execute(array('1',$id));
+            header("Location:izin.php");
+            exit();
+        }
+
+        if(isset($_POST['izinreddet'])) {
+            $id = guvenlik($_POST['id']);
+            $query = $db->prepare("UPDATE izinler SET durum = ? WHERE id = ?");
+            $update = $query->execute(array('2',$id));
+            header("Location:izin.php");
+            exit();
+        }
+
+        if(isset($_POST['izinsil'])) {
+            $id = guvenlik($_POST['id']);
+            $query = $db->prepare("UPDATE izinler SET silik = ? WHERE id = ?");
+            $update = $query->execute(array('1',$id));
+            header("Location:izin.php");
+            exit();
+        }
 	}
 ?>
 
@@ -101,8 +125,8 @@
             <h5 style="text-align:center; color:darkblue;"><?= date("Y", time())." YILI İZİN PLANLAMASI" ?></h5>
             <div class="row m-0 d-none d-md-flex">
                 <div class="col-md-2"><b>Ad Soyad</b></div>
-                <div class="col-md-2"><b>İşe Giriş Tarihi</b></div>
-                <div class="col-md-1 px-0"><b>Hakediş</b></div>
+                <div class="col-md-1 px-0"><b>İşe Giriş Tarihi</b></div>
+                <div class="col-md-1"><b>Hakediş</b></div>
                 <div class="col-md-2"><b>İzin Başlama Tarihi</b></div>
                 <div class="col-md-2"><b>İşe Başlama Tarihi</b></div>
                 <div class="col-md-1"><b>Onay</b></div>
@@ -114,32 +138,51 @@
                 $izinler = $db->query("SELECT * FROM izinler WHERE sirket = '{$uye_sirket}' AND 'izin_baslangic_tarihi' > '{$tarihv3}' AND silik = '0' ORDER BY saniye");
                 if($izinler->rowCount()) {
                     foreach($izinler as $key => $izin) {
+                        $id = guvenlik($izin['id']);
                         $izinli = guvenlik($izin['izinli']);
                         $izinliAdi = getUsername($izinli);
                         $izinBaslangicTarihi = guvenlik($izin['izin_baslangic_tarihi']);
                         $iseBaslamaTarihi = guvenlik($izin['ise_baslama_tarihi']);
                         $gunSayisi = guvenlik($izin['gun_sayisi']);
                         $onay = guvenlik($izin['durum']);
-                        $kalanIzin = yillikIzinHesapla($izinli) - kullanilanIzinHesapla($izinli)
+                        $kalanIzin = yillikIzinHesapla($izinli) - kullanilanIzinHesapla($izinli);
+                        //arşivleme
+                        $izinBaslangicYil = date('Y', strtotime($izinBaslangicTarihi));
+                        $iseBaslamaYil = date('Y', strtotime($iseBaslamaTarihi));
+                        $currentYear = date('Y');
+                        if($izinBaslangicYil < $currentYear && $iseBaslamaYil < $currentYear) {
+                            $query = $db->prepare('UPDATE izinler SET durum = ? WHERE id = ?');
+                            $update = $query->execute(array('3',$id));
+                        }
             ?>
-                        <div class="row" style="margin: 0; <?= $key%2 == 0 ? 'background-color:#c6c6c6;' : ''; ?>">
-                            <div class="col-6 d-block d-sm-none"><b>Ad Soyad :</b></div>
-                            <div class="col-md-2 col-6"><?= $izinliAdi ?></div>
-                            <div class="col-6 d-block d-sm-none"><b>İşe Giriş Tarihi :</b></div>
-                            <div class="col-md-2 col-6"><?= (new DateTime(iseGirisTarihiGetir($izinli)))->format('d.m.Y') ?></div>
-                            <div class="col-6 d-block d-sm-none"><b>,Hakediş :</b></div>
-                            <div class="col-md-1 col-6"><?= yillikIzinHesapla($izinli) ?></div>
-                            <div class="col-6 d-block d-sm-none"><b>İzin Başlama Tarihi :</b></div>
-                            <div class="col-md-2 col-6"><?= (new DateTime($izinBaslangicTarihi))->format('d.m.Y') ?></div>
-                            <div class="col-6 d-block d-sm-none"><b>İşe Başlama Tarihi :</b></div>
-                            <div class="col-md-2 col-6"><?= (new DateTime($iseBaslamaTarihi))->format('d.m.Y') ?></div>
-                            <div class="col-6 d-block d-sm-none"><b>Onay :</b></div>
-                            <div class="col-md-1 col-6"><?= $onay == 0 ? 'Bekleniyor' : 'Onaylandı' ?></div>
-                            <div class="col-6 d-block d-sm-none"><b>Kullanılan İzin :</b></div>
-                            <div class="col-md-1 col-6"><?= kullanilanIzinHesapla($izinli) ?></div>
-                            <div class="col-6 d-block d-sm-none"><b>Kalan İzin :</b></div>
-                            <div class="col-md-1 col-6"><?= $kalanIzin ?></div>
-                        </div>
+                        <form action="" method="POST">
+                            <div class="row" style="margin: 0; <?= $key%2 == 0 ? 'background-color:#c6c6c6;' : ''; ?>">
+                                <div class="col-6 d-block d-sm-none"><b>Ad Soyad :</b></div>
+                                <div class="col-md-2 col-6"><?= $izinliAdi ?></div>
+                                <div class="col-6 d-block d-sm-none"><b>İşe Giriş Tarihi :</b></div>
+                                <div class="col-md-1 col-6"><?= (new DateTime(iseGirisTarihiGetir($izinli)))->format('d.m.Y') ?></div>
+                                <div class="col-6 d-block d-sm-none"><b>,Hakediş :</b></div>
+                                <div class="col-md-1 col-6"><?= yillikIzinHesapla($izinli) ?></div>
+                                <div class="col-6 d-block d-sm-none"><b>İzin Başlama Tarihi :</b></div>
+                                <div class="col-md-2 col-6"><?= (new DateTime($izinBaslangicTarihi))->format('d.m.Y') ?></div>
+                                <div class="col-6 d-block d-sm-none"><b>İşe Başlama Tarihi :</b></div>
+                                <div class="col-md-2 col-6"><?= (new DateTime($iseBaslamaTarihi))->format('d.m.Y') ?></div>
+                                <div class="col-6 d-block d-sm-none"><b>Onay :</b></div>
+                                <div class="col-md-1 col-6"><?= $onay == 0 ? 'Bekleniyor' : ($onay == 1 ? 'Onaylandı' : 'Reddedildi') ?></div>
+                                <div class="col-6 d-block d-sm-none"><b>Kullanılan İzin :</b></div>
+                                <div class="col-md-1 col-6"><?= kullanilanIzinHesapla($izinli) ?></div>
+                                <div class="col-6 d-block d-sm-none"><b>Kalan İzin :</b></div>
+                                <div class="col-md-1 col-6"><?= $kalanIzin ?></div>
+                                <?php if($uye_tipi == 2) { ?>
+                                    <div class="col-md-1 col-12 px-0 d-flex">
+                                        <input type="hidden" name="id" value="<?= $id ?>">
+                                        <button type="submit" class="btn btn-block btn-sm btn-success mt-0" name="izinonayla" onclick="return confirmForm('İzni onaylıyorsunuz, emin misiniz?');">Onay</button>
+                                        <button type="submit" class="btn btn-block btn-sm btn-danger mt-0" name="izinreddet" onclick="return confirmForm('İzin iptal edilecek, emin misiniz?');">Red</button>
+                                        <button type="submit" class="btn btn-block btn-sm btn-secondary mt-0" name="izinsil" onclick="return confirmForm('İzni listeden kaldıracaksınız, emin misiniz?');">Sil</button>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </form>
             <?php
                     }
                 }

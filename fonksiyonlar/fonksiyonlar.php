@@ -2,7 +2,7 @@
 
 	function izinTarihKontrol($izinBaslangicTarihi, $iseBaslamaTarihi, $ofis) {
 		global $db;
-		$izin = $db->query("SELECT * FROM izinler WHERE ofis = '{$ofis}' AND (
+		$izin = $db->query("SELECT * FROM izinler WHERE ofis = '{$ofis}' AND silik = '0' AND durum != '2' AND (
 		('{$izinBaslangicTarihi}' >= izin_baslangic_tarihi AND '{$izinBaslangicTarihi}' < ise_baslama_tarihi) 
 		OR 
 		('{$iseBaslamaTarihi}' >= izin_baslangic_tarihi AND '{$iseBaslamaTarihi}' < ise_baslama_tarihi))");
@@ -11,14 +11,14 @@
 
 	function getOfisType($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}'")->fetch(PDO::FETCH_ASSOC);
+		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
 		$yetkiArray = explode(",", $uye['uye_yetkiler']);
 		return $yetkiArray[14];
 	}
 
 	function iseGirisTarihiGetir($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}'")->fetch(PDO::FETCH_ASSOC);
+		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
 		return $uye['ise_giris_tarihi'];
 	}
 
@@ -31,7 +31,7 @@
 
 	function yillikIzinHesapla($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}'")->fetch(PDO::FETCH_ASSOC);
+		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
 		$iseGirisTarihi = $uye['ise_giris_tarihi'];
 		$bugun = new DateTime();
 		$baslamaTarihi = new DateTime($iseGirisTarihi);
@@ -50,7 +50,7 @@
 
 	function getLastLeaveDate($izinli) {
 		global $db;
-		$lastLeave = $db->query("SELECT * FROM izinler WHERE izinli = '{$izinli}' ORDER BY izin_baslangic_tarihi DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		$lastLeave = $db->query("SELECT * FROM izinler WHERE izinli = '{$izinli}' AND silik = '0' AND durum != '2' ORDER BY izin_baslangic_tarihi DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 		return $lastLeave['ise_baslama_tarihi'];
 	}
 

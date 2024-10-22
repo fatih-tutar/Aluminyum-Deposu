@@ -197,6 +197,10 @@
         }
     }
 
+    function confirmForm(message) {
+        return confirm(message);
+    }
+
 </script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
