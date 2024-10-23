@@ -12,11 +12,19 @@
 
 		$profil_id = guvenlik($_GET['id']);
 
-		if ($profil_id != $uye_id) {
+		if ($profil_id != $uye_id && $uye_tipi != 2) {
 			
 			header("Location:index.php");
 
 			exit();
+
+		}else{
+
+			$profil = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$profil_id}'")->fetch(PDO::FETCH_ASSOC);
+
+			$profil_yetkiler = guvenlik($profil['uye_yetkiler']);
+
+			$profil_yetkileri_arrayi = explode(",", $profil_yetkiler);
 
 		}
 
@@ -169,8 +177,116 @@
     		</div>
 
     	</div>
+		<?php if($uye_tipi == 2){ ?>
+			<div class="div4">
+				<h5 style="margin-top: 10px;"><b>Yetkiler</b></h5>
+				<form action="" method="POST">
+					<div class="row">
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="adetCheckbox" name="yetkiadet" <?= $profil_yetkileri_arrayi[11] == '1' ? 'checked' : '' ?>>
+								<label for="adetCheckbox">Adet</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="paletCheckbox" name="yetkipalet" <?= $profil_yetkileri_arrayi[12] == '1' ? 'checked' : '' ?>>
+								<label for="paletCheckbox">Palet</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4 px-0">
+							<div class="form-group">
+								<input type="checkbox" id="alkopCheckbox" name="yetkialkop" <?= $profil_yetkileri_arrayi[13] == '1' ? 'checked' : '' ?>>
+								<label for="alkopCheckbox">Alkop</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="alisCheckbox" name="yetkialis" <?= $profil_yetkileri_arrayi[0] == '1' ? 'checked' : '' ?>>
+								<label for="alisCheckbox">Alış</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="satisCheckbox" name="yetkisatis" <?= $profil_yetkileri_arrayi[7] == '1' ? 'checked' : '' ?>>
+								<label for="satisCheckbox">Satış</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4 px-0">
+							<div class="form-group">
+								<input type="checkbox" id="fabrikaCheckbox" name="yetkifabrika" <?= $profil_yetkileri_arrayi[1] == '1' ? 'checked' : '' ?>>
+								<label for="fabrikaCheckbox">Fabrika</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="teklifCheckbox" name="yetkiteklif" <?= $profil_yetkileri_arrayi[2] == '1' ? 'checked' : '' ?>>
+								<label for="teklifCheckbox">Teklif</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="siparisCheckbox" name="yetkisiparis" <?= $profil_yetkileri_arrayi[3] == '1' ? 'checked' : '' ?>>
+								<label for="siparisCheckbox">Sipariş</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4 px-0">
+							<div class="form-group">
+								<input type="checkbox" id="sevkiyatCheckbox" name="sevkiyatyetki" <?= $profil_yetkileri_arrayi[10] == '1' ? 'checked' : '' ?>>
+								<label for="sevkiyatCheckbox">Sevkiyat</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="duzenlemeCheckbox" name="yetkiduzenleme" <?= $profil_yetkileri_arrayi[4] == '1' ? 'checked' : '' ?>>
+								<label for="duzenlemeCheckbox">Düzenleme</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="islemlerCheckbox" name="yetkiislemlerigorme" <?= $profil_yetkileri_arrayi[5] == '1' ? 'checked' : '' ?>>
+								<label for="islemlerCheckbox">İşlemler</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4 px-0">
+							<div class="form-group">
+								<input type="checkbox" id="toplamCheckbox" name="toplamgorme" <?= $profil_yetkileri_arrayi[8] == '1' ? 'checked' : '' ?>>
+								<label for="toplamCheckbox">Toplam Görme</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="gelengidenCheckbox" name="gelengidenigorme" <?= $profil_yetkileri_arrayi[6] == '1' ? 'checked' : '' ?>>
+								<label for="gelengidenCheckbox">Gelen Giden</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4">
+							<div class="form-group">
+								<input type="checkbox" id="ofisCheckbox" name="ofisyetki" <?= $profil_yetkileri_arrayi[14] == '1' ? 'checked' : '' ?>>
+								<label for="ofisCheckbox">Ofis</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-4 px-0">
+							<div class="form-group">
+								<input type="checkbox" id="ziyaretCheckbox" name="ziyaretyetki" <?= $profil_yetkileri_arrayi[9] == '1' ? 'checked' : '' ?>>
+								<label for="ziyaretCheckbox">Ziyaretler</label>
+							</div>
+						</div>
+						<div class="col-md-2 col-12"></div>
+						<div class="col-md-2 col-6" style="text-align:right;">						
+							<button type="submit" class="btn btn-warning btn-sm btn-block" name="bilgileriguncelle">Kaydet</button>
+						</div>
+						<div class="col-md-2 col-6" style="text-align:right;">						
+						<button type="submit" name="kullanicisil" class="btn btn-danger btn-sm btn-block" onclick="return confirmForm('Bu kullanıcıyı geri dönüşü olmayacak şekilde sileceksiniz, emin misiniz?');">Kullanıcıyı Sil</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		<?php } ?>
 
     </div>
+
+	<br/><br/><br/><br/><br/><br/>
 
     <?php include 'template/script.php'; ?>
 
