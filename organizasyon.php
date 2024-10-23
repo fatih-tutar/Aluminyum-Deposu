@@ -9,6 +9,11 @@
 		exit();
 
 	}else{
+    $bannerHidden = 0;
+    if(isset($_GET['pdf'])) {
+      $uye_tipi = 1;
+      $bannerHidden = 1;
+    }
     $users = [];
     $people = $db->query("SELECT * FROM organizasyon", PDO::FETCH_ASSOC);
     if ( $people->rowCount() ){
@@ -97,7 +102,7 @@
         color: white;
       }
       .dik-cubuk {
-        height:54px; 
+        height:40px; 
         border-left:3px solid #276274;
       }
       .border-full {
@@ -107,18 +112,19 @@
         padding-top:50px; 
         z-index: 0;
       }
-      .widthy40 {
-        width: 35%;
+      .widthy30 {
+        width: 30%;
       }
       .widthy50 {
         width: 50%;
       }
       .org-card {
-        width:250px;
+        width:190px;
         z-index: 2;
+        font-size: 10px;
       }
       .expand-left {
-        transform: translateX(-60%);
+        transform: translateX(-50%);
       }
       .expand-right {
         transform: translateX(50%); 
@@ -130,14 +136,14 @@
         transform: translateX(-40%); 
       }
       .expand-bottom-right {
-        transform: translateX(110%); 
-        margin-top: 159px;
+        transform: translateX(80%); 
+        margin-top: 130px;
       }
       .label {
-        width:290px;
-        height: 54px;
+        width:190px;
+        height: 40px;
         padding: 10px;
-        padding-left: 70px;
+        padding-left: 60px;
       }
       .label-high {
         width:750px;
@@ -146,15 +152,12 @@
       .relative {
         position: relative;
       }
-      .height-480 {
-        height: 480px;
-      }
       .profile-pic {
         position: absolute;
-        top: 20px;
+        top: 15px;
         left: 5px; /* Divin dışına taşması için negatif değer kullanıyoruz */
-        width: 70px;
-        height: 70px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%; /* Yuvarlak bir profil resmi için */
       }
       .upload-button {
@@ -167,10 +170,10 @@
         z-index: 1;
       }
       .right-side-frame {
-        width:465px; 
+        width:330px; 
         height:380px; 
         position:absolute; 
-        right:-465px; 
+        right:-330px; 
         top:100px;
       }
     </style>
@@ -178,14 +181,13 @@
   </head>
 
   <body>
-
-    <?php include 'template/banner.php' ?>
+    <?php if($bannerHidden == 0){ include 'template/banner.php'; }else{ echo "<div class='mt-5'></div>"; } ?>
     <br/>
     <form action="" method="POST" enctype="multipart/form-data" style="margin-left:-220px;">
       <div class="ortali mb-4">
         <h2><b>ORGANİZASYON ŞEMASI</b></h2>
       </div>
-      <div class="ortali" style="margin-left:-45px;">
+      <div class="ortali">
         <div class="org-card relative">
           <div class="bg1 white label ortali relative">
               <img src="img/<?= empty($users[0]['foto']) ? 'pp.png' : 'organizasyon/'.$users[0]['foto'] ?>" alt="profile picture" class="profile-pic">
@@ -212,7 +214,7 @@
         <div class="dik-cubuk"></div>
       </div>
       <div class="ortali">
-        <div class="border-full relative widthy40">
+        <div class="border-full relative widthy30">
           <div class="ortali relative space-between">
             <div class="org-card expand-left relative">
               <div class="bg1 white label ortali">
@@ -234,7 +236,7 @@
                 <input type="file" name="organizasyon[1][uploadfile]" class="upload-button">
               <?php } ?>
             </div>
-            <div class="org-card expand-right-40 relative">
+            <div class="org-card expand-right relative">
               <div class="bg1 white label ortali">
                 <img src="img/<?= empty($users[2]['foto']) ? 'pp.png' : 'organizasyon/'.$users[2]['foto'] ?>" alt="profile picture" class="profile-pic">
                 <?php if($uye_tipi == 2) { ?>
@@ -277,7 +279,7 @@
                 <input type="file" name="organizasyon[3][uploadfile]" class="upload-button">
               <?php } ?>
             </div>
-            <div class="org-card expand-right-40 relative">
+            <div class="org-card expand-right relative">
               <div class="bg1 white label ortali">
                 <img src="img/<?= empty($users[4]['foto']) ? 'pp.png' : 'organizasyon/'.$users[4]['foto'] ?>" alt="profile picture" class="profile-pic">
                 <?php if($uye_tipi == 2) { ?>
@@ -300,7 +302,7 @@
           </div>
           <div class="label"></div>
           <div class="ortali relative space-between">
-            <div class="border-full widthy50 height-480 expand-left bg3 zi-1">
+            <div class="border-full widthy50 expand-left bg3 zi-1">
               <div class="ortali relative space-between">
                 <div class="org-card expand-left relative">
                   <div class="bg1 white label ortali">
@@ -562,7 +564,7 @@
             </div>
           </div>
           <div class="border-full right-side-frame">
-            <div style="border-bottom:3px solid #276274; height:115px;"></div>
+            <div style="border-bottom:3px solid #276274; height:60px;"></div>
             <div class="expand-bottom-right relative" style="width:290px;"> 
               <div class="org-card">
                 <div class="bg1 white label ortali">
@@ -584,11 +586,7 @@
                   <input type="file" name="organizasyon[17][uploadfile]" class="upload-button">
                 <?php } ?>
               </div>
-              <div class="ortali">
-                <div></div>
-                <div class="dik-cubuk"></div>
-              </div>
-              <div class="org-card">
+              <div class="org-card" style="margin-top:40px;">
                 <div class="bg1 white label ortali relative">
                   <img src="img/pp.png" alt="profile picture" class="profile-pic">
                   <?php if($uye_tipi == 2) { ?>
@@ -612,9 +610,13 @@
           </div>
         </div>
       </div>
-      <div class="ortali mt-5">
+      <div class="ortali mt-5" style="justify-content: space-evenly;">
         <?php if($uye_tipi == 2) { ?>
+          <div></div>
           <button type="submit" class="btn btn-info" name="organizasyonkaydet" style="width:300px; font-size:25px;">Kaydet</button>
+          <a href="organizasyon.php?pdf" class="btn btn-warning">
+            PDF
+          </a>
         <?php } ?>
       </div>
     </form>
