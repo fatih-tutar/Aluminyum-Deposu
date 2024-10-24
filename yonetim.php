@@ -188,7 +188,7 @@
 
 		<?php include 'template/banner.php' ?>
 
-		<div class="container-fluid">
+		<div class="container-fluid mb-5">
 
 			<div class="row">
 				
@@ -240,7 +240,7 @@
 
 				</div>
 
-				<div class="col-md-6 col-12">
+				<div class="col-md-3 col-12">
 					
 					<div class="div4">
 						
@@ -296,295 +296,29 @@
 
 				</div>
 
-			</div>
-
-			<div class="row">
-
-				<div class="col-md-12 col-12">
-				
-					<div class="div4">
-							
-						<h4>Kullanıcı Bilgileri ve Yetkilendirme</h4>
-						<div class="d-none d-sm-block">
-							<div class="row">
-								
-								<div class="col-md-1 col-3"><b>Adı</b></div>
-
-								<div class="col-md-1 col-3">
-									<div class="row">
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Pasiflik</b></div>
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Adet</b></div>
-									</div>
-								</div>
-
-								<div class="col-md-1 col-3">
-									<div class="row">
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Palet</b></div>
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Alkop</b></div>
-									</div>
-								</div>
-
-								<div class="col-md-1 col-3">
-									<div class="row">
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Alış</b></div>
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Satış</b></div>
-									</div>
-								</div>
-
-								<div class="col-md-1 col-3">
-									<div class="row">
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Fabrika</b></div>
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Teklif</b></div>
-									</div>
-								</div>
-
-								<div class="col-md-1 col-3">
-									<div class="row">
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Sipariş</b></div>
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Sevkiyat</b></div>
-									</div>
-								</div>
-
-								<div class="col-md-1 col-3">
-									<div class="row">
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Düzenle</b></div>
-										<div class="col-md-6 p-0" style="text-align: center;"><b>İşlemler</b></div>
-									</div>
-								</div>
-
-								<div class="col-md-1 col-3 p-0">
-									<b>Toplam Göster</b>
-								</div>
-
-								<div class="col-md-1 col-3">
-									<b>Gelen/Giden</b>
-								</div>
-
-								<div class="col-md-1 col-3">
-									<div class="row">
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Ofis</b></div>
-										<div class="col-md-6 p-0" style="text-align: center;"><b>Ziyaretler</b></div>
-									</div>
-								</div>
-
-							</div>
-						</div>
-						<?php
-
-							$query = $db->query("SELECT * FROM uyeler WHERE uye_firma = '$uye_firma' AND uye_tipi != '2' AND uye_silik = '0' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
-
-							if ( $query->rowCount() ){
-
-								foreach( $query as $row ){
-
-									$kullanici_id = $row['uye_id'];
-
-									$kullanici_adi = $row['uye_adi'];
-
-									$kullanici_tipi = $row['uye_tipi'];
-
-									$kullanici_pasiflik = $row['pasiflik'];
-
-									$kullanici_yetkiler = $row['uye_yetkiler'];
-
-									$yetkiler_arrayi = explode(",", $kullanici_yetkiler);
-
-						?>
-
-									<hr/>
-
-									<form action="" method="POST">
-
-										<input type="hidden" name="kullanici_id" value="<?php echo $kullanici_id; ?>">
-
-										<div class="row">
-											
-											<div class="col-4 d-block d-sm-none"><b>Ad Soyad</b></div>
-											<div class="col-md-1 col-8" style="text-align: left;"><input type="text" class="form-control form-control-sm" name="kullanici_adi" value="<?php echo $kullanici_adi; ?>" ></div>
-											
-											<div class="col-md-1 col-12">
-												<div class="row">
-													<div class="col-4 d-block d-sm-none"><b>Pasiflik</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="pasiflikcheck" name="pasiflik" <?= $kullanici_pasiflik == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-													<div class="col-4 d-block d-sm-none px-0x"><b>Adet</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="yetkiadetcheck" name="yetkiadet" <?= $yetkiler_arrayi[11] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="col-md-1 col-12">
-												<div class="row">
-													<div class="col-4 d-block d-sm-none"><b>Palet</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="yetkipaletcheck" name="yetkipalet" <?= $yetkiler_arrayi[12] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-													<div class="col-4 d-block d-sm-none px-0x"><b>Alkop</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="yetkialkopcheck" name="yetkialkop" <?= $yetkiler_arrayi[13] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="col-md-1 col-12">
-												<div class="row">
-													<div class="col-4 d-block d-sm-none"><b>Alış</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="alisyetkicheck" name="yetkialis" <?= $yetkiler_arrayi[0] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-													<div class="col-4 d-block d-sm-none"><b>Satış</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="satisyetkicheck" name="yetkisatis" <?= $yetkiler_arrayi[7] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-
-												</div>
-											</div>
-											
-											<div class="col-md-1 col-12">
-												<div class="row">
-													<div class="col-4 d-block d-sm-none"><b>Fabrika</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="Fabrikayetkicheck" name="yetkifabrika" <?= $yetkiler_arrayi[1] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-													<div class="col-4 d-block d-sm-none"><b>Teklif</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="teklifyetkicheck" name="yetkiteklif" <?= $yetkiler_arrayi[2] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="col-md-1 col-12">
-												<div class="row">
-													<div class="col-4 d-block d-sm-none"><b>Sipariş</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="siparisyetkicheck" name="yetkisiparis" <?= $yetkiler_arrayi[3] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-													<div class="col-4 d-block d-sm-none"><b>Sevkiyat</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="sevkiyatyetkicheck" name="sevkiyatyetki" <?= $yetkiler_arrayi[10] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="col-md-1 col-12">
-												<div class="row">
-													<div class="col-4 d-block d-sm-none"><b>Düzenle</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="duzenlemeyetkicheck" name="yetkiduzenleme" <?= $yetkiler_arrayi[4] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-													<div class="col-4 d-block d-sm-none"><b>İşlemler</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="islemlerigormeyetkicheck" name="yetkiislemlerigorme" <?= $yetkiler_arrayi[5] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-												</div>
-											</div>
-											
-											<div class="col-4 d-block d-sm-none"><b>Toplam Göster</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="toplamyetkicheck" name="toplamgorme" <?= $yetkiler_arrayi[8] == '1' ? 'checked' : '' ?>>
-												</div>
-											</div>
-
-											<div class="col-4 d-block d-sm-none"><b>Gelen Giden</b></div>
-											<div class="col-md-1 col-2" style="text-align: center;">
-												<div class="form-check">
-													<input type="checkbox" class="form-check-input" id="gelengidenigormeyetkicheck" name="gelengidenigorme" <?= $yetkiler_arrayi[6] == '1' ? 'checked' : '' ?>>
-												</div>
-											</div>
-											<div class="col-md-1 col-12">
-												<div class="row">
-													<div class="col-4 d-block d-sm-none"><b>Ofis</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="ofisyetkicheck" name="ofisyetki" <?= $yetkiler_arrayi[14] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-													<div class="col-4 d-block d-sm-none"><b>Ziyaretler</b></div>
-													<div class="col-md-6 col-2" style="text-align: center;">
-														<div class="form-check">
-															<input type="checkbox" class="form-check-input" id="ziyaretyetkicheck" name="ziyaretyetki" <?= $yetkiler_arrayi[9] == '1' ? 'checked' : '' ?>>
-														</div>
-													</div>
-												</div>
-											</div>										
-											<div class="col-md-2 col-12" style="text-align:right;">
-												
-												<button type="submit" class="btn btn-warning btn-sm" name="bilgileriguncelle">Kaydet</button>
-												
-												<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmesorusudivi<?php echo $kullanici_id; ?>');"><button class="btn btn-danger btn-sm">Sil</button></a>
-
-											</div>
-
+				<div class="col-md-3 col-12">
+					<div class="div4">	
+						<h4>Kullanıcılar</h4>
+						<div class="row">
+							<?php	
+								$query = $db->query("SELECT * FROM uyeler WHERE uye_firma = '$uye_firma' AND uye_tipi != '2' AND uye_silik = '0' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+								if ( $query->rowCount() ){
+									foreach( $query as $row ){
+										$kullanici_id = $row['uye_id'];
+										$kullanici_adi = $row['uye_adi'];	
+							?>
+										<div class="col-6 my-2">
+											<a href="profil.php?id=<?= $kullanici_id ?>"><?= $kullanici_adi ?></a>								
 										</div>
-
-										<div id="silmesorusudivi<?php echo $kullanici_id; ?>" style="display: none; text-align: right;">
-
-											<div class="div5">
-
-												<b style="font-size: 20px;">Emin misiniz?</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												
-												<button type="submit" name="kullanicisil" class="btn btn-info btn-sm">Evet</button>
-
-												<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmesorusudivi<?php echo $kullanici_id; ?>');"><button class="btn btn-danger btn-sm">Hayır</button></a>
-
-											</div>
-
-										</div>
-
-									</form>
-
-
-
-						<?php
-
+							<?php
+									}
 								}
-
-							}
-
-						?>
-
+							?>
+						</div>
 					</div>
-
 				</div>
-
 			</div>
-
 		</div>
-
-		<br/><br/><br/>
-
-
-		<br/><br/><br/><br/><br/><br/>
-
 		<?php include 'template/script.php'; ?>
-
 	</body>
-
 </html>
