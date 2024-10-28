@@ -65,6 +65,12 @@
   <head>
     <title>İzinler</title>
     <?php include 'template/head.php'; ?>
+    <style>
+        .dikey-ortala {
+            display: flex;
+            align-items: center;
+        }
+    </style>
   </head>
   <body>
     <?php include 'template/banner.php' ?>
@@ -156,23 +162,23 @@
                         }
             ?>
                         <form action="" method="POST">
-                            <div class="row" style="margin: 0; <?= $key%2 == 0 ? 'background-color:#c6c6c6;' : ''; ?>">
+                            <div class="row" style="margin: 0; <?= $key%2 == 0 ? 'background-color:#d9d9d9;' : ''; ?>">
                                 <div class="col-6 d-block d-sm-none"><b>Ad Soyad :</b></div>
-                                <div class="col-md-2 col-6"><?= $izinliAdi ?></div>
+                                <div class="col-md-2 col-6 dikey-ortala"><?= $izinliAdi ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>İşe Giriş Tarihi :</b></div>
-                                <div class="col-md-1 col-6"><?= (new DateTime(iseGirisTarihiGetir($izinli)))->format('d.m.Y') ?></div>
+                                <div class="col-md-1 col-6 dikey-ortala"><?= (new DateTime(iseGirisTarihiGetir($izinli)))->format('d.m.Y') ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>,Hakediş :</b></div>
-                                <div class="col-md-1 col-6"><?= yillikIzinHesapla($izinli) ?></div>
+                                <div class="col-md-1 col-6 dikey-ortala"><?= yillikIzinHesapla($izinli) ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>İzin Başlama Tarihi :</b></div>
-                                <div class="col-md-2 col-6"><?= (new DateTime($izinBaslangicTarihi))->format('d.m.Y') ?></div>
+                                <div class="col-md-2 col-6 dikey-ortala"><?= (new DateTime($izinBaslangicTarihi))->format('d.m.Y') ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>İşe Başlama Tarihi :</b></div>
-                                <div class="col-md-2 col-6"><?= (new DateTime($iseBaslamaTarihi))->format('d.m.Y') ?></div>
+                                <div class="col-md-2 col-6 dikey-ortala"><?= (new DateTime($iseBaslamaTarihi))->format('d.m.Y') ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>Onay :</b></div>
-                                <div class="col-md-1 col-6"><?= $onay == 0 ? 'Bekleniyor' : ($onay == 1 ? 'Onaylandı' : 'Reddedildi') ?></div>
+                                <div class="col-md-1 col-6 dikey-ortala" style="color:<?= $onay == 0 ? 'orange' : ($onay == 1 ? 'green' : 'red'); ?>;"><?= $onay == 0 ? 'Bekleniyor' : ($onay == 1 ? 'Onaylandı' : 'Reddedildi') ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>Kullanılan İzin :</b></div>
-                                <div class="col-md-1 col-6"><?= kullanilanIzinHesapla($izinli) ?></div>
+                                <div class="col-md-1 col-6 dikey-ortala"><?= kullanilanIzinHesapla($izinli) ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>Kalan İzin :</b></div>
-                                <div class="col-md-1 col-6"><?= $kalanIzin ?></div>
+                                <div class="col-md-1 col-6 dikey-ortala"><?= $kalanIzin ?></div>
                                 <?php if($uye_tipi == 2) { ?>
                                     <div class="col-md-1 col-12 px-0 d-flex">
                                         <input type="hidden" name="id" value="<?= $id ?>">

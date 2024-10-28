@@ -21,9 +21,14 @@
 		}else{
 
 			$profil = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$profil_id}'")->fetch(PDO::FETCH_ASSOC);
-
 			$profil_yetkiler = guvenlik($profil['uye_yetkiler']);
-
+			$profil_adi = guvenlik($profil['uye_adi']);
+			$profil_mail = guvenlik($profil['uye_mail']);
+			$profil_tel = guvenlik($profil['uye_tel']);
+			$profil_tel_2 = guvenlik($profil['tel_2']);
+			$profil_foto = guvenlik($profil['foto']);
+			$unvan = guvenlik($profil['uye_unvan']);
+			$adres = guvenlik($profil['adres']);
 			$profil_yetkileri_arrayi = explode(",", $profil_yetkiler);
 
 		}
@@ -54,9 +59,9 @@
 
 				$query = $db->prepare("UPDATE uyeler SET uye_adi = ?, uye_mail = ?, uye_tel = ? WHERE uye_id = ?"); 
 
-				$guncelle = $query->execute(array($uye_adi,$uye_mail,$uye_tel,$uye_id));
+				$guncelle = $query->execute(array($uye_adi,$uye_mail,$uye_tel,$profil_id));
 
-				header("Location:profil.php?id=".$uye_id."&guncellendi");
+				header("Location:profil.php?id=".$profil_id."&guncellendi");
 
 				exit();
 
@@ -105,6 +110,54 @@
 			$hata = '<br/><div class="alert alert-success" role="alert" style="text-align:center;">Bilgileriniz başarıyla güncellendi.</div>';
 
 		}
+		
+		if (isset($_POST['yetkileriguncelle'])) {
+
+			$kullanici_yetkileri = '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0';
+
+			$kullanici_yetkileri_arrayi = explode(",", $kullanici_yetkileri);
+
+			if(isset($_POST['yetkialis'])){ $kullanici_yetkileri_arrayi[0] = 1; }
+
+			if(isset($_POST['yetkifabrika'])){ $kullanici_yetkileri_arrayi[1] = 1; }
+
+			if(isset($_POST['yetkiteklif'])){ $kullanici_yetkileri_arrayi[2] = 1; }
+
+			if(isset($_POST['yetkisiparis'])){ $kullanici_yetkileri_arrayi[3] = 1; }
+
+			if(isset($_POST['yetkiduzenleme'])){ $kullanici_yetkileri_arrayi[4] = 1; }
+
+			if(isset($_POST['yetkiislemlerigorme'])){ $kullanici_yetkileri_arrayi[5] = 1; }
+
+			if(isset($_POST['gelengidenigorme'])){ $kullanici_yetkileri_arrayi[6] = 1; }
+
+			if(isset($_POST['yetkisatis'])){ $kullanici_yetkileri_arrayi[7] = 1; }
+
+			if(isset($_POST['toplamgorme'])){ $kullanici_yetkileri_arrayi[8] = 1; }
+
+			if(isset($_POST['ziyaretyetki'])){ $kullanici_yetkileri_arrayi[9] = 1; }
+
+			if(isset($_POST['sevkiyatyetki'])){ $kullanici_yetkileri_arrayi[10] = 1; }
+
+			if(isset($_POST['yetkiadet'])){ $kullanici_yetkileri_arrayi[11] = 1; }
+
+			if(isset($_POST['yetkipalet'])){ $kullanici_yetkileri_arrayi[12] = 1; }
+
+			if(isset($_POST['yetkialkop'])){ $kullanici_yetkileri_arrayi[13] = 1; }
+
+			if(isset($_POST['ofisyetki'])){ $kullanici_yetkileri_arrayi[14] = 1; }
+
+			$kullanici_yetkileri = implode(",", $kullanici_yetkileri_arrayi);
+
+			$query = $db->prepare("UPDATE uyeler SET uye_yetkiler = ? WHERE uye_id = ?"); 
+
+			$guncelle = $query->execute(array($kullanici_yetkileri,$profil_id));
+
+			header("Location:profil.php?id=".$profil_id);
+
+			exit();
+
+		}
 
 	}}
 
@@ -120,6 +173,12 @@
 
     <?php include 'template/head.php'; ?>
 
+	<style>
+		.pp {
+			width: 100px;
+		}
+	</style>
+
   </head>
 
   <body>
@@ -129,6 +188,26 @@
     <?php echo $hata; ?>
 
     <div class="container">
+
+		<div class="div4">
+			<div class="row">
+				<div class="col-md-1">
+					<img src="img/<?= empty($profil_foto) ? 'pp.png' : $profil_foto ?>" alt="<?= $profil_adi ?> Profil Fotoğrafı" class="pp">
+				</div>
+				<div class="col-md-5 pt-3 pl-4">
+					<h4><b><?= $profil_adi ?></b></h4>
+					<h6><?= $unvan ?></h6>
+					<h6><?= $profil_mail ?></h6>
+				</div>
+				<div class="col-md-6 pt-3" style="display:flex; justify-content:end; align-items:end;">
+					<div style="text-align:right;">
+						<h6><i class="fas fa-mobile-alt mr-2" ></i><?= $profil_tel ?></h6>
+						<h6><i class="fas fa-phone mr-2"></i><?= $profil_tel_2 ?></h6>
+						<p class="mb-1"><i class="fas fa-map-marker mr-2"></i><?= $adres ?></p>
+					</div>
+				</div>
+			</div>
+		</div>
     	
     	<div class="row">
     		
@@ -140,11 +219,11 @@
     	
 			    	<form action="" method="POST">
 			    		
-			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="Kullanıcı Adı" name="uye_adi" value="<?php echo $uye_adi; ?>">
+			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="Kullanıcı Adı" name="uye_adi" value="<?= $profil_adi ?>">
 
-			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="E-posta Adresi" name="uye_mail" value="<?php echo $uye_mail; ?>">
+			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="E-posta Adresi" name="uye_mail" value="<?= $profil_mail; ?>">
 
-			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="Telefon Numarası" name="uye_tel" value="<?php echo $uye_tel; ?>">
+			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="Telefon Numarası" name="uye_tel" value="<?= $profil_tel; ?>">
 
 			    		<button type="submit" class="btn btn-primary btn-block" style="background-color: black;" name="bilgilerimiguncelle">Güncelle</button>
 
@@ -178,7 +257,7 @@
 
     	</div>
 		<?php if($uye_tipi == 2){ ?>
-			<div class="div4">
+			<div class="div4 px-3">
 				<h5 style="margin-top: 10px;"><b>Yetkiler</b></h5>
 				<form action="" method="POST">
 					<div class="row">
@@ -272,11 +351,13 @@
 								<label for="ziyaretCheckbox">Ziyaretler</label>
 							</div>
 						</div>
-						<div class="col-md-2 col-12"></div>
-						<div class="col-md-2 col-6" style="text-align:right;">						
-							<button type="submit" class="btn btn-warning btn-sm btn-block" name="bilgileriguncelle">Kaydet</button>
+						<div class="col-md-2 col-4">
+							<button type="submit" class="btn btn-warning btn-sm btn-block" name="yetkileriguncelle">Kaydet</button>
 						</div>
-						<div class="col-md-2 col-6" style="text-align:right;">						
+						<div class="col-md-2 col-4" style="text-align:right;">						
+							<button type="submit" class="btn btn-secondary btn-sm btn-block" name="pasiflestir">Pasifleştir</button>
+						</div>
+						<div class="col-md-2 col-4" style="text-align:right;">						
 						<button type="submit" name="kullanicisil" class="btn btn-danger btn-sm btn-block" onclick="return confirmForm('Bu kullanıcıyı geri dönüşü olmayacak şekilde sileceksiniz, emin misiniz?');">Kullanıcıyı Sil</button>
 						</div>
 					</div>

@@ -60,62 +60,6 @@
 
 		}
 
-		if (isset($_POST['bilgileriguncelle'])) {
-			
-			$kullanici_id = guvenlik($_POST['kullanici_id']);
-
-			$kullanici_adi = guvenlik($_POST['kullanici_adi']);
-
-			$kullanici_pasiflik = 0;
-
-			if(isset($_POST['pasiflik'])){ $kullanici_pasiflik = 1; }
-
-			$kullanici_yetkileri = '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0';
-
-			$kullanici_yetkileri_arrayi = explode(",", $kullanici_yetkileri);
-
-			if(isset($_POST['yetkialis'])){ $kullanici_yetkileri_arrayi[0] = 1; }
-
-			if(isset($_POST['yetkifabrika'])){ $kullanici_yetkileri_arrayi[1] = 1; }
-
-			if(isset($_POST['yetkiteklif'])){ $kullanici_yetkileri_arrayi[2] = 1; }
-
-			if(isset($_POST['yetkisiparis'])){ $kullanici_yetkileri_arrayi[3] = 1; }
-
-			if(isset($_POST['yetkiduzenleme'])){ $kullanici_yetkileri_arrayi[4] = 1; }
-
-			if(isset($_POST['yetkiislemlerigorme'])){ $kullanici_yetkileri_arrayi[5] = 1; }
-
-			if(isset($_POST['gelengidenigorme'])){ $kullanici_yetkileri_arrayi[6] = 1; }
-
-			if(isset($_POST['yetkisatis'])){ $kullanici_yetkileri_arrayi[7] = 1; }
-
-			if(isset($_POST['toplamgorme'])){ $kullanici_yetkileri_arrayi[8] = 1; }
-
-			if(isset($_POST['ziyaretyetki'])){ $kullanici_yetkileri_arrayi[9] = 1; }
-
-			if(isset($_POST['sevkiyatyetki'])){ $kullanici_yetkileri_arrayi[10] = 1; }
-
-			if(isset($_POST['yetkiadet'])){ $kullanici_yetkileri_arrayi[11] = 1; }
-
-			if(isset($_POST['yetkipalet'])){ $kullanici_yetkileri_arrayi[12] = 1; }
-
-			if(isset($_POST['yetkialkop'])){ $kullanici_yetkileri_arrayi[13] = 1; }
-
-			if(isset($_POST['ofisyetki'])){ $kullanici_yetkileri_arrayi[14] = 1; }
-
-			$kullanici_yetkileri = implode(",", $kullanici_yetkileri_arrayi);
-
-			$query = $db->prepare("UPDATE uyeler SET uye_adi = ?, uye_yetkiler = ?, pasiflik = ? WHERE uye_id = ?"); 
-
-			$guncelle = $query->execute(array($kullanici_adi,$kullanici_yetkileri,$kullanici_pasiflik,$kullanici_id));
-
-			header("Location:yonetim.php");
-
-			exit();
-
-		}
-
 		if (isset($_POST['kullanicisil'])) {
 			
 			$kullanici_id = guvenlik($_POST['kullanici_id']);
@@ -184,6 +128,13 @@
 
 	</head>
 
+	<style>
+		.dikey-ortala {
+			display: flex;
+			align-items: center;
+		}
+	</style>
+
 	<body>
 
 		<?php include 'template/banner.php' ?>
@@ -202,46 +153,63 @@
 			
 			<div class="row">
 
-				<div class="col-md-3 col-12"><!-- OKUMALARIN LİSTELENDİĞİ SAĞ TARAFTAKİ DİV -->
+				<div class="col-md-9 col-12">
+					
+					<div class="div4">	
+						<h4>Kullanıcılar</h4>
+						<div class="row">
+							<?php	
+								$query = $db->query("SELECT * FROM uyeler WHERE uye_firma = '$uye_firma' AND uye_tipi != '2' AND uye_silik = '0' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+								if ( $query->rowCount() ){
+									foreach( $query as $row ){
+										$kullanici_id = guvenlik($row['uye_id']);
+										$kullanici_adi = guvenlik($row['uye_adi']);	
+										$kullanici_unvan = guvenlik($row['uye_unvan']);
+							?>
+										<div class="col-6 my-2">
+											<a href="profil.php?id=<?= $kullanici_id ?>">
+												<div class="dikey-ortala">
+													<img src="img/pp.png" alt="" style="width:60px; border-radius:50%;">
+													<div>
+														<?= $kullanici_adi ?><br/><small><?= $kullanici_unvan ?></small>
+													</div>
+												</div>
+											</a>								
+										</div>
+							<?php
+									}
+								}
+							?>
+						</div>
+					</div>
 
 					<div class="div4">
 
 						<form action="" method="POST">
 
-							<h4>Yeni Kullanıcı Ekleme</h4>
-								
-							<div>
-								
-								<input type="text" name="yeni_uye_adi" placeholder="Kullanıcı Adı Giriniz" class="form-control" style="margin-bottom: 10px;">
-
+							<h4 class="pl-1 pt-1">Yeni Kullanıcı Ekleme</h4>
+							<div class="row">
+								<div class="col-md-5 col-12">
+									<input type="text" name="yeni_uye_adi" placeholder="Kullanıcı Adı Giriniz" class="form-control" style="margin-bottom: 10px;">
+								</div>
+								<div class="col-md-5 col-12">
+									<input type="text" name="yeni_uye_mail" placeholder="Kullanıcının E-Posta Adresini Giriniz" class="form-control" style="margin-bottom: 10px;">
+								</div>					
+								<div class="col-md-2 col-12">
+									<button type="submit" class="btn btn-primary btn-block" style="margin-bottom: 10px;" name="uye_ekle">Ekle</button>
+								</div>
+								<div class="col-md-12 col-12">
+									<div class="alert alert-info">				
+										Yeni eklenen kişinin şifresi 1234 olarak atanır. Kişinin oturum açtığında şifresini değiştirmesi tavsiye edilir.
+									</div>
+								</div>
 							</div>
-							
-							<div>
-								
-								<input type="text" name="yeni_uye_mail" placeholder="Kullanıcının E-Posta Adresini Giriniz" class="form-control" style="margin-bottom: 10px;">
-
-							</div>
-							
-							<div>
-								
-								<button type="submit" class="btn btn-primary btn-block" style="margin-bottom: 10px;" name="uye_ekle">Kullanıcı Ekle</button>
-
-							</div>
-								
-							<div class="alert alert-info">
-								
-								Buraya ekleyeceğiniz kişinin şifresi varsayılan olarak 1234 olarak atanır. Kişinin oturum açtığında şifresini değiştirmesi tavsiye edilir.
-
-							</div>
-
 						</form>
-
-					</div>					
-
+					</div>	
 				</div>
 
 				<div class="col-md-3 col-12">
-					
+
 					<div class="div4">
 						
 						<h4>Künye</h4>
@@ -255,10 +223,6 @@
 						</form>
 
 					</div>
-
-				</div>
-
-				<div class="col-md-3 col-12">
 
 					<div class="div4">
 						
@@ -294,28 +258,6 @@
 
 					</div>
 
-				</div>
-
-				<div class="col-md-3 col-12">
-					<div class="div4">	
-						<h4>Kullanıcılar</h4>
-						<div class="row">
-							<?php	
-								$query = $db->query("SELECT * FROM uyeler WHERE uye_firma = '$uye_firma' AND uye_tipi != '2' AND uye_silik = '0' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
-								if ( $query->rowCount() ){
-									foreach( $query as $row ){
-										$kullanici_id = $row['uye_id'];
-										$kullanici_adi = $row['uye_adi'];	
-							?>
-										<div class="col-6 my-2">
-											<a href="profil.php?id=<?= $kullanici_id ?>"><?= $kullanici_adi ?></a>								
-										</div>
-							<?php
-									}
-								}
-							?>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
