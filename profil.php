@@ -232,12 +232,12 @@
 
     <div class="container">
 
-		<div class="div4">
+		<div class="div4" style="padding:10px;">
 			<div class="row">
-				<div class="col-md-2" style="display:flex; justify-content:center; align-items:center;">
+				<div class="col-md-2 col-12" style="display:flex; justify-content:center; align-items:center;">
 					<img src="img/<?= empty($profil_foto) ? 'pp.png' : 'pp/'.$profil_foto ?>" alt="<?= $profil_adi ?> Profil Fotoğrafı" class="pp">
 				</div>
-				<div class="col-md-5 pt-3 pl-0">
+				<div class="col-md-5 col-7 pt-3 pr-0">
 					<h4><b><?= $profil_adi ?></b></h4>
 					<h6><?= $unvan ?></h6>
 					<h6><i class="fas fa-envelope mr-2"></i><?= $profil_mail ?></h6>
@@ -245,7 +245,7 @@
 					<h6><i class="fas fa-phone mr-2"></i><?= $profil_tel_2 ?></h6>
 					<p class="mb-1"><i class="fas fa-map-marker mr-2"></i><?= $adres ?></p>
 				</div>
-				<div class="col-md-5 pt-3" style="display:flex; justify-content:end; align-items:end;">
+				<div class="col-md-5 col-5 pt-3 pl-0" style="display:flex; justify-content:end; align-items:end;">
 					<div style="text-align:right;">
 						<h6>
 							<i class="fas fa-calendar-alt mr-2"></i>
@@ -352,7 +352,7 @@
 
     		<div class="col-md-6 col-12">
 
-    			<div class="div4" id="sifredivi" style="display:none;">
+    			<div class="div4" id="sifredivi" style="display:none; padding:10px;">
     			
     				<h5 style="margin-top: 10px;"><b>Şifre Değiştir</b></h5>
 
@@ -450,7 +450,7 @@
 								<label for="toplamCheckbox">Toplam Görme</label>
 							</div>
 						</div>
-						<div class="col-md-2 col-4">
+						<div class="col-md-2 col-4 pr-0">
 							<div class="form-group">
 								<input type="checkbox" id="gelengidenCheckbox" name="gelengidenigorme" <?= $profil_yetkileri_arrayi[6] == '1' ? 'checked' : '' ?>>
 								<label for="gelengidenCheckbox">Gelen Giden</label>
