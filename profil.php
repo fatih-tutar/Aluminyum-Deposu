@@ -29,44 +29,86 @@
 			$profil_foto = guvenlik($profil['foto']);
 			$unvan = guvenlik($profil['uye_unvan']);
 			$adres = guvenlik($profil['adres']);
+			$nufus_cuzdani = guvenlik($profil['nufus_cuzdani']);
+			$is_basvuru_formu = guvenlik($profil['is_basvuru_formu']);
+			$ikametgah_belgesi = guvenlik($profil['ikametgah_belgesi']);
+			$saglik_raporu = guvenlik($profil['saglik_raporu']);
+			$ise_giris_tarihi = guvenlik($profil['ise_giris_tarihi']);
 			$profil_yetkileri_arrayi = explode(",", $profil_yetkiler);
 
 		}
 
 	if($uye_tipi != '3'){
-
 		if (isset($_POST['bilgilerimiguncelle'])) {
-			
 			$uye_adi = guvenlik($_POST['uye_adi']);
-
+			$uye_unvan = guvenlik($_POST['uye_unvan']);
 			$uye_mail = guvenlik($_POST['uye_mail']);
-
 			$uye_tel = guvenlik($_POST['uye_tel']);
-
-			if (empty($uye_adi) === true) {
-				
-				$hata = '<br/><div class="alert alert-danger" role="alert">Kullanıcı adınızı boş bıraktınız.</div>';
-
-			}elseif (empty($uye_mail) === true) {
-				
-				$hata = '<br/><div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
-
-			}elseif (empty($uye_tel) === true) {
-				
-				$hata = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
-
+			$tel_2 = guvenlik($_POST['tel_2']);
+			$adres = guvenlik($_POST['adres']);
+			$ise_giris_tarihi = guvenlik($_POST['ise_giris_tarihi']);
+			if (!empty($_FILES['uploadfile']['name'])) {
+				$temp = explode(".", $_FILES['uploadfile']['name']);
+				$dosyaadi = $temp[0];
+				$extension = end($temp);
+				$randomsayi = rand(0,10000);;
+				$upload_file = $dosyaadi.$randomsayi.".".$extension;
+				move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/pp/".$upload_file);
 			}else{
-
-				$query = $db->prepare("UPDATE uyeler SET uye_adi = ?, uye_mail = ?, uye_tel = ? WHERE uye_id = ?"); 
-
-				$guncelle = $query->execute(array($uye_adi,$uye_mail,$uye_tel,$profil_id));
-
-				header("Location:profil.php?id=".$profil_id."&guncellendi");
-
-				exit();
-
+				$upload_file = $profil_foto;
 			}
-
+			if (!empty($_FILES['nufuscuzdani']['name'])) {
+				$temp = explode(".", $_FILES['nufuscuzdani']['name']);
+				$dosyaadi = $temp[0];
+				$extension = end($temp);
+				$randomsayi = rand(0,10000);;
+				$nufuscuzdani = $dosyaadi.$randomsayi.".".$extension;
+				move_uploaded_file($_FILES['nufuscuzdani']['tmp_name'], "img/belgeler/".$nufuscuzdani);
+			}else{
+				$nufuscuzdani = $nufus_cuzdani;
+			}
+			if (!empty($_FILES['isbasvuruformu']['name'])) {
+				$temp = explode(".", $_FILES['isbasvuruformu']['name']);
+				$dosyaadi = $temp[0];
+				$extension = end($temp);
+				$randomsayi = rand(0,10000);;
+				$isbasvuruformu = $dosyaadi.$randomsayi.".".$extension;
+				move_uploaded_file($_FILES['isbasvuruformu']['tmp_name'], "img/belgeler/".$isbasvuruformu);
+			}else{
+				$isbasvuruformu = $is_basvuru_formu;
+			}
+			if (!empty($_FILES['ikametgahbelgesi']['name'])) {
+				$temp = explode(".", $_FILES['ikametgahbelgesi']['name']);
+				$dosyaadi = $temp[0];
+				$extension = end($temp);
+				$randomsayi = rand(0,10000);;
+				$ikametgahbelgesi = $dosyaadi.$randomsayi.".".$extension;
+				move_uploaded_file($_FILES['ikametgahbelgesi']['tmp_name'], "img/belgeler/".$ikametgahbelgesi);
+			}else{
+				$ikametgahbelgesi = $ikametgah_belgesi;
+			}
+			if (!empty($_FILES['saglikraporu']['name'])) {
+				$temp = explode(".", $_FILES['saglikraporu']['name']);
+				$dosyaadi = $temp[0];
+				$extension = end($temp);
+				$randomsayi = rand(0,10000);;
+				$saglikraporu = $dosyaadi.$randomsayi.".".$extension;
+				move_uploaded_file($_FILES['saglikraporu']['tmp_name'], "img/belgeler/".$saglikraporu);
+			}else{
+				$saglikraporu = $saglik_raporu;
+			}
+			if (empty($uye_adi) === true) {				
+				$hata = '<br/><div class="alert alert-danger" role="alert">Kullanıcı adınızı boş bıraktınız.</div>';
+			}elseif (empty($uye_mail) === true) {
+				$hata = '<br/><div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
+			}elseif (empty($uye_tel) === true) {
+				$hata = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
+			}else{
+				$query = $db->prepare("UPDATE uyeler SET uye_adi = ?, uye_mail = ?, uye_unvan = ?, uye_tel = ?, tel_2 = ?, ise_giris_tarihi = ?, adres = ?, foto = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE uye_id = ?"); 
+				$guncelle = $query->execute(array($uye_adi, $uye_mail, $uye_unvan, $uye_tel, $tel_2, $ise_giris_tarihi, $adres, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
+				header("Location:profil.php?id=".$profil_id."&guncellendi");
+				exit();
+			}
 		}
 
 		if (isset($_POST['sifreyidegistir'])) {
@@ -175,7 +217,8 @@
 
 	<style>
 		.pp {
-			width: 100px;
+			width: 115px;
+			margin-top:15px;
 		}
 	</style>
 
@@ -191,51 +234,125 @@
 
 		<div class="div4">
 			<div class="row">
-				<div class="col-md-1">
-					<img src="img/<?= empty($profil_foto) ? 'pp.png' : $profil_foto ?>" alt="<?= $profil_adi ?> Profil Fotoğrafı" class="pp">
+				<div class="col-md-2" style="display:flex; justify-content:center; align-items:center;">
+					<img src="img/<?= empty($profil_foto) ? 'pp.png' : 'pp/'.$profil_foto ?>" alt="<?= $profil_adi ?> Profil Fotoğrafı" class="pp">
 				</div>
-				<div class="col-md-5 pt-3 pl-4">
+				<div class="col-md-5 pt-3 pl-0">
 					<h4><b><?= $profil_adi ?></b></h4>
 					<h6><?= $unvan ?></h6>
-					<h6><?= $profil_mail ?></h6>
+					<h6><i class="fas fa-envelope mr-2"></i><?= $profil_mail ?></h6>
+					<h6><i class="fas fa-mobile-alt mr-2" ></i><?= $profil_tel ?></h6>
+					<h6><i class="fas fa-phone mr-2"></i><?= $profil_tel_2 ?></h6>
+					<p class="mb-1"><i class="fas fa-map-marker mr-2"></i><?= $adres ?></p>
 				</div>
-				<div class="col-md-6 pt-3" style="display:flex; justify-content:end; align-items:end;">
+				<div class="col-md-5 pt-3" style="display:flex; justify-content:end; align-items:end;">
 					<div style="text-align:right;">
-						<h6><i class="fas fa-mobile-alt mr-2" ></i><?= $profil_tel ?></h6>
-						<h6><i class="fas fa-phone mr-2"></i><?= $profil_tel_2 ?></h6>
-						<p class="mb-1"><i class="fas fa-map-marker mr-2"></i><?= $adres ?></p>
+						<h6>
+							<i class="fas fa-calendar-alt mr-2"></i>
+							<?= (new DateTime($ise_giris_tarihi))->format('d.m.Y') ?></h6>
+						<h6>
+							<i class="fas fa-id-card mr-2"></i>
+							<?php if(empty($nufus_cuzdani)){ ?>
+								Nüfus Cüzdanı Fotokopisi
+							<?php }else{ ?>
+								<a href="img/belgeler/<?= $nufus_cuzdani ?>" target="_blank">
+									Nüfus Cüzdanı Fotokopisi
+								</a>
+							<?php } ?>
+						</h6>
+						<h6>
+							<i class="fas fa-file-alt mr-2"></i>
+							<?php if(empty($is_basvuru_formu)){ ?>
+								İş Başvuru Formu
+							<?php }else{ ?>
+								<a href="img/belgeler/<?= $is_basvuru_formu ?>" target="_blank">
+									İş Başvuru Formu
+								</a>
+							<?php } ?>
+						</h6>
+						<h6>
+							<i class="fas fa-map-marker-alt mr-2"></i>
+							<?php if(empty($ikametgah_belgesi)){ ?>
+								İkâmetgâh Belgesi
+							<?php }else{ ?>
+								<a href="img/belgeler/<?= $ikametgah_belgesi ?>" target="_blank">
+									İkâmetgâh Belgesi
+								</a>
+							<?php } ?>
+						</h6>
+						<h6>
+							<i class="fas fa-file-medical mr-2"></i>
+							<?php if(empty($saglik_raporu)){ ?>
+								Sağlık Raporu
+							<?php }else{ ?>
+								<a href="img/belgeler/<?= $saglik_raporu ?>" target="_blank">
+									Sağlık Raporu
+								</a>
+							<?php } ?>
+						</h6>
 					</div>
 				</div>
+			</div>
+			<hr/>
+			<div style="display:flex; justify-content:end;">
+				<button class="btn btn-success btn-sm mr-2" onclick="return false" onmousedown="javascript:ackapa3('duzenlemedivi','sifredivi','yetkidivi');">Düzenle</button>
+				<button class="btn btn-secondary btn-sm mr-2" onclick="return false" onmousedown="javascript:ackapa3('sifredivi','duzenlemedivi','yetkidivi');">Şifre Değiştir</button>
+				<?php if($uye_tipi == 2) { ?>
+					<button class="btn btn-warning btn-sm" onclick="return false" onmousedown="javascript:ackapa3('yetkidivi','sifredivi','duzenlemedivi');">Yetkiler</button>
+				<?php } ?> 
 			</div>
 		</div>
     	
     	<div class="row">
     		
-    		<div class="col-md-4 col-12">
+    		<div class="col-md-6 col-12">
     			
-    			<div class="div4">
-
-    				<h5 style="margin-top: 10px;"><b>Kullanıcı Bilgileri Güncelleme</b></h5>
+    			<div class="div4" id="duzenlemedivi" style="display:none;">
     	
-			    	<form action="" method="POST">
-			    		
-			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="Kullanıcı Adı" name="uye_adi" value="<?= $profil_adi ?>">
-
-			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="E-posta Adresi" name="uye_mail" value="<?= $profil_mail; ?>">
-
-			    		<input type="text" class="form-control" style="margin-bottom: 10px;" placeholder="Telefon Numarası" name="uye_tel" value="<?= $profil_tel; ?>">
-
-			    		<button type="submit" class="btn btn-primary btn-block" style="background-color: black;" name="bilgilerimiguncelle">Güncelle</button>
-
+			    	<form action="" method="POST" class="ml-1" enctype="multipart/form-data">
+						<div class="row">
+							<div class="col-md-6">
+								<b>Fotoğraf</b>
+								<input type="file" name="uploadfile" style="margin-bottom: 10px;"><br/>
+								<b>Ad Soyad</b>
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="Kullanıcı Adı" name="uye_adi" value="<?= $profil_adi ?>">
+								<b>Ünvan</b>
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="Ünvan" name="uye_unvan" value="<?= $unvan ?>">
+								<b>E-posta Adresi</b>
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="E-posta Adresi" name="uye_mail" value="<?= $profil_mail ?>">
+								<b>Telefon Numarası</b>
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="Telefon Numarası" name="uye_tel" value="<?= $profil_tel ?>">
+								<b>İkinci Telefon Numarası</b>
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="İkinci Telefon Numarası" name="tel_2" value="<?= $profil_tel_2 ?>">
+								<b>Adres</b>
+								<textarea name="adres" id="adres" rows="3" class="form-control form-control-sm mb-1" placeholder="Adresinizi giriniz."><?= $adres ?></textarea>
+							</div>
+							<div class="col-md-6">
+								<?php if($uye_tipi == 2){?>
+									<b>İşe Giriş Tarihi</b>
+									<input type="date" class="form-control form-control-sm mb-1" name="ise_giris_tarihi" value="<?= $ise_giris_tarihi ?>">	
+								<?php } ?>
+								<h6 class="mt-2"><b>Belgeler</b></h6>
+								<a href="<?= empty($nufus_cuzdani) ? '#' : 'img/belgeler/'.$nufus_cuzdani ?>" target="_blank" class="btn btn-<?= empty($nufus_cuzdani) ? 'secondary' : 'primary' ?> btn-sm mb-1">Nüfus Cüzdanı Fotokopisi</a>
+								<input type="file" name="nufuscuzdani" style="margin-bottom: 10px;"><br/>
+								<a href="<?= empty($is_basvuru_formu) ? '#' : 'img/belgeler/'.$is_basvuru_formu ?>" target="_blank" class="btn btn-<?= empty($is_basvuru_formu) ? 'secondary' : 'primary' ?> btn-sm mb-1">İş Başvuru Formu</a>
+								<input type="file" name="isbasvuruformu" style="margin-bottom: 10px;"><br/>
+								<a href="<?= empty($ikametgah_belgesi) ? '#' : 'img/belgeler/'.$ikametgah_belgesi ?>" target="_blank" class="btn btn-<?= empty($ikametgah_belgesi) ? 'secondary' : 'primary' ?> btn-sm mb-1">İkametgah Belgesi</a>
+								<input type="file" name="ikametgahbelgesi" style="margin-bottom: 10px;"><br/>
+								<a href="<?= empty($saglik_raporu) ? '#' : 'img/belgeler/'.$saglik_raporu ?>" target="_blank" class="btn btn-<?= empty($saglik_raporu) ? 'secondary' : 'primary' ?> btn-sm mb-1">Sağlık Raporu</a>
+								<input type="file" name="saglikraporu" style="margin-bottom: 10px;"><br/>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-success btn-block" name="bilgilerimiguncelle">Bilgileri Güncelle</button>
 			    	</form>
 
 			    </div>
 
     		</div>
 
-    		<div class="col-md-4 col-12">
+    		<div class="col-md-6 col-12">
 
-    			<div class="div4">
+    			<div class="div4" id="sifredivi" style="display:none;">
     			
     				<h5 style="margin-top: 10px;"><b>Şifre Değiştir</b></h5>
 
@@ -247,7 +364,7 @@
 
 			    		<input type="password" class="form-control" style="margin-bottom: 10px;" name="sifre_tekrar" placeholder="Yeni şifreyi tekrar ediniz.">
 
-			    		<button type="submit" class="btn btn-primary btn-block" style="background-color: black;" name="sifreyidegistir">Bilgileri Güncelle</button>
+			    		<button type="submit" class="btn btn-primary btn-block" name="sifreyidegistir">Şifreyi Güncelle</button>
 
 			    	</form>
 
@@ -257,7 +374,7 @@
 
     	</div>
 		<?php if($uye_tipi == 2){ ?>
-			<div class="div4 px-3">
+			<div class="div4 px-3" id="yetkidivi" style="display:none;">
 				<h5 style="margin-top: 10px;"><b>Yetkiler</b></h5>
 				<form action="" method="POST">
 					<div class="row">
