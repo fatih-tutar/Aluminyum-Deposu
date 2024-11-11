@@ -18,7 +18,9 @@ foreach ($spanList as $index => $item) {
     array_push($lmeArray, $content);
 }
 
-$number = $lmeArray[108];
+print_r($lmeArray);
+
+$number = $lmeArray[22];
 $number = str_replace(".", "", $number);
 $number = str_replace(",", ".", $number);
 $number = floatval($number);

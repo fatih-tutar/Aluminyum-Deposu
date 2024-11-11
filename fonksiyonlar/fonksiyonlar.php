@@ -196,14 +196,18 @@
 			array_push($lmeArray, $content);
 		}
 
-		$number = $lmeArray[108];
-		$number = str_replace(".", "", $number);
-		$number = str_replace(",", ".", $number);
-		$number = floatval($number);
-		$roundedNumber = intval($number);
-		$lme1 = $roundedNumber + 1;
-
-		$lme = $lme1;
+		if (isset($lmeArray[22])) {
+			$number = $lmeArray[22];
+			$number = str_replace(".", "", $number);
+			$number = str_replace(",", ".", $number);
+			$number = floatval($number);
+			$roundedNumber = intval($number);
+			$lme1 = $roundedNumber + 1;
+			$lme = $lme1;
+		} else {
+			// Hata durumunu ele alın veya varsayılan bir değer atayın
+			$lme = 0;
+		}
 
 		return $lme;
 	}
