@@ -792,41 +792,41 @@
 														
 														$siparisbilgisi = $db->query("SELECT * FROM siparis WHERE siparis_id = '{$value}' AND sirketid = '{$uye_sirket}' AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
 													
-														$siparis_id = $siparisbilgisi['siparis_id'];
+														$siparis_id = $siparisbilgisi['siparis_id'] ?? null;
 
-														$urun_id = $siparisbilgisi['urun_id'];
+														$urun_id = $siparisbilgisi['urun_id'] ?? null;
 
 														$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-														$urun_adi = $urunbilgicek['urun_adi'];
+														$urun_adi = $urunbilgicek['urun_adi'] ?? null;
 
 														$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-														$kategori_bir = $katbilcek['kategori_bir'];
+														$kategori_bir = $katbilcek['kategori_bir'] ?? null;
 
 														$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-														$kategori_bir_adi = $katadcek['kategori_adi'];
+														$kategori_bir_adi = $katadcek['kategori_adi'] ?? null;
 
-														$kategori_iki = $katbilcek['kategori_iki'];
+														$kategori_iki = $katbilcek['kategori_iki'] ?? null;
 
 														$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-														$kategori_iki_adi = $katadcek['kategori_adi'];
+														$kategori_iki_adi = $katadcek['kategori_adi'] ?? null;
 
-														$siparis_id = $siparisbilgisi['siparis_id'];
+														$siparis_id = $siparisbilgisi['siparis_id'] ?? null;
 
-														$hazirlayankisi = $siparisbilgisi['hazirlayankisi'];
+														$hazirlayankisi = $siparisbilgisi['hazirlayankisi'] ?? null;
 
-														$urun_siparis_aded = $siparisbilgisi['urun_siparis_aded'];
+														$urun_siparis_aded = $siparisbilgisi['urun_siparis_aded'] ?? null;
 
-														$urun_fabrika_id = $siparisbilgisi['urun_fabrika_id'];
+														$urun_fabrika_id = $siparisbilgisi['urun_fabrika_id'] ?? null;
 
-														$ilgilikisi = $siparisbilgisi['ilgilikisi'];
+														$ilgilikisi = $siparisbilgisi['ilgilikisi'] ?? null;
 
-														$urun_id = $siparisbilgisi['urun_id'];
+														$urun_id = $siparisbilgisi['urun_id'] ?? null;
 
-														$siparissaniye = $siparisbilgisi['siparissaniye'];
+														$siparissaniye = $siparisbilgisi['siparissaniye'] ?? null;
 
 														$siparistarih = date("d-m-Y", $siparissaniye);
 
