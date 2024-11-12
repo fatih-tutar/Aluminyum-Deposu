@@ -335,7 +335,7 @@
 
 													$ustadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_ust}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-													$ustkategoriadi = $ustadcek['kategori_adi'];
+													$ustkategoriadi = $ustadcek['kategori_adi'] ?? null;
 
 										?>
 

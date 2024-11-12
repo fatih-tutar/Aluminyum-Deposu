@@ -333,7 +333,7 @@
                     $ilce = guvenlik($row['ilce']);
                     $iskolu = guvenlik($row['iskolu']);
                     $iskoluadicek = $db->query("SELECT * FROM ziyaret_kategori WHERE id = '{$iskolu}'")->fetch(PDO::FETCH_ASSOC);
-                    $iskoluadi = guvenlik($iskoluadicek['adi']);
+                    $iskoluadi = guvenlik($iskoluadicek['adi'] ?? null);
                     $musteriismi = guvenlik($row['musteriismi']);
                     $yetkilikisi = guvenlik($row['yetkilikisi']);
                     $telefon = guvenlik($row['telefon']);
