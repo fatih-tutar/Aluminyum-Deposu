@@ -2,48 +2,50 @@
 
 	include 'fonksiyonlar/bagla.php';
 
-	$urun_fabrika_id = guvenlik($_GET['id']);
+	if ($girdi != '1') {
+		header("Location:giris.php");
+		exit();
+	}else{
 
-	$query = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$urun_fabrika_id}' AND silik = '0' ORDER BY siparis_id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		$urun_fabrika_id = guvenlik($_GET['id']);
 
-	$hazirlayankisi = $query['hazirlayankisi'];
+		$query = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$urun_fabrika_id}' AND silik = '0' ORDER BY siparis_id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 
-	$siparistarih = date("d-m-Y", time());
+		$hazirlayankisi = $query['hazirlayankisi'];
 
-	$adcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}'")->fetch(PDO::FETCH_ASSOC);
+		$siparistarih = date("d-m-Y", time());
 
-	$urun_fabrika_adi = $adcek['fabrika_adi'];
+		$adcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}'")->fetch(PDO::FETCH_ASSOC);
 
-	$ilgilikisi = $query['ilgilikisi'];
+		$urun_fabrika_adi = $adcek['fabrika_adi'];
 
-if($uye_tipi != '3'){
+		$ilgilikisi = $query['ilgilikisi'];
 
-	if (isset($_POST['formkaydet'])) {
+		if (isset($_POST['formkaydet'])) {
 
-		$siparislistesi = guvenlik($_POST['siparislistesi']);
+			$siparislistesi = guvenlik($_POST['siparislistesi']);
 
-		$siparislistesipatlat = explode(",", $siparislistesi);
+			$siparislistesipatlat = explode(",", $siparislistesi);
 
-		foreach ($siparislistesipatlat as $key => $value) {
-				
-			$query = $db->prepare("UPDATE siparis SET formda = ? WHERE siparis_id = ?"); 
+			foreach ($siparislistesipatlat as $key => $value) {
+					
+				$query = $db->prepare("UPDATE siparis SET formda = ? WHERE siparis_id = ?"); 
 
-			$guncelle = $query->execute(array('1',$value));
+				$guncelle = $query->execute(array('1',$value));
+
+			}
+			
+			$query = $db->prepare("INSERT INTO siparisformlari SET siparisler = ?, fabrikaid = ?, saniye = ?, sirketid = ?, silik = ?");
+
+			$insert = $query->execute(array($siparislistesi,$urun_fabrika_id,$su_an,$uye_sirket,'0'));
+
+			header("Location:yonetim.php");
+
+			exit();
 
 		}
-		
-		$query = $db->prepare("INSERT INTO siparisformlari SET siparisler = ?, fabrikaid = ?, saniye = ?, sirketid = ?, silik = ?");
-
-		$insert = $query->execute(array($siparislistesi,$urun_fabrika_id,$su_an,$uye_sirket,'0'));
-
-		header("Location:yonetim.php");
-
-		exit();
 
 	}
-
-}
-
 ?>
 
 <!DOCTYPE html>

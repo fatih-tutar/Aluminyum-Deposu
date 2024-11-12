@@ -32,9 +32,11 @@
 
 			$fabrikaid = $formbilgileri['fabrikaid'];
 
+			$fabrika = getFactoryInfos($fabrikaid);
+
 			$saniye = $formbilgileri['saniye'];
 
-			$tarih = date("d-m-Y", $saniye);
+			$siparistarih = date("d-m-Y", $saniye);
 
 		}
 
@@ -125,7 +127,7 @@
 
 			<div class="col-md-4">
 				
-				<?php echo $urun_fabrika_adi; ?>
+				<?php echo $fabrika['fabrika_adi'] ?>
 
 			</div>
 

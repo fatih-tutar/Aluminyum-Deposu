@@ -161,8 +161,8 @@
 		</div>
     <div class="div4">
       <!-- Başlık -->
-      <h2 class="mb-4 text-center">Araç Ekleme Formu</h2>
-      <form action="" method="POST" enctype="multipart/form-data">
+      <a href="#" onclick="return false" onmousedown="javascript:ackapa('araceklemeformudivi');"><h2 class="mt-2 text-center"><i class="fas fa-angle-double-down"></i>&nbsp;&nbsp;&nbsp;&nbsp;Araç Ekleme Formu&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-angle-double-down"></i></h2></a>
+      <form action="" method="POST" enctype="multipart/form-data" style="display:none;" id="araceklemeformudivi" class="mt-4">
         <div class="row">
           <div class="col-md-1 col-12">
             <div class="row">
@@ -212,7 +212,7 @@
               <div class="col-md-12 col-7 pb-2"><input type="file" name="ruhsat_pdf" id="ruhsat_pdf_inputu" style="width:88px;"></div>
             </div>
           </div>
-          <div class="col-md-12 col-12">
+          <div class="col-md-12 col-12 mb-2">
             <textarea name="aciklama" id="aciklama" placeholder="Bu alan not girebilirsiniz." class="form-control form-control-sm"></textarea>
           </div>
           <div class="col-md-12">

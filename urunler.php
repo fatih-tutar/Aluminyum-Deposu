@@ -242,7 +242,7 @@
 
 			$urun_adi = guvenlik($_POST['urun_adi']);
 
-			$urun_adet = guvenlik($_POST['urun_adet']);
+			$urun_adet = guvenlik($_POST['urun_adet'] ?? null);
 
 			$urun_palet = guvenlik($_POST['urun_palet'] ?? null);
 
@@ -257,6 +257,8 @@
 			$eskipalet = $eskiadeticek['urun_palet'];
 
 			$eskidepoadet = $eskiadeticek['urun_depo_adet'];
+			
+			$eskiurunalis = $eskiadeticek['urun_alis'];
 
 			if(!isset($_POST['urun_adet'])){
 				$urun_adet = $eskiadet;
@@ -274,7 +276,11 @@
 
 			$urun_boy_olcusu = guvenlik($_POST['urun_boy_olcusu'] ?? null);
 
-			$urun_alis = guvenlik($_POST['urun_alis']);
+			$urun_alis = guvenlik($_POST['urun_alis'] ?? null);
+
+			if(!isset($_POST['urun_alis'])){
+				$urun_alis = $eskiurunalis;
+			}
 
 			$satis = guvenlik($_POST['satis'] ?? null);
 

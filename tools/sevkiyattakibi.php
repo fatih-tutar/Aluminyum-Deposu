@@ -41,7 +41,7 @@
 
                 <select name="sevk_tipi" id="sevk_tipi" class="form-control">
 
-                    <option value="null">Sevk tipi seçiniz.</option>
+                    <option value="">Sevk tipi seçiniz.</option>
                     <option value="0">Müşteri Çağlayan</option>
                     <option value="1">Müşteri Alkop</option>
                     <option value="2">Tarafımızca sevk</option>

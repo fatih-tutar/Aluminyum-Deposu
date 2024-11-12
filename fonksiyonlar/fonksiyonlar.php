@@ -1,5 +1,11 @@
 <?php
 
+	function getFactoryInfos($fabrikaId) {
+		global $db;
+		$fabrika = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$fabrikaId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		return $fabrika;
+	}
+
 	function izinTarihKontrol($izinBaslangicTarihi, $iseBaslamaTarihi, $ofis) {
 		global $db;
 		$izin = $db->query("SELECT * FROM izinler WHERE ofis = '{$ofis}' AND silik = '0' AND durum != '2' AND (
