@@ -908,7 +908,7 @@
 
 						$u_fabrika = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-						$urun_fabrika_adi = $u_fabrika['fabrika_adi'];
+						$urun_fabrika_adi = $u_fabrika['fabrika_adi'] ?? null;
 
 						$urun_aciklama = $orw['urun_aciklama'];
 
