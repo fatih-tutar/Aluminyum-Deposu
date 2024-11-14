@@ -138,7 +138,7 @@
                                     $malzemeAdeti = 0;
                                     foreach($urunArray as $key => $urunId){
                                         $urun = getUrunInfo($urunId);
-                                        if($urun !== null) {
+                                        if($urun !== false) {
                                 ?>
                                             <div class="row mb-1">
                                                 <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
@@ -260,7 +260,7 @@
                                     $malzemeAdeti = 0;
                                     foreach($urunArray as $key => $urunId){
                                         $urun = getUrunInfo($urunId);
-                                        if($urun !== null) {
+                                        if($urun !== false) {
                                 ?>
                                             <div class="row mb-1">
                                                 <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
@@ -376,7 +376,7 @@
                                     $malzemeAdeti = 0;
                                     foreach($urunArray as $key => $urunId){
                                         $urun = getUrunInfo($urunId);
-                                        if($urun !== null) {
+                                        if($urun !== false) {
                                 ?>
                                             <div class="row mb-1">
                                                 <div class="col-4 d-block d-sm-none">Ürün Adı : </div>

@@ -132,7 +132,7 @@
             $totalPrice = 0;
             foreach($urunArray as $key => $urunId){
                 $urun = getUrunInfo($urunId);
-                if($urun !== null) {
+                if($urun !== false) {
         ?>
                     <hr style="border:2px black solid; margin: 0px;" />
 

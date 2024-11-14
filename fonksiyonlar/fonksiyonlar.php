@@ -74,7 +74,7 @@
 			$urunInfo = $urunInfo->fetch(PDO::FETCH_ASSOC);
 			return $urunInfo;
 		}else{
-			return null;
+			return false;
 		}
 	}
 
@@ -147,15 +147,18 @@
 			array_push($lmeArray, $content);
 		}
 
-		$number = $lmeArray[108];
-		$number = str_replace(".", "", $number);
-		$number = str_replace(",", ".", $number);
-		$number = floatval($number);
-		$roundedNumber = intval($number);
-		$lme1 = $roundedNumber + 1;
+		if(isset($lmeArray[22])) {
+			$number = $lmeArray[22];
+			$number = str_replace(".", "", $number);
+			$number = str_replace(",", ".", $number);
+			$number = floatval($number);
+			$roundedNumber = intval($number);
+			$lme1 = $roundedNumber + 1;
 
-		$lme = $lme1;
-
+			$lme = $lme1;
+		}else{
+			$lme = 1;
+		}
 		return $lme;
 	}
 
