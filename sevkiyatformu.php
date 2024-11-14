@@ -126,28 +126,30 @@
             $totalPrice = 0;
             foreach($urunArray as $key => $urunId){
                 $urun = getUrunInfo($urunId);
+                if($urun !== null) {
         ?>
-                <hr style="border:2px black solid; margin: 0px;" />
+                    <hr style="border:2px black solid; margin: 0px;" />
 
-                <div class="row" style="padding: 20px;">
-                    <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-                    <div class="col-md-4 col-8"><?= $urun['urun_adi'].' '.getCategoryShortName($urun['kategori_iki']) ?></div>
-                    <div class="col-4 d-block d-sm-none">Cinsi : </div>
-                    <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
-                    <div class="col-4 d-block d-sm-none">Raf : </div>
-                    <div class="col-md-2 col-8"><?= $urun['urun_raf'] ?></div>
-                    <div class="col-md-4">
-                        <div class="row">
-                            <div class="col-4 d-block d-sm-none">Adet : </div>
-                            <div class="col-md-4 col-8"><?= $adetArray[$key] ?></div>
-                            <div class="col-4 d-block d-sm-none">Kilo : </div>
-                            <div class="col-md-4 col-8"><?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?></div>  
-                            <div class="col-4 d-block d-sm-none">Fiyat : </div>
-                            <div class="col-md-4 col-8"><?= $fiyatArray[$key].' TL'; ?></div>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
+                        <div class="col-md-4 col-8"><?= $urun['urun_adi'].' '.getCategoryShortName($urun['kategori_iki']) ?></div>
+                        <div class="col-4 d-block d-sm-none">Cinsi : </div>
+                        <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
+                        <div class="col-4 d-block d-sm-none">Raf : </div>
+                        <div class="col-md-2 col-8"><?= $urun['urun_raf'] ?></div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-4 d-block d-sm-none">Adet : </div>
+                                <div class="col-md-4 col-8"><?= $adetArray[$key] ?></div>
+                                <div class="col-4 d-block d-sm-none">Kilo : </div>
+                                <div class="col-md-4 col-8"><?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?></div>  
+                                <div class="col-4 d-block d-sm-none">Fiyat : </div>
+                                <div class="col-md-4 col-8"><?= $fiyatArray[$key].' TL'; ?></div>
+                            </div>
                         </div>
                     </div>
-                </div>
         <?php
+                }
             }
         ?>
 

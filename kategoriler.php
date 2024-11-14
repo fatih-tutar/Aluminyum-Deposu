@@ -156,9 +156,9 @@
 
 			$sonurunsirasi++;
 
-			$query = $db->prepare("INSERT INTO urun SET kategori_bir = ?, kategori_iki = ?, urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, urun_fabrika = ?, urun_stok = ?, urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, musteri_ismi = ?, tarih = ?, termin = ?, satis = ?, sirketid = ?");
+			$query = $db->prepare("INSERT INTO urun SET kategori_bir = ?, kategori_iki = ?, urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, urun_fabrika = ?, urun_stok = ?, urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, musteri_ismi = ?, tarih = ?, termin = ?, satis = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($kategori_bir,$kategori_iki,'',$urun_adi,'','','','','','','','','','','',$sonurunsirasi,'','','','',$uye_sirket));
+			$insert = $query->execute(array($kategori_bir,$kategori_iki,'',$urun_adi,'','','','','','','','','','','',$sonurunsirasi,'','','','',$uye_sirket,'0'));
 
 			header("Location:kategoriler.php");
 

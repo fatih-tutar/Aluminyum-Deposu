@@ -140,22 +140,24 @@
                                     $malzemeAdeti = 0;
                                     foreach($urunArray as $key => $urunId){
                                         $urun = getUrunInfo($urunId);
+                                        if($urun !== null){
                                 ?>
-                                        <div class="row mb-1">
-                                            <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-                                            <div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
-                                            <div class="col-4 d-block d-sm-none">Cinsi : </div>
-                                            <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
-                                            <div class="col-4 d-block d-sm-none">Adet : </div>
-                                            <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
-                                            <div class="col-4 d-block d-sm-none">Kilo : </div>
-                                            <div class="col-md-2 col-8"><?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?></div>
-                                            <div class="col-4 d-block d-sm-none">Fiyat : </div>
-                                            <div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
-                                        </div>
-                                        <hr class="my-1" style="border-top:1px solid white;"/>
+                                            <div class="row mb-1">
+                                                <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
+                                                <div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
+                                                <div class="col-4 d-block d-sm-none">Cinsi : </div>
+                                                <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
+                                                <div class="col-4 d-block d-sm-none">Adet : </div>
+                                                <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
+                                                <div class="col-4 d-block d-sm-none">Kilo : </div>
+                                                <div class="col-md-2 col-8"><?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?></div>
+                                                <div class="col-4 d-block d-sm-none">Fiyat : </div>
+                                                <div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
+                                            </div>
+                                            <hr class="my-1" style="border-top:1px solid white;"/>
                                 <?php
-                                        $malzemeAdeti++;
+                                            $malzemeAdeti++;
+                                        }
                                     }
                                 ?>
                                 <div class="row">
