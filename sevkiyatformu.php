@@ -2,36 +2,42 @@
 
     include 'fonksiyonlar/bagla.php';
 
+    if ($girdi != '1') {
+		header("Location:giris.php");
+		exit();
+	}else{
 
-    $sevkiyatID = guvenlik($_GET['id']);
+        $sevkiyatID = guvenlik($_GET['id']);
 
-    $sevkiyat = $db->query("SELECT * FROM sevkiyat WHERE id = '{$sevkiyatID}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+        $sevkiyat = $db->query("SELECT * FROM sevkiyat WHERE id = '{$sevkiyatID}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 
-    $urunler = guvenlik($sevkiyat['urunler']);
-    $urunArray = explode(",",$urunler);
-    $firmaId = guvenlik($sevkiyat['firma_id']);
-    $firmaInfos = getFirmaInfos($firmaId);
-    $adetler = guvenlik($sevkiyat['adetler']);
-    $adetArray = explode(",",$adetler);
-    $kilolar = guvenlik($sevkiyat['kilolar']);
-    if(strpos($kilolar, ',')){
-        $kiloArray = explode(",",$kilolar);
-        $toplamkg = 0;
-        foreach($kiloArray as $kilo){
-            $toplamkg += $kilo;
+        $urunler = guvenlik($sevkiyat['urunler']);
+        $urunArray = explode(",",$urunler);
+        $firmaId = guvenlik($sevkiyat['firma_id']);
+        $firmaInfos = getFirmaInfos($firmaId);
+        $adetler = guvenlik($sevkiyat['adetler']);
+        $adetArray = explode(",",$adetler);
+        $kilolar = guvenlik($sevkiyat['kilolar']);
+        if(strpos($kilolar, ',')){
+            $kiloArray = explode(",",$kilolar);
+            $toplamkg = 0;
+            foreach($kiloArray as $kilo){
+                $toplamkg += $kilo;
+            }
         }
+        $fiyatlar = guvenlik($sevkiyat['fiyatlar']);
+        $fiyatArray = explode("-",$fiyatlar);
+        $olusturan = guvenlik($sevkiyat['olusturan']);
+        $hazirlayan = guvenlik($sevkiyat['hazirlayan']);
+        $faturaci = guvenlik($sevkiyat['faturaci']);
+        $sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
+        $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
+        $aciklama = guvenlik($sevkiyat['aciklama']);
+        $saniye = guvenlik($sevkiyat['saniye']);
+        $tarih = getdmY($saniye);
+        $saat = getHis($saniye);
+
     }
-    $fiyatlar = guvenlik($sevkiyat['fiyatlar']);
-    $fiyatArray = explode("-",$fiyatlar);
-    $olusturan = guvenlik($sevkiyat['olusturan']);
-    $hazirlayan = guvenlik($sevkiyat['hazirlayan']);
-    $faturaci = guvenlik($sevkiyat['faturaci']);
-    $sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
-    $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
-    $aciklama = guvenlik($sevkiyat['aciklama']);
-    $saniye = guvenlik($sevkiyat['saniye']);
-    $tarih = getdmY($saniye);
-    $saat = getHis($saniye);
 
 ?>
 <!DOCTYPE html>
