@@ -18,8 +18,9 @@
 
 		}else{
 
-			$islemurunid = guvenlik($_GET['id']);
-
+			if(isset($_GET['id']) && empty($_GET['id']) === false) {
+				$islemurunid = guvenlik($_GET['id']);
+			}
 		}
 
 	}
