@@ -466,10 +466,10 @@
 
 		global $db;
 
-		$dbhost = "aluminyumstok.com"; //Veritabanın bulunduğu host
-		$dbuser = "aluminy4_fatih"; //Veritabanı Kullanıcı Adı
-		$dbpass = "ZWT3?CR?k}+y"; //Veritabanı Şifresi
-		$dbdata = "aluminy4_db'"; //Veritabanı Adı
+		$dbhost = "aluminyumdeposu.com"; //Veritabanın bulunduğu host
+		$dbuser = "u9022286_depokullanici"; //Veritabanı Kullanıcı Adı
+		$dbpass = "Sifrem10"; //Veritabanı Şifresi
+		$dbdata = "u9022286_depoveritabani'"; //Veritabanı Adı
 
 		include 'DBBackupRestore.class.php'; //DBBackup.class.php dosyamızı dahil ediyoruz
 		$dbBackup = new DBYedek(); // class'imizla $dbBackup nesnemizi olusturduk
@@ -517,10 +517,10 @@
      
 		$bilgiler = array(
 	        'src' => 'mysql', 
-	        'host' => 'aluminyumstok.com',  
-	        'kadi' => 'aluminy4_fatih',  
-	        'parola' => 'ZWT3?CR?k}+y',
-	        'veritabani' => 'aluminy4_db'
+	        'host' => 'aluminyumdeposu.com',  
+	        'kadi' => 'u9022286_depokullanici',  
+	        'parola' => 'Sifrem10',
+	        'veritabani' => 'u9022286_depoveritabani'
         );
  
         $olustur = new Yedekle($bilgiler);
