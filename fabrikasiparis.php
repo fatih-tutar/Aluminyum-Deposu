@@ -75,45 +75,47 @@
 
     				$i = 0;
 
-						$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}' AND taslak = '0' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
+					$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}' AND taslak = '0' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
 
-						if ( $sipariscek->rowCount() ){
+					if ( $sipariscek->rowCount() ){
 
-							foreach( $sipariscek as $row ){
+						foreach( $sipariscek as $row ){
 
-								$i++;
+							$i++;
 
-								$siparis_id = $row['siparis_id'];
+							$siparis_id = $row['siparis_id'];
 
-								$urun_adi = $row['urun_adi'];
+							$urun_adi = $row['urun_adi'];
 
-								$hazirlayankisi = $row['hazirlayankisi'];
+							$hazirlayankisi = $row['hazirlayankisi'];
 
-								$urun_siparis_aded = $row['urun_siparis_aded'];
+							$urun_siparis_aded = $row['urun_siparis_aded'];
 
-								$urun_fabrika_id = $row['urun_fabrika_id'];
+							$urun_fabrika_id = $row['urun_fabrika_id'];
 
-								$ilgilikisi = $row['ilgilikisi'];
+							$ilgilikisi = $row['ilgilikisi'];
 
-								$siparissaniye = $row['siparissaniye'];
+							$siparissaniye = $row['siparissaniye'];
 
-								$terminsaniye = $row['terminsaniye'];
+							$terminsaniye = $row['terminsaniye'];
 
-								$siparisboy = $row['siparisboy'];
+							$siparisboy = $row['siparisboy'];
 
-								$urun_siparis_aded = $row['urun_siparis_aded'];
+							$urun_siparis_aded = $row['urun_siparis_aded'];
 
-								$siparistarih = date("d-m-Y", $siparissaniye);
+							$siparistarih = date("d-m-Y", $siparissaniye);
 
-								$siparisayi= date("m", $siparissaniye); if($i == 1){ $hafizaay = $siparisayi; }
+							$siparisayi= date("m", $siparissaniye); if($i == 1){ $hafizaay = $siparisayi; }
 
-								$siparisyili= date("Y", $siparissaniye); if($i == 1){ $hafizayil = $siparisyili; }
+							$siparisyili= date("Y", $siparissaniye); if($i == 1){ $hafizayil = $siparisyili; }
 
-								$termintarih = date("d-m-Y", $terminsaniye);
+							$termintarih = date("d-m-Y", $terminsaniye);
 
-								$urun_id = $row['urun_id'];
+							$urun_id = $row['urun_id'];
 
-								$urunbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
+							$urunbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
+
+							if($urunbilcek) {
 
 								$kategori_bir = $urunbilcek['kategori_bir'];	
 
@@ -147,13 +149,13 @@
 
 					?>
 
-								<hr style="border-color: black; border-width: 2px;" />
+									<hr style="border-color: black; border-width: 2px;" />
 
-								<div class="row">
-									<div class="col-12" style="font-weight: bold; font-size: 21px; color:red;">
-										<?php echo ($siparisyili + 1)." yılında ".$yiltoplami." kg sipariş teslim alınmıştır."; ?>
+									<div class="row">
+										<div class="col-12" style="font-weight: bold; font-size: 21px; color:red;">
+											<?php echo ($siparisyili + 1)." yılında ".$yiltoplami." kg sipariş teslim alınmıştır."; ?>
+										</div>
 									</div>
-								</div>
 
 					<?php
 									$yiltoplami = $kilo;
@@ -165,13 +167,13 @@
 
 					?>
 
-								<hr style="border-color: black; border-width: 2px;" />
+									<hr style="border-color: black; border-width: 2px;" />
 
-								<div class="row">
-									<div class="col-12">
-										<?php echo $siparisyili." ".ayAdi($siparisayi + 1)." ayında ".$aytoplami." kg sipariş teslim alınmıştır."; ?>
+									<div class="row">
+										<div class="col-12">
+											<?php echo $siparisyili." ".ayAdi($siparisayi + 1)." ayında ".$aytoplami." kg sipariş teslim alınmıştır."; ?>
+										</div>
 									</div>
-								</div>
 
 					<?php
 									$aytoplami = $kilo;
@@ -182,6 +184,8 @@
 							}
 
 						}
+
+					}
 
 					?>
     			<hr style="border-color: black; border-width: 2px;" />

@@ -103,69 +103,73 @@
 
 								$urun_id = $row['urun_id'];
 
-								$urunbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
+								$urunbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
 
-								$kategori_bir = $urunbilcek['kategori_bir'];	
+								if(!$urunbilcek) {
 
-								$kategori_iki = $urunbilcek['kategori_iki'];
+									$kategori_bir = $urunbilcek['kategori_bir'];	
 
-								$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
+									$kategori_iki = $urunbilcek['kategori_iki'];
 
-								$kategori_bir_adi = $katadcek['kategori_adi'];
+									$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
 
-								$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}'")->fetch(PDO::FETCH_ASSOC);
+									$kategori_bir_adi = $katadcek['kategori_adi'];
 
-								$kategori_iki_adi = $katadcek['kategori_adi'];
+									$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}'")->fetch(PDO::FETCH_ASSOC);
 
-								$urun_birimkg = $urunbilcek['urun_birimkg'];
+									$kategori_iki_adi = $katadcek['kategori_adi'];
 
-								$kilo = $urun_siparis_aded * $urun_birimkg;
+									$urun_birimkg = $urunbilcek['urun_birimkg'];
 
-								if($siparisayi == $hafizaay){
+									$kilo = $urun_siparis_aded * $urun_birimkg;
 
-									$aytoplami += $kilo;
+									if($siparisayi == $hafizaay){
 
-								}
+										$aytoplami += $kilo;
 
-								if($siparisyili == $hafizayil){
+									}
 
-									$yiltoplami += $kilo;
+									if($siparisyili == $hafizayil){
 
-								}
+										$yiltoplami += $kilo;
 
-								if($siparisyili != $hafizayil){
+									}
 
-					?>
-
-								<hr style="border-color: black; border-width: 2px;" />
-
-								<div class="row">
-									<div class="col-12" style="font-weight: bold; font-size: 21px; color:red;">
-										<?php echo ($siparisyili + 1)." yılında ".$yiltoplami." kg sipariş teslim alınmıştır."; ?>
-									</div>
-								</div>
-
-					<?php
-									$yiltoplami = $kilo;
-									$hafizayil = $siparisyili;
-
-								}
-
-								if($siparisayi != $hafizaay){
+									if($siparisyili != $hafizayil){
 
 					?>
 
-								<hr style="border-color: black; border-width: 2px;" />
+									<hr style="border-color: black; border-width: 2px;" />
 
-								<div class="row">
-									<div class="col-12">
-										<?php echo $siparisyili." ".ayAdi($siparisayi + 1)." ayında ".$aytoplami." kg sipariş teslim alınmıştır."; ?>
+									<div class="row">
+										<div class="col-12" style="font-weight: bold; font-size: 21px; color:red;">
+											<?php echo ($siparisyili + 1)." yılında ".$yiltoplami." kg sipariş teslim alınmıştır."; ?>
+										</div>
 									</div>
-								</div>
 
 					<?php
-									$aytoplami = $kilo;
-									$hafizaay = $siparisayi;
+										$yiltoplami = $kilo;
+										$hafizayil = $siparisyili;
+
+									}
+
+									if($siparisayi != $hafizaay){
+
+					?>
+
+										<hr style="border-color: black; border-width: 2px;" />
+
+										<div class="row">
+											<div class="col-12">
+												<?php echo $siparisyili." ".ayAdi($siparisayi + 1)." ayında ".$aytoplami." kg sipariş teslim alınmıştır."; ?>
+											</div>
+										</div>
+
+					<?php
+										$aytoplami = $kilo;
+										$hafizaay = $siparisayi;
+
+									}
 
 								}
 

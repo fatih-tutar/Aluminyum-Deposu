@@ -3,6 +3,11 @@
 
     include 'fonksiyonlar/bagla.php';
 
+    if ($girdi != '1') {
+		header("Location:giris.php");
+		exit();
+	}
+
 /* Database Bağlantısı */
     
     if (isset($_REQUEST['term'])) { // Bir terim gelip gelmediğini kontrol ediyoruz.
