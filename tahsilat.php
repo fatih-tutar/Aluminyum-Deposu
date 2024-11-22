@@ -52,9 +52,9 @@
 
 			}else{
 			
-				$sil = $db->prepare("DELETE FROM firmalar WHERE firmaid = ?");
+				$sil = $db->prepare("UPDATE firmalar SET silik = ? WHERE firmaid = ?");
 
-				$delete = $sil->execute(array($firmaid));
+				$delete = $sil->execute(array('1',$firmaid));
 
 				header("Location:firmalar.php");
 
@@ -100,9 +100,9 @@
 
 			$firmaadres = guvenlik($_POST['firmaadres']);
 
-			$query = $db->prepare("INSERT INTO firmalar SET firmaadi = ?, firmatel = ?, firmaeposta = ?, firmaadres = ?, sirketid = ?");
+			$query = $db->prepare("INSERT INTO firmalar SET firmaadi = ?, firmatel = ?, firmaeposta = ?, firmaadres = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($firmaadi, $firmatel, $firmaeposta, $firmaadres, $uye_sirket));
+			$insert = $query->execute(array($firmaadi, $firmatel, $firmaeposta, $firmaadres, $uye_sirket,'0'));
 
 			header("Location:firmalar.php");
 

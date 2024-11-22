@@ -30,9 +30,9 @@
 
 			}else{
 
-				$sil = $db->prepare("DELETE FROM kategori WHERE kategori_id = ?");
+				$sil = $db->prepare("UPDATE kategori SET silik = ? WHERE kategori_id = ?");
 
-				$delete = $sil->execute(array($kategori_id));
+				$delete = $sil->execute(array('1',$kategori_id));
 
 				header("Location:kategoriler.php");
 
@@ -122,9 +122,9 @@
 
             move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/kategoriler/".$upload_file);
 
-			$query = $db->prepare("INSERT INTO kategori SET kategori_adi = ?, kategori_tipi = ?, kategori_ust = ?, resim = ?, sutunlar = ?, sirketid = ?");
+			$query = $db->prepare("INSERT INTO kategori SET kategori_adi = ?, kategori_tipi = ?, kategori_ust = ?, resim = ?, sutunlar = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($kategori_adi,$kategori_tipi,'0',$upload_file,$sutunlar,$uye_sirket));
+			$insert = $query->execute(array($kategori_adi,$kategori_tipi,'0',$upload_file,$sutunlar,$uye_sirket,'0'));
 
 			header("Location:kategoriler.php");
 

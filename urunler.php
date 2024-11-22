@@ -114,9 +114,9 @@
 
 				}
 				
-				$sil = $db->prepare("DELETE FROM urun WHERE urun_id = ?");
+				$sil = $db->prepare("UPDATE urun SET silik = ? WHERE urun_id = ?");
 
-				$delete = $sil->execute(array($urun_id));
+				$delete = $sil->execute(array('1',$urun_id));
 
 				header("Location:urunler.php?id=".$kategori_id."&urunsilindi#".$urun_id);
 

@@ -56,9 +56,9 @@
 
 			}else{
 			
-				$sil = $db->prepare("DELETE FROM fabrikalar WHERE fabrika_id = ?");
+				$sil = $db->prepare("UPDATE fabrikalar SET silik = ? WHERE fabrika_id = ?");
 
-				$delete = $sil->execute(array($fabrika_id));
+				$delete = $sil->execute(array('1',$fabrika_id));
 
 				$siraid = guvenlik($_POST['siraid']);
 
@@ -112,9 +112,9 @@
 
 			$fabrikaalacaktarih = 0;
 
-			$query = $db->prepare("INSERT INTO fabrikalar SET fabrika_adi = ?, fabrikatel = ?, fabrikaeposta = ?, fabrikaadres = ?, fabrikaalacak = ?, fabrikaalacaktarih = ?, sirketid = ?");
+			$query = $db->prepare("INSERT INTO fabrikalar SET fabrika_adi = ?, fabrikatel = ?, fabrikaeposta = ?, fabrikaadres = ?, fabrikaalacak = ?, fabrikaalacaktarih = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($fabrika_adi, $fabrikatel, $fabrikaeposta, $fabrikaadres, $fabrikaalacak, $fabrikaalacaktarih, $uye_sirket));
+			$insert = $query->execute(array($fabrika_adi, $fabrikatel, $fabrikaeposta, $fabrikaadres, $fabrikaalacak, $fabrikaalacaktarih, $uye_sirket,'0'));
 
 			header("Location:fabrikalar.php");
 

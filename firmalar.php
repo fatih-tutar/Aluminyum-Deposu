@@ -56,9 +56,9 @@
 
 			}else{
 			
-				$sil = $db->prepare("DELETE FROM firmalar WHERE firmaid = ?");
+				$sil = $db->prepare("UPDATE firmalar SET silik = ? WHERE firmaid = ?");
 
-				$delete = $sil->execute(array($firmaid));
+				$delete = $sil->execute(array('1',$firmaid));
 
 				header("Location:firmalar.php#".($siraid - 2));
 
@@ -110,9 +110,9 @@
 
 			$firmaalacaktarih = 0;
 
-			$query = $db->prepare("INSERT INTO firmalar SET firmaadi = ?, firmatel = ?, firmaeposta = ?, firmaadres = ?, firmaalacak = ?, firmaalacaktarih = ?, sirketid = ?");
+			$query = $db->prepare("INSERT INTO firmalar SET firmaadi = ?, firmatel = ?, firmaeposta = ?, firmaadres = ?, firmaalacak = ?, firmaalacaktarih = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($firmaadi, $firmatel, $firmaeposta, $firmaadres, $firmaalacak, $firmaalacaktarih, $uye_sirket));
+			$insert = $query->execute(array($firmaadi, $firmatel, $firmaeposta, $firmaadres, $firmaalacak, $firmaalacaktarih, $uye_sirket,'0'));
 
 			header("Location:firmalar.php");
 
@@ -755,79 +755,82 @@
 
 													$turunid = $tklfrow['turunid'];
 
-													$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+													$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND silik = '0' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-													$urun_adi = $urunbilgicek['urun_adi'];
+													if($urunbilgicek) {
+													
+														$urun_adi = $urunbilgicek['urun_adi'];
 
-													$urun_birimkg = $urunbilgicek['urun_birimkg'];
+														$urun_birimkg = $urunbilgicek['urun_birimkg'];
 
-													$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+														$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-													$kategori_bir = $katbilcek['kategori_bir'];
+														$kategori_bir = $katbilcek['kategori_bir'];
 
-													$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+														$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-													$kategori_bir_adi = $katadcek['kategori_adi'];
+														$kategori_bir_adi = $katadcek['kategori_adi'];
 
-													$kategori_iki = $katbilcek['kategori_iki'];
+														$kategori_iki = $katbilcek['kategori_iki'];
 
-													$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+														$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-													$kategori_iki_adi = $katadcek['kategori_adi'];
+														$kategori_iki_adi = $katadcek['kategori_adi'];
 
-													$tverilenfirmaid = $tklfrow['tverilenfirma'];
+														$tverilenfirmaid = $tklfrow['tverilenfirma'];
 
-													$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+														$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-													$tverilenfirmaadi = $firmabilgi['firmaadi'];
+														$tverilenfirmaadi = $firmabilgi['firmaadi'];
 
-													$tadet = $tklfrow['tadet'];
+														$tadet = $tklfrow['tadet'];
 
-													$tsatisfiyati = $tklfrow['tsatisfiyati'];
+														$tsatisfiyati = $tklfrow['tsatisfiyati'];
 
-													$tsaniye = $tklfrow['tsaniye'];
+														$tsaniye = $tklfrow['tsaniye'];
 
-													$ttarih = date("d-m-Y",$tsaniye);
+														$ttarih = date("d-m-Y",$tsaniye);
 
-													$toplam_fiyat = $tadet * $urun_birimkg * $tsatisfiyati;
+														$toplam_fiyat = $tadet * $urun_birimkg * $tsatisfiyati;
 
 										?>
 
-													<div class="row">
-														
-														<div class="col-3"><?php echo $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
+														<div class="row">
+															
+															<div class="col-3"><?php echo $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
 
-														<div class="col-3"><?php echo $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
+															<div class="col-3"><?php echo $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
 
-														<div class="col-1"><?php echo $tadet; ?></div>
+															<div class="col-1"><?php echo $tadet; ?></div>
 
-														<div class="col-1"><?php echo $tsatisfiyati." TL"; ?></div>
+															<div class="col-1"><?php echo $tsatisfiyati." TL"; ?></div>
 
-														<div class="col-2"><?php echo $toplam_fiyat." TL"; ?></div>
+															<div class="col-2"><?php echo $toplam_fiyat." TL"; ?></div>
 
-														<div class="col-1"><?php echo $ttarih; ?></div>
+															<div class="col-1"><?php echo $ttarih; ?></div>
 
-														<div class="col-1" style="text-align: right;">
-																
-															<form action="" method="POST">
+															<div class="col-1" style="text-align: right;">
+																	
+																<form action="" method="POST">
 
-																<input type="hidden" name="teklifformid" value="<?php echo $tformid; ?>">
+																	<input type="hidden" name="teklifformid" value="<?php echo $tformid; ?>">
 
-																<input type="hidden" name="tekliflistesi" value="<?php echo $tekliflistesi; ?>">
+																	<input type="hidden" name="tekliflistesi" value="<?php echo $tekliflistesi; ?>">
 
-																<input type="hidden" name="teklifkey" value="<?php echo $key; ?>">
+																	<input type="hidden" name="teklifkey" value="<?php echo $key; ?>">
 
-																<input type="hidden" name="teklifid" value="<?php echo $teklifid; ?>">
-																
-																<button type="submit" class="btn btn-danger btn-sm" name="formluteklifsil" style="margin-bottom: 5px;">Sil</button>
+																	<input type="hidden" name="teklifid" value="<?php echo $teklifid; ?>">
+																	
+																	<button type="submit" class="btn btn-danger btn-sm" name="formluteklifsil" style="margin-bottom: 5px;">Sil</button>
 
-															</form>
+																</form>
+
+															</div>
 
 														</div>
 
-													</div>
-
 										<?php
+													}
 
 												} ?>
 
