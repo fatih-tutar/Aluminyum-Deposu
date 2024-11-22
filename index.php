@@ -259,13 +259,20 @@
 			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
 			$malzemeAdeti = guvenlik($_POST['malzemeAdeti']);
 			$kilolar = guvenlik($_POST['kilolar']);
+			if(!empty($kilolar) && !is_numeric($kilolar)){
+				$hata = '<br/><div class="alert alert-danger" role="alert">Kilo kısmına sadece sayısal bir değer girebilirsiniz.</div>'; 
+			}
 			if(empty($kilolar)){
 				for($i = 0; $i < $malzemeAdeti; $i++){
 					if(!empty(guvenlik($_POST['kilo_'.$i]))){ 
-						if($i == 0){
-							$kilolar = guvenlik($_POST['kilo_'.$i]);
+						if(is_numeric($_POST['kilo_'.$i])){
+							if($i == 0){
+								$kilolar = guvenlik($_POST['kilo_'.$i]);
+							}else{
+								$kilolar = $kilolar.",".guvenlik($_POST['kilo_'.$i]);
+							}
 						}else{
-							$kilolar = $kilolar.",".guvenlik($_POST['kilo_'.$i]);
+							$hata = '<br/><div class="alert alert-danger" role="alert">Kilo kısmına sadece sayısal bir değer girebilirsiniz.</div>'; 
 						}
 					}
 				}	
@@ -273,9 +280,13 @@
 			if(!empty($kilolar)){
 				$query = $db->prepare("UPDATE sevkiyat SET kilolar = ?, durum = ?, hazirlayan = ? WHERE id = ?");
 				$update = $query->execute(array($kilolar,'1',$uye_id,$sevkiyatID));
+			}else{
+				$hata = '<br/><div class="alert alert-danger" role="alert">Ürünlere tek tek veya toplam olarak kilo girmelisiniz.</div>'; 
 			}
-			header("Location: index.php");
-			exit();
+			if(!$hata){
+				header("Location: index.php");
+				exit();
+			}
 		}
 
 		if(isset($_POST['sevkiyatsil'])){
