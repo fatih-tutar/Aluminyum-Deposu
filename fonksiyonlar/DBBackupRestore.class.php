@@ -17,7 +17,7 @@ class DBYedek {
 public function __construct() {
     global $dbhost, $dbuser, $dbpass, $dbdata;
 	try {
-		$this->baglan = new PDO("mysql:host=aluminyumdeposu.com;dbname=u9022286_depoveritabani","u9022286_depokullanici","Sifrem10",
+		$this->baglan = new PDO("mysql:host=aluminyumstok.com;dbname=aluminy4_db","aluminy4_fatih","ZWT3?CR?k}+y",
 		array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 		//echo "Veritabanı bağlantısı PDO:: >>>> ΟΚ<br><br>";
 	} catch (PDOException $e) {
