@@ -800,93 +800,96 @@
 
 															$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-															$urun_adi = $urunbilgicek['urun_adi'];
+															if($urunbilgicek) {
 
-															$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+																$urun_adi = $urunbilgicek['urun_adi'];
 
-															$kategori_bir = $katbilcek['kategori_bir'];
+																$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-															$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+																$kategori_bir = $katbilcek['kategori_bir'];
 
-															$kategori_bir_adi = $katadcek['kategori_adi'];
+																$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-															$kategori_iki = $katbilcek['kategori_iki'];
+																$kategori_bir_adi = $katadcek['kategori_adi'];
 
-															$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+																$kategori_iki = $katbilcek['kategori_iki'];
 
-															$kategori_iki_adi = $katadcek['kategori_adi'];
+																$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
 
-															$siparis_id = $siparisbilgisi['siparis_id'];
+																$kategori_iki_adi = $katadcek['kategori_adi'];
 
-															$hazirlayankisi = $siparisbilgisi['hazirlayankisi'];
+																$siparis_id = $siparisbilgisi['siparis_id'];
 
-															$urun_siparis_aded = $siparisbilgisi['urun_siparis_aded'];
+																$hazirlayankisi = $siparisbilgisi['hazirlayankisi'];
 
-															$urun_fabrika_id = $siparisbilgisi['urun_fabrika_id'];
+																$urun_siparis_aded = $siparisbilgisi['urun_siparis_aded'];
 
-															$ilgilikisi = $siparisbilgisi['ilgilikisi'];
+																$urun_fabrika_id = $siparisbilgisi['urun_fabrika_id'];
 
-															$urun_id = $siparisbilgisi['urun_id'];
+																$ilgilikisi = $siparisbilgisi['ilgilikisi'];
 
-															$siparissaniye = $siparisbilgisi['siparissaniye'];
+																$urun_id = $siparisbilgisi['urun_id'];
 
-															$siparistarih = date("d-m-Y", $siparissaniye);
+																$siparissaniye = $siparisbilgisi['siparissaniye'];
 
-															$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+																$siparistarih = date("d-m-Y", $siparissaniye);
 
-															$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
+																$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+
+																$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
 
 												?>
 
-															<div class="row">
+																<div class="row">
 
-																<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Hazırlayan</b></div>
-																
-																<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $hazirlayankisi; ?></div>
+																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Hazırlayan</b></div>
+																	
+																	<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $hazirlayankisi; ?></div>
 
-																<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Fabrika</b></div>
+																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Fabrika</b></div>
 
-																<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $urun_fabrika_adi; ?></div>
+																	<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $urun_fabrika_adi; ?></div>
 
-																<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">İlgili</b></div>
+																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">İlgili</b></div>
 
-																<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $ilgilikisi; ?></div>
+																	<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $ilgilikisi; ?></div>
 
-																<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Ürün</b></div>
+																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Ürün</b></div>
 
-																<div class="col-md-3 col-8" style="margin-top: 7px;"><?php echo $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
+																	<div class="col-md-3 col-8" style="margin-top: 7px;"><?php echo $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
 
-																<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Adet</b></div>
+																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Adet</b></div>
 
-																<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $urun_siparis_aded; ?></div>
+																	<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $urun_siparis_aded; ?></div>
 
-																<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Tarih</b></div>
+																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Tarih</b></div>
 
-																<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $siparistarih; ?></div>
+																	<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $siparistarih; ?></div>
 
-																<div class="col-md-1 col-12" style="margin-top: 7px; text-align: right;">
-														
-																	<form action="" method="POST">
+																	<div class="col-md-1 col-12" style="margin-top: 7px; text-align: right;">
+															
+																		<form action="" method="POST">
 
-																		<input type="hidden" name="siparisformid" value="<?php echo $formid; ?>">
+																			<input type="hidden" name="siparisformid" value="<?php echo $formid; ?>">
 
-																		<input type="hidden" name="siparisler" value="<?php echo $siparisler; ?>">
+																			<input type="hidden" name="siparisler" value="<?php echo $siparisler; ?>">
 
-																		<input type="hidden" name="sipariskey" value="<?php echo $key; ?>">
+																			<input type="hidden" name="sipariskey" value="<?php echo $key; ?>">
 
-																		<input type="hidden" name="siparis_id" value="<?php echo $siparis_id; ?>">
+																			<input type="hidden" name="siparis_id" value="<?php echo $siparis_id; ?>">
 
-																		<input type="hidden" name="siraid" value="<?php echo $id; ?>">
-																		
-																		<button type="submit" class="btn btn-danger btn-sm btn-block" name="formlusiparissil" style="margin-bottom: 5px;">Sil</button>
+																			<input type="hidden" name="siraid" value="<?php echo $id; ?>">
+																			
+																			<button type="submit" class="btn btn-danger btn-sm btn-block" name="formlusiparissil" style="margin-bottom: 5px;">Sil</button>
 
-																	</form>
+																		</form>
+
+																	</div>
 
 																</div>
 
-															</div>
-
 												<?php
+															}
 														}
 
 													}

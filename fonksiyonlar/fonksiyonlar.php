@@ -69,7 +69,11 @@
 	function getUsername($userId){
 		global $db;
 		$user = $db->query("SELECT uye_adi FROM uyeler WHERE uye_id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-		return $user['uye_adi'];
+		if($user) {
+			return $user['uye_adi'];
+		}else{
+			return null;
+		}
 	}
 
 	function getCategoryInfo($categoryId){
