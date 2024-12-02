@@ -68,11 +68,13 @@
                     $adetler = guvenlik($sevkiyat['adetler']);
                     $adetArray = explode(",",$adetler);
                     $kilolar = guvenlik($sevkiyat['kilolar']);
-                    if(strpos($kilolar, ',')){
-                        $kiloArray = explode(",",$kilolar);
+                    if (strpos($kilolar, ',')) {
+                        $kiloArray = array_map('trim', explode(",", $kilolar)); // Boşlukları temizle
                         $toplamkg = 0;
-                        foreach($kiloArray as $kilo){
-                            $toplamkg += $kilo;
+                        foreach ($kiloArray as $kilo) {
+                            if (is_numeric($kilo)) {
+                                $toplamkg += $kilo;
+                            }
                         }
                     }
                     $fiyatlar = guvenlik($sevkiyat['fiyatlar']);
