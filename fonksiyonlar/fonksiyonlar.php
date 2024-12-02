@@ -127,8 +127,10 @@
 	function getCategoryName($categoryId){
 		global $db;
 		$category = $db->query("SELECT kategori_adi FROM kategori WHERE kategori_id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-		$categoryName = $category['kategori_adi'];
-		return $categoryName;
+		if($category && isset($category['kategori_adi'])){
+            return $category['kategori_adi'];
+        }
+		return null;
 	}
 
 	function getUrunInfo($urunId){
