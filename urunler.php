@@ -192,54 +192,44 @@
 
 			if (isset($_POST['sevkiyatkaydet'])) {
 
-				$urunId = guvenlik($_POST['urun_id']);
-
-				$adet = guvenlik($_POST['adet']);
-
-				$fiyat = guvenlik($_POST['fiyat']);
-
-				$sevkTipi =  guvenlik($_POST['sevk_tipi']);
-
-				$aciklama =  guvenlik($_POST['aciklama']);
-
-				$firma = guvenlik($_POST['firma']);
-
-				$firmaidcek = $db->query("SELECT * FROM firmalar WHERE firmaadi = '{$firma}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
-
-				$firmaId = $firmaidcek['firmaid'];
-
-				$sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-				
-				if($sevkiyatList){
-
-					$urunler = guvenlik($sevkiyatList['urunler']);
-
-					$adetler = guvenlik($sevkiyatList['adetler']);
-
-					$fiyatlar = guvenlik($sevkiyatList['fiyatlar']);
-
-					$urunler = $urunler.",".$urunId;
-
-					$adetler = $adetler.",".$adet;
-
-					$fiyatlar = $fiyatlar."-".$fiyat;
-
-					$query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?"); 
-
-					$update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0','0', $uye_sirket));
-
-				}else{
-
-					$query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-
-					$insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$uye_id,'',$sevkTipi,$aciklama,'0','0',$su_an, $uye_sirket));	
-
-				}			
-
-				header("Location:urunler.php?id=".$kategori_id."&u=".$urunId."&sevkiyateklendi#".$urunId);
-
-				exit();
-
+                $urun = $_POST['urun'];
+                $adet = guvenlik($_POST['adet']);
+                $fiyat = guvenlik($_POST['fiyat']);
+                $sevkTipi =  guvenlik($_POST['sevk_tipi']);
+                $aciklama =  guvenlik($_POST['aciklama']);
+                $firma = guvenlik($_POST['firma']);
+                if(empty($urun)){
+                    $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir ürün seçiniz.</div>';
+                }else if(empty($adet)){
+                    $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir adet belirtiniz.</div>';
+                }else if(empty($fiyat)){
+                    $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir fiyat yazınız.</div>';
+                }else if(empty($sevkTipi) || $sevkTipi === "null") {
+                    $hata = '<br/><div class="alert alert-danger" role="alert">Sevk tipi boş bırakılamaz.</div>';
+                }else {
+                    $urunArray = explode("/", $urun);
+                    $urun = trim($urunArray[0]);
+                    $kategori_iki = trim($urunArray[1]);
+                    $kategori_bir = trim($urunArray[2]);
+                    $urunId = getUrunID($urun, $kategori_iki, $kategori_bir);
+                    $firmaId = getFirmaID($firma);
+                    $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+                    if ($sevkiyatList) {
+                        $urunler = guvenlik($sevkiyatList['urunler']);
+                        $adetler = guvenlik($sevkiyatList['adetler']);
+                        $fiyatlar = guvenlik($sevkiyatList['fiyatlar']);
+                        $urunler = $urunler . "," . $urunId;
+                        $adetler = $adetler . "," . $adet;
+                        $fiyatlar = $fiyatlar . "-" . $fiyat;
+                        $query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?");
+                        $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $uye_sirket));
+                    } else {
+                        $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
+                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $uye_id, '', $sevkTipi, $aciklama, '0', '0', $su_an, $uye_sirket));
+                    }
+                    header("Location:urunler.php?id=" . $kategori_id . "&u=" . $urunId . "&sevkiyateklendi#" . $urunId);
+                    exit();
+                }
 			}
 
 			if (isset($_POST['guncellemeformu'])) {
