@@ -10,87 +10,6 @@
 
 	}elseif ($girdi == 1) {
 
-		if(isset($_GET['mt']) === true && empty($_GET['mt']) === false){ 
-
-			$mt = guvenlik($_GET['mt']); 
-
-			if ($mt == '1') {
-				
-				$kalinlik = guvenlik($_GET['k']);
-
-				$en = guvenlik($_GET['e']);
-
-				$boy = guvenlik($_GET['b']);
-
-				$adet = guvenlik($_GET['a']);
-
-				$toplam1 = guvenlik($_GET['toplam']);
-
-			}
-
-			if ($mt == '2') {
-				
-				$amm = guvenlik($_GET['a']);
-
-				$bmm = guvenlik($_GET['b']);
-
-				$etkalinligi = guvenlik($_GET['e']);
-
-				$boy = guvenlik($_GET['boy']);
-
-				$adet = guvenlik($_GET['adet']);
-
-				$toplam2 = guvenlik($_GET['toplam']);
-
-			}
-
-			if ($mt == '3') {
-				
-				$cap = guvenlik($_GET['c']);
-
-				$uzunluk = guvenlik($_GET['u']);
-
-				$adet = guvenlik($_GET['a']);
-
-				$toplam3 = guvenlik($_GET['toplam']);
-
-			}
-
-			
-			if ($mt == '4') {
-				
-				$amm = guvenlik($_GET['a']);
-
-				$bmm = guvenlik($_GET['b']);
-
-				$etkalinligi = guvenlik($_GET['e']);
-
-				$boy = guvenlik($_GET['boy']);
-
-				$adet = guvenlik($_GET['adet']);
-
-				$toplam4 = guvenlik($_GET['toplam']);
-
-			}
-
-			if ($mt == '5') {
-				
-				$iccap = guvenlik($_GET['iccap']);
-
-				$discap = guvenlik($_GET['discap']);
-
-				$etkalinligi = guvenlik($_GET['e']);
-
-				$boy = guvenlik($_GET['boy']);
-
-				$adet = guvenlik($_GET['adet']);
-
-				$toplam5 = guvenlik($_GET['toplam']);
-
-			}
-
-		}
-
 		if (isset($_POST['hesapla'])) {
 			
 			$dolarPost = guvenlik($_POST['dolarkuru']);
@@ -105,116 +24,6 @@
 
 			exit();
  
-		}
-
-		if (isset($_POST['levhahesapla'])) {
-
-			$malzemetipi = guvenlik($_POST['malzemetipi']);
-			
-			$kalinlik = guvenlik($_POST['kalinlik']);
-
-			$en = guvenlik($_POST['en']);
-
-			$boy = guvenlik($_POST['boy']);
-
-			$adet = guvenlik($_POST['adet']);
-
-			$toplam = $kalinlik * $en * $boy * $adet * 0.000001 * 2.81;
-
-			header("Location:index.php?mt=".$malzemetipi."&k=".$kalinlik."&e=".$en."&b=".$boy."&a=".$adet."&toplam=".$toplam);
-
-			exit();
-
-		}
-
-		if (isset($_POST['kosebenthesapla'])) {
-
-			$malzemetipi = guvenlik($_POST['malzemetipi']);
-			
-			$a = guvenlik($_POST['a']);
-
-			$b = guvenlik($_POST['b']);
-
-			$etkalinligi = guvenlik($_POST['etkalinligi']);
-
-			$boy = guvenlik($_POST['boy']);
-
-			$adet = guvenlik($_POST['adet']);
-
-			$toplam = $adet * 2.71 * $etkalinligi * $boy * ($a + $b - $etkalinligi) * 0.000001;
-
-			header("Location:index.php?mt=".$malzemetipi."&a=".$a."&b=".$b."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
-
-			exit();
-
-		}
-
-		if (isset($_POST['cubukhesapla'])) {
-
-			$malzemetipi = guvenlik($_POST['malzemetipi']);
-			
-			$cap = guvenlik($_POST['cap']);
-
-			$uzunluk = guvenlik($_POST['uzunluk']);
-
-			$adet = guvenlik($_POST['adet']);
-
-			$toplam = 3.14 * (($cap / 2) * ($cap / 2) * $uzunluk * $adet * (0.000001) * 2.71);
-
-			header("Location:index.php?mt=".$malzemetipi."&c=".$cap."&u=".$uzunluk."&a=".$adet."&toplam=".$toplam);
-
-			exit();
-
-		}
-
-		if (isset($_POST['kutuhesapla'])) {
-
-			$malzemetipi = guvenlik($_POST['malzemetipi']);
-			
-			$a = guvenlik($_POST['a']);
-
-			$b = guvenlik($_POST['b']);
-
-			$etkalinligi = guvenlik($_POST['etkalinligi']);
-
-			$boy = guvenlik($_POST['boy']);
-
-			$adet = guvenlik($_POST['adet']);
-
-			$toplam = (2 * $etkalinligi * ($a + $b) - (4 * $etkalinligi * $etkalinligi)) * $boy * $adet * 2.71 * 0.000001;
-
-			header("Location:index.php?mt=".$malzemetipi."&a=".$a."&b=".$b."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
-
-			exit();
-
-		}
-
-		if (isset($_POST['boruhesapla'])) {
-
-			$malzemetipi = guvenlik($_POST['malzemetipi']);
-			
-			$iccap = guvenlik($_POST['iccap']);
-
-			$discap = guvenlik($_POST['discap']);
-
-			$etkalinligi = guvenlik($_POST['etkalinligi']);
-
-			if (empty($iccap) === true && empty($etkalinligi) === false) {
-				
-				$iccap = $discap - (2 * $etkalinligi);
-
-			}
-
-			$boy = guvenlik($_POST['boy']);
-
-			$adet = guvenlik($_POST['adet']);
-
-			$toplam = 3.14 * ((($discap / 2) * ($discap / 2)) - (($iccap / 2) * ($iccap / 2))) * $boy * $adet * 2.71 * 0.000001;
-
-			header("Location:index.php?mt=".$malzemetipi."&iccap=".$iccap."&discap=".$discap."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
-
-			exit();
-
 		}
 
 		if(isset($_POST['plan_duzenle'])){
@@ -369,12 +178,14 @@
 			$firma = guvenlik($_POST['firma']);
 			if(empty($urun)){
 				$hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir ürün seçiniz.</div>'; 
-			}else if(empty($adet)){
+			}else if(empty($firma)){
+                $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir firma seçiniz.</div>';
+            }else if(empty($adet)){
 				$hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir adet belirtiniz.</div>'; 
 			}else if(empty($fiyat)){
 				$hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir fiyat yazınız.</div>'; 
-			}else if(empty($sevkTipi) || $sevkTipi === "null") {
-				$hata = '<br/><div class="alert alert-danger" role="alert">Sevk tipi boş bırakılamaz.</div>';   
+			}else if($sevkTipi === "null") {
+                $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
 			}else{
 				$urunArray = explode("/",$urun);
 				$urun = trim($urunArray[0]);

@@ -191,27 +191,21 @@
 			}
 
 			if (isset($_POST['sevkiyatkaydet'])) {
-
-                $urun = $_POST['urun'];
+                $urunId = $_POST['urun_id'];
                 $adet = guvenlik($_POST['adet']);
                 $fiyat = guvenlik($_POST['fiyat']);
-                $sevkTipi =  guvenlik($_POST['sevk_tipi']);
-                $aciklama =  guvenlik($_POST['aciklama']);
+                $sevkTipi = guvenlik($_POST['sevk_tipi']);
+                $aciklama = guvenlik($_POST['aciklama']);
                 $firma = guvenlik($_POST['firma']);
-                if(empty($urun)){
-                    $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir ürün seçiniz.</div>';
+                if(empty($firma)){
+                    $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir firma seçiniz.</div>';
                 }else if(empty($adet)){
                     $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir adet belirtiniz.</div>';
                 }else if(empty($fiyat)){
                     $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir fiyat yazınız.</div>';
-                }else if(empty($sevkTipi) || $sevkTipi === "null") {
-                    $hata = '<br/><div class="alert alert-danger" role="alert">Sevk tipi boş bırakılamaz.</div>';
+                }else if($sevkTipi === "null") {
+                    $hata = '<br/><div class="alert alert-danger" role="alert">Sevk tipi : '.$sevkTipi.' Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
                 }else {
-                    $urunArray = explode("/", $urun);
-                    $urun = trim($urunArray[0]);
-                    $kategori_iki = trim($urunArray[1]);
-                    $kategori_bir = trim($urunArray[2]);
-                    $urunId = getUrunID($urun, $kategori_iki, $kategori_bir);
                     $firmaId = getFirmaID($firma);
                     $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
                     if ($sevkiyatList) {
@@ -598,6 +592,14 @@
     <?php include 'template/banner.php' ?>
 
     <div class="container-fluid" style="padding: 0px;">
+
+        <?php if(isset($hata)){ ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <?php echo $hata; ?>
+                </div>
+            </div>
+        <?php } ?>
 
     	<div style="background-color: white; padding: 15px 15px 50px 15px; margin: 0px;">
 
