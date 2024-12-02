@@ -171,15 +171,16 @@
 		$firmaid = $query['firmaid'];
 		return $firmaid;
 	}
+    function getFirmaAdi($firmaId){
+        global $db;
+        $query = $db->query("SELECT firmaadi FROM firmalar WHERE firmaid = '{$firmaId}' AND silik='0'")->fetch(PDO::FETCH_ASSOC);
+        if ($query && isset($query['firmaadi'])) {
+            return $query['firmaadi'];
+        }
+        return null;
+    }
 
-	function getFirmaAdi($firmaId){
-		global $db;
-		$query = $db->query("SELECT firmaadi FROM firmalar WHERE firmaid = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
-		$firmaAdi = $query['firmaadi'];
-		return $firmaAdi;
-	}
-
-	function getDolar(){
+function getDolar(){
 		$icerik = file_get_contents("https://www.tcmb.gov.tr/kurlar/today.xml");
 		
 		$baslik = ara("<ForexSelling>", "</ForexSelling>", $icerik);
