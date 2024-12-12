@@ -309,7 +309,7 @@
 						
 					}else{
 
-						$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$uye_sirket}' ORDER BY firmaadi ASC LIMIT $i,20", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY firmaadi ASC LIMIT $i,20", PDO::FETCH_ASSOC);
 
 					}					
 
@@ -874,7 +874,10 @@
 					
 				<nav aria-label="Page navigation example">
   					<ul class="pagination justify-content-center">
-					<?php for ($i=1; $i < 26; $i++) { 
+					<?php
+                    $totalCount = $db->query("SELECT COUNT(*) FROM firmalar WHERE sirketid = '{$uye_sirket}' AND silik = '0'")->fetchColumn();
+                    $sayfaSayisi = ceil($totalCount / 20);
+                    for ($i=1; $i <= $sayfaSayisi; $i++) {
 						echo '<li class="page-item"><a class="page-link" href="firmalar.php?s='.$i.'">'.$i.'</a></li>'; 
 					} ?>
 				  </ul>

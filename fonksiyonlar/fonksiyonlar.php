@@ -353,8 +353,9 @@ function getDolar(){
 		global $db;
 
 		$query = $db->query("SELECT * FROM uyeler WHERE uye_adi = '{$uye_adi}'")->fetch(PDO::FETCH_ASSOC);
-
-		$uye_id = $query['uye_id'];
+        if($query && isset($query['uye_id'])) {
+            $uye_id = $query['uye_id'];
+        }
 
 		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE uye_adi = '{$uye_adi}' AND uye_sifre = '{$sifre}'");
 		$sorgu->execute();
