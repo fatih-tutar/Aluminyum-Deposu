@@ -847,7 +847,7 @@
 
 				$urunlistesira = 0;
 
-				$urun = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
+				$urun = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
 
 				if ( $urun->rowCount() ){
 
