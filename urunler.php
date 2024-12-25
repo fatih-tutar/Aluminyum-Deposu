@@ -382,7 +382,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($uye_id,$urun_id,($eskidepoadet+$eskipalet),($urun_depo_adet+$urun_palet),$su_an,'1',$uye_sirket));
+					$islemiekle = $islem->execute(array($uye_id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),$su_an,'1',$uye_sirket));
 
 				}
 
