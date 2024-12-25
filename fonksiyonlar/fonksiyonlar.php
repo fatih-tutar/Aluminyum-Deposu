@@ -182,16 +182,16 @@
         return null;
     }
 
-function getDolar(){
+    function getDolar(){
 		$icerik = file_get_contents("https://www.tcmb.gov.tr/kurlar/today.xml");
-		
 		$baslik = ara("<ForexSelling>", "</ForexSelling>", $icerik);
-		
-		$dolarsatis = $baslik[0];
-
-		$formatted_dolar = number_format($dolarsatis, 2, '.', '');
-
-		return $formatted_dolar;
+        if (is_array($baslik) && isset($baslik[0])) {
+            $dolarsatis = $baslik[0];
+            $formatted_dolar = number_format($dolarsatis, 2, '.', '');
+            return $formatted_dolar;
+        }else{
+            return 0;
+        }
 	}
 
 	function getLME(){
