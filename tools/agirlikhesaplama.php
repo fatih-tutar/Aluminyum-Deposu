@@ -9,8 +9,8 @@
             $toplam1 = guvenlik($_GET['toplam']);
         }
         if ($mt == '2') {
-            $amm = guvenlik($_GET['a']);
-            $bmm = guvenlik($_GET['b']);
+            $amm = guvenlik($_GET['amm']);
+            $bmm = guvenlik($_GET['bmm']);
             $etkalinligi = guvenlik($_GET['e']);
             $boy = guvenlik($_GET['boy']);
             $adet = guvenlik($_GET['adet']);
@@ -55,8 +55,8 @@
     }
     if (isset($_POST['kosebenthesapla'])) {
         $malzemetipi = guvenlik($_POST['malzemetipi']);
-        $a = guvenlik($_POST['a']);
-        $b = guvenlik($_POST['b']);
+        $amm = guvenlik($_POST['amm']);
+        $bmm = guvenlik($_POST['bmm']);
         $etkalinligi = guvenlik($_POST['etkalinligi']);
         $boy = guvenlik($_POST['boy']);
         $adet = guvenlik($_POST['adet']);
@@ -64,7 +64,7 @@
             $agirlikHata = '<br/><div class="alert alert-danger" role="alert">Boş bırakılan alanlar var.</div>';
         }else{
             $toplam = $adet * 2.71 * $etkalinligi * $boy * ($a + $b - $etkalinligi) * 0.000001;
-            header("Location:index.php?mt=".$malzemetipi."&a=".$a."&b=".$b."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
+            header("Location:index.php?mt=".$malzemetipi."&amm=".$amm."&bmm=".$bmm."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
             exit();
         }
     }
@@ -178,9 +178,9 @@
 
             <input type="hidden" name="malzemetipi" value="2">
 
-            <div class="row"><div class="col-4"><b>A (mm)</b></div><div class="col-8"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" value="<?php echo $amm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" placeholder="A (mm)"><?php } ?></div></div>
+            <div class="row"><div class="col-4"><b>A (mm)</b></div><div class="col-8"><?php if(isset($_GET['amm'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="amm" value="<?php echo $amm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="amm" placeholder="A (mm)"><?php } ?></div></div>
 
-            <div class="row"><div class="col-4"><b>B (mm)</b></div><div class="col-8"><?php if(isset($_GET['b'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" value="<?php echo $bmm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" placeholder="B (mm)"><?php } ?></div></div>
+            <div class="row"><div class="col-4"><b>B (mm)</b></div><div class="col-8"><?php if(isset($_GET['bmm'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="bmm" value="<?php echo $bmm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" placeholder="B (mm)"><?php } ?></div></div>
 
             <div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?php echo $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
 
