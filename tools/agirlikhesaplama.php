@@ -3,7 +3,7 @@
         $mt = guvenlik($_GET['mt']);
         if ($mt == '1') {
             $kalinlik = guvenlik($_GET['k']);
-            $en = guvenlik($_GET['e']);
+            $en = guvenlik($_GET['en']);
             $boy = guvenlik($_GET['b']);
             $adet = guvenlik($_GET['a']);
             $toplam1 = guvenlik($_GET['toplam']);
@@ -49,7 +49,7 @@
             $agirlikHata = '<br/><div class="alert alert-danger" role="alert">Boş bırakılan alanlar var.</div>';
         }else{
             $toplam = $kalinlik * $en * $boy * $adet * 0.000001 * 2.81;
-            header("Location:index.php?mt=".$malzemetipi."&k=".$kalinlik."&e=".$en."&b=".$boy."&a=".$adet."&toplam=".$toplam);
+            header("Location:index.php?mt=".$malzemetipi."&k=".$kalinlik."&en=".$en."&b=".$boy."&a=".$adet."&toplam=".$toplam);
             exit();
         }
     }
@@ -154,7 +154,7 @@
 
             <div class="row"><div class="col-3"><b>Kalınlık</b></div><div class="col-9"><?php if(isset($_GET['k'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="kalinlik" value="<?php echo $kalinlik ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="kalinlik" placeholder="KALINLIK"><?php } ?></div></div>
 
-            <div class="row"><div class="col-3"><b>En</b></div><div class="col-9"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" value="<?php echo $en; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" placeholder="EN"><?php } ?></div></div>
+            <div class="row"><div class="col-3"><b>En</b></div><div class="col-9"><?php if(isset($_GET['en'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" value="<?php echo $en; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" placeholder="EN"><?php } ?></div></div>
 
             <div class="row"><div class="col-3"><b>Boy</b></div><div class="col-9"><?php if(isset($_GET['b'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?php echo $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
 
