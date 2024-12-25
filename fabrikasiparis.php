@@ -252,20 +252,25 @@
 							$urun_id = $row['urun_id'];
 
 							$urunbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
-
-							$kategori_bir = $urunbilcek['kategori_bir'];	
-
-							$kategori_iki = $urunbilcek['kategori_iki'];
-
-							$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
-
-							$kategori_bir_adi = $katadcek['kategori_adi'];
-
-							$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}'")->fetch(PDO::FETCH_ASSOC);
-
-							$kategori_iki_adi = $katadcek['kategori_adi'];
-
-							$urun_birimkg = $urunbilcek['urun_birimkg'];
+                            if($urunbilcek) {
+                                $kategori_bir = $urunbilcek['kategori_bir'];
+                                $kategori_iki = $urunbilcek['kategori_iki'];
+                                $katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
+                                if($katadcek) {
+                                    $kategori_bir_adi = $katadcek['kategori_adi'];
+                                }else {
+                                    $kategori_bir_adi = "";
+                                }
+                                $katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}'")->fetch(PDO::FETCH_ASSOC);
+                                if($katadcek) {
+                                    $kategori_iki_adi = $katadcek['kategori_adi'];
+                                }else{
+                                    $kategori_iki_adi = "";
+                                }
+                                $urun_birimkg = $urunbilcek['urun_birimkg'];
+                            }else{
+                                $urun_birimkg = 0;
+                            }
 
 							$kilo = $urun_siparis_aded * $urun_birimkg;
 
