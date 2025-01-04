@@ -1,5 +1,14 @@
 <?php
 
+    function controlProductById($productId){
+        global $db;
+        $product = $db->query("SELECT * FROM urun WHERE urun_id='{$productId}' AND silik='0'");
+        if($product->rowCount() > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 	function getFactoryInfos($fabrikaId) {
 		global $db;
 		$fabrika = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$fabrikaId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
@@ -183,7 +192,7 @@
     }
 
     function getDolar(){
-		$icerik = file_get_contents("https://www.tcmb.gov.tr/kurlar/today.xml");
+		$icerik = @file_get_contents("https://www.tcmb.gov.tr/kurlar/today.xml");
         if($icerik !== false){
             $baslik = ara("<ForexSelling>", "</ForexSelling>", $icerik);
             if (is_array($baslik) && isset($baslik[0])) {
@@ -279,9 +288,13 @@
 			case '11':
 			return 'Kasım';
 			break;
+
+            case '12':
+                return 'Aralık';
+                break;
 			
 			default:
-				return 'Aralık';
+				return 'Ocak';
 				break;
 		}
 

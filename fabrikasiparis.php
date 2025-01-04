@@ -229,98 +229,101 @@
 
 							$urun_adi = $row['urun_adi'];
 
-							$hazirlayankisi = $row['hazirlayankisi'];
+                            $urun_id = $row['urun_id'];
 
-							$urun_siparis_aded = $row['urun_siparis_aded'];
+                            if(controlProductById($urun_id)){
 
-							$urun_fabrika_id = $row['urun_fabrika_id'];
+                                $hazirlayankisi = $row['hazirlayankisi'];
 
-							$ilgilikisi = $row['ilgilikisi'];
+                                $urun_siparis_aded = $row['urun_siparis_aded'];
 
-							$siparissaniye = $row['siparissaniye'];
+                                $urun_fabrika_id = $row['urun_fabrika_id'];
 
-							$terminsaniye = $row['terminsaniye'];
+                                $ilgilikisi = $row['ilgilikisi'];
 
-							$siparisboy = $row['siparisboy'];
+                                $siparissaniye = $row['siparissaniye'];
 
-							$urun_siparis_aded = $row['urun_siparis_aded'];
+                                $terminsaniye = $row['terminsaniye'];
 
-							$siparistarih = date("d-m-Y", $siparissaniye);
+                                $siparisboy = $row['siparisboy'];
 
-							$termintarih = date("d-m-Y", $terminsaniye);
+                                $urun_siparis_aded = $row['urun_siparis_aded'];
 
-							$urun_id = $row['urun_id'];
+                                $siparistarih = date("d-m-Y", $siparissaniye);
 
-							$urunbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
-                            if($urunbilcek) {
-                                $kategori_bir = $urunbilcek['kategori_bir'];
-                                $kategori_iki = $urunbilcek['kategori_iki'];
-                                $katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
-                                if($katadcek) {
-                                    $kategori_bir_adi = $katadcek['kategori_adi'];
-                                }else {
-                                    $kategori_bir_adi = "";
-                                }
-                                $katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}'")->fetch(PDO::FETCH_ASSOC);
-                                if($katadcek) {
-                                    $kategori_iki_adi = $katadcek['kategori_adi'];
+                                $termintarih = date("d-m-Y", $terminsaniye);
+
+                                $urunbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
+                                if($urunbilcek) {
+                                    $kategori_bir = $urunbilcek['kategori_bir'];
+                                    $kategori_iki = $urunbilcek['kategori_iki'];
+                                    $katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
+                                    if($katadcek) {
+                                        $kategori_bir_adi = $katadcek['kategori_adi'];
+                                    }else {
+                                        $kategori_bir_adi = "";
+                                    }
+                                    $katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}'")->fetch(PDO::FETCH_ASSOC);
+                                    if($katadcek) {
+                                        $kategori_iki_adi = $katadcek['kategori_adi'];
+                                    }else{
+                                        $kategori_iki_adi = "";
+                                    }
+                                    $urun_birimkg = $urunbilcek['urun_birimkg'];
                                 }else{
-                                    $kategori_iki_adi = "";
+                                    $urun_birimkg = 0;
                                 }
-                                $urun_birimkg = $urunbilcek['urun_birimkg'];
-                            }else{
-                                $urun_birimkg = 0;
-                            }
 
-							$kilo = $urun_siparis_aded * $urun_birimkg;
+                                $kilo = $urun_siparis_aded * $urun_birimkg;
 
-							$toplamkilo += $kilo;
+                                $toplamkilo += $kilo;
 
 				?>
 
-							<hr style="border-color: black; border-width: 2px;" />
+                                <hr style="border-color: black; border-width: 2px;" />
 
-							<form action="" method="POST">
+                                <form action="" method="POST">
 
-								<div class="row" style="margin: 2px;">
+                                    <div class="row" style="margin: 2px;">
 
-									<div class="col-4 d-block d-sm-none">Malzeme :</div>
-									
-									<div class="col-md-2 col-8"><?php echo $urun_adi." ".$kategori_iki_adi; ?></div>
+                                        <div class="col-4 d-block d-sm-none">Malzeme :</div>
 
-									<div class="col-4 d-block d-sm-none">Boy :</div>
-									
-									<div class="col-md-1 col-8"><?php echo $siparisboy; ?></div>
+                                        <div class="col-md-2 col-8"><?php echo $urun_adi." ".$kategori_iki_adi; ?></div>
 
-									<div class="col-4 d-block d-sm-none">Miktar :</div>
-									
-									<div class="col-md-1 col-8"><?php echo $urun_siparis_aded." adet "; ?></div>
+                                        <div class="col-4 d-block d-sm-none">Boy :</div>
 
-									<div class="col-4 d-block d-sm-none">Kilo :</div>
-									
-									<div class="col-md-1 col-8"><?php echo $kilo." KG"; ?></div>
+                                        <div class="col-md-1 col-8"><?php echo $siparisboy; ?></div>
 
-									<div class="col-4 d-block d-sm-none">Kategori :</div>
-									
-									<div class="col-md-1 col-8"><?php echo $kategori_bir_adi; ?></div>
+                                        <div class="col-4 d-block d-sm-none">Miktar :</div>
 
-									<div class="col-4 d-block d-sm-none">Miktar :</div>
+                                        <div class="col-md-1 col-8"><?php echo $urun_siparis_aded." adet "; ?></div>
 
-									<div class="col-md-1 col-8"><input type="text" name="eklenenadet" class="form-control form-control-sm" value="<?php echo $urun_siparis_aded; ?>"></div>
+                                        <div class="col-4 d-block d-sm-none">Kilo :</div>
 
-									<div class="col-4 d-block d-sm-none">Tarih :</div>
+                                        <div class="col-md-1 col-8"><?php echo $kilo." KG"; ?></div>
 
-									<div class="col-md-1 col-8"><?php echo $siparistarih; ?></div>
+                                        <div class="col-4 d-block d-sm-none">Kategori :</div>
 
-									<div class="col-4 d-block d-sm-none">Termin :</div>
+                                        <div class="col-md-1 col-8"><?php echo $kategori_bir_adi; ?></div>
 
-									<div class="col-md-1 col-8"><?php echo $termintarih; ?></div>
+                                        <div class="col-4 d-block d-sm-none">Miktar :</div>
 
-								</div>
+                                        <div class="col-md-1 col-8"><input type="text" name="eklenenadet" class="form-control form-control-sm" value="<?php echo $urun_siparis_aded; ?>"></div>
 
-							</form>
+                                        <div class="col-4 d-block d-sm-none">Tarih :</div>
+
+                                        <div class="col-md-1 col-8"><?php echo $siparistarih; ?></div>
+
+                                        <div class="col-4 d-block d-sm-none">Termin :</div>
+
+                                        <div class="col-md-1 col-8"><?php echo $termintarih; ?></div>
+
+                                    </div>
+
+                                </form>
 
 				<?php
+                            }
 
 						}
 
