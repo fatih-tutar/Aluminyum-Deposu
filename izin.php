@@ -132,7 +132,7 @@
             <div class="row m-0 d-none d-md-flex">
                 <div class="col-md-2"><b>Ad Soyad</b></div>
                 <div class="col-md-1 px-0"><b>İşe Giriş Tarihi</b></div>
-                <div class="col-md-1"><b>Hakediş</b></div>
+                <?php if($uye_tipi == 2){ ?><div class="col-md-1"><b>Hakediş</b></div><?php } ?>
                 <div class="col-md-2"><b>İzin Başlama Tarihi</b></div>
                 <div class="col-md-2"><b>İşe Başlama Tarihi</b></div>
                 <div class="col-md-1"><b>Onay</b></div>
@@ -167,8 +167,10 @@
                                 <div class="col-md-2 col-6 dikey-ortala"><?= $izinliAdi ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>İşe Giriş Tarihi :</b></div>
                                 <div class="col-md-1 col-6 dikey-ortala"><?= (new DateTime(iseGirisTarihiGetir($izinli)))->format('d.m.Y') ?></div>
-                                <div class="col-6 d-block d-sm-none"><b>,Hakediş :</b></div>
+                                <?php if($uye_tipi == 2){ ?>
+                                <div class="col-6 d-block d-sm-none"><b>Hakediş :</b></div>
                                 <div class="col-md-1 col-6 dikey-ortala"><?= yillikIzinHesapla($izinli) ?></div>
+                                <?php } ?>
                                 <div class="col-6 d-block d-sm-none"><b>İzin Başlama Tarihi :</b></div>
                                 <div class="col-md-2 col-6 dikey-ortala"><?= (new DateTime($izinBaslangicTarihi))->format('d.m.Y') ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>İşe Başlama Tarihi :</b></div>
@@ -205,6 +207,7 @@
                 <li>YÖNETİMİN İNSİYATİFİYLE BELİRLEDİĞİ MÜCBİR SEBEBLER HARİÇ, BU KURALAR DIŞINA ÇIKILAMAZ; TÜM ÇALIŞANLARIN BU KURALLARA UYMASI BEKLENMEKTEDİR.</li>
             </ul>
         </div>
+        <?php if($uye_tipi == 2){ ?>
         <div class="div4 pt-3 mt-4">
             <h5 style="text-align:center; color:darkblue;">GENEL İZİN TABLOSU</h5>
             <div class="row m-0 d-none d-md-flex">
@@ -251,6 +254,7 @@
                 </li>
             </ul> -->
         </div>
+        <?php } ?>
         <br/><br/><br/><br/><br/>
     </div>
     <?php include 'template/script.php'; ?>

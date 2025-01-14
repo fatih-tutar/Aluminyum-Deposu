@@ -159,9 +159,17 @@
           <?= isset($hata) ? $hata : ''; ?>
       </div>
 		</div>
-    <div class="div4">
+    <div class="div4" style="text-align: center;">
       <!-- Başlık -->
-      <a href="#" onclick="return false" onmousedown="javascript:ackapa('araceklemeformudivi');"><h2 class="mt-2 text-center"><i class="fas fa-angle-double-down"></i>&nbsp;&nbsp;&nbsp;&nbsp;Araç Ekleme Formu&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-angle-double-down"></i></h2></a>
+      <a href="#" onclick="return false" onmousedown="javascript:ackapa('araceklemeformudivi');">
+          <button class="btn btn-primary btn-sm">
+              <h2 class="mt-2 text-center">
+                  <i class="fas fa-angle-double-down"></i>&nbsp;&nbsp;&nbsp;
+                  &nbsp;Araç Ekleme Formu&nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fas fa-angle-double-down"></i>
+              </h2>
+          </button>
+      </a>
       <form action="" method="POST" enctype="multipart/form-data" style="display:none;" id="araceklemeformudivi" class="mt-4">
         <div class="row">
           <div class="col-md-1 col-12">
@@ -237,18 +245,18 @@
           
           <!-- Masaüstü için başlık satırları -->
           <div class="row font-weight-bold d-none d-md-flex" style="background-color: #f8f9fa; padding: 10px; border-bottom: 2px solid #343a40;">
-              <div class="col-md-1">Plaka</div>
-              <div class="col-md-2">Kullanan Kişi</div>
+              <div class="col-md-1"><button class="btn btn-primary btn-sm">Plaka</button></div>
+              <div class="col-md-2"><button class="btn btn-primary btn-sm">Kullanan Kişi</button></div>
               <div class="col-md-5">
                 <div class="row">
-                  <div class="col-md-4">Kasko Bitiş Tarihi</div>
-                  <div class="col-md-4">Sigorta Bitiş Tarihi</div>
-                  <div class="col-md-4">Muayene Tarihi</div>
+                  <div class="col-md-4"><button class="btn btn-primary btn-sm">Kasko Bitiş Tarihi</button></div>
+                  <div class="col-md-4"><button class="btn btn-primary btn-sm">Sigorta Bitiş Tarihi</button></div>
+                  <div class="col-md-4"><button class="btn btn-primary btn-sm">Muayene Tarihi</button></div>
                 </div>
               </div>
-              <div class="col-md-1">Kasko PDF</div>
-              <div class="col-md-1">Sigorta PDF</div>
-              <div class="col-md-1">Ruhsat PDF</div>
+              <div class="col-md-1"><button class="btn btn-primary btn-sm">Kasko PDF</button></div>
+              <div class="col-md-1 p-0"><button class="btn btn-primary btn-sm">Sigorta PDF</button></div>
+              <div class="col-md-1 p-0"><button class="btn btn-primary btn-sm">Ruhsat PDF</button></div>
           </div>
 
           <?php foreach ($rows as $index => $row): ?>

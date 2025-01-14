@@ -155,7 +155,7 @@
 		
 		if (isset($_POST['yetkileriguncelle'])) {
 
-			$kullanici_yetkileri = '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0';
+			$kullanici_yetkileri = '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0';
 
 			$kullanici_yetkileri_arrayi = explode(",", $kullanici_yetkileri);
 
@@ -188,6 +188,8 @@
 			if(isset($_POST['yetkialkop'])){ $kullanici_yetkileri_arrayi[13] = 1; }
 
 			if(isset($_POST['ofisyetki'])){ $kullanici_yetkileri_arrayi[14] = 1; }
+
+            if(isset($_POST['aracyetki'])){ $kullanici_yetkileri_arrayi[15] = 1; }
 
 			$kullanici_yetkileri = implode(",", $kullanici_yetkileri_arrayi);
 
@@ -468,6 +470,16 @@
 								<label for="ziyaretCheckbox">Ziyaretler</label>
 							</div>
 						</div>
+                        <div class="col-md-2 col-4">
+                            <div class="form-group">
+                                <input type="checkbox" id="aracCheckbox" name="aracyetki" <?= $profil_yetkileri_arrayi[15] == '1' ? 'checked' : '' ?>>
+                                <label for="ziyaretCheckbox">Araçlar</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-4">
+                        </div>
+                        <div class="col-md-2 col-4">
+                        </div>
 						<div class="col-md-2 col-4">
 							<button type="submit" class="btn btn-warning btn-sm btn-block" name="yetkileriguncelle">Kaydet</button>
 						</div>

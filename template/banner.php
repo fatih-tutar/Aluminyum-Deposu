@@ -60,6 +60,12 @@
 
 							<?php } ?>
 
+                            <?php if($uye_arac_yetkisi == '1'){?>
+
+                                <a class="dropdown-item" href="arac.php"><b>ARAÇLAR</b></a>
+
+                            <?php } ?>
+
 							<?php if($uye_tipi == '2' || $uye_tipi == '1' || $uye_tipi == '3'){?>
 								
 								<a class="dropdown-item" href="kategoriler.php"><b>KATEGORİLER</b></a>

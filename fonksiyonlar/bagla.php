@@ -87,6 +87,8 @@
 		$uye_alkop_yetkisi = $uye_yetkileri_arrayi[13];
 
 		$uye_ofis_yetkisi = $uye_yetkileri_arrayi[14];
+
+        $uye_arac_yetkisi = $uye_yetkileri_arrayi[15];
  
 		//ŞİRKET BİLGİLERİ
 
