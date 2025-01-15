@@ -1,33 +1,25 @@
 <?php
-
-	session_start(); 
-
+	session_start();
 	ob_start();
 
-	$su_an = time();
-
+    $su_an = time();
 	$tarih = date("Y-m-d H:i:s", time());
-
 	$bugunformatlitarih = date("d-m-Y", time());
-
 	$bugununsaniyesi = strtotime($bugunformatlitarih);
-
 	$tarihf2 = date("d-m-Y",$su_an);
-
 	$tarihv3 = date("Y-m-d",$su_an);
 
-	$girdi = 0;
-
+    $girdi = 0;
 	$hata = "";
 
-	setlocale(LC_TIME, "turkish");
+    setlocale(LC_TIME, "turkish");
 
-	include 'baglan.php';
+    include 'database.php';
+    $dbInstance = new Database();
+	$db = $dbInstance->getConnection();
 
-	include 'fonksiyonlar.php';
-
+    include 'fonksiyonlar.php';
 	// Osmanlı Alüminyum İçin
-
 	$fiyatlistesi = $db->query("SELECT * FROM sirketler WHERE sirketid = '2'")->fetch(PDO::FETCH_ASSOC);
 
 	$sirketfiyatlistesi = guvenlik($fiyatlistesi['fiyatlistesi']);
