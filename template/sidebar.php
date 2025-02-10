@@ -92,7 +92,7 @@
         </a>
     </div>	
     <div class="card p-1">
-        <a href="#" onclick="return false" onmousedown="javascript:ackapa4('anlikfiyatlamadivi','fiyathesaplamadivi','agirlikhesaplamadivi','isplanidivi');" class="sidebar-font">
+        <a href="anlikfiyatlama.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/anlik_fiyatlama.png" alt="" width="35" height="35">
@@ -104,7 +104,7 @@
         </a>
     </div>	
     <div class="card p-1">
-        <a href="#" onclick="return false" onmousedown="javascript:ackapa4('fiyathesaplamadivi','agirlikhesaplamadivi','anlikfiyatlamadivi','isplanidivi');" class="sidebar-font">
+        <a href="fiyathesaplama.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/fiyat_hesaplama.png" alt="" width="35" height="35">

@@ -4,4 +4,5 @@ yedekler/
 error_log
 files/
 img/
-.idea/
+fonksiyonlar/database.php
+vcs.xml

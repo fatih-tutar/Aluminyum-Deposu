@@ -207,42 +207,63 @@
         }
 	}
 
-	function getLME(){
+function getLME(){
+    $lme = 0;
 
-		$lme = 0;
+    $url = 'https://www.bloomberght.com/emtia/aliminyum';
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_NOBODY, true); // Sadece header bilgisi alınır
+    curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); // HTTP kodu alınır
+    curl_close($ch);
 
-		$url = 'https://www.bloomberght.com/emtia/aliminyum';
-		$ch = curl_init($url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$html = curl_exec($ch);
-		curl_close($ch);
-		$dom = new DOMDocument();
-		@$dom->loadHTML($html);
-		$xpath = new DOMXPath($dom);
-		$spanList = $xpath->query('//span');
-		$lmeArray = [];
+    // Eğer HTTP kodu 200 değilse hata mesajı döndür
+    if ($httpCode !== 200) {
+        error_log("Hata: URL erişilemez. HTTP Kodu: $httpCode");
+        return $lme; // Hata durumunda $lme = 0 döner
+    }
 
-		foreach ($spanList as $index => $item) {
-			$content = $item->nodeValue;
-			array_push($lmeArray, $content);
-		}
+    // Sayfa içeriğini çek
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $html = curl_exec($ch);
+    curl_close($ch);
 
-		if(isset($lmeArray[22])) {
-			$number = $lmeArray[22];
-			$number = str_replace(".", "", $number);
-			$number = str_replace(",", ".", $number);
-			$number = floatval($number);
-			$roundedNumber = intval($number);
-			$lme1 = $roundedNumber + 1;
+    if (empty($html)) {
+        error_log("Hata: URL'den alınan içerik boş.");
+        return $lme;
+    }
 
-			$lme = $lme1;
-		}else{
-			$lme = 1;
-		}
-		return $lme;
-	}
+    $dom = new DOMDocument();
+    @$dom->loadHTML($html);
+    $xpath = new DOMXPath($dom);
+    $spanList = $xpath->query('//span');
+    $lmeArray = [];
 
-	function ayAdi($ay){
+    foreach ($spanList as $index => $item) {
+        $content = $item->nodeValue;
+        array_push($lmeArray, $content);
+    }
+
+    if (isset($lmeArray[22])) {
+        $number = $lmeArray[22];
+        $number = str_replace(".", "", $number);
+        $number = str_replace(",", ".", $number);
+        $number = floatval($number);
+        $roundedNumber = intval($number);
+        $lme1 = $roundedNumber + 1;
+
+        $lme = $lme1;
+    } else {
+        $lme = 1;
+    }
+
+    return $lme;
+}
+
+function ayAdi($ay){
 
 		switch ($ay) {
 			case '01':
@@ -339,45 +360,30 @@
 	}	
 
 	function guvenlik($veri){
-
 		global $db;
-
 		$veri = bosluk_sil($veri);
-
 		$veri_patlat = explodeEachChar($veri);
-
 		foreach($veri_patlat as $key => $value)
 		{
 			$alfabedizi = "abcçdefgğhıijklmnoöqprsştuüvwxyzwqABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZWQ0123456789.,_-:/\@<>*# ";
-
 			if (!preg_match("/[" . preg_quote($value, '/') . "]/i", $alfabedizi)) {
-
 				unset($veri_patlat[$key]);
-				
 			}
 		}
-
 		$veri_birlestir = implode("", $veri_patlat);
-
 		$veri = $veri_birlestir;
-
 		return $veri;
-
 	}
 
 	function giris($uye_adi, $sifre){
-
 		global $db;
-
 		$query = $db->query("SELECT * FROM uyeler WHERE uye_adi = '{$uye_adi}'")->fetch(PDO::FETCH_ASSOC);
         if($query && isset($query['uye_id'])) {
             $uye_id = $query['uye_id'];
         }
-
 		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE uye_adi = '{$uye_adi}' AND uye_sifre = '{$sifre}'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
-
 		if ($say == '0') {
 			return false;
 		}else{
@@ -391,13 +397,10 @@
 	}
 
 	function pasifmi($uye_adi){
-
 		global $db;
-
 		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE uye_adi = '{$uye_adi}' AND pasiflik = '1'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
-
 		return ($say == '0') ? '0' : '1';
 	}
 

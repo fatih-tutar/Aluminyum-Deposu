@@ -11,48 +11,26 @@
 	}
 
 	if (isset($_POST['giris'])) {
-		
 		$uye_adi = guvenlik($_POST['uye_adi']);
-
 		$sifre = guvenlik($_POST['sifre']);
-
 		$sifreli = md5($sifre);
-
 		if (empty($uye_adi) === true) {
-
 			$hata = '<div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
-
 		}elseif(empty($sifre) === true){
-
 			$hata = '<div class="alert alert-danger" role="alert">Şifre kısmını boş bıraktınız.</div>';
-		}
-
-		elseif(giris($uye_adi,$sifreli) === false){
-
+		}elseif(giris($uye_adi,$sifreli) === false){
 			$hata = '<div class="alert alert-danger" role="alert">E-posta veya şifreyi yanlış girdiniz.</div>';
-		
 		}elseif(pasifmi($uye_adi) == '1'){
-
 			$hata = '<div class="alert alert-danger" role="alert">Üyeliğiniz pasifleştirilmiştir.</div>';
-
 		}else{
-
 			if (is_numeric(giris($uye_adi,$sifreli)) === true) {
-				
 				$_SESSION['uye_id'] = giris($uye_adi,$sifreli);
-
 				header("Location: index.php");
-
 				exit();
-
 			}
-			
 		}
-
 	}
-
 ?>
-
 <!DOCTYPE html>
 
 <html>

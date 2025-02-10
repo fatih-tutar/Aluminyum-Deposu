@@ -7,6 +7,7 @@
 
     if (isset($_POST['aracekle'])) {
       // Formdan gelen verileri alalım
+      $arac_adi = $_POST['arac_adi'];
       $plaka = $_POST['plaka'];
       $kasko_bitis_tarihi = $_POST['kasko_bitis_tarihi'];
       $sigorta_bitis_tarihi = $_POST['sigorta_bitis_tarihi'];
@@ -43,11 +44,12 @@
       }
   
       // Veritabanına kayıt ekle
-      $sql = "INSERT INTO araclar (plaka, kasko_bitis_tarihi, sigorta_bitis_tarihi, kasko_pdf, sigorta_pdf, muayene_tarihi, araci_kullanan, ruhsat_pdf, aciklama, saniye, silik) 
-              VALUES (:plaka, :kasko_bitis_tarihi, :sigorta_bitis_tarihi, :kasko_pdf, :sigorta_pdf, :muayene_tarihi, :araci_kullanan, :ruhsat_pdf, :aciklama, :saniye, :silik)";
+      $sql = "INSERT INTO araclar (arac_adi, plaka, kasko_bitis_tarihi, sigorta_bitis_tarihi, kasko_pdf, sigorta_pdf, muayene_tarihi, araci_kullanan, ruhsat_pdf, aciklama, saniye, silik) 
+              VALUES (:arac_adi, :plaka, :kasko_bitis_tarihi, :sigorta_bitis_tarihi, :kasko_pdf, :sigorta_pdf, :muayene_tarihi, :araci_kullanan, :ruhsat_pdf, :aciklama, :saniye, :silik)";
   
       $stmt = $db->prepare($sql);
-  
+
+      $stmt->bindParam(':arac_adi', $arac_adi);
       $stmt->bindParam(':plaka', $plaka);
       $stmt->bindParam(':kasko_bitis_tarihi', $kasko_bitis_tarihi);
       $stmt->bindParam(':sigorta_bitis_tarihi', $sigorta_bitis_tarihi);
@@ -80,6 +82,7 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['aracduzenle'])) {
       // POST verilerini al
       $id = $_POST['id'];
+      $arac_adi = $_POST['arac_adi'];
       $plaka = $_POST['plaka'];
       $araci_kullanan = $_POST['araci_kullanan'];
       $kasko_bitis_tarihi = $_POST['kasko_bitis_tarihi'];
@@ -111,6 +114,7 @@
 
       // SQL sorgusunu oluştur
       $sql = "UPDATE araclar SET 
+                  arac_adi = ?, 
                   plaka = ?, 
                   araci_kullanan = ?, 
                   kasko_bitis_tarihi = ?, 
@@ -119,7 +123,7 @@
                   aciklama = ?";
 
       // Dosya alanlarını kontrol et ve SQL sorgusuna ekle
-      $params = [$plaka, $araci_kullanan, $kasko_bitis_tarihi, $sigorta_bitis_tarihi, $muayene_tarihi, $aciklama];
+      $params = [$arac_adi, $plaka, $araci_kullanan, $kasko_bitis_tarihi, $sigorta_bitis_tarihi, $muayene_tarihi, $aciklama];
       
       foreach ($uploads as $key => $path) {
           $sql .= ", $key = ?";
@@ -174,6 +178,12 @@
         <div class="row">
           <div class="col-md-1 col-12">
             <div class="row">
+                <div class="col-md-12 col-5">Araç Adı</div>
+                <div class="col-md-12 col-7 pb-2"><input type="text" name="arac_adi" class="form-control form-control-sm" placeholder="Araç Adı"></div>
+            </div>
+          </div>
+          <div class="col-md-1 col-12">
+            <div class="row">
               <div class="col-md-12 col-5">Plaka</div>
               <div class="col-md-12 col-7 pb-2"><input type="text" name="plaka" class="form-control form-control-sm" placeholder="Plaka"></div>
             </div>
@@ -184,23 +194,27 @@
               <div class="col-md-12 col-7"><input type="text" name="araci_kullanan" class="form-control form-control-sm" placeholder="Aracı Kullanan Kişi"></div>
             </div>
           </div>
-          <div class="col-md-2 col-12">
-            <div class="row">
-              <div class="col-md-12 col-5">Kasko Bitiş Tarihi</div>
-              <div class="col-md-12 col-7 pb-2"><input type="date" name="kasko_bitis_tarihi" id="kasko_bitis_tarihi_inputu" class="form-control form-control-sm"></div>
-            </div>
-          </div>
-          <div class="col-md-2 col-12">
-            <div class="row">
-              <div class="col-md-12 col-5">Sigorta Bitiş Tarihi</div>
-              <div class="col-md-12 col-7 pb-2"><input type="date" name="sigorta_bitis_tarihi" id="sigorta_bitis_tarihi_inputu" class="form-control form-control-sm"></div>
-            </div>
-          </div>
-          <div class="col-md-2 col-12">
-            <div class="row">
-              <div class="col-md-12 col-5">Muayene Tarihi</div>
-              <div class="col-md-12 col-7 pb-2"><input type="date" name="muayene_tarihi" id="muayene_tarihi_inputu"></div>
-            </div>
+          <div class="col-md-5 col-12">
+              <div class="row">
+                  <div class="col-md-4 col-12">
+                    <div class="row">
+                      <div class="col-md-12 col-5">Kasko Bitiş Tarihi</div>
+                      <div class="col-md-12 col-7 pb-2"><input type="date" name="kasko_bitis_tarihi" id="kasko_bitis_tarihi_inputu" class="form-control form-control-sm"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-12">
+                    <div class="row">
+                      <div class="col-md-12 col-5">Sigorta Bitiş Tarihi</div>
+                      <div class="col-md-12 col-7 pb-2"><input type="date" name="sigorta_bitis_tarihi" id="sigorta_bitis_tarihi_inputu" class="form-control form-control-sm"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-12">
+                    <div class="row">
+                      <div class="col-md-12 col-5">Muayene Tarihi</div>
+                      <div class="col-md-12 col-7 pb-2"><input type="date" name="muayene_tarihi" id="muayene_tarihi_inputu" class="form-control form-control-sm"></div>
+                    </div>
+                  </div>
+              </div>
           </div>
           <div class="col-md-1 col-12">
             <div class="row">
@@ -232,7 +246,7 @@
     <div class="div4">
       <?php
         // PDO sorgusu ve verilerin çekilmesi
-        $araclar = $db->query("SELECT id, plaka, kasko_bitis_tarihi, sigorta_bitis_tarihi, kasko_pdf, sigorta_pdf, muayene_tarihi, araci_kullanan, ruhsat_pdf, aciklama FROM araclar WHERE silik = '0'");
+        $araclar = $db->query("SELECT * FROM araclar WHERE silik = '0'");
         $rows = $araclar->fetchAll(PDO::FETCH_ASSOC);
       ?>
 
@@ -245,12 +259,13 @@
           
           <!-- Masaüstü için başlık satırları -->
           <div class="row font-weight-bold d-none d-md-flex" style="background-color: #f8f9fa; padding: 10px; border-bottom: 2px solid #343a40;">
+              <div class="col-md-1"><button class="btn btn-primary btn-sm">Araç Adı</button></div>
               <div class="col-md-1"><button class="btn btn-primary btn-sm">Plaka</button></div>
               <div class="col-md-2"><button class="btn btn-primary btn-sm">Kullanan Kişi</button></div>
-              <div class="col-md-5">
+              <div class="col-md-4">
                 <div class="row">
                   <div class="col-md-4"><button class="btn btn-primary btn-sm">Kasko Bitiş Tarihi</button></div>
-                  <div class="col-md-4"><button class="btn btn-primary btn-sm">Sigorta Bitiş Tarihi</button></div>
+                  <div class="col-md-4"><button class="btn btn-primary btn-sm" style="padding-left:4px; padding-right:4px;">Sigorta Bitiş Tarihi</button></div>
                   <div class="col-md-4"><button class="btn btn-primary btn-sm">Muayene Tarihi</button></div>
                 </div>
               </div>
@@ -261,19 +276,20 @@
 
           <?php foreach ($rows as $index => $row): ?>
             <form action="" method="POST">
-              <!-- Arka plan rengi her satırda sırayla beyaz ve daha belirgin gri olacak şekilde ayarlanıyor -->
               <div class="row py-2" style="background-color: <?= $index % 2 === 0 ? '#ffffff' : '#d0d4d7' ?>; border-bottom: 1px solid #dee2e6;">
-                <!-- Plaka -->
+                <div class="col-md-1 col-12">
+                  <span class="d-md-none font-weight-bold">Araç Adı: </span>
+                  <?= guvenlik($row['arac_adi']) ?>
+                </div>
                 <div class="col-md-1 col-12">
                     <span class="d-md-none font-weight-bold">Plaka: </span>
                     <?= htmlspecialchars($row['plaka']) ?>
                 </div>
-                <!-- Kullanan Kişi -->
                 <div class="col-md-2 col-12">
                     <span class="d-md-none font-weight-bold">Kullanan Kişi: </span>
                     <?= htmlspecialchars($row['araci_kullanan']) ?>
                 </div>
-                <div class="col-md-5 col-12">
+                <div class="col-md-4 col-12">
                   <div class="row">
                     <div class="col-md-4 col-12">
                       <span class="d-md-none font-weight-bold">Kasko Bitiş Tarihi: </span>
@@ -332,6 +348,12 @@
                   <div class="row">
                     <div class="col-md-1 col-12">
                       <div class="row">
+                          <div class="col-md-12 col-5">Araç Adı</div>
+                          <div class="col-md-12 col-7 pb-2"><input type="text" name="arac_adi" class="form-control form-control-sm" placeholder="Plaka" value="<?= $row['arac_adi']?>"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-1 col-12">
+                      <div class="row">
                         <div class="col-md-12 col-5">Plaka</div>
                         <div class="col-md-12 col-7 pb-2"><input type="text" name="plaka" class="form-control form-control-sm" placeholder="Plaka" value="<?= $row['plaka']?>"></div>
                       </div>
@@ -342,22 +364,26 @@
                         <div class="col-md-12 col-7"><input type="text" name="araci_kullanan" class="form-control form-control-sm" placeholder="Aracı Kullanan Kişi" value="<?= $row['araci_kullanan'] ?>"></div>
                       </div>
                     </div>
-                    <div class="col-md-2 col-12">
+                    <div class="col-md-5 col-12">
                       <div class="row">
-                        <div class="col-md-12 col-5">Kasko Bitiş Tarihi</div>
-                        <div class="col-md-12 col-7 pb-2"><input type="date" name="kasko_bitis_tarihi" id="kasko_bitis_tarihi_inputu" class="form-control form-control-sm" value="<?= $row['kasko_bitis_tarihi'] ?>"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-2 col-12">
-                      <div class="row">
-                        <div class="col-md-12 col-5">Sigorta Bitiş Tarihi</div>
-                        <div class="col-md-12 col-7 pb-2"><input type="date" name="sigorta_bitis_tarihi" id="sigorta_bitis_tarihi_inputu" class="form-control form-control-sm" value="<?= $row['sigorta_bitis_tarihi'] ?>"></div>
-                      </div>
-                    </div>
-                    <div class="col-md-2 col-12">
-                      <div class="row">
-                        <div class="col-md-12 col-5">Muayene Tarihi</div>
-                        <div class="col-md-12 col-7 pb-2"><input type="date" name="muayene_tarihi" id="muayene_tarihi_inputu" value="<?= $row['muayene_tarihi'] ?>"></div>
+                        <div class="col-md-4 col-12">
+                          <div class="row">
+                            <div class="col-md-12 col-5">Kasko Bitiş Tarihi</div>
+                            <div class="col-md-12 col-7 pb-2"><input type="date" name="kasko_bitis_tarihi" id="kasko_bitis_tarihi_inputu" class="form-control form-control-sm" value="<?= $row['kasko_bitis_tarihi'] ?>"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                          <div class="row">
+                            <div class="col-md-12 col-5">Sigorta Bitiş Tarihi</div>
+                            <div class="col-md-12 col-7 pb-2"><input type="date" name="sigorta_bitis_tarihi" id="sigorta_bitis_tarihi_inputu" class="form-control form-control-sm" value="<?= $row['sigorta_bitis_tarihi'] ?>"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                          <div class="row">
+                            <div class="col-md-12 col-5">Muayene Tarihi</div>
+                            <div class="col-md-12 col-7 pb-2"><input type="date" name="muayene_tarihi" id="muayene_tarihi_inputu" class="form-control form-control-sm" value="<?= $row['muayene_tarihi'] ?>"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="col-md-1 col-12">

@@ -564,9 +564,11 @@ if ($girdi != '1') {
                 </div>
             </div>
             <?php
-            $rand = rand(0, 1);
-            $firstUser = $rand === 0 ? 17 : 18;
-            $secondUser = $rand === 0 ? 18 : 17;
+            //$rand = rand(0, 1);
+            //$firstUser = $rand === 0 ? 17 : 18;
+            //$secondUser = $rand === 0 ? 18 : 17;
+            $firstUser = 17;
+            $secondUser = 18;
             ?>
             <div class="border-full right-side-frame">
                 <div style="border-bottom:3px solid #276274; height:60px;"></div>
