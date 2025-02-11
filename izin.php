@@ -91,11 +91,11 @@
                             <select name="izinli" id="izinli" class="form-control">
                                 <option selected>İzin Verilecek Kişiyi Seçiniz</option>                        
                                 <?php
-                                    $calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' AND uye_tipi != '2' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+                                    $calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' AND uye_tipi != '2' ORDER BY name ASC", PDO::FETCH_ASSOC);
                                     if ( $calisanlaricek->rowCount() ){
                                         foreach( $calisanlaricek as $cc ){
                                             $calisanId = guvenlik($cc['id']);
-                                            $calisanAdi = guvenlik($cc['uye_adi']);
+                                            $calisanAdi = guvenlik($cc['name']);
                                 ?>
                                             <option value="<?= $calisanId; ?>"><?= $calisanAdi; ?></option>
                                 <?php
@@ -219,11 +219,11 @@
             </div>
             <hr/>
             <?php
-                $uyeler = $db->query("SELECT * FROM uyeler WHERE uye_tipi != '2' AND uye_firma = '{$uye_sirket}' AND uye_silik = '0' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+                $uyeler = $db->query("SELECT * FROM uyeler WHERE uye_tipi != '2' AND uye_firma = '{$uye_sirket}' AND uye_silik = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
                 if ( $uyeler->rowCount() ){
                     foreach( $uyeler as $key => $uye ){
                         $uyeId = guvenlik($uye['id']);
-                        $uyeAdi = guvenlik($uye['uye_adi']);
+                        $uyeAdi = guvenlik($uye['name']);
                         $iseGirisTarihi = guvenlik($uye['ise_giris_tarihi']);
                         $toplamHakedis = yillikIzinHesapla($uyeId);
                         $kullanilanIzin = kullanilanIzinHesapla($uyeId);

@@ -11,20 +11,20 @@
 	}
 
 	if (isset($_POST['giris'])) {
-		$uye_adi = guvenlik($_POST['uye_adi']);
+		$name = guvenlik($_POST['name']);
 		$sifre = guvenlik($_POST['sifre']);
 		$sifreli = md5($sifre);
-		if (empty($uye_adi) === true) {
+		if (empty($name) === true) {
 			$hata = '<div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
 		}elseif(empty($sifre) === true){
 			$hata = '<div class="alert alert-danger" role="alert">Şifre kısmını boş bıraktınız.</div>';
-		}elseif(giris($uye_adi,$sifreli) === false){
+		}elseif(giris($name,$sifreli) === false){
 			$hata = '<div class="alert alert-danger" role="alert">E-posta veya şifreyi yanlış girdiniz.</div>';
-		}elseif(pasifmi($uye_adi) == '1'){
+		}elseif(pasifmi($name) == '1'){
 			$hata = '<div class="alert alert-danger" role="alert">Üyeliğiniz pasifleştirilmiştir.</div>';
 		}else{
-			if (is_numeric(giris($uye_adi,$sifreli)) === true) {
-				$_SESSION['user_id'] = giris($uye_adi,$sifreli);
+			if (is_numeric(giris($name,$sifreli)) === true) {
+				$_SESSION['user_id'] = giris($name,$sifreli);
 				header("Location: index.php");
 				exit();
 			}
@@ -67,7 +67,7 @@
 
 							<div class="input-group mb-3">
 								
-								<input type="text" class="form-control" placeholder="Kullanıcı Adı" aria-label="uye_adi" aria-describedby="basic-addon1" name="uye_adi" style="text-align: center; font-weight: bold; border:2px grey solid;">
+								<input type="text" class="form-control" placeholder="Kullanıcı Adı" aria-label="name" aria-describedby="basic-addon1" name="name" style="text-align: center; font-weight: bold; border:2px grey solid;">
 							
 							</div>
 

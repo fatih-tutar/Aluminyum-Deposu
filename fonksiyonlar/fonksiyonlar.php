@@ -77,9 +77,9 @@
 
 	function getUsername($userId){
 		global $db;
-		$user = $db->query("SELECT uye_adi FROM uyeler WHERE id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		$user = $db->query("SELECT name FROM uyeler WHERE id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 		if($user) {
-			return $user['uye_adi'];
+			return $user['name'];
 		}else{
 			return null;
 		}
@@ -375,13 +375,13 @@ function ayAdi($ay){
 		return $veri;
 	}
 
-	function giris($uye_adi, $sifre){
+	function giris($name, $sifre){
 		global $db;
-		$query = $db->query("SELECT * FROM uyeler WHERE uye_adi = '{$uye_adi}'")->fetch(PDO::FETCH_ASSOC);
+		$query = $db->query("SELECT * FROM uyeler WHERE name = '{$name}'")->fetch(PDO::FETCH_ASSOC);
         if($query && isset($query['id'])) {
             $userId = $query['id'];
         }
-		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE uye_adi = '{$uye_adi}' AND uye_sifre = '{$sifre}'");
+		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE name = '{$name}' AND uye_sifre = '{$sifre}'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
 		if ($say == '0') {
@@ -396,9 +396,9 @@ function ayAdi($ay){
 		return (isset($_SESSION['user_id'])) ? true: false;
 	}
 
-	function pasifmi($uye_adi){
+	function pasifmi($name){
 		global $db;
-		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE uye_adi = '{$uye_adi}' AND pasiflik = '1'");
+		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE name = '{$name}' AND pasiflik = '1'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
 		return ($say == '0') ? '0' : '1';
@@ -426,11 +426,11 @@ function ayAdi($ay){
 		return ($say == '0') ? '0' : '1';
 	}
 
-	function uye_adi_var_mi($uye_adi){
+	function checkUserById($name){
 
 		global $db;
 
-		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE uye_adi = '{$uye_adi}'");
+		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE name = '{$name}'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
 
@@ -571,9 +571,9 @@ function ayAdi($ay){
 
 		$uyeadcek = $db->query("SELECT * FROM uyeler WHERE id = '{$userId}'")->fetch(PDO::FETCH_ASSOC);
 
-		$uye_adi = $uyeadcek['uye_adi'];
+		$name = $uyeadcek['name'];
 
-		return $uye_adi;
+		return $name;
 
 	}
 

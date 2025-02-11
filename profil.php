@@ -22,7 +22,7 @@
 
 			$profil = $db->query("SELECT * FROM uyeler WHERE id = '{$profil_id}'")->fetch(PDO::FETCH_ASSOC);
 			$profil_yetkiler = guvenlik($profil['uye_yetkiler']);
-			$profil_adi = guvenlik($profil['uye_adi']);
+			$profil_adi = guvenlik($profil['name']);
 			$profil_mail = guvenlik($profil['uye_mail']);
 			$profil_tel = guvenlik($profil['uye_tel']);
 			$profil_tel_2 = guvenlik($profil['tel_2']);
@@ -40,7 +40,7 @@
 
 	if($uye_tipi != '3'){
 		if (isset($_POST['bilgilerimiguncelle'])) {
-			$uye_adi = guvenlik($_POST['uye_adi']);
+			$name = guvenlik($_POST['name']);
 			$uye_unvan = guvenlik($_POST['uye_unvan']);
 			$uye_mail = guvenlik($_POST['uye_mail']);
 			$uye_tel = guvenlik($_POST['uye_tel']);
@@ -97,15 +97,15 @@
 			}else{
 				$saglikraporu = $saglik_raporu;
 			}
-			if (empty($uye_adi) === true) {				
+			if (empty($name) === true) {
 				$hata = '<br/><div class="alert alert-danger" role="alert">Kullanıcı adınızı boş bıraktınız.</div>';
 			}elseif (empty($uye_mail) === true) {
 				$hata = '<br/><div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
 			}elseif (empty($uye_tel) === true) {
 				$hata = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
 			}else{
-				$query = $db->prepare("UPDATE uyeler SET uye_adi = ?, uye_mail = ?, uye_unvan = ?, uye_tel = ?, tel_2 = ?, ise_giris_tarihi = ?, adres = ?, foto = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE id = ?");
-				$guncelle = $query->execute(array($uye_adi, $uye_mail, $uye_unvan, $uye_tel, $tel_2, $ise_giris_tarihi, $adres, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
+				$query = $db->prepare("UPDATE uyeler SET name = ?, uye_mail = ?, uye_unvan = ?, uye_tel = ?, tel_2 = ?, ise_giris_tarihi = ?, adres = ?, foto = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE id = ?");
+				$guncelle = $query->execute(array($name, $uye_mail, $uye_unvan, $uye_tel, $tel_2, $ise_giris_tarihi, $adres, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
 				header("Location:profil.php?id=".$profil_id."&guncellendi");
 				exit();
 			}
@@ -317,7 +317,7 @@
 								<b>Fotoğraf</b>
 								<input type="file" name="uploadfile" style="margin-bottom: 10px;"><br/>
 								<b>Ad Soyad</b>
-								<input type="text" class="form-control form-control-sm mb-1" placeholder="Kullanıcı Adı" name="uye_adi" value="<?= $profil_adi ?>">
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="Kullanıcı Adı" name="name" value="<?= $profil_adi ?>">
 								<b>Ünvan</b>
 								<input type="text" class="form-control form-control-sm mb-1" placeholder="Ünvan" name="uye_unvan" value="<?= $unvan ?>">
 								<b>E-posta Adresi</b>

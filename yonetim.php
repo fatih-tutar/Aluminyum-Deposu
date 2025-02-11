@@ -76,7 +76,7 @@
 
 		if (isset($_POST['uye_ekle'])) {
 			
-			$yeni_uye_adi = guvenlik($_POST['yeni_uye_adi']);
+			$name = guvenlik($_POST['name']);
 
 			$yeni_uye_mail = guvenlik($_POST['yeni_uye_mail']);
 
@@ -84,19 +84,19 @@
 
 			$yeni_uye_yetki = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
 
-			if (empty($yeni_uye_adi)) {
+			if (empty($name)) {
 				
 				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Kullanıcı adı kısmını boş bıraktınız.</div>';
 
-			}elseif (uye_adi_var_mi($yeni_uye_adi) == '1') {
+			}elseif (checkUserById($name) == '1') {
 				
 				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Bu kullanıcı adı kullanılıyor.</div>';				
 
 			}else{
 
-				$query = $db->prepare("INSERT INTO uyeler SET uye_adi = ?, uye_mail = ?, uye_sifre = ?, uye_firma = ?, uye_tipi = ?, uye_yetkiler = ?, uye_silik = ?");
+				$query = $db->prepare("INSERT INTO uyeler SET name = ?, uye_mail = ?, uye_sifre = ?, uye_firma = ?, uye_tipi = ?, uye_yetkiler = ?, uye_silik = ?");
 
-				$insert = $query->execute(array($yeni_uye_adi,$yeni_uye_mail,$yeni_uye_sifre,$uye_firma,'0',$yeni_uye_yetki,'0'));
+				$insert = $query->execute(array($name,$yeni_uye_mail,$yeni_uye_sifre,$uye_firma,'0',$yeni_uye_yetki,'0'));
 
 				header("Location:yonetim.php");
 
@@ -159,11 +159,11 @@
 						<h4>Kullanıcılar</h4>
 						<div class="row">
 							<?php	
-								$query = $db->query("SELECT * FROM uyeler WHERE uye_firma = '$uye_firma' AND uye_tipi != '2' AND uye_silik = '0' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+								$query = $db->query("SELECT * FROM uyeler WHERE uye_firma = '$uye_firma' AND uye_tipi != '2' AND uye_silik = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
 								if ( $query->rowCount() ){
 									foreach( $query as $row ){
 										$kullanici_id = guvenlik($row['id']);
-										$kullanici_adi = guvenlik($row['uye_adi']);	
+										$kullanici_adi = guvenlik($row['name']);
 										$kullanici_unvan = guvenlik($row['uye_unvan']);
 							?>
 										<div class="col-6 my-2">
@@ -190,7 +190,7 @@
 							<h4 class="pl-1 pt-1">Yeni Kullanıcı Ekleme</h4>
 							<div class="row">
 								<div class="col-md-5 col-12">
-									<input type="text" name="yeni_uye_adi" placeholder="Kullanıcı Adı Giriniz" class="form-control" style="margin-bottom: 10px;">
+									<input type="text" name="name" placeholder="Kullanıcı Adı Giriniz" class="form-control" style="margin-bottom: 10px;">
 								</div>
 								<div class="col-md-5 col-12">
 									<input type="text" name="yeni_uye_mail" placeholder="Kullanıcının E-Posta Adresini Giriniz" class="form-control" style="margin-bottom: 10px;">

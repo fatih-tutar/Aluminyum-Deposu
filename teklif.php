@@ -121,7 +121,7 @@ if($uye_tipi != '3'){
 
 			<div class="col-md-5"><br/>
 				
-				<?= $uye_adi."<br/>".$uye_mail."<br/>".$uye_tel; ?>
+				<?= $user->name."<br/>".$uye_mail."<br/>".$uye_tel; ?>
 
 			</div>
 

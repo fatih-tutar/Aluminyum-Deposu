@@ -101,7 +101,7 @@
 
 			<div class="col-md-5"><br/>
 
-				<?= $uye_adi." / ".$uye_mail; ?>
+				<?= $user->name." / ".$uye_mail; ?>
 
 			</div>
 

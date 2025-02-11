@@ -16,7 +16,7 @@
 				
 					<button class="btn btn-primary dropdown-toggle" style="background-color:black; border-style: none;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				
-						<?= $uye_adi ?>
+						<?= $user->name ?>
 				
 					</button>
 				

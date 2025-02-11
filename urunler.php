@@ -1337,13 +1337,13 @@
 														
 														<?php
 
-															$calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
+															$calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
 															if ( $calisanlaricek->rowCount() ){
 
 																foreach( $calisanlaricek as $cc ){
 
-																	$hazirlayanadi = $cc['uye_adi'];
+																	$hazirlayanadi = $cc['name'];
 
 														?>
 

@@ -22,7 +22,6 @@
 		$uye_session_id = $_SESSION['user_id'];
         $user = $db->query("SELECT * FROM uyeler WHERE id = '$uye_session_id'", PDO::FETCH_OBJ)->fetch();
 		$uye_verileri = $db->query("SELECT * FROM uyeler WHERE id = '{$uye_session_id}'")->fetch(PDO::FETCH_ASSOC);
-		$uye_adi = $uye_verileri['uye_adi'];
 		$uye_mail = $uye_verileri['uye_mail'];
 		$uye_sifre = $uye_verileri['uye_sifre'];
 		$uye_firma = $uye_verileri['uye_firma'];

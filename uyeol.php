@@ -44,7 +44,7 @@
 				
 				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Şifre ve şifre tekrarı birbiriyle uyuşmuyor.</div>';				
 
-			}elseif (uye_adi_var_mi($uyeadi) == '1') {
+			}elseif (checkUserById($uyeadi) == '1') {
 				
 				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Bu kullanıcı adı kullanılıyor.</div>';				
 
@@ -52,7 +52,7 @@
 
 				$sifre = md5($sifre);
 
-				$query = $db->prepare("INSERT INTO uyeler SET uye_adi = ?, uye_mail = ?, uye_sifre = ?, uye_firma = ?, uye_tipi = ?, uye_yetkiler = ?, uye_silik =?");
+				$query = $db->prepare("INSERT INTO uyeler SET name = ?, uye_mail = ?, uye_sifre = ?, uye_firma = ?, uye_tipi = ?, uye_yetkiler = ?, uye_silik =?");
 
 				$insert = $query->execute(array($uyeadi,$eposta,$sifre,'0','0',$yeni_uye_yetki,'1'));
 
