@@ -16,7 +16,7 @@
     
         /* Gelen terim ile eşleşen kayıt olup olmadığını sorguluyoruz. */
 
-        $sorgu = $db->prepare("SELECT COUNT(*) FROM firmalar WHERE firmaadi LIKE '%$term%' AND sirketid = '{$uye_sirket}' ORDER BY firmaadi ASC");
+        $sorgu = $db->prepare("SELECT COUNT(*) FROM firmalar WHERE firmaadi LIKE '%$term%' AND sirketid = '{$user->company_id}' ORDER BY firmaadi ASC");
         
         $sorgu->execute();
         
@@ -26,7 +26,7 @@
 
         if ($say != 0) { // Sorgulama sonucu dolu olursa eğer sonuçları ekrana basıyoruz.
 
-            $query = $db->query("SELECT * FROM firmalar WHERE firmaadi LIKE '%$term%' AND sirketid = '{$uye_sirket}' ORDER BY firmaadi ASC LIMIT 10", PDO::FETCH_ASSOC);
+            $query = $db->query("SELECT * FROM firmalar WHERE firmaadi LIKE '%$term%' AND sirketid = '{$user->company_id}' ORDER BY firmaadi ASC LIMIT 10", PDO::FETCH_ASSOC);
 
             if($query->rowCount()){
 

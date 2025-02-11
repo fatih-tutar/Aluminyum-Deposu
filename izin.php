@@ -28,7 +28,7 @@
                 $hata = '<br/><div class="alert alert-danger" role="alert">Sizin departmanınızda aynı tarihlerde izin alan başka bir çalışan var. Lütfen yıllık izin planından kontrol ediniz.</div>';        
             }else{
                 $query = $db->prepare("INSERT INTO izinler SET izinli = ?, izin_baslangic_tarihi = ?, ise_baslama_tarihi = ?, gun_sayisi = ?, durum = ?, ofis = ?, sirket = ?, silik = ?, saniye = ?");
-                $insert = $query->execute(array($izinli, $izinBaslangicTarihi, $iseBaslamaTarihi, $gunSayisi, '0', $ofis, $uye_sirket, '0', $su_an));
+                $insert = $query->execute(array($izinli, $izinBaslangicTarihi, $iseBaslamaTarihi, $gunSayisi, '0', $ofis, $user->company_id, '0', $su_an));
                 header("Location: izin.php");
                 exit();
             }
@@ -85,13 +85,13 @@
             <div id="formdivi" style="display: none;">
                 <form action="" method="POST">
                     <div class="row mb-2">
-                        <?php if($uye_tipi == 2) { ?>
+                        <?php if($user->type == 2) { ?>
                         <div class="col-md-3 col-12">
                             <b>Çalışan</b>
                             <select name="izinli" id="izinli" class="form-control">
                                 <option selected>İzin Verilecek Kişiyi Seçiniz</option>                        
                                 <?php
-                                    $calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' AND uye_tipi != '2' ORDER BY name ASC", PDO::FETCH_ASSOC);
+                                    $calisanlaricek = $db->query("SELECT * FROM users WHERE company_id = '{$user->company_id}' AND type != '2' ORDER BY name ASC", PDO::FETCH_ASSOC);
                                     if ( $calisanlaricek->rowCount() ){
                                         foreach( $calisanlaricek as $cc ){
                                             $calisanId = guvenlik($cc['id']);
@@ -132,7 +132,7 @@
             <div class="row m-0 d-none d-md-flex">
                 <div class="col-md-2"><b>Ad Soyad</b></div>
                 <div class="col-md-1 px-0"><b>İşe Giriş Tarihi</b></div>
-                <?php if($uye_tipi == 2){ ?><div class="col-md-1"><b>Hakediş</b></div><?php } ?>
+                <?php if($user->type == 2){ ?><div class="col-md-1"><b>Hakediş</b></div><?php } ?>
                 <div class="col-md-2"><b>İzin Başlama Tarihi</b></div>
                 <div class="col-md-2"><b>İşe Başlama Tarihi</b></div>
                 <div class="col-md-1"><b>Onay</b></div>
@@ -141,7 +141,7 @@
             </div>
             <hr/>
             <?php
-                $izinler = $db->query("SELECT * FROM izinler WHERE sirket = '{$uye_sirket}' AND 'izin_baslangic_tarihi' > '{$tarihv3}' AND silik = '0' ORDER BY saniye");
+                $izinler = $db->query("SELECT * FROM izinler WHERE sirket = '{$user->company_id}' AND 'izin_baslangic_tarihi' > '{$tarihv3}' AND silik = '0' ORDER BY saniye");
                 if($izinler->rowCount()) {
                     foreach($izinler as $key => $izin) {
                         $id = guvenlik($izin['id']);
@@ -167,7 +167,7 @@
                                 <div class="col-md-2 col-6 dikey-ortala"><?= $izinliAdi ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>İşe Giriş Tarihi :</b></div>
                                 <div class="col-md-1 col-6 dikey-ortala"><?= (new DateTime(iseGirisTarihiGetir($izinli)))->format('d.m.Y') ?></div>
-                                <?php if($uye_tipi == 2){ ?>
+                                <?php if($user->type == 2){ ?>
                                 <div class="col-6 d-block d-sm-none"><b>Hakediş :</b></div>
                                 <div class="col-md-1 col-6 dikey-ortala"><?= yillikIzinHesapla($izinli) ?></div>
                                 <?php } ?>
@@ -181,7 +181,7 @@
                                 <div class="col-md-1 col-6 dikey-ortala"><?= kullanilanIzinHesapla($izinli) ?></div>
                                 <div class="col-6 d-block d-sm-none"><b>Kalan İzin :</b></div>
                                 <div class="col-md-1 col-6 dikey-ortala"><?= $kalanIzin ?></div>
-                                <?php if($uye_tipi == 2) { ?>
+                                <?php if($user->type == 2) { ?>
                                     <div class="col-md-1 col-12 px-0 d-flex">
                                         <input type="hidden" name="id" value="<?= $id ?>">
                                         <button type="submit" class="btn btn-block btn-sm btn-success mt-0" name="izinonayla" onclick="return confirmForm('İzni onaylıyorsunuz, emin misiniz?');">Onay</button>
@@ -207,7 +207,7 @@
                 <li>YÖNETİMİN İNSİYATİFİYLE BELİRLEDİĞİ MÜCBİR SEBEBLER HARİÇ, BU KURALAR DIŞINA ÇIKILAMAZ; TÜM ÇALIŞANLARIN BU KURALLARA UYMASI BEKLENMEKTEDİR.</li>
             </ul>
         </div>
-        <?php if($uye_tipi == 2){ ?>
+        <?php if($user->type == 2){ ?>
         <div class="div4 pt-3 mt-4">
             <h5 style="text-align:center; color:darkblue;">GENEL İZİN TABLOSU</h5>
             <div class="row m-0 d-none d-md-flex">
@@ -219,9 +219,9 @@
             </div>
             <hr/>
             <?php
-                $uyeler = $db->query("SELECT * FROM uyeler WHERE uye_tipi != '2' AND uye_firma = '{$uye_sirket}' AND uye_silik = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
-                if ( $uyeler->rowCount() ){
-                    foreach( $uyeler as $key => $uye ){
+                $users = $db->query("SELECT * FROM users WHERE type != '2' AND company_id = '{$user->company_id}' AND uye_silik = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
+                if ( $users->rowCount() ){
+                    foreach( $users as $key => $uye ){
                         $uyeId = guvenlik($uye['id']);
                         $uyeAdi = guvenlik($uye['name']);
                         $iseGirisTarihi = guvenlik($uye['ise_giris_tarihi']);

@@ -26,9 +26,9 @@
 				
 						<a class="dropdown-item" href="profil.php?id=<?= $user->id; ?>"><b>PROFİL</b></a>
 				
-						<?php if($uye_tipi == '2' || $uye_tipi == '1' || $uye_tipi == '3'){?>
+						<?php if($user->type == '2' || $user->type == '1' || $user->type == '3'){?>
 				
-							<?php if($uye_tipi == '2'){?>
+							<?php if($user->type == '2'){?>
 
 								<hr class="m-1"/>
 
@@ -66,7 +66,7 @@
 
                             <?php } ?>
 
-							<?php if($uye_tipi == '2' || $uye_tipi == '1' || $uye_tipi == '3'){?>
+							<?php if($user->type == '2' || $user->type == '1' || $user->type == '3'){?>
 								
 								<a class="dropdown-item" href="kategoriler.php"><b>KATEGORİLER</b></a>
 							
@@ -124,9 +124,9 @@
 
 if(giris_yapti_mi() === true){
 
-	if(($su_an - (60 * 60 * 7)) > $sirketyedekalmasaniye && $uye_tipi == '2'){
+	if(($su_an - (60 * 60 * 7)) > $sirketyedekalmasaniye && $user->type == '2'){
 
-		otomatikyedekal($su_an, $uye_sirket, $sayfa);
+		otomatikyedekal($su_an, $user->company_id, $sayfa);
 
 	}
 

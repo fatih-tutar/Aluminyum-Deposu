@@ -8,7 +8,7 @@
 
 		exit();
 
-	}elseif($uye_tipi == '0' || $uye_tipi == '1'){
+	}elseif($user->type == '0' || $user->type == '1'){
 
 		header("Location:index.php");
 
@@ -311,14 +311,14 @@
 
 		if (isset($_POST['fiyatgoster'])) {
 			$query = $db->prepare("UPDATE sirketler SET fiyatlistesi = ? WHERE sirketid = ?"); 
-			$guncelle = $query->execute(array(0,$uye_sirket));
+			$guncelle = $query->execute(array(0,$user->company_id));
 			header("Location:fiyatlar.php");
 			exit();
 		}
 
 		if (isset($_POST['fiyatgizle'])) {
 			$query = $db->prepare("UPDATE sirketler SET fiyatlistesi = ? WHERE sirketid = ?"); 
-			$guncelle = $query->execute(array(1,$uye_sirket));
+			$guncelle = $query->execute(array(1,$user->company_id));
 			header("Location:fiyatlar.php");
 			exit();
 		}

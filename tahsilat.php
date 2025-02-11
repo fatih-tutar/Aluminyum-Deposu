@@ -10,7 +10,7 @@
 
 	}elseif ($girdi == 1) {
 
-		if($uye_tipi == '0'){
+		if($user->type == '0'){
 
 			header("Location:index.php");
 
@@ -18,7 +18,7 @@
 
 		}
 
-	if($uye_tipi != '3'){
+	if($user->type != '3'){
 
 		if (isset($_POST['firmabilgileriguncelle'])) {
 			
@@ -102,7 +102,7 @@
 
 			$query = $db->prepare("INSERT INTO firmalar SET firmaadi = ?, firmatel = ?, firmaeposta = ?, firmaadres = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($firmaadi, $firmatel, $firmaeposta, $firmaadres, $uye_sirket,'0'));
+			$insert = $query->execute(array($firmaadi, $firmatel, $firmaeposta, $firmaadres, $user->company_id,'0'));
 
 			header("Location:firmalar.php");
 
@@ -162,7 +162,7 @@
 
 	                                    <?php
 
-	                                    $fabrika = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$uye_sirket}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
+	                                    $fabrika = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$user->company_id}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
 
 	                                    if ( $fabrika->rowCount() ){
 
@@ -226,7 +226,7 @@
 				
 				<?php 
 
-					$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$uye_sirket}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
+					$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$user->company_id}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
 
 					if ( $query->rowCount() ){
 
@@ -372,7 +372,7 @@
 
 									$tekliflersiralamasi = 0;
 
-									$tklfcek = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$firmaid}' AND formda = '0' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY teklifid DESC", PDO::FETCH_ASSOC);
+									$tklfcek = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$firmaid}' AND formda = '0' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY teklifid DESC", PDO::FETCH_ASSOC);
 
 									if ( $tklfcek->rowCount() ){
 
@@ -384,29 +384,29 @@
 
 											$turunid = $tklfrow['turunid'];
 
-											$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+											$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 											$urun_adi = $urunbilgicek['urun_adi'];
 
 											$urun_birimkg = $urunbilgicek['urun_birimkg'];
 
-											$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+											$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 											$kategori_bir = $katbilcek['kategori_bir'];
 
-											$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+											$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 											$kategori_bir_adi = $katadcek['kategori_adi'];
 
 											$kategori_iki = $katbilcek['kategori_iki'];
 
-											$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+											$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 											$kategori_iki_adi = $katadcek['kategori_adi'];
 
 											$tverilenfirmaid = $tklfrow['tverilenfirma'];
 
-											$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+											$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 											$tverilenfirmaadi = $firmabilgi['firmaadi'];
 
@@ -474,7 +474,7 @@
 
 						<?php
 
-							$teklifformlarinicek = $db->query("SELECT * FROM teklifformlari WHERE firmaid = '{$firmaid}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY tformid DESC", PDO::FETCH_ASSOC);
+							$teklifformlarinicek = $db->query("SELECT * FROM teklifformlari WHERE firmaid = '{$firmaid}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY tformid DESC", PDO::FETCH_ASSOC);
 
 							if ( $teklifformlarinicek->rowCount() ){
 
@@ -528,7 +528,7 @@
 
 											foreach ($teklifleripatlat as $key => $value) {
 												
-												$tklfrow = $db->query("SELECT * FROM teklif WHERE teklifid = '{$value}' AND sirketid = '{$uye_sirket}' AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
+												$tklfrow = $db->query("SELECT * FROM teklif WHERE teklifid = '{$value}' AND sirketid = '{$user->company_id}' AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
 
 												$tekliflersiralamasi++;
 
@@ -536,29 +536,29 @@
 
 												$turunid = $tklfrow['turunid'];
 
-												$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$urun_adi = $urunbilgicek['urun_adi'];
 
 												$urun_birimkg = $urunbilgicek['urun_birimkg'];
 
-												$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$turunid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$kategori_bir = $katbilcek['kategori_bir'];
 
-												$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$kategori_bir_adi = $katadcek['kategori_adi'];
 
 												$kategori_iki = $katbilcek['kategori_iki'];
 
-												$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$kategori_iki_adi = $katadcek['kategori_adi'];
 
 												$tverilenfirmaid = $tklfrow['tverilenfirma'];
 
-												$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$tverilenfirmaadi = $firmabilgi['firmaadi'];
 

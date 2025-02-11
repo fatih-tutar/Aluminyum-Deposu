@@ -10,7 +10,7 @@
 
 	}elseif ($girdi == 1) {
 
-		if($uye_tipi == '0' || $uye_tipi == '1'){
+		if($user->type == '0' || $user->type == '1'){
 
 			header("Location:index.php");
 
@@ -18,7 +18,7 @@
 
 		}
 
-	if($uye_tipi != '3'){
+	if($user->type != '3'){
 
 		if (isset($_POST['aciklamaguncelle'])) {
 			
@@ -26,7 +26,7 @@
 
 			$query = $db->prepare("UPDATE sirketler SET sirketaciklama = ? WHERE sirketid = ?"); 
 
-			$guncelle = $query->execute(array($sirketaciklama,$uye_sirket));
+			$guncelle = $query->execute(array($sirketaciklama,$user->company_id));
 
 			header("Location:yonetim.php");
 
@@ -52,7 +52,7 @@
 
             $query = $db->prepare("UPDATE sirketler SET sirketlogo = ? WHERE sirketid = ?"); 
 
-			$guncelle = $query->execute(array($upload_file,$uye_sirket));
+			$guncelle = $query->execute(array($upload_file,$user->company_id));
 
 			header("Location:yonetim.php");
 
@@ -64,7 +64,7 @@
 			
 			$kullanici_id = guvenlik($_POST['kullanici_id']);
 
-			$query = $db->prepare("UPDATE uyeler SET uye_silik = ? WHERE id = ?");
+			$query = $db->prepare("UPDATE users SET uye_silik = ? WHERE id = ?");
 
 			$guncelle = $query->execute(array('1',$kullanici_id));
 
@@ -78,9 +78,9 @@
 			
 			$name = guvenlik($_POST['name']);
 
-			$yeni_uye_mail = guvenlik($_POST['yeni_uye_mail']);
+			$email = guvenlik($_POST['email']);
 
-			$yeni_uye_sifre = "81dc9bdb52d04dc20036dbd8313ed055";
+			$password = "81dc9bdb52d04dc20036dbd8313ed055";
 
 			$yeni_uye_yetki = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
 
@@ -94,9 +94,9 @@
 
 			}else{
 
-				$query = $db->prepare("INSERT INTO uyeler SET name = ?, uye_mail = ?, uye_sifre = ?, uye_firma = ?, uye_tipi = ?, uye_yetkiler = ?, uye_silik = ?");
+				$query = $db->prepare("INSERT INTO users SET name = ?, email = ?, password = ?, company_id = ?, type = ?, permissions = ?, uye_silik = ?");
 
-				$insert = $query->execute(array($name,$yeni_uye_mail,$yeni_uye_sifre,$uye_firma,'0',$yeni_uye_yetki,'0'));
+				$insert = $query->execute(array($name,$email,$password,$user->company_id,'0',$yeni_uye_yetki,'0'));
 
 				header("Location:yonetim.php");
 
@@ -159,12 +159,12 @@
 						<h4>Kullanıcılar</h4>
 						<div class="row">
 							<?php	
-								$query = $db->query("SELECT * FROM uyeler WHERE uye_firma = '$uye_firma' AND uye_tipi != '2' AND uye_silik = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
+								$query = $db->query("SELECT * FROM users WHERE company_id = '$user->company_id' AND type != '2' AND uye_silik = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
 								if ( $query->rowCount() ){
 									foreach( $query as $row ){
 										$kullanici_id = guvenlik($row['id']);
 										$kullanici_adi = guvenlik($row['name']);
-										$kullanici_unvan = guvenlik($row['uye_unvan']);
+										$kullanici_unvan = guvenlik($row['title']);
 							?>
 										<div class="col-6 my-2">
 											<a href="profil.php?id=<?= $kullanici_id ?>">
@@ -193,7 +193,7 @@
 									<input type="text" name="name" placeholder="Kullanıcı Adı Giriniz" class="form-control" style="margin-bottom: 10px;">
 								</div>
 								<div class="col-md-5 col-12">
-									<input type="text" name="yeni_uye_mail" placeholder="Kullanıcının E-Posta Adresini Giriniz" class="form-control" style="margin-bottom: 10px;">
+									<input type="text" name="email" placeholder="Kullanıcının E-Posta Adresini Giriniz" class="form-control" style="margin-bottom: 10px;">
 								</div>					
 								<div class="col-md-2 col-12">
 									<button type="submit" class="btn btn-primary btn-block" style="margin-bottom: 10px;" name="uye_ekle">Ekle</button>

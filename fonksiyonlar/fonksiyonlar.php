@@ -26,14 +26,14 @@
 
 	function getOfisType($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM uyeler WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
-		$yetkiArray = explode(",", $uye['uye_yetkiler']);
+		$uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
+		$yetkiArray = explode(",", $uye['permissions']);
 		return $yetkiArray[14];
 	}
 
 	function iseGirisTarihiGetir($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM uyeler WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
+		$uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
 		return $uye['ise_giris_tarihi'];
 	}
 	
@@ -46,7 +46,7 @@
 
 	function yillikIzinHesapla($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM uyeler WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
+		$uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
 		$iseGirisTarihi = $uye['ise_giris_tarihi'];
 		$bugun = new DateTime();
 		$baslamaTarihi = new DateTime($iseGirisTarihi);
@@ -77,7 +77,7 @@
 
 	function getUsername($userId){
 		global $db;
-		$user = $db->query("SELECT name FROM uyeler WHERE id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		$user = $db->query("SELECT name FROM users WHERE id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 		if($user) {
 			return $user['name'];
 		}else{
@@ -377,11 +377,11 @@ function ayAdi($ay){
 
 	function giris($name, $sifre){
 		global $db;
-		$query = $db->query("SELECT * FROM uyeler WHERE name = '{$name}'")->fetch(PDO::FETCH_ASSOC);
+		$query = $db->query("SELECT * FROM users WHERE name = '{$name}'")->fetch(PDO::FETCH_ASSOC);
         if($query && isset($query['id'])) {
             $userId = $query['id'];
         }
-		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE name = '{$name}' AND uye_sifre = '{$sifre}'");
+		$sorgu = $db->prepare("SELECT COUNT(*) FROM users WHERE name = '{$name}' AND password = '{$sifre}'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
 		if ($say == '0') {
@@ -398,7 +398,7 @@ function ayAdi($ay){
 
 	function pasifmi($name){
 		global $db;
-		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE name = '{$name}' AND pasiflik = '1'");
+		$sorgu = $db->prepare("SELECT COUNT(*) FROM users WHERE name = '{$name}' AND pasiflik = '1'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
 		return ($say == '0') ? '0' : '1';
@@ -419,18 +419,18 @@ function ayAdi($ay){
 
 		global $db;
 
-		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE id = '{$userId}'");
+		$sorgu = $db->prepare("SELECT COUNT(*) FROM users WHERE id = '{$userId}'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
 
 		return ($say == '0') ? '0' : '1';
 	}
 
-	function checkUserById($name){
+	function checkUserByName($name){
 
 		global $db;
 
-		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE name = '{$name}'");
+		$sorgu = $db->prepare("SELECT COUNT(*) FROM users WHERE name = '{$name}'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
 
@@ -490,7 +490,7 @@ function ayAdi($ay){
 
 	}
 
-	function otomatikyedekal($su_an, $uye_sirket, $sayfa){
+	function otomatikyedekal($su_an, $companyId, $sayfa){
 
 		global $db;
 
@@ -518,7 +518,7 @@ function ayAdi($ay){
 
 				$yedekal = $db->prepare("UPDATE sirketler SET yedekalmasaniye = ? WHERE sirketid = ?"); 
 
-				$yedekguncelle = $yedekal->execute(array($su_an,$uye_sirket));
+				$yedekguncelle = $yedekal->execute(array($su_an,$companyId));
 
 				echo '<div class="alert alert-warning" style="position:fixed; z-index:1; left:10%; border-width:3px; border-color:#856404;" >
 						Veritabanı yedeğiniz sunucuya alındı.<br/>Bilgisayarınıza da indirmek istiyorsanız<br/>aşağıdaki evet butonuna tıklayın.
@@ -569,7 +569,7 @@ function ayAdi($ay){
 
 		global $db;
 
-		$uyeadcek = $db->query("SELECT * FROM uyeler WHERE id = '{$userId}'")->fetch(PDO::FETCH_ASSOC);
+		$uyeadcek = $db->query("SELECT * FROM users WHERE id = '{$userId}'")->fetch(PDO::FETCH_ASSOC);
 
 		$name = $uyeadcek['name'];
 

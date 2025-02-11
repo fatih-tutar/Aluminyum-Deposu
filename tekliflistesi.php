@@ -10,7 +10,7 @@
 
 	}else{
 
-		if($uye_tipi == '0'){
+		if($user->type == '0'){
 
 			header("Location:index.php");
 
@@ -18,7 +18,7 @@
 
 		}
 
-	if($uye_tipi != '3'){
+	if($user->type != '3'){
 
 		if (isset($_POST['teklifkaydet'])) {
 			
@@ -132,7 +132,7 @@
 
     			<div class="col-md-6" style="text-align:right;">
 
-    				<?php if($uye_tipi == '2'){ ?><a href="teklifarsivi.php" target="_blank"><button class="btn btn-primary">Teklif Arşivi</button></a><?php } ?>
+    				<?php if($user->type == '2'){ ?><a href="teklifarsivi.php" target="_blank"><button class="btn btn-primary">Teklif Arşivi</button></a><?php } ?>
 
     			</div>
 

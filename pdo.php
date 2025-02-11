@@ -2,7 +2,7 @@
 
 //TEK ÇEKİM
 
-$query = $db->query("SELECT * FROM uyeler WHERE id = '{$id}'")->fetch(PDO::FETCH_ASSOC);
+$query = $db->query("SELECT * FROM users WHERE id = '{$id}'")->fetch(PDO::FETCH_ASSOC);
 
 //TOPLU ÇEKİM
 

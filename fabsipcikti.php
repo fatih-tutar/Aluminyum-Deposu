@@ -14,7 +14,7 @@
 			
 			$fabrika_id = guvenlik($_GET['id']);
 
-			$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+			$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 			$fabrika_adi = $fabrikaadcek['fabrika_adi'];
 
@@ -65,7 +65,7 @@
 
     				$i = 0;
 
-						$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}' AND taslak = '0' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
+						$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}' AND taslak = '0' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
 
 						if ( $sipariscek->rowCount() ){
 
@@ -207,7 +207,7 @@
 
     			$toplamkilo = 0;
 
-					$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}' AND taslak = '1' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
+					$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}' AND taslak = '1' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
 
 					if ( $sipariscek->rowCount() ){
 

@@ -2,7 +2,7 @@
 
 	include 'fonksiyonlar/bagla.php';
 
-	if($uye_tipi == '0'){
+	if($user->type == '0'){
 
 		header("Location:index.php");
 
@@ -101,7 +101,7 @@
 
 			<div class="col-md-5"><br/>
 
-				<?= $user->name." / ".$uye_mail; ?>
+				<?= $user->name." / ".$user->email; ?>
 
 			</div>
 

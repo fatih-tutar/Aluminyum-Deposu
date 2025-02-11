@@ -2,7 +2,7 @@
 
 	include 'fonksiyonlar/bagla.php';
 
-	if($uye_tipi == '0'){
+	if($user->type == '0'){
 
 		header("Location:index.php");
 
@@ -18,7 +18,7 @@
 
 	$firmatel = $firmabilgicek['firmatel'];
 
-if($uye_tipi != '3'){
+if($user->type != '3'){
 
 	if (isset($_POST['formkaydet'])) {
 
@@ -36,7 +36,7 @@ if($uye_tipi != '3'){
 		
 		$query = $db->prepare("INSERT INTO teklifformlari SET tekliflistesi = ?, firmaid = ?, saniye = ?, sirketid = ?, silik = ?");
 
-		$insert = $query->execute(array($tekliflistesi,$firmaid,$su_an,$uye_sirket,'0'));
+		$insert = $query->execute(array($tekliflistesi,$firmaid,$su_an,$user->company_id,'0'));
 
 		header("Location:firmalar.php");
 
@@ -121,7 +121,7 @@ if($uye_tipi != '3'){
 
 			<div class="col-md-5"><br/>
 				
-				<?= $user->name."<br/>".$uye_mail."<br/>".$uye_tel; ?>
+				<?= $user->name."<br/>".$user->email."<br/>".$user->phone; ?>
 
 			</div>
 

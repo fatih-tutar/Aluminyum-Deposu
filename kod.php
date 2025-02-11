@@ -10,7 +10,7 @@
 
 	}else{
 
-	if($uye_tipi != '3'){
+	if($user->type != '3'){
 
 		if (isset($_POST['kaydet'])) {
 			

@@ -10,7 +10,7 @@
 
 	}elseif ($girdi == 1) {
 
-		if($uye_tipi == '0'){
+		if($user->type == '0'){
 
 			header("Location:index.php");
 
@@ -18,7 +18,7 @@
 
 		}
 
-	if($uye_tipi != '3'){
+	if($user->type != '3'){
 
 		if (isset($_POST['fabrikabilgileriguncelle'])) {
 			
@@ -114,7 +114,7 @@
 
 			$query = $db->prepare("INSERT INTO fabrikalar SET fabrika_adi = ?, fabrikatel = ?, fabrikaeposta = ?, fabrikaadres = ?, fabrikaalacak = ?, fabrikaalacaktarih = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($fabrika_adi, $fabrikatel, $fabrikaeposta, $fabrikaadres, $fabrikaalacak, $fabrikaalacaktarih, $uye_sirket,'0'));
+			$insert = $query->execute(array($fabrika_adi, $fabrikatel, $fabrikaeposta, $fabrikaadres, $fabrikaalacak, $fabrikaalacaktarih, $user->company_id,'0'));
 
 			header("Location:fabrikalar.php");
 
@@ -348,19 +348,19 @@
 
 					if(isset($_GET['arananlar'])){
 
-						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' AND fabrikaalacak != 0 AND fabrikaalacaktarih != '0' AND fabrikaalacaktarih > '{$bugununsaniyesi}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' AND fabrikaalacak != 0 AND fabrikaalacaktarih != '0' AND fabrikaalacaktarih > '{$bugununsaniyesi}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
 
 					}elseif (isset($_GET['odemeler'])) {
 
-						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' AND fabrikaalacak != 0 ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' AND fabrikaalacak != 0 ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
 						
 					}elseif (isset($_GET['tahsilatigecenler'])) {
 
-						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' AND fabrikaalacak != 0 AND fabrikaalacaktarih != '0' AND fabrikaalacaktarih <= '{$bugununsaniyesi}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' AND fabrikaalacak != 0 AND fabrikaalacaktarih != '0' AND fabrikaalacaktarih <= '{$bugununsaniyesi}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
 						
 					}else{
 
-						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
 
 					}	
 
@@ -620,7 +620,7 @@
 
 									<?php
 
-										$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}' AND formda = '0' AND sirketid = '{$uye_sirket}' AND silik = '0'", PDO::FETCH_ASSOC);
+										$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}' AND formda = '0' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
 
 										if ( $sipariscek->rowCount() ){
 
@@ -630,21 +630,21 @@
 
 												$urun_id = $row['urun_id'];
 
-												$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$urun_adi = $urunbilgicek['urun_adi'];
 
-												$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$kategori_bir = $katbilcek['kategori_bir'];
 
-												$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$kategori_bir_adi = $katadcek['kategori_adi'];
 
 												$kategori_iki = $katbilcek['kategori_iki'];
 
-												$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$kategori_iki_adi = $katadcek['kategori_adi'];
 
@@ -664,7 +664,7 @@
 
 												$siparistarih = date("d-m-Y", $siparissaniye);
 
-												$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+												$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 												$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
 
@@ -730,7 +730,7 @@
 
 									<?php
 
-									$formcek = $db->query("SELECT * FROM siparisformlari WHERE fabrikaid = '{$fabrika_id}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY saniye DESC LIMIT 10", PDO::FETCH_ASSOC);
+									$formcek = $db->query("SELECT * FROM siparisformlari WHERE fabrikaid = '{$fabrika_id}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY saniye DESC LIMIT 10", PDO::FETCH_ASSOC);
 
 									if ( $formcek->rowCount() ){
 
@@ -790,7 +790,7 @@
 
 													foreach ($siparisleripatlat as $key => $value) {
 														
-														$siparisbilgisi = $db->query("SELECT * FROM siparis WHERE siparis_id = '{$value}' AND sirketid = '{$uye_sirket}' AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
+														$siparisbilgisi = $db->query("SELECT * FROM siparis WHERE siparis_id = '{$value}' AND sirketid = '{$user->company_id}' AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
 
 														if($siparisbilgisi) {
 													
@@ -798,23 +798,23 @@
 
 															$urun_id = $siparisbilgisi['urun_id'];
 
-															$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+															$urunbilgicek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 															if($urunbilgicek) {
 
 																$urun_adi = $urunbilgicek['urun_adi'];
 
-																$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+																$katbilcek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 																$kategori_bir = $katbilcek['kategori_bir'];
 
-																$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+																$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 																$kategori_bir_adi = $katadcek['kategori_adi'];
 
 																$kategori_iki = $katbilcek['kategori_iki'];
 
-																$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+																$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 																$kategori_iki_adi = $katadcek['kategori_adi'];
 
@@ -834,7 +834,7 @@
 
 																$siparistarih = date("d-m-Y", $siparissaniye);
 
-																$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+																$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 																$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
 

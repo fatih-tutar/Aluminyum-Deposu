@@ -4,11 +4,11 @@
 		header("Location:giris.php");
 		exit();
 	}else{
-		if($uye_tipi == '0'){
+		if($user->type == '0'){
 			header("Location:index.php");
 			exit();
 		}
-	if($uye_tipi != '3'){
+	if($user->type != '3'){
 		if (isset($_POST['teklifkaydet'])) {
 			$musteri = guvenlik($_POST['musteri']);
 			$ilgilikisi = guvenlik($_POST['ilgilikisi']);
@@ -65,7 +65,7 @@
     		<div class="row">
     			<div class="col-md-6"><h2>Kalıp Sorgulama Formu</h2></div>
     			<div class="col-md-6" style="text-align:right;">
-    				<?php if($uye_tipi == '2'){ ?><a href="kaliparsivi.php" target="_blank"><button class="btn btn-primary">Kalıp Arşivi</button></a><?php } ?>
+    				<?php if($user->type == '2'){ ?><a href="kaliparsivi.php" target="_blank"><button class="btn btn-primary">Kalıp Arşivi</button></a><?php } ?>
     			</div>
     		</div>
 	    	<hr/>

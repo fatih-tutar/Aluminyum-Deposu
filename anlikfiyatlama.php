@@ -29,7 +29,7 @@ if ($girdi != '1') {
 
                     <?php
 
-                    $query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+                    $query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
 
                     if ( $query->rowCount() ){
 

@@ -153,7 +153,7 @@
             $kategori_bir = trim($urunArray[2]);
             $urunId = getUrunID($urun,$kategori_iki,$kategori_bir);
             $firmaId = getFirmaID($firma);
-            $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND manuel = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+            $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND manuel = '0' AND sirket_id = '{$user->company_id}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
             if($sevkiyatList){
                 $urunler = guvenlik($sevkiyatList['urunler']);
                 $adetler = guvenlik($sevkiyatList['adetler']);
@@ -162,10 +162,10 @@
                 $adetler = $adetler.",".$adet;
                 $fiyatlar = $fiyatlar."-".$fiyat;
                 $query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?");
-                $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $uye_sirket));
+                $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $user->company_id));
             }else{
                 $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, manuel = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                $insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$user->id,'',$sevkTipi,$arac_id,$aciklama,'0','0','0',$su_an, $uye_sirket));
+                $insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$user->id,'',$sevkTipi,$arac_id,$aciklama,'0','0','0',$su_an, $user->company_id));
             }
             header("Location:index.php");
             exit();

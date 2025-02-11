@@ -12,7 +12,7 @@
 
 		$profil_id = guvenlik($_GET['id']);
 
-		if ($profil_id != $user->id && $uye_tipi != 2) {
+		if ($profil_id != $user->id && $user->type != 2) {
 			
 			header("Location:index.php");
 
@@ -20,15 +20,15 @@
 
 		}else{
 
-			$profil = $db->query("SELECT * FROM uyeler WHERE id = '{$profil_id}'")->fetch(PDO::FETCH_ASSOC);
-			$profil_yetkiler = guvenlik($profil['uye_yetkiler']);
+			$profil = $db->query("SELECT * FROM users WHERE id = '{$profil_id}'")->fetch(PDO::FETCH_ASSOC);
+			$profil_yetkiler = guvenlik($profil['permissions']);
 			$profil_adi = guvenlik($profil['name']);
-			$profil_mail = guvenlik($profil['uye_mail']);
-			$profil_tel = guvenlik($profil['uye_tel']);
-			$profil_tel_2 = guvenlik($profil['tel_2']);
+			$profil_mail = guvenlik($profil['email']);
+			$profil_tel = guvenlik($profil['phone']);
+			$profil_phone_2 = guvenlik($profil['phone_2']);
 			$profil_foto = guvenlik($profil['foto']);
-			$unvan = guvenlik($profil['uye_unvan']);
-			$adres = guvenlik($profil['adres']);
+			$unvan = guvenlik($profil['title']);
+			$address = guvenlik($profil['address']);
 			$nufus_cuzdani = guvenlik($profil['nufus_cuzdani']);
 			$is_basvuru_formu = guvenlik($profil['is_basvuru_formu']);
 			$ikametgah_belgesi = guvenlik($profil['ikametgah_belgesi']);
@@ -38,14 +38,14 @@
 
 		}
 
-	if($uye_tipi != '3'){
+	if($user->type != '3'){
 		if (isset($_POST['bilgilerimiguncelle'])) {
 			$name = guvenlik($_POST['name']);
-			$uye_unvan = guvenlik($_POST['uye_unvan']);
-			$uye_mail = guvenlik($_POST['uye_mail']);
-			$uye_tel = guvenlik($_POST['uye_tel']);
-			$tel_2 = guvenlik($_POST['tel_2']);
-			$adres = guvenlik($_POST['adres']);
+			$title = guvenlik($_POST['title']);
+			$email = guvenlik($_POST['email']);
+			$phone = guvenlik($_POST['phone']);
+			$phone_2 = guvenlik($_POST['phone_2']);
+			$address = guvenlik($_POST['address']);
 			$ise_giris_tarihi = guvenlik($_POST['ise_giris_tarihi']);
 			if (!empty($_FILES['uploadfile']['name'])) {
 				$temp = explode(".", $_FILES['uploadfile']['name']);
@@ -99,13 +99,13 @@
 			}
 			if (empty($name) === true) {
 				$hata = '<br/><div class="alert alert-danger" role="alert">Kullanıcı adınızı boş bıraktınız.</div>';
-			}elseif (empty($uye_mail) === true) {
+			}elseif (empty($email) === true) {
 				$hata = '<br/><div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
-			}elseif (empty($uye_tel) === true) {
+			}elseif (empty($phone) === true) {
 				$hata = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
 			}else{
-				$query = $db->prepare("UPDATE uyeler SET name = ?, uye_mail = ?, uye_unvan = ?, uye_tel = ?, tel_2 = ?, ise_giris_tarihi = ?, adres = ?, foto = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE id = ?");
-				$guncelle = $query->execute(array($name, $uye_mail, $uye_unvan, $uye_tel, $tel_2, $ise_giris_tarihi, $adres, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
+				$query = $db->prepare("UPDATE users SET name = ?, email = ?, title = ?, phone = ?, phone_2 = ?, ise_giris_tarihi = ?, address = ?, foto = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE id = ?");
+				$guncelle = $query->execute(array($name, $email, $title, $phone, $phone_2, $ise_giris_tarihi, $address, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
 				header("Location:profil.php?id=".$profil_id."&guncellendi");
 				exit();
 			}
@@ -125,7 +125,7 @@
 				
 				$hata = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Formda boş bırakılan alanlar var lütfen kontrol ediniz.</div>';
 
-			}elseif ($user->uye_sifre != md5($eski_sifre)) {
+			}elseif ($user->password != md5($eski_sifre)) {
 				
 				$hata = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Mevcut şifrenizi yanlış girdiniz. Lütfen tekrar deneyiniz.</div>';
 
@@ -135,7 +135,7 @@
 
 			}else{
 
-				$query = $db->prepare("UPDATE uyeler SET uye_sifre = ? WHERE id = ?");
+				$query = $db->prepare("UPDATE users SET password = ? WHERE id = ?");
 
 				$guncelle = $query->execute(array($md5lisifre,$user->id));
 
@@ -193,7 +193,7 @@
 
 			$kullanici_yetkileri = implode(",", $kullanici_yetkileri_arrayi);
 
-			$query = $db->prepare("UPDATE uyeler SET uye_yetkiler = ? WHERE id = ?");
+			$query = $db->prepare("UPDATE users SET permissions = ? WHERE id = ?");
 
 			$guncelle = $query->execute(array($kullanici_yetkileri,$profil_id));
 
@@ -244,7 +244,7 @@
 					<h6><?= $unvan ?></h6>
 					<h6><i class="fas fa-envelope mr-2"></i><?= $profil_mail ?></h6>
 					<h6><i class="fas fa-mobile-alt mr-2" ></i><?= $profil_tel ?></h6>
-					<h6><i class="fas fa-phone mr-2"></i><?= $profil_tel_2 ?></h6>
+					<h6><i class="fas fa-phone mr-2"></i><?= $profil_phone_2 ?></h6>
 					<p class="mb-1"><i class="fas fa-map-marker mr-2"></i><?= $adres ?></p>
 				</div>
 				<div class="col-md-5 col-5 pt-3 pl-0" style="display:flex; justify-content:end; align-items:end;">
@@ -299,7 +299,7 @@
 			<div style="display:flex; justify-content:end;">
 				<button class="btn btn-success btn-sm mr-2" onclick="return false" onmousedown="javascript:ackapa3('duzenlemedivi','sifredivi','yetkidivi');">Düzenle</button>
 				<button class="btn btn-secondary btn-sm mr-2" onclick="return false" onmousedown="javascript:ackapa3('sifredivi','duzenlemedivi','yetkidivi');">Şifre Değiştir</button>
-				<?php if($uye_tipi == 2) { ?>
+				<?php if($user->type == 2) { ?>
 					<button class="btn btn-warning btn-sm" onclick="return false" onmousedown="javascript:ackapa3('yetkidivi','sifredivi','duzenlemedivi');">Yetkiler</button>
 				<?php } ?> 
 			</div>
@@ -319,18 +319,18 @@
 								<b>Ad Soyad</b>
 								<input type="text" class="form-control form-control-sm mb-1" placeholder="Kullanıcı Adı" name="name" value="<?= $profil_adi ?>">
 								<b>Ünvan</b>
-								<input type="text" class="form-control form-control-sm mb-1" placeholder="Ünvan" name="uye_unvan" value="<?= $unvan ?>">
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="Ünvan" name="title" value="<?= $unvan ?>">
 								<b>E-posta Adresi</b>
-								<input type="text" class="form-control form-control-sm mb-1" placeholder="E-posta Adresi" name="uye_mail" value="<?= $profil_mail ?>">
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="E-posta Adresi" name="email" value="<?= $profil_mail ?>">
 								<b>Telefon Numarası</b>
-								<input type="text" class="form-control form-control-sm mb-1" placeholder="Telefon Numarası" name="uye_tel" value="<?= $profil_tel ?>">
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="Telefon Numarası" name="phone" value="<?= $profil_tel ?>">
 								<b>İkinci Telefon Numarası</b>
-								<input type="text" class="form-control form-control-sm mb-1" placeholder="İkinci Telefon Numarası" name="tel_2" value="<?= $profil_tel_2 ?>">
+								<input type="text" class="form-control form-control-sm mb-1" placeholder="İkinci Telefon Numarası" name="phone_2" value="<?= $profil_phone_2 ?>">
 								<b>Adres</b>
 								<textarea name="adres" id="adres" rows="3" class="form-control form-control-sm mb-1" placeholder="Adresinizi giriniz."><?= $adres ?></textarea>
 							</div>
 							<div class="col-md-6">
-								<?php if($uye_tipi == 2){?>
+								<?php if($user->type == 2){?>
 									<b>İşe Giriş Tarihi</b>
 									<input type="date" class="form-control form-control-sm mb-1" name="ise_giris_tarihi" value="<?= $ise_giris_tarihi ?>">	
 								<?php } ?>
@@ -375,7 +375,7 @@
     		</div>
 
     	</div>
-		<?php if($uye_tipi == 2){ ?>
+		<?php if($user->type == 2){ ?>
 			<div class="div4 px-3" id="yetkidivi" style="display:none;">
 				<h5 style="margin-top: 10px;"><b>Yetkiler</b></h5>
 				<form action="" method="POST">

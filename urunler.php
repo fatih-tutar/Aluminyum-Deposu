@@ -15,7 +15,7 @@
 
 		$kategori_id = guvenlik($_GET['id']);
 
-		$ustkategoriyicek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_id}' AND silik = '0' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+		$ustkategoriyicek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_id}' AND silik = '0' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 		if(!$ustkategoriyicek) {
 			header("Location:index.php");
@@ -24,7 +24,7 @@
 		
 		$ust_kategori_id = guvenlik($ustkategoriyicek['kategori_ust']);
 
-		$ustbilgicek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$ust_kategori_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+		$ustbilgicek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$ust_kategori_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 		$ust_kategori_adi = guvenlik($ustbilgicek['kategori_adi']);
 
@@ -80,7 +80,7 @@
 
 		$sutunpaletizni = $sutunlaripatlat[22];
 
-		if($uye_tipi != '3'){
+		if($user->type != '3'){
 
 			if (isset($_POST['urunsil'])) {
 				
@@ -102,7 +102,7 @@
 
 				}elseif ($urun_adet == 0 && $urun_depo_adet == 0 && $urun_palet == 0) {
 
-					$siralar = $db->query("SELECT * FROM urun WHERE urun_sira > '{$urun_sira}' AND kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
+					$siralar = $db->query("SELECT * FROM urun WHERE urun_sira > '{$urun_sira}' AND kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
 
 					if ( $siralar->rowCount() ){
 
@@ -140,7 +140,7 @@
 				
 				$tekliffirma = guvenlik($_POST['tekliffirma']);
 
-				$firmaidcek = $db->query("SELECT * FROM firmalar WHERE firmaadi = '{$tekliffirma}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+				$firmaidcek = $db->query("SELECT * FROM firmalar WHERE firmaadi = '{$tekliffirma}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 				$tekliffirma = $firmaidcek['firmaid'];
 
@@ -150,7 +150,7 @@
 
 				$query = $db->prepare("INSERT INTO teklif SET turunid = ?, tverilenfirma = ?, tadet = ?, tsatisfiyati = ?, tsaniye = ?, formda = ?, sirketid = ?, silik = ?");
 
-				$insert = $query->execute(array($turunid,$tekliffirma,$teklifadet,$teklifsatisfiyat,$su_an,'0',$uye_sirket,'0'));
+				$insert = $query->execute(array($turunid,$tekliffirma,$teklifadet,$teklifsatisfiyat,$su_an,'0',$user->company_id,'0'));
 
 				header("Location:urunler.php?id=".$kategori_id."&u=".$turunid."&teklifeklendi#".$turunid);
 
@@ -176,13 +176,13 @@
 
 				$terminsaniye = strtotime($termin);
 
-				$uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+				$uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 				$urun_adi = $uruninfo['urun_adi'];
 
 				$query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?");
 
-				$insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',$su_an,'0',$uye_sirket,'0'));
+				$insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',$su_an,'0',$user->company_id,'0'));
 
 				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&sipariseklendi#".$urun_id);
 
@@ -207,7 +207,7 @@
                     $hata = '<br/><div class="alert alert-danger" role="alert">Sevk tipi : '.$sevkTipi.' Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
                 }else {
                     $firmaId = getFirmaID($firma);
-                    $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND manuel = '0' AND silik = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+                    $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND manuel = '0' AND silik = '0' AND sirket_id = '{$user->company_id}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
                     if ($sevkiyatList) {
                         $urunler = guvenlik($sevkiyatList['urunler']);
                         $adetler = guvenlik($sevkiyatList['adetler']);
@@ -216,10 +216,10 @@
                         $adetler = $adetler . "," . $adet;
                         $fiyatlar = $fiyatlar . "-" . $fiyat;
                         $query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?");
-                        $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $uye_sirket));
+                        $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $user->company_id));
                     } else {
                         $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $aciklama, '0', '0', $su_an, $uye_sirket));
+                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $aciklama, '0', '0', $su_an, $user->company_id));
                     }
                     header("Location:urunler.php?id=" . $kategori_id . "&u=" . $urunId . "&sevkiyateklendi#" . $urunId);
                     exit();
@@ -302,7 +302,7 @@
 					
 					$kayacakurunsayisi = $urun_yeni_sira - $urun_eski_sira;
 
-					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' ORDER BY urun_sira ASC LIMIT $urun_eski_sira,$kayacakurunsayisi", PDO::FETCH_ASSOC);
+					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $urun_eski_sira,$kayacakurunsayisi", PDO::FETCH_ASSOC);
 
 					if ( $kaycaklaricek->rowCount() ){
 
@@ -328,7 +328,7 @@
 
 					$bionce = $urun_yeni_sira - 1;
 
-					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' ORDER BY urun_sira ASC LIMIT $bionce,$kayacakurunsayisi", PDO::FETCH_ASSOC);
+					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $bionce,$kayacakurunsayisi", PDO::FETCH_ASSOC);
 
 					if ( $kaycaklaricek->rowCount() ){
 
@@ -352,7 +352,7 @@
 
 				// SIRALAMA AYARI BİTİŞ
 
-				$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$uye_sirket}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
+				$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$user->company_id}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
 
 				if ( $query->rowCount() ){
 
@@ -374,7 +374,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$uye_sirket));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$user->company_id));
 
 				}
 				
@@ -382,7 +382,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),$su_an,'1',$uye_sirket));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),$su_an,'1',$user->company_id));
 
 				}
 
@@ -420,7 +420,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$uye_sirket));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$user->company_id));
 
 				}
 
@@ -454,7 +454,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,$su_an,'1',$uye_sirket));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,$su_an,'1',$user->company_id));
 
 				}
 
@@ -488,7 +488,7 @@
 
 				$query = $db->prepare("INSERT INTO envanter SET urun_id = ?, kod = ?, cap = ?, kalinlik = ?, c = ?, kutle = ?, fabrika = ?, silik = ?, sirket_id = ?");
 
-				$insert = $query->execute(array($kategori_id,$kod,$cap,$kalinlik,$c,$kutle,$fabrika,'0',$uye_sirket));
+				$insert = $query->execute(array($kategori_id,$kod,$cap,$kalinlik,$c,$kutle,$fabrika,'0',$user->company_id));
 
 				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&envantereeklendi");
 
@@ -661,7 +661,7 @@
 
 					<?php if($sutunalisizni == '1' && $uye_alis_yetkisi == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Alış</b></div><?php  } ?>
 
-					<?php if($sutunsatisizni == '1' && $uye_satis_yetkisi == '1' || $uye_tipi == '2'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Satış</b></div><?php } ?>
+					<?php if($sutunsatisizni == '1' && $uye_satis_yetkisi == '1' || $user->type == '2'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Satış</b></div><?php } ?>
 
 					<?php if($sutunfabrikaizni == '1' && $uye_fabrika_yetkisi == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Fabrika</b></div><?php } ?>	
 
@@ -775,7 +775,7 @@
 
 				<?php
 
-					$envantercek = $db->query("SELECT * FROM envanter WHERE urun_id = '{$kategori_id}' AND sirket_id = '{$uye_sirket}' AND silik = '0'", PDO::FETCH_ASSOC);
+					$envantercek = $db->query("SELECT * FROM envanter WHERE urun_id = '{$kategori_id}' AND sirket_id = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
 
 					if ( $envantercek->rowCount() ){
 
@@ -847,7 +847,7 @@
 
 				$urunlistesira = 0;
 
-				$urun = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
+				$urun = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
 
 				if ( $urun->rowCount() ){
 
@@ -907,7 +907,7 @@
 
 						$urun_fabrika = $orw['urun_fabrika'];
 
-						$u_fabrika = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+						$u_fabrika = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 						$urun_fabrika_adi = $u_fabrika['fabrika_adi'] ?? null;
 
@@ -1061,7 +1061,7 @@
 
 							<?php } ?>
 
-							<?php if($sutunsatisizni == '1' && $uye_satis_yetkisi == '1' || $uye_tipi == '2'){?>
+							<?php if($sutunsatisizni == '1' && $uye_satis_yetkisi == '1' || $user->type == '2'){?>
 
 							<div class="col-4 d-block d-sm-none">Satış : </div>
 
@@ -1241,7 +1241,7 @@
 
 											$tekliflersiralamasi = 0;
 
-											$tklfcek = $db->query("SELECT * FROM teklif WHERE turunid = '{$urun_id}' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY teklifid DESC", PDO::FETCH_ASSOC);
+											$tklfcek = $db->query("SELECT * FROM teklif WHERE turunid = '{$urun_id}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY teklifid DESC", PDO::FETCH_ASSOC);
 
 											if ( $tklfcek->rowCount() ){
 
@@ -1251,7 +1251,7 @@
 
 													$tverilenfirmaid = $tklfrow['tverilenfirma'];
 
-													$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+													$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 													$tverilenfirmaadi = $firmabilgi['firmaadi'];
 
@@ -1337,7 +1337,7 @@
 														
 														<?php
 
-															$calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' ORDER BY name ASC", PDO::FETCH_ASSOC);
+															$calisanlaricek = $db->query("SELECT * FROM users WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
 															if ( $calisanlaricek->rowCount() ){
 
@@ -1379,7 +1379,7 @@
 
 														}
 
-														$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
+														$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}'", PDO::FETCH_ASSOC);
 
 														if ( $fabrika->rowCount() ){
 
@@ -1453,7 +1453,7 @@
 									
 										<?php
 
-											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '1' AND sirketid = '{$uye_sirket}' AND silik = '0'", PDO::FETCH_ASSOC);
+											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '1' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
 
 											if ( $sipariscek->rowCount() ){
 
@@ -1477,7 +1477,7 @@
 
 													$termintarih = date("d-m-Y", $terminsaniye);
 
-													$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+													$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 													$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
 
@@ -1573,7 +1573,7 @@
 									
 										<?php
 
-											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '0' AND sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
+											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '0' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
 
 											if ( $sipariscek->rowCount() ){
 
@@ -1591,7 +1591,7 @@
 
 													$siparistarih = date("d-m-Y", $siparissaniye);
 
-													$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+													$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 													$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
 
@@ -1780,7 +1780,7 @@
 
 												<?php } ?>
 
-												<?php if($sutunmanuelsatisizni == '1' && $uye_satis_yetkisi == '1' || $uye_tipi == '2'){?>
+												<?php if($sutunmanuelsatisizni == '1' && $uye_satis_yetkisi == '1' || $user->type == '2'){?>
 
 													<div class="col-md-1 col-12">
 
@@ -1810,7 +1810,7 @@
 
 														}
 
-														$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+														$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
 
 														if ( $fabrika->rowCount() ){
 
@@ -1849,7 +1849,7 @@
 													<select class="form-control" id="exampleFormControlSelect1" name="urun_yeni_sira">
 														<?php
 
-															$sirayicek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$uye_sirket}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
+															$sirayicek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
 
 															if ( $sirayicek->rowCount() ){
 
@@ -1938,7 +1938,7 @@
 
 			?>
 
-			<?php if($uye_tipi == '2'){ ?> 
+			<?php if($user->type == '2'){ ?> 
 
 				<div class="row">
 

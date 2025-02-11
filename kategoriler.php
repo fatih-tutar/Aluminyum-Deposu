@@ -10,7 +10,7 @@
 
 	}elseif ($girdi == 1) {
 
-		if($uye_tipi == '0'){
+		if($user->type == '0'){
 
 			header("Location:index.php");
 
@@ -18,7 +18,7 @@
 
 		}
 
-	if($uye_tipi != '3'){
+	if($user->type != '3'){
 
 		if (isset($_POST['kategorisil'])) {
 			
@@ -124,7 +124,7 @@
 
 			$query = $db->prepare("INSERT INTO kategori SET kategori_adi = ?, kategori_tipi = ?, kategori_ust = ?, resim = ?, sutunlar = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($kategori_adi,$kategori_tipi,'0',$upload_file,$sutunlar,$uye_sirket,'0'));
+			$insert = $query->execute(array($kategori_adi,$kategori_tipi,'0',$upload_file,$sutunlar,$user->company_id,'0'));
 
 			header("Location:kategoriler.php");
 
@@ -136,13 +136,13 @@
 			
 			$kategori_iki = guvenlik($_POST['kategori_iki']);
 
-			$katbircek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+			$katbircek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 			$kategori_bir = $katbircek['kategori_ust'];
 
 			$urun_adi = guvenlik($_POST['urun_adi']);
 
-			$sonuruncek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_iki}' AND kategori_bir = '{$kategori_bir}' AND sirketid = '{$uye_sirket}' ORDER BY urun_sira DESC LIMIT 1", PDO::FETCH_ASSOC);
+			$sonuruncek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_iki}' AND kategori_bir = '{$kategori_bir}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira DESC LIMIT 1", PDO::FETCH_ASSOC);
 
 			if ( $sonuruncek->rowCount() ){
 
@@ -158,7 +158,7 @@
 
 			$query = $db->prepare("INSERT INTO urun SET kategori_bir = ?, kategori_iki = ?, urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, urun_fabrika = ?, urun_stok = ?, urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, musteri_ismi = ?, tarih = ?, termin = ?, satis = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($kategori_bir,$kategori_iki,'',$urun_adi,'','','','','','','','','','','',$sonurunsirasi,'','','','',$uye_sirket,'0'));
+			$insert = $query->execute(array($kategori_bir,$kategori_iki,'',$urun_adi,'','','','','','','','','','','',$sonurunsirasi,'','','','',$user->company_id,'0'));
 
 			header("Location:kategoriler.php");
 
@@ -321,7 +321,7 @@
 										
 										<?php
 
-											$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '1' AND sirketid = '{$uye_sirket}' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+											$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '1' AND sirketid = '{$user->company_id}' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 											if ( $query->rowCount() ){
 
@@ -333,7 +333,7 @@
 
 													$kategori_ust = $row['kategori_ust'];
 
-													$ustadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_ust}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+													$ustadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_ust}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
                                                     if ($ustadcek && is_array($ustadcek)) {
                                                         $ustkategoriadi = $ustadcek['kategori_adi'] ?? null;
@@ -703,7 +703,7 @@
 
 						<?php
 
-							$query = $db->query("SELECT * FROM kategori WHERE sirketid = '{$uye_sirket}' AND kategori_tipi = '0' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+							$query = $db->query("SELECT * FROM kategori WHERE sirketid = '{$user->company_id}' AND kategori_tipi = '0' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 							if ( $query->rowCount() ){
 								foreach( $query as $row ){
@@ -807,7 +807,7 @@
 
 																<?php
 
-																	$ustkatcek = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$uye_sirket}' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+																	$ustkatcek = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 																	if ( $ustkatcek->rowCount() ){
 
@@ -1122,7 +1122,7 @@
 
 						<?php
 
-							$query = $db->query("SELECT * FROM kategori WHERE sirketid = '{$uye_sirket}' AND kategori_tipi = '1' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+							$query = $db->query("SELECT * FROM kategori WHERE sirketid = '{$user->company_id}' AND kategori_tipi = '1' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 							if ( $query->rowCount() ){
 
@@ -1254,7 +1254,7 @@
 
 																<?php
 
-																	$ustkatcek = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$uye_sirket}' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+																	$ustkatcek = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 																	if ( $ustkatcek->rowCount() ){
 

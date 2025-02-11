@@ -75,11 +75,11 @@
 
   		if (empty($islemurunid) === false) {
 
-  			$query = $db->query("SELECT * FROM islemler WHERE urunid = '{$islemurunid}' AND sirketid = '{$uye_sirket}' ORDER BY saniye DESC LIMIT 300", PDO::FETCH_ASSOC);
+  			$query = $db->query("SELECT * FROM islemler WHERE urunid = '{$islemurunid}' AND sirketid = '{$user->company_id}' ORDER BY saniye DESC LIMIT 300", PDO::FETCH_ASSOC);
 
   		}else{
 
-  			$query = $db->query("SELECT * FROM islemler WHERE sirketid = '{$uye_sirket}' ORDER BY saniye DESC LIMIT 300", PDO::FETCH_ASSOC);
+  			$query = $db->query("SELECT * FROM islemler WHERE sirketid = '{$user->company_id}' ORDER BY saniye DESC LIMIT 300", PDO::FETCH_ASSOC);
 
   		}	  	
 
@@ -89,7 +89,7 @@
 
 				$yapanid = $row['yapanid'];
 
-				$yapanadicek = $db->query("SELECT * FROM uyeler WHERE id = '{$yapanid}'")->fetch(PDO::FETCH_ASSOC);
+				$yapanadicek = $db->query("SELECT * FROM users WHERE id = '{$yapanid}'")->fetch(PDO::FETCH_ASSOC);
 
 				$yapanadi = $yapanadicek['name'];
 

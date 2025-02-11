@@ -20,15 +20,16 @@
 	$site_adresi = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 	if(giris_yapti_mi() === true){
 		$uye_session_id = $_SESSION['user_id'];
-        $user = $db->query("SELECT * FROM uyeler WHERE id = '$uye_session_id'", PDO::FETCH_OBJ)->fetch();
-		$uye_verileri = $db->query("SELECT * FROM uyeler WHERE id = '{$uye_session_id}'")->fetch(PDO::FETCH_ASSOC);
-		$uye_mail = $uye_verileri['uye_mail'];
-		$uye_sifre = $uye_verileri['uye_sifre'];
-		$uye_firma = $uye_verileri['uye_firma'];
-		$uye_tipi = $uye_verileri['uye_tipi'];
-		$uye_sirket = $uye_verileri['uye_firma'];
-		$uye_yetkiler = $uye_verileri['uye_yetkiler'];
-		$uye_yetkileri_arrayi = explode(",", $uye_yetkiler);
+        $user = $db->query("SELECT * FROM users WHERE id = '$uye_session_id'", PDO::FETCH_OBJ)->fetch();
+		$userPermissionKeys = [
+            'buying_price','factory','quote','order','editing','transaction','stock_flow','selling_price',
+            'total_view','visit','shipment','piece','pallet','alkop','office','vehicle'
+        ];
+        $userPermissionValues = explode(",", $user->permissions);
+        $uye_verileri = $db->query("SELECT * FROM users WHERE id = '{$uye_session_id}'")->fetch(PDO::FETCH_ASSOC);
+		$uye_yetkiler = $uye_verileri['permissions'];
+		$uye_yetkileri_arrayi = explode(",", $user->permissions);
+        $user->permissions = (object) array_combine($userPermissionKeys, $userPermissionValues);
 		$uye_alis_yetkisi = $uye_yetkileri_arrayi[0];
 		$uye_fabrika_yetkisi = $uye_yetkileri_arrayi[1];
 		$uye_teklif_yetkisi = $uye_yetkileri_arrayi[2];
@@ -46,7 +47,7 @@
 		$uye_ofis_yetkisi = $uye_yetkileri_arrayi[14];
         $uye_arac_yetkisi = $uye_yetkileri_arrayi[15];
 		//ŞİRKET BİLGİLERİ
-		$sirketbilgileri = $db->query("SELECT * FROM sirketler WHERE sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+		$sirketbilgileri = $db->query("SELECT * FROM sirketler WHERE sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 		$sirketaciklama = $sirketbilgileri['sirketaciklama'];
 		$sirketlogo = $sirketbilgileri['sirketlogo'];
 		$sirketyedekalmasaniye = $sirketbilgileri['yedekalmasaniye'];

@@ -46,7 +46,7 @@
 
 			$renkarrayi = explode(",", $renkstringi);
 
-			$cek = $db->query("SELECT * FROM kategori WHERE kategori_ust = '{$kategori_id}' AND kategori_tipi = '1' AND sirketid = '{$uye_sirket}'", PDO::FETCH_ASSOC);
+			$cek = $db->query("SELECT * FROM kategori WHERE kategori_ust = '{$kategori_id}' AND kategori_tipi = '1' AND sirketid = '{$user->company_id}'", PDO::FETCH_ASSOC);
 
 			if ( $cek->rowCount() ){
 

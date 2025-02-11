@@ -10,7 +10,7 @@ if($girdi == '0'){
 
 }else{
 
-    if($uye_tipi == '0'){
+    if($user->type == '0'){
 
         header("Location:index.php");
 
@@ -18,7 +18,7 @@ if($girdi == '0'){
 
     }else{
 
-    if($uye_tipi != '3'){
+    if($user->type != '3'){
 
         if (isset($_POST['kalibiekle'])) {
             
@@ -44,7 +44,7 @@ if($girdi == '0'){
 
             $query = $db->prepare("INSERT INTO kaliplar SET musteriadi = ?, kalipnumarasi = ?, fabrikaid = ?, pdf = ?, sirketid = ?, silik = ?");
 
-            $insert = $query->execute(array($musteriadi,$kalipnumarasi,$fabrikaid,$upload_file,$uye_sirket,'0'));
+            $insert = $query->execute(array($musteriadi,$kalipnumarasi,$fabrikaid,$upload_file,$user->company_id,'0'));
 
             header("Location:kaliplar.php");
 
@@ -140,7 +140,7 @@ if($girdi == '0'){
 
                                     <?php
 
-                                    $fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+                                    $fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
 
                                     if ( $fabrika->rowCount() ){
 
@@ -200,7 +200,7 @@ if($girdi == '0'){
 
             <?php
 
-                $kaliplaricek = $db->query("SELECT * FROM kaliplar WHERE sirketid = '{$uye_sirket}' AND silik = '0' ORDER BY musteriadi ASC", PDO::FETCH_ASSOC);
+                $kaliplaricek = $db->query("SELECT * FROM kaliplar WHERE sirketid = '{$user->company_id}' AND silik = '0' ORDER BY musteriadi ASC", PDO::FETCH_ASSOC);
 
                 if ( $kaliplaricek->rowCount() ){
 
@@ -214,7 +214,7 @@ if($girdi == '0'){
 
                         $fabrikaid = $row['fabrikaid'];
 
-                        $fabrikadicek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$fabrikaid}' AND sirketid = '{$uye_sirket}'")->fetch(PDO::FETCH_ASSOC);
+                        $fabrikadicek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$fabrikaid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
                         $fabrikaadi = $fabrikadicek['fabrika_adi'];
 
@@ -330,7 +330,7 @@ if($girdi == '0'){
 
                                             <?php
 
-                                            $fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$uye_sirket}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+                                            $fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
 
                                             if ( $fabrika->rowCount() ){
 

@@ -16,7 +16,7 @@
 
 	$ilgilikisi = $query['ilgilikisi'];
 
-if($uye_tipi != '3'){
+if($user->type != '3'){
 
 	if (isset($_POST['formkaydet'])) {
 
@@ -34,7 +34,7 @@ if($uye_tipi != '3'){
 		
 		$query = $db->prepare("INSERT INTO siparisformlari SET siparisler = ?, fabrikaid = ?, saniye = ?, sirketid = ?, silik = ?");
 
-		$insert = $query->execute(array($siparislistesi,$urun_fabrika_id,$su_an,$uye_sirket,'0'));
+		$insert = $query->execute(array($siparislistesi,$urun_fabrika_id,$su_an,$user->company_id,'0'));
 
 		header("Location:fabrikalar.php");
 

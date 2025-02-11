@@ -52,7 +52,7 @@
 
 				$sifre = md5($sifre);
 
-				$query = $db->prepare("INSERT INTO uyeler SET name = ?, uye_mail = ?, uye_sifre = ?, uye_firma = ?, uye_tipi = ?, uye_yetkiler = ?, uye_silik =?");
+				$query = $db->prepare("INSERT INTO users SET name = ?, email = ?, password = ?, company_id = ?, type = ?, permissions = ?, uye_silik =?");
 
 				$insert = $query->execute(array($uyeadi,$eposta,$sifre,'0','0',$yeni_uye_yetki,'1'));
 

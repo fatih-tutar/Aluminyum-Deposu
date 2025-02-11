@@ -8,7 +8,7 @@
 
 		exit();
 
-	}elseif($uye_tipi == '0' || $uye_tipi == '1'){
+	}elseif($user->type == '0' || $user->type == '1'){
 
 		header("Location:index.php");
 
@@ -16,7 +16,7 @@
 
 	}else{
 
-	if($uye_tipi != '3'){
+	if($user->type != '3'){
 
 		if (isset($_POST['teklifkaydet'])) {
 			

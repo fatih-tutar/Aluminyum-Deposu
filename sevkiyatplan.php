@@ -26,7 +26,7 @@
                 $hata = '<br/><div class="alert alert-danger" role="alert">Kilo bilgisi yazmadınız.</div>';
             }else{
                 $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, manuel = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                $insert = $query->execute(array('',$firmaId,'',$kilolar,'',$user->id,'','',$arac_id,'','1','0','0',$su_an, $uye_sirket));
+                $insert = $query->execute(array('',$firmaId,'',$kilolar,'',$user->id,'','',$arac_id,'','1','0','0',$su_an, $user->company_id));
                 header("Location:sevkiyatplan.php");
                 exit();
             }

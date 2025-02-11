@@ -10,7 +10,7 @@
 
 	}else{
 
-		if($uye_tipi == '0'){
+		if($user->type == '0'){
 
 			header("Location:index.php");
 

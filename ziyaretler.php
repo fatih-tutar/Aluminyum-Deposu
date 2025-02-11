@@ -75,7 +75,7 @@
 
                 $query = $db->prepare("INSERT INTO ziyaret_kategori SET adi = ?, saniye = ?, silik = ?, sirketid = ?");
 
-                $insert = $query->execute(array($iskoluadi,$su_an,'0',$uye_sirket));
+                $insert = $query->execute(array($iskoluadi,$su_an,'0',$user->company_id));
 
                 header("Location:ziyaretler.php"); exit();
 
