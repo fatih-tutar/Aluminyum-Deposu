@@ -276,37 +276,37 @@
 				    			
 				    			<div class="col-md-2">
 				    				
-				    				<input type="text" name="musteri" class="form-control" placeholder="Müşteri İsmi" value="<?php echo $musteri; ?>">
+				    				<input type="text" name="musteri" class="form-control" placeholder="Müşteri İsmi" value="<?= $musteri; ?>">
 
 				    			</div>
 
 				    			<div class="col-md-2">
 				    				
-				    				<input type="text" name="ilgilikisi" class="form-control" placeholder="İlgili Kişi" value="<?php echo $ilgilikisi; ?>">
+				    				<input type="text" name="ilgilikisi" class="form-control" placeholder="İlgili Kişi" value="<?= $ilgilikisi; ?>">
 
 				    			</div>
 
 				    			<div class="col-md-3">
 				    				
-				    				<input type="text" name="urunmiktar" class="form-control" placeholder="Ürün / Miktar" value="<?php echo $urunmiktar; ?>">
+				    				<input type="text" name="urunmiktar" class="form-control" placeholder="Ürün / Miktar" value="<?= $urunmiktar; ?>">
 
 				    			</div>
 
 				    			<div class="col-md-2">
 				    				
-				    				<input type="text" name="fiyat" class="form-control" placeholder="Fiyat" value="<?php echo $fiyat; ?>">
+				    				<input type="text" name="fiyat" class="form-control" placeholder="Fiyat" value="<?= $fiyat; ?>">
 
 				    			</div>
 
 				    			<div class="col-md-2">
 				    				
-				    				<?php echo $teklifveren; ?>
+				    				<?= $teklifveren; ?>
 
 				    			</div>
 
 				    			<div class="col-md-1">
 				    				
-				    				<?php echo $tekliftarih; ?>
+				    				<?= $tekliftarih; ?>
 
 				    			</div>
 
@@ -316,25 +316,25 @@
 				    			
 				    			<div class="col-md-5">
 
-				    				<input type="text" name="aciklama" class="form-control" placeholder="Buraya açıklama girebilirsiniz." value="<?php echo $aciklama; ?>">
+				    				<input type="text" name="aciklama" class="form-control" placeholder="Buraya açıklama girebilirsiniz." value="<?= $aciklama; ?>">
 
 				    			</div>
 
 				    			<div class="col-md-2">
 				    				
-				    				<input type="text" name="fabrika" class="form-control" placeholder="Fabrika" value="<?php echo $fabrika; ?>">
+				    				<input type="text" name="fabrika" class="form-control" placeholder="Fabrika" value="<?= $fabrika; ?>">
 
 				    			</div>
 
 				    			<div class="col-md-2">
 				    				
-				    				<input type="text" name="fabrikafiyat" class="form-control" placeholder="Fabrika Fiyat" value="<?php echo $fabrikafiyat; ?>">
+				    				<input type="text" name="fabrikafiyat" class="form-control" placeholder="Fabrika Fiyat" value="<?= $fabrikafiyat; ?>">
 
 				    			</div>
 
 				    			<div class="col-md-1">
 
-				    				<input type="hidden" name="teklifid" value="<?php echo $teklifid; ?>">
+				    				<input type="hidden" name="teklifid" value="<?= $teklifid; ?>">
 				    				
 				    				<button type="submit" name="teklifguncelle" class="btn btn-dark btn-block">Güncelle</button>
 

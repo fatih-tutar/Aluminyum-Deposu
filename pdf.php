@@ -67,7 +67,7 @@ if($uye_tipi != '3'){
 
 		<div class="row">
 			
-			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?php echo $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
+			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
@@ -101,7 +101,7 @@ if($uye_tipi != '3'){
 
 			<div class="col-md-4">
 				
-				<?php echo $hazirlayankisi; ?>
+				<?= $hazirlayankisi; ?>
 
 			</div>
 
@@ -113,7 +113,7 @@ if($uye_tipi != '3'){
 
 			<div class="col-md-3">
 				
-				<?php echo $siparistarih; ?>
+				<?= $siparistarih; ?>
 
 			</div>
 
@@ -129,7 +129,7 @@ if($uye_tipi != '3'){
 
 			<div class="col-md-4">
 				
-				<?php echo $urun_fabrika_adi; ?>
+				<?= $urun_fabrika_adi; ?>
 
 			</div>
 
@@ -141,7 +141,7 @@ if($uye_tipi != '3'){
 
 			<div class="col-md-3">
 				
-				<?php echo $ilgilikisi; ?>
+				<?= $ilgilikisi; ?>
 
 			</div>
 
@@ -219,15 +219,15 @@ if($uye_tipi != '3'){
 
 						<div class="row" style="padding: 20px;">
 				
-							<div class="col-md-1"><?php echo $a; ?></div>
+							<div class="col-md-1"><?= $a; ?></div>
 
-							<div class="col-md-3"><?php echo $urun_adi." ".$kategori_iki_adi; ?></div>
+							<div class="col-md-3"><?= $urun_adi." ".$kategori_iki_adi; ?></div>
 
-							<div class="col-2"><?php echo $siparisboy." boyunda "; ?></div>
+							<div class="col-2"><?= $siparisboy." boyunda "; ?></div>
 
-							<div class="col-2"><?php echo $urun_siparis_aded." adet "; ?></div>
+							<div class="col-2"><?= $urun_siparis_aded." adet "; ?></div>
 
-							<div class="col-2"><?php echo $kategori_bir_adi; ?></div>
+							<div class="col-2"><?= $kategori_bir_adi; ?></div>
 
 						</div>
 
@@ -269,7 +269,7 @@ if($uye_tipi != '3'){
 
 				<form action="" method="POST">
 
-					<input type="hidden" name="siparislistesi" value="<?php echo $siparislistesi; ?>">
+					<input type="hidden" name="siparislistesi" value="<?= $siparislistesi; ?>">
 					
 					<button type="submit" name="formkaydet" class="btn btn-warning btn-lg btn-block">Formu Kaydet</button>
 
@@ -279,7 +279,7 @@ if($uye_tipi != '3'){
 
 			<div class="col-6">
 				
-				<a href="siparisyazdir.php?id=<?php echo $urun_fabrika_id; ?>" target="_blank">
+				<a href="siparisyazdir.php?id=<?= $urun_fabrika_id; ?>" target="_blank">
 					
 					<button type="submit" class="btn btn-danger btn-lg btn-block">Yazdırma Sayfasına Git</button>
 

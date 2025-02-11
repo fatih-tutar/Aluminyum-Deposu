@@ -145,7 +145,7 @@
 				
 				<div class="col-md-12">
 					
-					<?php echo $hata; ?>
+					<?= $hata; ?>
 
 				</div>
 
@@ -216,7 +216,7 @@
 
 						<form action="" method="POST" enctype="multipart/form-data">
 							
-							<textarea name="sirketaciklama" class="form-control" rows="5"><?php echo $sirketaciklama; ?></textarea><br/>
+							<textarea name="sirketaciklama" class="form-control" rows="5"><?= $sirketaciklama; ?></textarea><br/>
 
 							<button type="submit" class="btn btn-warning btn-sm" name="aciklamaguncelle">Kaydet</button>
 

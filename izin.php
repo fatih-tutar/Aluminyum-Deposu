@@ -97,7 +97,7 @@
                                             $calisanId = guvenlik($cc['uye_id']);
                                             $calisanAdi = guvenlik($cc['uye_adi']);
                                 ?>
-                                            <option value="<?php echo $calisanId; ?>"><?php echo $calisanAdi; ?></option>
+                                            <option value="<?= $calisanId; ?>"><?= $calisanAdi; ?></option>
                                 <?php
                                         }
                                     }

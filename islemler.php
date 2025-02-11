@@ -149,39 +149,39 @@
 
 					<div class="col-4 d-block d-sm-none"><b style="color: red;">Yapan</b></div>
   			
-		  			<div class="col-md-1 col-8"><?php echo $yapanadi; ?></div>
+		  			<div class="col-md-1 col-8"><?= $yapanadi; ?></div>
 
 		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Ürün</b></div>
 
-		  			<div class="col-md-2 col-8"><?php echo $urunadi; ?></div>
+		  			<div class="col-md-2 col-8"><?= $urunadi; ?></div>
 
 		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Alt K.</b></div>
 
-		  			<div class="col-md-1 col-8"><?php echo $kategori_iki_adi; ?></div>
+		  			<div class="col-md-1 col-8"><?= $kategori_iki_adi; ?></div>
 
 		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Üst K.</b></div>
 
-					<div class="col-md-2 col-8"><?php echo $kategori_bir_adi; ?></div> 
+					<div class="col-md-2 col-8"><?= $kategori_bir_adi; ?></div> 
 
 					<div class="col-4 d-block d-sm-none"><b style="color: red;">Eski Adet</b></div>
 
-		  			<div class="col-md-1 col-8"><?php echo $eskiadet; ?></div>
+		  			<div class="col-md-1 col-8"><?= $eskiadet; ?></div>
 
 		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Yeni Adet</b></div>
 
-		  			<div class="col-md-1 col-8"><?php echo $yeniadet; ?></div>
+		  			<div class="col-md-1 col-8"><?= $yeniadet; ?></div>
 
 		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Fark</b></div>
 
-		  			<div class="col-md-1 col-8"><?php if($islem == 0){?><button class="btn btn-danger btn-sm"><?php }else{ ?><button class="btn btn-success btn-sm"><?php } ?><?php echo $fark; ?></button></div>
+		  			<div class="col-md-1 col-8"><?php if($islem == 0){?><button class="btn btn-danger btn-sm"><?php }else{ ?><button class="btn btn-success btn-sm"><?php } ?><?= $fark; ?></button></div>
 
 		  			<div class="col-4 d-block d-sm-none"><b style="color: red;">Yer</b></div>
 
-		  			<div class="col-md-1 col-8"><?php echo $islem_yeri; ?></div>
+		  			<div class="col-md-1 col-8"><?= $islem_yeri; ?></div>
 					
 					<div class="col-4 d-block d-sm-none"><b style="color: red;">Tarih</b></div>
 
-		  			<div class="col-md-2 col-8"><?php echo $tarih; ?></div>
+		  			<div class="col-md-2 col-8"><?= $tarih; ?></div>
 
 		  		</div>
 

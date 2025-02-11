@@ -47,10 +47,10 @@
     		<div class="row">
     			
     			<div class="col-md-8 col-12">
-    				<h5><b style="line-height: 40px;"><?php echo $fabrika_adi; ?> Sipariş Listesi</b></h5>
+    				<h5><b style="line-height: 40px;"><?= $fabrika_adi; ?> Sipariş Listesi</b></h5>
     			</div>
     			<div class="col-md-2 col-12">
-    				<a href="fabsipcikti.php?id=<?php echo $fabrika_id; ?>">
+    				<a href="fabsipcikti.php?id=<?= $fabrika_id; ?>">
     					<button class="btn btn-secondary btn-block">Çıktı Sayfası</button>
     				</a>
     			</div>
@@ -153,7 +153,7 @@
 
 									<div class="row">
 										<div class="col-12" style="font-weight: bold; font-size: 21px; color:red;">
-											<?php echo ($siparisyili + 1)." yılında ".$yiltoplami." kg sipariş teslim alınmıştır."; ?>
+											<?= ($siparisyili + 1)." yılında ".$yiltoplami." kg sipariş teslim alınmıştır."; ?>
 										</div>
 									</div>
 
@@ -171,7 +171,7 @@
 
 									<div class="row">
 										<div class="col-12">
-											<?php echo $siparisyili." ".ayAdi($siparisayi + 1)." ayında ".$aytoplami." kg sipariş teslim alınmıştır."; ?>
+											<?= $siparisyili." ".ayAdi($siparisayi + 1)." ayında ".$aytoplami." kg sipariş teslim alınmıştır."; ?>
 										</div>
 									</div>
 
@@ -288,35 +288,35 @@
 
                                         <div class="col-4 d-block d-sm-none">Malzeme :</div>
 
-                                        <div class="col-md-2 col-8"><?php echo $urun_adi." ".$kategori_iki_adi; ?></div>
+                                        <div class="col-md-2 col-8"><?= $urun_adi." ".$kategori_iki_adi; ?></div>
 
                                         <div class="col-4 d-block d-sm-none">Boy :</div>
 
-                                        <div class="col-md-1 col-8"><?php echo $siparisboy; ?></div>
+                                        <div class="col-md-1 col-8"><?= $siparisboy; ?></div>
 
                                         <div class="col-4 d-block d-sm-none">Miktar :</div>
 
-                                        <div class="col-md-1 col-8"><?php echo $urun_siparis_aded." adet "; ?></div>
+                                        <div class="col-md-1 col-8"><?= $urun_siparis_aded." adet "; ?></div>
 
                                         <div class="col-4 d-block d-sm-none">Kilo :</div>
 
-                                        <div class="col-md-1 col-8"><?php echo $kilo." KG"; ?></div>
+                                        <div class="col-md-1 col-8"><?= $kilo." KG"; ?></div>
 
                                         <div class="col-4 d-block d-sm-none">Kategori :</div>
 
-                                        <div class="col-md-1 col-8"><?php echo $kategori_bir_adi; ?></div>
+                                        <div class="col-md-1 col-8"><?= $kategori_bir_adi; ?></div>
 
                                         <div class="col-4 d-block d-sm-none">Miktar :</div>
 
-                                        <div class="col-md-1 col-8"><input type="text" name="eklenenadet" class="form-control form-control-sm" value="<?php echo $urun_siparis_aded; ?>"></div>
+                                        <div class="col-md-1 col-8"><input type="text" name="eklenenadet" class="form-control form-control-sm" value="<?= $urun_siparis_aded; ?>"></div>
 
                                         <div class="col-4 d-block d-sm-none">Tarih :</div>
 
-                                        <div class="col-md-1 col-8"><?php echo $siparistarih; ?></div>
+                                        <div class="col-md-1 col-8"><?= $siparistarih; ?></div>
 
                                         <div class="col-4 d-block d-sm-none">Termin :</div>
 
-                                        <div class="col-md-1 col-8"><?php echo $termintarih; ?></div>
+                                        <div class="col-md-1 col-8"><?= $termintarih; ?></div>
 
                                     </div>
 
@@ -333,7 +333,7 @@
 				<hr style="border-color: black; border-width: 2px;" />
 				<div class="row" style="font-size: 27px;">
 					<div class="col-4" style="text-align: right;"><b>Toplam Kilo : </b></div>
-					<div class="col-8"><b style="color:red;"><?php echo $toplamkilo." KG"; ?></b></div>
+					<div class="col-8"><b style="color:red;"><?= $toplamkilo." KG"; ?></b></div>
 				</div>
 
     	</div>

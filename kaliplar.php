@@ -228,43 +228,43 @@ if($girdi == '0'){
 
                             <div class="col-4 d-block d-sm-none" style="margin-top: 5px;"><b style="color: red;">Müşteri</b></div>
                 
-                            <div class="col-md-2 col-8" style="margin-top: 5px;"><?php echo $musteriadi; ?></div>
+                            <div class="col-md-2 col-8" style="margin-top: 5px;"><?= $musteriadi; ?></div>
 
                             <div class="col-4 d-block d-sm-none" style="margin-top: 5px;"><b style="color: red;">Kalıp No</b></div>
 
-                            <div class="col-md-2 col-8" style="margin-top: 5px;"><?php echo $kalipnumarasi; ?></div>
+                            <div class="col-md-2 col-8" style="margin-top: 5px;"><?= $kalipnumarasi; ?></div>
 
                             <div class="col-4 d-block d-sm-none" style="margin-top: 5px;"><b style="color: red;">Fabrika</b></div>
 
-                            <div class="col-md-2 col-8" style="margin-top: 5px;"><?php echo $fabrikaadi; ?></div>
+                            <div class="col-md-2 col-8" style="margin-top: 5px;"><?= $fabrikaadi; ?></div>
 
                             <div class="col-4 d-block d-sm-none" style="margin-top: 5px;"><b style="color: red;">Pdf</b></div>
 
-                            <div class="col-md-2 col-8" style="margin-top: 5px;"><a href="img/pdf/<?php echo $pdf; ?>" target="_blank"><?php echo $pdf; ?></a></div>
+                            <div class="col-md-2 col-8" style="margin-top: 5px;"><a href="img/pdf/<?= $pdf; ?>" target="_blank"><?= $pdf; ?></a></div>
 
                             <div class="col-4 d-block d-sm-none" style="margin-top: 5px;"><b style="color: red;">Önizleme</b></div>
 
-                            <div class="col-md-2 col-8" style="margin-top: 5px;"><a href="#" onclick="return false" onmousedown="javascript:ackapa('pdfdivi<?php echo $kalipid; ?>');">Pdf'i Önizleme</a></div>
+                            <div class="col-md-2 col-8" style="margin-top: 5px;"><a href="#" onclick="return false" onmousedown="javascript:ackapa('pdfdivi<?= $kalipid; ?>');">Pdf'i Önizleme</a></div>
 
                             <div class="col-md-1 col-6" style="margin-top: 5px;">
 
-                                <a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?php echo $kalipid; ?>');"><button class="btn btn-primary btn-sm btn-block">Düzenle</button></a>
+                                <a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $kalipid; ?>');"><button class="btn btn-primary btn-sm btn-block">Düzenle</button></a>
                                 
                             </div>
 
                             <div class="col-md-1 col-6" style="margin-top: 5px;">
 
-                                <a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?php echo $kalipid; ?>');"><button class="btn btn-danger btn-sm btn-block">Sil</button></a>
+                                <a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $kalipid; ?>');"><button class="btn btn-danger btn-sm btn-block">Sil</button></a>
                                 
                             </div>
 
                         </div>
 
-                        <div style="position: fixed; z-index: 1; top:100px; left: 100px; display: none;" id="pdfdivi<?php echo $kalipid; ?>">
+                        <div style="position: fixed; z-index: 1; top:100px; left: 100px; display: none;" id="pdfdivi<?= $kalipid; ?>">
 
                             <div style="text-align: right;">
                                 
-                                <a href="#" onclick="return false" onmousedown="javascript:ackapa('pdfdivi<?php echo $kalipid; ?>');">
+                                <a href="#" onclick="return false" onmousedown="javascript:ackapa('pdfdivi<?= $kalipid; ?>');">
 
                                    <span style="font-size: 3rem;">
                                       <span style="color: red; background-color: white;">
@@ -276,13 +276,13 @@ if($girdi == '0'){
 
                             </div>
 
-                            <object width="700" height="500" type="application/pdf" data="img/pdf/<?php echo $pdf; ?>" id="pdf_content">
+                            <object width="700" height="500" type="application/pdf" data="img/pdf/<?= $pdf; ?>" id="pdf_content">
                             <p>Pdf dokümanı yüklenemediğinde verilecek hata mesajı...</p>
                             </object>
 
                         </div>
 
-                        <div id="silmedivi<?php echo $kalipid; ?>" style="display: none;">
+                        <div id="silmedivi<?= $kalipid; ?>" style="display: none;">
 
                             <div class="row" style="margin-top: 10px;">
                                 
@@ -292,7 +292,7 @@ if($girdi == '0'){
                                 
                                     <form action="" method="POST">
 
-                                        <input type="hidden" name="kalipid" value="<?php echo $kalipid; ?>">
+                                        <input type="hidden" name="kalipid" value="<?= $kalipid; ?>">
                                     
                                         <button type="submit" name="kalipsil" class="btn btn-success btn-sm btn-block">Evet</button>
 
@@ -302,7 +302,7 @@ if($girdi == '0'){
 
                                 <div class="col-md-1 col-6" style="padding-top: 5px;">
                                     
-                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?php echo $kalipid; ?>');"><button class="btn btn-danger btn-sm btn-block">Hayır</button></a>
+                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $kalipid; ?>');"><button class="btn btn-danger btn-sm btn-block">Hayır</button></a>
 
                                 </div>  
 
@@ -310,17 +310,17 @@ if($girdi == '0'){
 
                         </div>
 
-                        <div id="duzenlemedivi<?php echo $kalipid; ?>" style="display: none;">
+                        <div id="duzenlemedivi<?= $kalipid; ?>" style="display: none;">
                             
                             <form action="" method="POST">
 
-                                <input type="hidden" name="kalipid" value="<?php echo $kalipid; ?>">
+                                <input type="hidden" name="kalipid" value="<?= $kalipid; ?>">
 
                                 <div class="row">
                                 
-                                    <div class="col-md-2 col-12" style="margin-top: 5px;"><input type="text" class="form-control" name="musteriadi" value="<?php echo $musteriadi; ?>"></div>
+                                    <div class="col-md-2 col-12" style="margin-top: 5px;"><input type="text" class="form-control" name="musteriadi" value="<?= $musteriadi; ?>"></div>
 
-                                    <div class="col-md-2 col-12" style="margin-top: 5px;"><input type="text" class="form-control" name="kalipnumarasi" value="<?php echo $kalipnumarasi; ?>"></div>
+                                    <div class="col-md-2 col-12" style="margin-top: 5px;"><input type="text" class="form-control" name="kalipnumarasi" value="<?= $kalipnumarasi; ?>"></div>
 
                                     <div class="col-md-2 col-12" style="margin-top: 5px;">
 

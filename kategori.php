@@ -62,15 +62,15 @@
 						
 					<div class="col-md-3">
 
-						<a href="urunler.php?id=<?php echo $alt_kategori_id; ?>">
+						<a href="urunler.php?id=<?= $alt_kategori_id; ?>">
 
-							<img src="<?php echo $resim; ?>" class="img-thumbnail" style="width: 100%; height: auto; padding: 20px;">
+							<img src="<?= $resim; ?>" class="img-thumbnail" style="width: 100%; height: auto; padding: 20px;">
 
-							<button class="btn btn-dark btn-sm btn-block" style="background-color: black;"><?php echo $alt_kategori_adi; ?></button>
+							<button class="btn btn-dark btn-sm btn-block" style="background-color: black;"><?= $alt_kategori_adi; ?></button>
 
-							<!--<div style="border-radius: 50px; text-align: center; background-color: <?php echo $renkarrayi[$sayac]; ?>; color: white; font-weight: bolder; text-align: center; height: 90%; padding: 30% 20% 30% 20%; margin-bottom: 20px; font-size: 25px;">
+							<!--<div style="border-radius: 50px; text-align: center; background-color: <?= $renkarrayi[$sayac]; ?>; color: white; font-weight: bolder; text-align: center; height: 90%; padding: 30% 20% 30% 20%; margin-bottom: 20px; font-size: 25px;">
 
-								<?php echo $alt_kategori_adi; ?>
+								<?= $alt_kategori_adi; ?>
 
 							</div>-->
 

@@ -208,7 +208,7 @@
 				
 				<div class="col-md-12">
 					
-					<?php echo $hata; ?>
+					<?= $hata; ?>
 
 				</div>
 
@@ -355,9 +355,9 @@
 								
 									<div class="col-md-3 col-12" style="margin-top: 7px;">
 										
-										<a href="#" id="<?php echo $id; ?>" onclick="return false" onmousedown="javascript:ackapa('tekliflerdivi<?php echo $firmaid; ?>');">
+										<a href="#" id="<?= $id; ?>" onclick="return false" onmousedown="javascript:ackapa('tekliflerdivi<?= $firmaid; ?>');">
 
-											<b><?php echo $firmaadi;?></b>
+											<b><?= $firmaadi;?></b>
 												
 										</a>
 
@@ -365,7 +365,7 @@
 
 									<div class="col-md-2" style="margin-top: 7px;">
 
-										<b><?php echo $firmatel; ?></b>									
+										<b><?= $firmatel; ?></b>									
 
 									</div>
 
@@ -375,7 +375,7 @@
 											
 											<div class="col-md-9">
 												
-												<?php if($firmaalacak == 0){?><input type="text" name="tutar" class="form-control" placeholder="Tutar giriniz." style="margin-bottom: 5px;"><?php }else{ ?><input type="text" name="tutar" class="form-control" value="<?php echo $firmaalacak; ?>" style="margin-bottom: 5px;"><?php } ?>
+												<?php if($firmaalacak == 0){?><input type="text" name="tutar" class="form-control" placeholder="Tutar giriniz." style="margin-bottom: 5px;"><?php }else{ ?><input type="text" name="tutar" class="form-control" value="<?= $firmaalacak; ?>" style="margin-bottom: 5px;"><?php } ?>
 
 											</div>
 
@@ -397,11 +397,11 @@
 												
 												<?php if($firmaalacaktarih == 0){?>
 													
-													<input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo "Tarih seçiniz."; ?>" class="form-control form-control-sm">
+													<input type="text" id="tarih<?= $id; ?>" name="vefo_tarih" value="<?= "Tarih seçiniz."; ?>" class="form-control form-control-sm">
 													
 												<?php }else{ ?>
 													
-													<input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo $firmaalacaktarihv2; ?>" class="form-control form-control-sm">
+													<input type="text" id="tarih<?= $id; ?>" name="vefo_tarih" value="<?= $firmaalacaktarihv2; ?>" class="form-control form-control-sm">
 													
 												<?php } ?>
 
@@ -411,9 +411,9 @@
 
 												<input type="hidden" id="tarih-db" name="vefat_tarih">
 
-												<input type="hidden" name="siraid" value="<?php echo $id; ?>">
+												<input type="hidden" name="siraid" value="<?= $id; ?>">
 
-												<input type="hidden" name="firmaid" value="<?php echo $firmaid; ?>">
+												<input type="hidden" name="firmaid" value="<?= $firmaid; ?>">
 												
 												<button class="btn btn-dark btn-sm" type="submit" name="arandi"><i class="fas fa-phone"></i></button>												
 
@@ -431,13 +431,13 @@
 
 									<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?php echo $firmaid; ?>');"><button class="btn btn-warning btn-sm btn-block">Düzenle</button></a>
+										<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $firmaid; ?>');"><button class="btn btn-warning btn-sm btn-block">Düzenle</button></a>
 										
 									</div>
 
 									<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?php echo $firmaid; ?>');"><button class="btn btn-secondary btn-sm btn-block">Sil</button></a>
+										<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $firmaid; ?>');"><button class="btn btn-secondary btn-sm btn-block">Sil</button></a>
 										
 									</div>
 
@@ -445,37 +445,37 @@
 
 							</form>
 
-							<div id="silmedivi<?php echo $firmaid; ?>" class="alert alert-danger" style="display: none; text-align: right; margin-top: 15px;">
+							<div id="silmedivi<?= $firmaid; ?>" class="alert alert-danger" style="display: none; text-align: right; margin-top: 15px;">
 										
 								<form action="" method="POST">
 
-									<input type="hidden" name="firmaid" value="<?php echo $firmaid; ?>">
+									<input type="hidden" name="firmaid" value="<?= $firmaid; ?>">
 
-									<input type="hidden" name="siraid" value="<?php echo $id; ?>">
+									<input type="hidden" name="siraid" value="<?= $id; ?>">
 
 									Silmek istediğinize emin misiniz?&nbsp;&nbsp;&nbsp;
 
 									<button class="btn btn-success btn-sm" name="firmasil" type="submit">Evet</button>&nbsp;&nbsp;&nbsp;
 
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?php echo $firmaid; ?>');"><button class="btn btn-danger btn-sm">Hayır</button></a>
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $firmaid; ?>');"><button class="btn btn-danger btn-sm">Hayır</button></a>
 
 								</form>
 
 							</div>
 
-							<div id="duzenlemedivi<?php echo $firmaid; ?>" style="display: none; position: fixed; top: 20%; left: 20%; z-index: 1; " class="div2">			
+							<div id="duzenlemedivi<?= $firmaid; ?>" style="display: none; position: fixed; top: 20%; left: 20%; z-index: 1; " class="div2">			
 
 								<div class="row">
 									
 									<div class="col-md-8 col-8">
 										
-										<h5><b><?php echo $firmaadi; ?></b></h5>
+										<h5><b><?= $firmaadi; ?></b></h5>
 
 									</div>
 
 									<div class="col-md-4 col-4" style="text-align: right;">
 										
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?php echo $firmaid; ?>');"><span style="font-size: 24px;"><i class="fas fa-times"></i></span></a>
+										<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $firmaid; ?>');"><span style="font-size: 24px;"><i class="fas fa-times"></i></span></a>
 
 									</div>
 
@@ -493,9 +493,9 @@
 
 												<b>Firma Adı</b>
 												
-												<input type="hidden" name="firmaid" value="<?php echo $firmaid; ?>">
+												<input type="hidden" name="firmaid" value="<?= $firmaid; ?>">
 											
-												<input type="text" name="firmaadi" class="form-control" value="<?php echo $firmaadi; ?>">
+												<input type="text" name="firmaadi" class="form-control" value="<?= $firmaadi; ?>">
 
 											</div>
 
@@ -503,7 +503,7 @@
 
 												<b>Telefon</b><br/>
 												
-												<input type="text" name="firmatel" class="form-control" value="<?php echo $firmatel; ?>">
+												<input type="text" name="firmatel" class="form-control" value="<?= $firmatel; ?>">
 
 											</div>
 
@@ -511,7 +511,7 @@
 
 												<b>E-posta</b><br/>
 												
-												<input type="text" name="firmaeposta" class="form-control" value="<?php echo $firmaeposta; ?>">
+												<input type="text" name="firmaeposta" class="form-control" value="<?= $firmaeposta; ?>">
 
 											</div>
 
@@ -523,7 +523,7 @@
 
 												<b>Adres</b><br/>
 
-												<textarea name="firmaadres" class="form-control" rows="1"><?php echo $firmaadres; ?></textarea>
+												<textarea name="firmaadres" class="form-control" rows="1"><?= $firmaadres; ?></textarea>
 
 											</div>
 
@@ -533,7 +533,7 @@
 											
 											<div class="col-md-12 col-12"  style="margin-top: 5px;">
 
-												<input type="hidden" name="siraid" value="<?php echo $id; ?>">
+												<input type="hidden" name="siraid" value="<?= $id; ?>">
 												
 												<button class="btn btn-primary" type="submit" name="firmabilgileriguncelle">Güncelle</button>
 
@@ -547,7 +547,7 @@
 
 							</div>
 
-							<div id="tekliflerdivi<?php echo $firmaid; ?>" class="div2" style="display: none; margin: 0px -20px 0px -20px;">
+							<div id="tekliflerdivi<?= $firmaid; ?>" class="div2" style="display: none; margin: 0px -20px 0px -20px;">
 
 								<div class="alert alert-primary">
 									
@@ -555,7 +555,7 @@
 									
 										<div class="col-6"><h5><b style="line-height: 40px;">Teklifler</b></h5></div>
 
-										<div class="col-6"><a href="teklif.php?id=<?php echo $firmaid; ?>" target="_blank"><button class="btn btn-primary btn-sm">Teklif Formuna Git</button></a></div>
+										<div class="col-6"><a href="teklif.php?id=<?= $firmaid; ?>" target="_blank"><button class="btn btn-primary btn-sm">Teklif Formuna Git</button></a></div>
 
 									</div>	
 
@@ -637,33 +637,33 @@
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Firma</b></div>
 													
-													<div class="col-md-3 col-8" style="margin-top: 7px;"><?php echo $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
+													<div class="col-md-3 col-8" style="margin-top: 7px;"><?= $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Ürün</b></div>
 
-													<div class="col-md-3 col-8" style="margin-top: 7px;"><?php echo $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
+													<div class="col-md-3 col-8" style="margin-top: 7px;"><?= $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Adet</b></div>
 
-													<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $tadet; ?></div>
+													<div class="col-md-1 col-8" style="margin-top: 7px;"><?= $tadet; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Satış</b></div>
 
-													<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $tsatisfiyati." TL"; ?></div>
+													<div class="col-md-1 col-8" style="margin-top: 7px;"><?= $tsatisfiyati." TL"; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Toplam</b></div>
 
-													<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $toplam_fiyat." TL"; ?></div>
+													<div class="col-md-2 col-8" style="margin-top: 7px;"><?= $toplam_fiyat." TL"; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Tarih</b></div>
 
-													<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $ttarih; ?></div>
+													<div class="col-md-1 col-8" style="margin-top: 7px;"><?= $ttarih; ?></div>
 
 													<div class="col-md-1 col-12" style="margin-top: 7px; text-align: right;">
 														
 														<form action="" method="POST">
 
-															<input type="hidden" name="teklifid" value="<?php echo $teklifid; ?>">
+															<input type="hidden" name="teklifid" value="<?= $teklifid; ?>">
 															
 															<button type="submit" class="btn btn-danger btn-sm btn-block" name="teklifsil" style="margin-bottom: 5px;">Sil</button>
 
@@ -709,15 +709,15 @@
 
 											<div class="row" style="margin-bottom: 3px;">
 												
-												<div class="col-10"><a onclick="return false" onmousedown="javascript:ackapa('teklifformdivi<?php echo $tformid; ?>');"><?php echo $tekliftarihi." Tarihli Teklif Formundaki Ürünler<br/>"; ?></a></div>
+												<div class="col-10"><a onclick="return false" onmousedown="javascript:ackapa('teklifformdivi<?= $tformid; ?>');"><?= $tekliftarihi." Tarihli Teklif Formundaki Ürünler<br/>"; ?></a></div>
 
-												<div class="col-1" style="text-align: right;"><a href="teklifformu.php?id=<?php echo $tformid; ?>" target="_blank"><button class="btn btn-warning btn-sm btn-block">Göster</button></a></div>
+												<div class="col-1" style="text-align: right;"><a href="teklifformu.php?id=<?= $tformid; ?>" target="_blank"><button class="btn btn-warning btn-sm btn-block">Göster</button></a></div>
 
-												<div class="col-1" style="text-align: right;"><form action="" method="POST"><input type="hidden" name="siraid" value="<?php echo $id; ?>"><input type="hidden" name="tformid" value="<?php echo $tformid; ?>"><input type="hidden" name="tekliflistesi" value="<?php echo $tekliflistesi; ?>"><button class="btn btn-danger btn-sm btn-block" type="submit" name="teklifformunusil">Sil</button></form></div>
+												<div class="col-1" style="text-align: right;"><form action="" method="POST"><input type="hidden" name="siraid" value="<?= $id; ?>"><input type="hidden" name="tformid" value="<?= $tformid; ?>"><input type="hidden" name="tekliflistesi" value="<?= $tekliflistesi; ?>"><button class="btn btn-danger btn-sm btn-block" type="submit" name="teklifformunusil">Sil</button></form></div>
 											
 											</div>																		
 
-											<div id="teklifformdivi<?php echo $tformid; ?>" style="display: none; padding: 10px;">
+											<div id="teklifformdivi<?= $tformid; ?>" style="display: none; padding: 10px;">
 
 												<hr/>
 
@@ -797,29 +797,29 @@
 
 														<div class="row">
 															
-															<div class="col-3"><?php echo $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
+															<div class="col-3"><?= $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
 
-															<div class="col-3"><?php echo $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
+															<div class="col-3"><?= $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
 
-															<div class="col-1"><?php echo $tadet; ?></div>
+															<div class="col-1"><?= $tadet; ?></div>
 
-															<div class="col-1"><?php echo $tsatisfiyati." TL"; ?></div>
+															<div class="col-1"><?= $tsatisfiyati." TL"; ?></div>
 
-															<div class="col-2"><?php echo $toplam_fiyat." TL"; ?></div>
+															<div class="col-2"><?= $toplam_fiyat." TL"; ?></div>
 
-															<div class="col-1"><?php echo $ttarih; ?></div>
+															<div class="col-1"><?= $ttarih; ?></div>
 
 															<div class="col-1" style="text-align: right;">
 																	
 																<form action="" method="POST">
 
-																	<input type="hidden" name="teklifformid" value="<?php echo $tformid; ?>">
+																	<input type="hidden" name="teklifformid" value="<?= $tformid; ?>">
 
-																	<input type="hidden" name="tekliflistesi" value="<?php echo $tekliflistesi; ?>">
+																	<input type="hidden" name="tekliflistesi" value="<?= $tekliflistesi; ?>">
 
-																	<input type="hidden" name="teklifkey" value="<?php echo $key; ?>">
+																	<input type="hidden" name="teklifkey" value="<?= $key; ?>">
 
-																	<input type="hidden" name="teklifid" value="<?php echo $teklifid; ?>">
+																	<input type="hidden" name="teklifid" value="<?= $teklifid; ?>">
 																	
 																	<button type="submit" class="btn btn-danger btn-sm" name="formluteklifsil" style="margin-bottom: 5px;">Sil</button>
 
@@ -866,7 +866,7 @@
 
 				<div class="row">
 
-					<div class="col-md-12" style="padding-top: 20px; padding-bottom: 10px; text-align: center;"><b style="font-size: 20px;">Toplam Tahsilat Tutarı : <?php echo $toplamfirmaalacak; ?> TL</b></div>
+					<div class="col-md-12" style="padding-top: 20px; padding-bottom: 10px; text-align: center;"><b style="font-size: 20px;">Toplam Tahsilat Tutarı : <?= $toplamfirmaalacak; ?> TL</b></div>
 
 				</div>
 

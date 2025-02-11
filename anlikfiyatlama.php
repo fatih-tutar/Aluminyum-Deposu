@@ -55,12 +55,12 @@ if ($girdi != '1') {
 
                                 <div class="row">
 
-                                    <div class="col-md-7 col-7 text-fiyat" style="border-right: 2px solid black;"><?php echo $fabrika_adi; ?></div>
+                                    <div class="col-md-7 col-7 text-fiyat" style="border-right: 2px solid black;"><?= $fabrika_adi; ?></div>
 
                                     <div class="col-md-5 col-5 px-1 pr-3 text-fiyat">
                                         <div class="d-flex justify-content-between">
-                                            <div><?php echo $fiyat."₺"; ?></div>
-                                            <div><?php echo $fiyat2."₺"; ?></div>
+                                            <div><?= $fiyat."₺"; ?></div>
+                                            <div><?= $fiyat2."₺"; ?></div>
                                         </div>
                                     </div>
 

@@ -22,7 +22,7 @@
                             <img src="<?= $resim ?>" alt="<?= $kategori_adi ?>" width="40" height="40">
                         </div>
                         <div class="col-md-9 col-10 d-flex align-items-center">
-                            <?php echo $kategori_adi; ?>
+                            <?= $kategori_adi; ?>
                         </div>
                     </div>							
                 </div>
@@ -35,13 +35,13 @@
                     $alt_kategori_adi = $wor['kategori_adi'];
                     $alt_kategori_resim = "img/kategoriler/".$wor['resim'];
         ?>		
-                    <a href="urunler.php?id=<?php echo $alt_kategori_id; ?>">
+                    <a href="urunler.php?id=<?= $alt_kategori_id; ?>">
                         <div class="row pl-1">
                             <div class="col-md-3 col-2 offset-md-0 ">
                                 <img src="<?= $alt_kategori_resim ?>" alt="<?= $alt_kategori_adi ?>" width="35" height="35">
                             </div>
                             <div class="col-md-9 col-9 d-flex align-items-center">
-                                <?php echo $alt_kategori_adi; ?>
+                                <?= $alt_kategori_adi; ?>
                             </div>
                         </div>		
                     </a>

@@ -268,7 +268,7 @@
 				
 				<div class="col-md-12">
 					
-					<?php echo $hata; ?>
+					<?= $hata; ?>
 
 				</div>
 
@@ -396,9 +396,9 @@
 
 								<div class="col-md-3 col-12" style="margin-top: 7px;">
 									
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('siparislerdivi<?php echo $fabrika_id; ?>');">
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('siparislerdivi<?= $fabrika_id; ?>');">
 
-										<b><?php echo $fabrika_adi;?></b>
+										<b><?= $fabrika_adi;?></b>
 											
 									</a>
 
@@ -406,7 +406,7 @@
 
 								<div class="col-md-2" style="margin-top: 7px;">
 
-									<b><?php echo $fabrikatel; ?></b>									
+									<b><?= $fabrikatel; ?></b>									
 
 								</div>
 
@@ -432,7 +432,7 @@
 											
 											<div class="col-md-4">
 												
-												<?php if($fabrikaalacak == 0){?><input type="text" name="tutar" class="form-control" placeholder="Tutar giriniz." style="margin-bottom: 5px;"><?php }else{ ?><input type="text" name="tutar" class="form-control" value="<?php echo $fabrikaalacak; ?>" style="margin-bottom: 5px;"><?php } ?>
+												<?php if($fabrikaalacak == 0){?><input type="text" name="tutar" class="form-control" placeholder="Tutar giriniz." style="margin-bottom: 5px;"><?php }else{ ?><input type="text" name="tutar" class="form-control" value="<?= $fabrikaalacak; ?>" style="margin-bottom: 5px;"><?php } ?>
 
 											</div>
 
@@ -444,7 +444,7 @@
 
 											<div class="col-md-4">
 												
-												<?php if($fabrikaalacaktarih == 0){?><input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo "Tarih seçiniz."; ?>" class="form-control form-control-sm"><?php }else{ ?><input type="text" id="tarih<?php echo $id; ?>" name="vefo_tarih" value="<?php echo $fabrikaalacaktarihv2; ?>" class="form-control form-control-sm"><?php } ?>
+												<?php if($fabrikaalacaktarih == 0){?><input type="text" id="tarih<?= $id; ?>" name="vefo_tarih" value="<?= "Tarih seçiniz."; ?>" class="form-control form-control-sm"><?php }else{ ?><input type="text" id="tarih<?= $id; ?>" name="vefo_tarih" value="<?= $fabrikaalacaktarihv2; ?>" class="form-control form-control-sm"><?php } ?>
 
 											</div>
 
@@ -452,9 +452,9 @@
 
 												<input type="hidden" id="tarih-db" name="vefat_tarih">
 
-												<input type="hidden" name="fabrikaid" value="<?php echo $fabrika_id; ?>">
+												<input type="hidden" name="fabrikaid" value="<?= $fabrika_id; ?>">
 
-												<input type="hidden" name="siraid" value="<?php echo $id; ?>">
+												<input type="hidden" name="siraid" value="<?= $id; ?>">
 												
 												<button class="btn btn-dark btn-sm" type="submit" name="arandi"><i class="fas fa-phone"></i></button>												
 
@@ -474,55 +474,55 @@
 
 								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<a href="fabrikasiparis.php?id=<?php echo $fabrika_id; ?>"><button class="btn btn-info btn-sm btn-block">Siparişler</button></a>												
+									<a href="fabrikasiparis.php?id=<?= $fabrika_id; ?>"><button class="btn btn-info btn-sm btn-block">Siparişler</button></a>												
 									
 								</div>		
 
 								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?php echo $fabrika_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Düzenle</button></a>
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $fabrika_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Düzenle</button></a>
 									
 								</div>
 
 								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?php echo $fabrika_id; ?>');"><button class="btn btn-secondary btn-sm btn-block">Sil</button></a>
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $fabrika_id; ?>');"><button class="btn btn-secondary btn-sm btn-block">Sil</button></a>
 									
 								</div>
 
 							</div>
 
-							<div id="silmedivi<?php echo $fabrika_id; ?>" class="alert alert-danger" style="display: none; text-align: right; margin-top: 15px;">												
+							<div id="silmedivi<?= $fabrika_id; ?>" class="alert alert-danger" style="display: none; text-align: right; margin-top: 15px;">												
 
 								<form action="" method="POST">
 
-									<input type="hidden" name="fabrika_id" value="<?php echo $fabrika_id; ?>">
+									<input type="hidden" name="fabrika_id" value="<?= $fabrika_id; ?>">
 
-									<input type="hidden" name="siraid" value="<?php echo $id; ?>">
+									<input type="hidden" name="siraid" value="<?= $id; ?>">
 
 									Silmek istediğinize emin misiniz?&nbsp;&nbsp;&nbsp;
 
 									<button class="btn btn-success btn-sm" name="fabrikasil" type="submit">Evet</button>&nbsp;&nbsp;&nbsp;
 
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?php echo $fabrika_id; ?>');"><button class="btn btn-danger btn-sm">Hayır</button></a>
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $fabrika_id; ?>');"><button class="btn btn-danger btn-sm">Hayır</button></a>
 
 								</form>
 
 							</div>
 
-							<div id="duzenlemedivi<?php echo $fabrika_id; ?>" style="display: none; position: fixed; top: 20%; left: 20%; z-index: 1; " class="div2">			
+							<div id="duzenlemedivi<?= $fabrika_id; ?>" style="display: none; position: fixed; top: 20%; left: 20%; z-index: 1; " class="div2">			
 
 								<div class="row">
 									
 									<div class="col-md-8 col-8">
 										
-										<h5><b><?php echo $fabrika_adi; ?></b></h5>
+										<h5><b><?= $fabrika_adi; ?></b></h5>
 
 									</div>
 
 									<div class="col-md-4 col-4" style="text-align: right;">
 										
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?php echo $fabrika_id; ?>');"><span style="font-size: 24px;"><i class="fas fa-times"></i></span></a>
+										<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $fabrika_id; ?>');"><span style="font-size: 24px;"><i class="fas fa-times"></i></span></a>
 
 									</div>
 
@@ -540,9 +540,9 @@
 
 												<b>Fabrika Adı</b>
 												
-												<input type="hidden" name="fabrika_id" value="<?php echo $fabrika_id; ?>">
+												<input type="hidden" name="fabrika_id" value="<?= $fabrika_id; ?>">
 											
-												<input type="text" name="fabrika_adi" class="form-control" value="<?php echo $fabrika_adi; ?>">
+												<input type="text" name="fabrika_adi" class="form-control" value="<?= $fabrika_adi; ?>">
 
 											</div>
 
@@ -550,7 +550,7 @@
 
 												<b>Telefon</b><br/>
 												
-												<input type="text" name="fabrikatel" class="form-control" value="<?php echo $fabrikatel; ?>">
+												<input type="text" name="fabrikatel" class="form-control" value="<?= $fabrikatel; ?>">
 
 											</div>
 
@@ -558,7 +558,7 @@
 
 												<b>E-posta</b><br/>
 												
-												<input type="text" name="fabrikaeposta" class="form-control" value="<?php echo $fabrikaeposta; ?>">
+												<input type="text" name="fabrikaeposta" class="form-control" value="<?= $fabrikaeposta; ?>">
 
 											</div>
 
@@ -570,7 +570,7 @@
 
 												<b>İşçilik</b><br/>
 												
-												<input type="text" name="fabrikaiscilik" class="form-control" placeholder="Sadece sayı giriniz." value="<?php echo $fabrikaiscilik; ?>">
+												<input type="text" name="fabrikaiscilik" class="form-control" placeholder="Sadece sayı giriniz." value="<?= $fabrikaiscilik; ?>">
 
 											</div>
 
@@ -582,7 +582,7 @@
 
 												<b>Adres</b><br/>
 
-												<textarea name="fabrikaadres" class="form-control" rows="1"><?php echo $fabrikaadres; ?></textarea>
+												<textarea name="fabrikaadres" class="form-control" rows="1"><?= $fabrikaadres; ?></textarea>
 
 											</div>
 
@@ -592,7 +592,7 @@
 											
 											<div class="col-md-12 col-12"  style="margin-top: 5px;">
 
-												<input type="hidden" name="siraid" value="<?php echo $id; ?>">
+												<input type="hidden" name="siraid" value="<?= $id; ?>">
 												
 												<button class="btn btn-primary" type="submit" name="fabrikabilgileriguncelle">Güncelle</button>
 
@@ -606,7 +606,7 @@
 
 							</div>
 
-							<div id="siparislerdivi<?php echo $fabrika_id; ?>" class="div2" style="display: none; margin: 0px -20px 0px -20px;">
+							<div id="siparislerdivi<?= $fabrika_id; ?>" class="div2" style="display: none; margin: 0px -20px 0px -20px;">
 
 								<div class="alert alert-primary">
 
@@ -614,7 +614,7 @@
 										
 										<div class="col-6" style="text-align: left;"><h5><b style="line-height: 40px;">Siparişler</b></h5></div>
 
-										<div class="col-6" style="text-align: right;"><a href="pdf.php?id=<?php echo $fabrika_id; ?>" target="_blank"><button class="btn btn-primary btn-sm">Sipariş Formuna Git</button></a></div>
+										<div class="col-6" style="text-align: right;"><a href="pdf.php?id=<?= $fabrika_id; ?>" target="_blank"><button class="btn btn-primary btn-sm">Sipariş Formuna Git</button></a></div>
 
 									</div>																
 
@@ -674,35 +674,35 @@
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Hazırlayan</b></div>
 													
-													<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $hazirlayankisi; ?></div>
+													<div class="col-md-2 col-8" style="margin-top: 7px;"><?= $hazirlayankisi; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Fabrika</b></div>
 
-													<div class="col-md-2 col-12" style="margin-top: 7px;"><?php echo $urun_fabrika_adi; ?></div>
+													<div class="col-md-2 col-12" style="margin-top: 7px;"><?= $urun_fabrika_adi; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">İlgili</b></div>
 
-													<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $ilgilikisi; ?></div>
+													<div class="col-md-2 col-8" style="margin-top: 7px;"><?= $ilgilikisi; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Ürün</b></div>
 
-													<div class="col-md-3 col-8" style="margin-top: 7px;"><?php echo $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
+													<div class="col-md-3 col-8" style="margin-top: 7px;"><?= $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Adet</b></div>
 
-													<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $urun_siparis_aded; ?></div>
+													<div class="col-md-1 col-8" style="margin-top: 7px;"><?= $urun_siparis_aded; ?></div>
 
 													<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Tarih</b></div>
 
-													<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $siparistarih; ?></div>
+													<div class="col-md-1 col-8" style="margin-top: 7px;"><?= $siparistarih; ?></div>
 
 													<div class="col-md-1 col-12" style="margin-top: 7px; text-align: right;">
 														
 														<form action="" method="POST">
 
-															<input type="hidden" name="siparis_id" value="<?php echo $siparis_id; ?>">
+															<input type="hidden" name="siparis_id" value="<?= $siparis_id; ?>">
 
-															<input type="hidden" name="siraid" value="<?php echo $id; ?>">
+															<input type="hidden" name="siraid" value="<?= $id; ?>">
 															
 															<button type="submit" class="btn btn-danger btn-sm btn-block" name="siparissil" style="margin-bottom: 5px;">Sil</button>
 
@@ -750,15 +750,15 @@
 
 											<div class="row" style="margin-bottom: 3px;">
 												
-												<div class="col-10"><a onclick="return false" onmousedown="javascript:ackapa('formdivi<?php echo $formid; ?>');"><?php echo $formtarih." Tarihli Sipariş Formundaki Ürünler<br/>"; ?></a></div>
+												<div class="col-10"><a onclick="return false" onmousedown="javascript:ackapa('formdivi<?= $formid; ?>');"><?= $formtarih." Tarihli Sipariş Formundaki Ürünler<br/>"; ?></a></div>
 
-												<div class="col-1" style="text-align: right;"><a href="siparisform.php?id=<?php echo $formid; ?>" target="_blank"><button class="btn btn-warning btn-sm btn-block">Göster</button></a></div>
+												<div class="col-1" style="text-align: right;"><a href="siparisform.php?id=<?= $formid; ?>" target="_blank"><button class="btn btn-warning btn-sm btn-block">Göster</button></a></div>
 
-												<div class="col-1" style="text-align: right;"><form action="" method="POST"><input type="hidden" name="formid" value="<?php echo $formid; ?>"><input type="hidden" name="siparisler" value="<?php echo $siparisler; ?>"><input type="hidden" name="siraid" value="<?php echo $id; ?>"><button type="submit" name="siparisformunusil" class="btn btn-danger btn-sm btn-block">Sil</button></form></div>
+												<div class="col-1" style="text-align: right;"><form action="" method="POST"><input type="hidden" name="formid" value="<?= $formid; ?>"><input type="hidden" name="siparisler" value="<?= $siparisler; ?>"><input type="hidden" name="siraid" value="<?= $id; ?>"><button type="submit" name="siparisformunusil" class="btn btn-danger btn-sm btn-block">Sil</button></form></div>
 
 											</div>
 
-											<div id="formdivi<?php echo $formid; ?>" style="display: none; padding: 10px;">
+											<div id="formdivi<?= $formid; ?>" style="display: none; padding: 10px;">
 
 												<hr/>
 
@@ -844,41 +844,41 @@
 
 																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Hazırlayan</b></div>
 																	
-																	<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $hazirlayankisi; ?></div>
+																	<div class="col-md-2 col-8" style="margin-top: 7px;"><?= $hazirlayankisi; ?></div>
 
 																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Fabrika</b></div>
 
-																	<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $urun_fabrika_adi; ?></div>
+																	<div class="col-md-2 col-8" style="margin-top: 7px;"><?= $urun_fabrika_adi; ?></div>
 
 																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">İlgili</b></div>
 
-																	<div class="col-md-2 col-8" style="margin-top: 7px;"><?php echo $ilgilikisi; ?></div>
+																	<div class="col-md-2 col-8" style="margin-top: 7px;"><?= $ilgilikisi; ?></div>
 
 																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Ürün</b></div>
 
-																	<div class="col-md-3 col-8" style="margin-top: 7px;"><?php echo $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
+																	<div class="col-md-3 col-8" style="margin-top: 7px;"><?= $urun_adi." ".$kategori_iki_adi." ".$kategori_bir_adi; ?></div>
 
 																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Adet</b></div>
 
-																	<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $urun_siparis_aded; ?></div>
+																	<div class="col-md-1 col-8" style="margin-top: 7px;"><?= $urun_siparis_aded; ?></div>
 
 																	<div class="col-4 d-block d-sm-none" style="margin-top: 7px;"><b style="color: red;">Tarih</b></div>
 
-																	<div class="col-md-1 col-8" style="margin-top: 7px;"><?php echo $siparistarih; ?></div>
+																	<div class="col-md-1 col-8" style="margin-top: 7px;"><?= $siparistarih; ?></div>
 
 																	<div class="col-md-1 col-12" style="margin-top: 7px; text-align: right;">
 															
 																		<form action="" method="POST">
 
-																			<input type="hidden" name="siparisformid" value="<?php echo $formid; ?>">
+																			<input type="hidden" name="siparisformid" value="<?= $formid; ?>">
 
-																			<input type="hidden" name="siparisler" value="<?php echo $siparisler; ?>">
+																			<input type="hidden" name="siparisler" value="<?= $siparisler; ?>">
 
-																			<input type="hidden" name="sipariskey" value="<?php echo $key; ?>">
+																			<input type="hidden" name="sipariskey" value="<?= $key; ?>">
 
-																			<input type="hidden" name="siparis_id" value="<?php echo $siparis_id; ?>">
+																			<input type="hidden" name="siparis_id" value="<?= $siparis_id; ?>">
 
-																			<input type="hidden" name="siraid" value="<?php echo $id; ?>">
+																			<input type="hidden" name="siraid" value="<?= $id; ?>">
 																			
 																			<button type="submit" class="btn btn-danger btn-sm btn-block" name="formlusiparissil" style="margin-bottom: 5px;">Sil</button>
 
@@ -926,7 +926,7 @@
 
 				<div class="row">
 
-					<div class="col-md-12" style="padding-top: 20px; padding-bottom: 10px; text-align: center;"><b style="font-size: 20px;">Toplam Borç Tutarı : <?php echo $toplamfabrikaborc; ?> TL</b></div>
+					<div class="col-md-12" style="padding-top: 20px; padding-bottom: 10px; text-align: center;"><b style="font-size: 20px;">Toplam Borç Tutarı : <?= $toplamfabrikaborc; ?> TL</b></div>
 
 				</div>
 

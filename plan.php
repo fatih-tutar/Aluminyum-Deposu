@@ -256,15 +256,15 @@
 
                                 <div class="row">
                                     
-                                    <div class="col-md-3"><?php echo $i; ?><input type="hidden" name="plan_id" value="<?php echo $plan_id; ?>"></div>
+                                    <div class="col-md-3"><?= $i; ?><input type="hidden" name="plan_id" value="<?= $plan_id; ?>"></div>
                                     
-                                    <div class="col-md-9"><input type="text" id="tarih<?php echo $plan_id; ?>" name="plan_tarihi" value="<?php echo $plan_tarihi; ?>" class="form-control form-control-sm" style="border-style:none; font-size:1.1rem;"></div>
+                                    <div class="col-md-9"><input type="text" id="tarih<?= $plan_id; ?>" name="plan_tarihi" value="<?= $plan_tarihi; ?>" class="form-control form-control-sm" style="border-style:none; font-size:1.1rem;"></div>
                                 
                                 </div>
 
                             </div>
 
-                            <div class="col-md-4"><input type="text" name="plan" class="form-control form-control-sm" placeholder="İş planına eklenecek görev" value="<?php echo $plan; ?>" style="border-style:none; font-size:1.1rem;"></div>
+                            <div class="col-md-4"><input type="text" name="plan" class="form-control form-control-sm" placeholder="İş planına eklenecek görev" value="<?= $plan; ?>" style="border-style:none; font-size:1.1rem;"></div>
 
                             <div class="col-md-3">
 
@@ -310,9 +310,9 @@
 
                             <div class="col-md-2">
 
-                                <div id="sildivi<?php echo $plan_id; ?>">
+                                <div id="sildivi<?= $plan_id; ?>">
 
-                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa2('silmeonaydivi<?php echo $plan_id; ?>','sildivi<?php echo $plan_id; ?>');">
+                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa2('silmeonaydivi<?= $plan_id; ?>','sildivi<?= $plan_id; ?>');">
                                 
                                         <button class="btn btn-danger btn-sm" style="width:100px;">Sil</button>
                                     
@@ -320,7 +320,7 @@
 
                                 </div>
 
-                                <div id="silmeonaydivi<?php echo $plan_id; ?>" style="display:none;">
+                                <div id="silmeonaydivi<?= $plan_id; ?>" style="display:none;">
                             
                                     <div class="row">
 
@@ -332,7 +332,7 @@
                                         
                                         <div class="col-md-6">
 
-                                            <a href="#" onclick="return false" onmousedown="javascript:ackapa2('sildivi<?php echo $plan_id; ?>','silmeonaydivi<?php echo $plan_id; ?>');">
+                                            <a href="#" onclick="return false" onmousedown="javascript:ackapa2('sildivi<?= $plan_id; ?>','silmeonaydivi<?= $plan_id; ?>');">
                                     
                                                 <button class="btn btn-danger btn-block btn-sm">Hayır</button>
                                             
@@ -410,15 +410,15 @@
 
                                 <div class="row">
                                     
-                                    <div class="col-md-3"><?php echo $i; ?><input type="hidden" name="plan_id" value="<?php echo $plan_id; ?>"></div>
+                                    <div class="col-md-3"><?= $i; ?><input type="hidden" name="plan_id" value="<?= $plan_id; ?>"></div>
                                     
-                                    <div class="col-md-9"><input type="text" id="tarih<?php echo $plan_id; ?>" name="plan_tarihi" value="<?php echo $plan_tarihi; ?>" class="form-control form-control-sm" style="border-style:none; font-size:1.1rem;"></div>
+                                    <div class="col-md-9"><input type="text" id="tarih<?= $plan_id; ?>" name="plan_tarihi" value="<?= $plan_tarihi; ?>" class="form-control form-control-sm" style="border-style:none; font-size:1.1rem;"></div>
                                 
                                 </div>
 
                             </div>
 
-                            <div class="col-md-4"><input type="text" name="plan" class="form-control form-control-sm" placeholder="İş planına eklenecek görev" value="<?php echo $plan; ?>" style="border-style:none; font-size:1.1rem;"></div>
+                            <div class="col-md-4"><input type="text" name="plan" class="form-control form-control-sm" placeholder="İş planına eklenecek görev" value="<?= $plan; ?>" style="border-style:none; font-size:1.1rem;"></div>
 
                             <div class="col-md-3">
 
@@ -464,9 +464,9 @@
 
                             <div class="col-md-2">
 
-                                <div id="sildivi<?php echo $plan_id; ?>">
+                                <div id="sildivi<?= $plan_id; ?>">
 
-                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa2('silmeonaydivi<?php echo $plan_id; ?>','sildivi<?php echo $plan_id; ?>');">
+                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa2('silmeonaydivi<?= $plan_id; ?>','sildivi<?= $plan_id; ?>');">
                                 
                                         <button class="btn btn-danger btn-sm" style="width:100px;">Sil</button>
                                     
@@ -474,7 +474,7 @@
 
                                 </div>
 
-                                <div id="silmeonaydivi<?php echo $plan_id; ?>" style="display:none;">
+                                <div id="silmeonaydivi<?= $plan_id; ?>" style="display:none;">
                             
                                     <div class="row">
 
@@ -486,7 +486,7 @@
                                         
                                         <div class="col-md-6">
 
-                                            <a href="#" onclick="return false" onmousedown="javascript:ackapa2('sildivi<?php echo $plan_id; ?>','silmeonaydivi<?php echo $plan_id; ?>');">
+                                            <a href="#" onclick="return false" onmousedown="javascript:ackapa2('sildivi<?= $plan_id; ?>','silmeonaydivi<?= $plan_id; ?>');">
                                     
                                                 <button class="btn btn-danger btn-block btn-sm">Hayır</button>
                                             

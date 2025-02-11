@@ -41,7 +41,7 @@
 
 		<div class="row">
 			
-			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?php echo $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
+			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
@@ -65,7 +65,7 @@
 
 			</div>
 
-			<div class="col-3" style="padding-top: 20px;"><?php echo "Tarih : ".$tarihf2; ?></div>
+			<div class="col-3" style="padding-top: 20px;"><?= "Tarih : ".$tarihf2; ?></div>
 
 		</div>
 
@@ -79,7 +79,7 @@
 
 			<div class="col-md-5">
 				
-				<?php echo $firmaadi."<br/><br/>".$firmatel; ?>
+				<?= $firmaadi."<br/><br/>".$firmatel; ?>
 
 			</div>
 
@@ -101,7 +101,7 @@
 
 			<div class="col-md-5"><br/>
 
-				<?php echo $uye_adi." / ".$uye_mail; ?>
+				<?= $uye_adi." / ".$uye_mail; ?>
 
 			</div>
 
@@ -185,19 +185,19 @@
 
 				<div class="row" style="padding: 20px;">
 
-					<div class="col-3"><?php echo $a.". ".$urun_adi." ".$kategori_iki_adi; ?></div>
+					<div class="col-3"><?= $a.". ".$urun_adi." ".$kategori_iki_adi; ?></div>
 
-					<div class="col-1"><?php echo $tadet." Boy "; ?></div>
+					<div class="col-1"><?= $tadet." Boy "; ?></div>
 
-					<div class="col-2"><?php echo $kategori_bir_adi; ?></div>
+					<div class="col-2"><?= $kategori_bir_adi; ?></div>
 
-					<div class="col-1"><?php echo $urun_birimkg." Kg"; ?></div>
+					<div class="col-1"><?= $urun_birimkg." Kg"; ?></div>
 
-					<div class="col-2"><?php echo $toplamkilo." Kg"; ?></div>
+					<div class="col-2"><?= $toplamkilo." Kg"; ?></div>
 
-					<div class="col-1"><?php echo $tsatisfiyati." TL"; ?></div>
+					<div class="col-1"><?= $tsatisfiyati." TL"; ?></div>
 
-					<div class="col-2"><?php echo $tutar." TL + KDV"; ?></div>
+					<div class="col-2"><?= $tutar." TL + KDV"; ?></div>
 
 				</div>
 
@@ -213,7 +213,7 @@
 			
 			<div class="col-12" style="text-align: right; padding-right: 50px; margin: 10px;">
 				
-				<b style="font-size: 20px;"><?php echo "Toplam Tutar : ".(number_format($toplamtutar, 0, ',', '.'))." + KDV"; ?></b>
+				<b style="font-size: 20px;"><?= "Toplam Tutar : ".(number_format($toplamtutar, 0, ',', '.'))." + KDV"; ?></b>
 
 			</div>
 

@@ -44,9 +44,9 @@ if ($girdi != '1') {
 
                     <div class="row">
 
-                        <div class="col-xl-6 col-lg-12 col-6"><?php echo "<b>Dolar : </b>".$dolar." TL"; ?></div>
+                        <div class="col-xl-6 col-lg-12 col-6"><?= "<b>Dolar : </b>".$dolar." TL"; ?></div>
 
-                        <div class="col-xl-6 col-lg-12 col-6"><?php echo "<b>LME : </b>".$lme." $"; ?></div>
+                        <div class="col-xl-6 col-lg-12 col-6"><?= "<b>LME : </b>".$lme." $"; ?></div>
 
                     </div>
 
@@ -62,7 +62,7 @@ if ($girdi != '1') {
 
                             <div class="col-3">Dolar</div>
 
-                            <div class="col-9"><input type="text" class="form-control" name="dolarkuru" value="<?php echo $dolar; ?>"></div>
+                            <div class="col-9"><input type="text" class="form-control" name="dolarkuru" value="<?= $dolar; ?>"></div>
 
                         </div>
 
@@ -70,7 +70,7 @@ if ($girdi != '1') {
 
                             <div class="col-3">LME</div>
 
-                            <div class="col-9"><input type="text" class="form-control" name="lme" value="<?php echo $lme; ?>"></div>
+                            <div class="col-9"><input type="text" class="form-control" name="lme" value="<?= $lme; ?>"></div>
 
                         </div>
 
@@ -98,7 +98,7 @@ if ($girdi != '1') {
 
                         <h5><b>Fiyat</b></h5>
 
-                        <?php echo $_GET['fiyat']." TL"; ?>
+                        <?= $_GET['fiyat']." TL"; ?>
 
                     </div>
 

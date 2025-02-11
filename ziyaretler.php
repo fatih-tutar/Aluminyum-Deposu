@@ -188,7 +188,7 @@
                                                     $iskolulisteid = guvenlik($zkl['id']);
                                                     $iskolulisteadi = guvenlik($zkl['adi']);
                                         ?>
-                                                    <option value="<?php echo $iskolulisteid; ?>"><?php echo $iskolulisteadi; ?></option>
+                                                    <option value="<?= $iskolulisteid; ?>"><?= $iskolulisteadi; ?></option>
                                         <?php
                                                     
                                             
@@ -246,10 +246,10 @@
                                 <form action="" method="POST">
                                     <div class="row mb-1">
                                         <div class="col-12 mb-2">
-                                            <input type="text" class="form-control" name="iskoluadi" placeholder="İş kolunu giriniz." value="<?php echo $iskoluadi; ?>">
+                                            <input type="text" class="form-control" name="iskoluadi" placeholder="İş kolunu giriniz." value="<?= $iskoluadi; ?>">
                                         </div>
                                         <div class="col-6">
-                                            <input type="hidden" name="iskoluid" value="<?php echo $iskoluid; ?>">
+                                            <input type="hidden" name="iskoluid" value="<?= $iskoluid; ?>">
                                             <button type="submit" class="btn btn-primary btn-block" name="iskoluguncelle">Güncelle</button>
                                         </div>   
                                         <div class="col-6">
@@ -292,7 +292,7 @@
                                 if(isset($_GET['il']) === true && empty($_GET['il']) === false){ 
                                     $seciliSehir = guvenlik($_GET['il']);
                             ?>
-                                <option value="<?php echo $seciliSehir; ?>" selected><?php echo $seciliSehir; ?></option>
+                                <option value="<?= $seciliSehir; ?>" selected><?= $seciliSehir; ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -306,7 +306,7 @@
                         if(isset($_GET['il']) === true && empty($_GET['il']) === false){ 
                             $seciliSehir = guvenlik($_GET['il']);
                     ?>
-                        <option value="<?php echo $seciliSehir; ?>" selected><?php echo $seciliSehir; ?></option>
+                        <option value="<?= $seciliSehir; ?>" selected><?= $seciliSehir; ?></option>
                     <?php } ?>
                 </select>
             </div>
@@ -346,41 +346,41 @@
             ?>
                     
                     <form action="" method="POST">
-                        <input type="hidden" name="ziyaretid" value="<?php echo $id; ?>">
-                        <div class="row" style="background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;">
+                        <input type="hidden" name="ziyaretid" value="<?= $id; ?>">
+                        <div class="row" style="background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;">
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>İl</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="il" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="İl" value="<?php echo $il; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="il" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="İl" value="<?= $il; ?>"></div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>İlçe</b></div>
                             <div class="col-md-1 col-8 px-1 pt-2" style="border-right:1px solid black; text-align:left;">
-                                <a href="http://aluminyumdeposu.com/ziyaretler.php?ilce=<?php echo $ilce; ?>"><?php echo $ilce; ?></a>
+                                <a href="http://aluminyumdeposu.com/ziyaretler.php?ilce=<?= $ilce; ?>"><?= $ilce; ?></a>
                             </div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>İş Kolu</b></div>
                             <div class="col-md-1 col-8 px-1 pt-1" style="border-right:1px solid black; text-align:left;">
-                                <a href="http://aluminyumdeposu.com/ziyaretler.php?iskolu=<?php echo $iskolu; ?>"><?php echo $iskoluadi; ?></a>
+                                <a href="http://aluminyumdeposu.com/ziyaretler.php?iskolu=<?= $iskolu; ?>"><?= $iskoluadi; ?></a>
                             </div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Müşteri İsmi</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="musteriismi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Müşteri İsmi" value="<?php echo $musteriismi; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="musteriismi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Müşteri İsmi" value="<?= $musteriismi; ?>"></div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Yetkili Kişi</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="yetkilikisi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Yetkili Kişi" value="<?php echo $yetkilikisi; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="yetkilikisi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Yetkili Kişi" value="<?= $yetkilikisi; ?>"></div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Telefon</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="telefon" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Telefon" value="<?php echo $telefon; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="telefon" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Telefon" value="<?= $telefon; ?>"></div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Ziyaret Tarihi</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih1<?php echo $id; ?>" name="ziyarettarihi" placeholder="Son Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?php echo $ziyarettarihi; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih1<?= $id; ?>" name="ziyarettarihi" placeholder="Son Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?= $ziyarettarihi; ?>"></div>
                            
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Planlanan Tarih</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih2<?php echo $id; ?>" name="planlanantarih" placeholder="Planlanan Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?php echo $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?php echo $planlanantarih; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih2<?= $id; ?>" name="planlanantarih" placeholder="Planlanan Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?= $planlanantarih; ?>"></div>
                             
                             <div class="col-md-1 col-3 px-1 py-2">
-                                <button class="btn btn-success btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3('adresdivi<?php echo $id; ?>','notdivi<?php echo $id; ?>');">Adres</button>
+                                <button class="btn btn-success btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3('adresdivi<?= $id; ?>','notdivi<?= $id; ?>');">Adres</button>
                             </div>
                             <div class="col-md-1 col-3 px-1 py-2">
-                                <button class="btn btn-info btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3('notdivi<?php echo $id; ?>','adresdivi<?php echo $id; ?>');">Not</button>
+                                <button class="btn btn-info btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3('notdivi<?= $id; ?>','adresdivi<?= $id; ?>');">Not</button>
                             </div>
                             <div class="col-md-1 col-3 px-1 py-2">
                                 <button type="submit" class="btn btn-warning btn-block btn-sm" name="ziyaretguncelle">Güncelle</button>
@@ -388,8 +388,8 @@
                             <div class="col-md-1 col-3 px-1 py-2">
                                 <button type="submit" class="btn btn-danger btn-block btn-sm" name="ziyaretsil">Sil</button>
                             </div>
-                            <div id="adresdivi<?php echo $id; ?>" class="col-md-12 mb-1 px-1" style="display:none;"><textarea name="acikadres" id="" class="form-control" rows="1" placeholder="Açık Adres"><?php echo $acikadres; ?></textarea></div>
-                            <div id="notdivi<?php echo $id; ?>" class="col-md-12 mb-1 px-1" style="display:none;"><textarea name="ziyaretnotu" id="" class="form-control" rows="1" placeholder="Ziyaret Notu"><?php echo $ziyaretnotu; ?></textarea></div>
+                            <div id="adresdivi<?= $id; ?>" class="col-md-12 mb-1 px-1" style="display:none;"><textarea name="acikadres" id="" class="form-control" rows="1" placeholder="Açık Adres"><?= $acikadres; ?></textarea></div>
+                            <div id="notdivi<?= $id; ?>" class="col-md-12 mb-1 px-1" style="display:none;"><textarea name="ziyaretnotu" id="" class="form-control" rows="1" placeholder="Ziyaret Notu"><?= $ziyaretnotu; ?></textarea></div>
                         </div>
 
                     </form>

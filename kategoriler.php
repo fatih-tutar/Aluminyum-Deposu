@@ -295,7 +295,7 @@
 				
 				<div class="col-md-12">
 					
-					<?php echo $hata; ?>
+					<?= $hata; ?>
 
 				</div>
 
@@ -343,7 +343,7 @@
 
 										?>
 
-													<option value="<?php echo $kategori_id; ?>"><?php echo $kategori_adi." (".$ustkategoriadi.")"; ?></option>
+													<option value="<?= $kategori_id; ?>"><?= $kategori_adi." (".$ustkategoriadi.")"; ?></option>
 
 										<?php
 
@@ -749,9 +749,9 @@
 												
 												<div class="col-12">
 													
-													<a href="#" onclick="return false" onmousedown="javascript:ackapa('kategoriduzenlemeformu<?php echo $kategori_id; ?>');">
+													<a href="#" onclick="return false" onmousedown="javascript:ackapa('kategoriduzenlemeformu<?= $kategori_id; ?>');">
 
-														<div><?php echo $kategori_adi; ?></div>
+														<div><?= $kategori_adi; ?></div>
 
 													</a>
 
@@ -759,13 +759,13 @@
 
 											</div>
 
-											<div id="kategoriduzenlemeformu<?php echo $kategori_id; ?>" style="display:none; background-color: #e6ecf0; padding: 10px;">
+											<div id="kategoriduzenlemeformu<?= $kategori_id; ?>" style="display:none; background-color: #e6ecf0; padding: 10px;">
 												
 												<form action="" method="POST" enctype="multipart/form-data">
 
 													<div class="row" style="margin-bottom: 3px;">
 														
-														<div class="col-12"><input type="text" name="kategori_adi" value="<?php echo $kategori_adi; ?>" class="form-control"></div>
+														<div class="col-12"><input type="text" name="kategori_adi" value="<?= $kategori_adi; ?>" class="form-control"></div>
 
 													</div>
 
@@ -818,7 +818,7 @@
 																			$ust_kategori_adi = $ukc['kategori_adi'];
 
 																?>
-																				<option <?= $kategori_ust == $ust_kategori_id ? 'selected' : '' ?> value="<?php echo $ust_kategori_id; ?>"><?php echo $ust_kategori_adi; ?></option>
+																				<option <?= $kategori_ust == $ust_kategori_id ? 'selected' : '' ?> value="<?= $ust_kategori_id; ?>"><?= $ust_kategori_adi; ?></option>
 																<?php
 																		}
 
@@ -990,7 +990,7 @@
 
 														<div class="form-check">
 
-															<input type="checkbox" class="form-check-input" id="sutunmanuelsatis2" name="sutunmanuelsatis" onchange="yuzdeinputuac('yuzdeinputu<?php echo $kategori_id; ?>');" c<?= $sutunmanuelsatisizni == 1 ? 'hecked ' : '' ?> >
+															<input type="checkbox" class="form-check-input" id="sutunmanuelsatis2" name="sutunmanuelsatis" onchange="yuzdeinputuac('yuzdeinputu<?= $kategori_id; ?>');" c<?= $sutunmanuelsatisizni == 1 ? 'hecked ' : '' ?> >
 
 															<label class="form-check-label" for="sutunmanuelsatis2">Manuel Satış<small>(1 birim)</small></label>
 														
@@ -1002,15 +1002,15 @@
 
 																<?php if($sutunmanuelsatisizni == 1){ ?>
 
-																<div id="yuzdeinputu<?php echo $kategori_id; ?>" style="display: none;">
+																<div id="yuzdeinputu<?= $kategori_id; ?>" style="display: none;">
 
 																<?php }else{ ?>
 
-																<div id="yuzdeinputu<?php echo $kategori_id; ?>">
+																<div id="yuzdeinputu<?= $kategori_id; ?>">
 
 																<?php } ?>
 																
-																	<input type="text" name="karyuzdesi" class="form-control" placeholder="Kâr yüzdenizi sadece sayı ile yazınız." value="<?php echo $karyuzdesi; ?>">
+																	<input type="text" name="karyuzdesi" class="form-control" placeholder="Kâr yüzdenizi sadece sayı ile yazınız." value="<?= $karyuzdesi; ?>">
 
 																</div>
 
@@ -1068,9 +1068,9 @@
 
 														<div class="col-12" style="text-align: right;">
 
-															<input type="hidden" name="kategori_id" value="<?php echo $kategori_id; ?>">
+															<input type="hidden" name="kategori_id" value="<?= $kategori_id; ?>">
 
-															<input type="hidden" name="eskiresim" value="<?php echo $resim; ?>">
+															<input type="hidden" name="eskiresim" value="<?= $resim; ?>">
 
 															<button type="submit" name="kategoriduzenle" class="btn btn-warning btn-sm btn-block">Kaydet</button>
 
@@ -1086,7 +1086,7 @@
 
 														<div class="col-12">
 
-															<input type="hidden" name="kategori_id" value="<?php echo $kategori_id; ?>">
+															<input type="hidden" name="kategori_id" value="<?= $kategori_id; ?>">
 														
 															<button type="submit" name="kategorisil" class="btn btn-danger btn-sm btn-block">Sil</button>
 
@@ -1196,9 +1196,9 @@
 												
 												<div class="col-12">
 													
-													<a href="#" onclick="return false" onmousedown="javascript:ackapa('kategoriduzenlemeformu<?php echo $kategori_id; ?>');">
+													<a href="#" onclick="return false" onmousedown="javascript:ackapa('kategoriduzenlemeformu<?= $kategori_id; ?>');">
 
-														<div><?php echo $kategori_adi; ?></div>
+														<div><?= $kategori_adi; ?></div>
 
 													</a>
 
@@ -1206,13 +1206,13 @@
 
 											</div>
 
-											<div id="kategoriduzenlemeformu<?php echo $kategori_id; ?>" style="display:none; background-color: #e6ecf0; padding: 10px;">
+											<div id="kategoriduzenlemeformu<?= $kategori_id; ?>" style="display:none; background-color: #e6ecf0; padding: 10px;">
 												
 												<form action="" method="POST" enctype="multipart/form-data">
 
 													<div class="row" style="margin-bottom: 3px;">
 														
-														<div class="col-12"><input type="text" name="kategori_adi" value="<?php echo $kategori_adi; ?>" class="form-control"></div>
+														<div class="col-12"><input type="text" name="kategori_adi" value="<?= $kategori_adi; ?>" class="form-control"></div>
 
 													</div>
 
@@ -1266,11 +1266,11 @@
 
 																			if($kategori_ust == $ust_kategori_id){ ?>
 
-																				<option selected value="<?php echo $ust_kategori_id; ?>"><?php echo $ust_kategori_adi; ?></option>
+																				<option selected value="<?= $ust_kategori_id; ?>"><?= $ust_kategori_adi; ?></option>
 
 																			<?php }else{ ?> 
 
-																				<option value="<?php echo $ust_kategori_id; ?>"><?php echo $ust_kategori_adi; ?></option>
+																				<option value="<?= $ust_kategori_id; ?>"><?= $ust_kategori_adi; ?></option>
 
 																			<?php } 
 
@@ -1516,7 +1516,7 @@
 
 														<div class="col-12" style="text-align: right;">
 
-															<input type="hidden" name="kategori_id" value="<?php echo $kategori_id; ?>">
+															<input type="hidden" name="kategori_id" value="<?= $kategori_id; ?>">
 
 															<button type="submit" name="kategoriduzenle" class="btn btn-warning btn-sm btn-block">Kaydet</button>
 
@@ -1532,7 +1532,7 @@
 
 														<div class="col-12">
 
-															<input type="hidden" name="kategori_id" value="<?php echo $kategori_id; ?>">
+															<input type="hidden" name="kategori_id" value="<?= $kategori_id; ?>">
 														
 															<button type="submit" name="kategorisil" class="btn btn-danger btn-sm btn-block">Sil</button>
 

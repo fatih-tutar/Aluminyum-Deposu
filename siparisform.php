@@ -65,7 +65,7 @@
 
 		<div class="row">
 			
-			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?php echo $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
+			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
@@ -99,7 +99,7 @@
 
 			<div class="col-md-4">
 				
-				<?php echo $hazirlayankisi; ?>
+				<?= $hazirlayankisi; ?>
 
 			</div>
 
@@ -111,7 +111,7 @@
 
 			<div class="col-md-3">
 				
-				<?php echo $siparistarih; ?>
+				<?= $siparistarih; ?>
 
 			</div>
 
@@ -127,7 +127,7 @@
 
 			<div class="col-md-4">
 				
-				<?php echo $fabrika['fabrika_adi'] ?>
+				<?= $fabrika['fabrika_adi'] ?>
 
 			</div>
 
@@ -139,7 +139,7 @@
 
 			<div class="col-md-3">
 				
-				<?php echo $ilgilikisi; ?>
+				<?= $ilgilikisi; ?>
 
 			</div>
 
@@ -215,17 +215,17 @@
 
 				<div class="row" style="padding: 20px;">
 		
-					<div class="col-md-1"><?php echo $a; ?></div>
+					<div class="col-md-1"><?= $a; ?></div>
 
-					<div class="col-md-3"><?php echo $urun_adi." ".$kategori_iki_adi; ?></div>
+					<div class="col-md-3"><?= $urun_adi." ".$kategori_iki_adi; ?></div>
 
-					<div class="col-md-2"><?php echo $siparisboy." boyunda "; ?></div>
+					<div class="col-md-2"><?= $siparisboy." boyunda "; ?></div>
 
-					<div class="col-md-2"><?php echo $urun_siparis_aded." adet "; ?></div>
+					<div class="col-md-2"><?= $urun_siparis_aded." adet "; ?></div>
 
-					<div class="col-md-2"><?php echo $kilo." KG"; ?></div>
+					<div class="col-md-2"><?= $kilo." KG"; ?></div>
 
-					<div class="col-md-2"><?php echo $kategori_bir_adi; ?></div>
+					<div class="col-md-2"><?= $kategori_bir_adi; ?></div>
 
 				</div>
 
@@ -241,7 +241,7 @@
 			
 			<div class="col-md-8" style="text-align:right; font-size:18px;"><b>Toplam Kilo : </b></div>
 
-			<div class="col-md-4" style="font-size:18px;"><b><?php echo $toplamkilo." KG"; ?></b></div>			
+			<div class="col-md-4" style="font-size:18px;"><b><?= $toplamkilo." KG"; ?></b></div>			
 
 		</div>
 

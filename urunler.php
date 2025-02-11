@@ -596,7 +596,7 @@
         <?php if(isset($hata)){ ?>
             <div class="row">
                 <div class="col-md-12">
-                    <?php echo $hata; ?>
+                    <?= $hata; ?>
                 </div>
             </div>
         <?php } ?>
@@ -609,11 +609,11 @@
     				
     				<div class="col-6">
     					
-    					<a href="kategori.php?id=<?php echo $ust_kategori_id; ?>" style="color: white;">
+    					<a href="kategori.php?id=<?= $ust_kategori_id; ?>" style="color: white;">
     			
 			    			<button class="btn btn-info btn-sm btn-block">
 			    		
-					    		<i class="fas fa-backward"></i>&nbsp;&nbsp;&nbsp;<?php echo $ust_kategori_adi; ?>
+					    		<i class="fas fa-backward"></i>&nbsp;&nbsp;&nbsp;<?= $ust_kategori_adi; ?>
 
 					    	</button>
 
@@ -673,11 +673,11 @@
 							
 							<div class="col-6">
 								
-								<a href="kategori.php?id=<?php echo $ust_kategori_id; ?>" style="color: white;">
+								<a href="kategori.php?id=<?= $ust_kategori_id; ?>" style="color: white;">
 						
 									<button class="btn btn-info btn-sm btn-block">
 			    		
-							    		<i class="fas fa-backward"></i>&nbsp;&nbsp;&nbsp;<?php echo $ust_kategori_adi; ?>
+							    		<i class="fas fa-backward"></i>&nbsp;&nbsp;&nbsp;<?= $ust_kategori_adi; ?>
 
 							    	</button>
 
@@ -799,29 +799,29 @@
 
 							<form action="" method="POST">
 
-								<input type="hidden" name="envanter_id" value="<?php echo $envanter_id; ?>">
+								<input type="hidden" name="envanter_id" value="<?= $envanter_id; ?>">
 
 								<div class="row" style="margin-bottom: 3px;">
 									
-									<div class="col-md-1 col-2" style="padding: 0px;"><input type="text" name="kod" class="form-control form-control-sm" value="<?php echo $kod; ?>"></div>
+									<div class="col-md-1 col-2" style="padding: 0px;"><input type="text" name="kod" class="form-control form-control-sm" value="<?= $kod; ?>"></div>
 
 									<div class="col-md-6 col-4" style="padding: 0px;">
 										
 										<div class="row" style="margin: 0px; padding: 0px;">
 											
-											<div class="col-4" style="padding: 0px;"><input type="text" name="cap" class="form-control form-control-sm" value="<?php echo $cap; ?>"></div>
+											<div class="col-4" style="padding: 0px;"><input type="text" name="cap" class="form-control form-control-sm" value="<?= $cap; ?>"></div>
 
-											<div class="col-4" style="padding: 0px;"><input type="text" name="kalinlik" class="form-control form-control-sm" value="<?php echo $kalinlik; ?>"></div>
+											<div class="col-4" style="padding: 0px;"><input type="text" name="kalinlik" class="form-control form-control-sm" value="<?= $kalinlik; ?>"></div>
 
-											<div class="col-4" style="padding: 0px;"><input type="text" name="c" class="form-control form-control-sm" value="<?php echo $c; ?>"></div>
+											<div class="col-4" style="padding: 0px;"><input type="text" name="c" class="form-control form-control-sm" value="<?= $c; ?>"></div>
 
 										</div>
 
 									</div>
 
-									<div class="col-md-2 col-2" style="padding: 0px;"><input type="text" name="kutle" class="form-control form-control-sm" value="<?php echo $kutle; ?>"></div>
+									<div class="col-md-2 col-2" style="padding: 0px;"><input type="text" name="kutle" class="form-control form-control-sm" value="<?= $kutle; ?>"></div>
 
-									<div class="col-md-2 col-3" style="padding: 0px;"><input type="text" name="fabrika" class="form-control form-control-sm" value="<?php echo $fabrika; ?>"></div>
+									<div class="col-md-2 col-3" style="padding: 0px;"><input type="text" name="fabrika" class="form-control form-control-sm" value="<?= $fabrika; ?>"></div>
 
 									<div class="col-md-1 col-1" style="padding: 0px;"><button type="submit" name="envanter_guncelle" class="btn btn-block btn-primary btn-sm"><i class="fas fa-check"></i></button></div>
 
@@ -945,7 +945,7 @@
 
 							<div class="col-4 d-block d-sm-none">Ürün Kodu : </div>
 
-							<div class="col-md-1 col-8" style="text-align: center;"><?php echo $urun_kodu; ?></div>
+							<div class="col-md-1 col-8" style="text-align: center;"><?= $urun_kodu; ?></div>
 
 							<?php } ?>
 
@@ -955,7 +955,7 @@
 
 								<div class="col-md-2 col-8">
 
-									<a id="<?php echo $urun_id; ?>" href="islemler.php?id=<?php echo $urun_id; ?>" target="_blank"><b style="color: red;"><?php echo "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
+									<a id="<?= $urun_id; ?>" href="islemler.php?id=<?= $urun_id; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
 
 								</div>
 
@@ -965,7 +965,7 @@
 
 								<div class="col-md-2 col-8">
 
-									<a id="<?php echo $urun_id; ?>" href="islemler.php?id=<?php echo $urun_id; ?>" target="_blank"><b style="color: red;"><?php echo "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
+									<a id="<?= $urun_id; ?>" href="islemler.php?id=<?= $urun_id; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
 
 								</div>
 
@@ -975,7 +975,7 @@
 
 								<div class="col-md-2 col-8">
 
-									<a id="<?php echo $urun_id; ?>" href="islemler.php?id=<?php echo $urun_id; ?>" target="_blank"><b><?php echo "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
+									<a id="<?= $urun_id; ?>" href="islemler.php?id=<?= $urun_id; ?>" target="_blank"><b><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
 
 								</div>
 
@@ -989,7 +989,7 @@
 
 									<div class="col-4 d-block d-sm-none">Adet : </div>
 
-									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-warning btn-sm btn-block"><b><?php echo $urun_adet; ?></b></button></div>
+									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-warning btn-sm btn-block"><b><?= $urun_adet; ?></b></button></div>
 
 									<?php } ?>
 
@@ -997,7 +997,7 @@
 
 									<div class="col-4 d-block d-sm-none">Palet : </div>
 
-									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-dark btn-sm btn-block"><b><?php echo $urun_palet; ?></b></button></div>
+									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-dark btn-sm btn-block"><b><?= $urun_palet; ?></b></button></div>
 
 									<?php } ?>
 
@@ -1005,7 +1005,7 @@
 
 									<div class="col-4 d-block d-sm-none">Alkop Adet : </div>
 
-									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-info btn-sm btn-block"><b><?php echo $urun_depo_adet; ?></b></button></div>
+									<div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-info btn-sm btn-block"><b><?= $urun_depo_adet; ?></b></button></div>
 
 									<?php } ?>
 
@@ -1013,7 +1013,7 @@
 
 									<div class="col-4 d-block d-sm-none">Raf : </div>
 
-									<div class="col-md-2 col-8" style="text-align: left;"><b><?php echo $urun_raf; ?></b></div>
+									<div class="col-md-2 col-8" style="text-align: left;"><b><?= $urun_raf; ?></b></div>
 
 									<?php } ?>
 
@@ -1021,7 +1021,7 @@
 
 									<div class="col-4 d-block d-sm-none">Birim Kg : </div>
 
-									<div class="col-md-2 col-8" style="text-align:center;"><small><?php echo $urun_birimkg." kg"; ?></small></div>
+									<div class="col-md-2 col-8" style="text-align:center;"><small><?= $urun_birimkg." kg"; ?></small></div>
 
 									<?php } ?>
 
@@ -1029,7 +1029,7 @@
 
 									<div class="col-4 d-block d-sm-none">Sipariş Kilo : </div>
 
-									<div class="col-md-2 col-8" style="text-align: center;"><button class="btn btn-danger btn-sm btn-block"><b><?php echo $urun_birimkg." kg"; ?></b></button></div>
+									<div class="col-md-2 col-8" style="text-align: center;"><button class="btn btn-danger btn-sm btn-block"><b><?= $urun_birimkg." kg"; ?></b></button></div>
 
 									<?php } ?>
 
@@ -1037,7 +1037,7 @@
 
 									<div class="col-4 d-block d-sm-none">Boy Ölçüsü : </div>
 
-									<div class="col-md-2 col-8"><?php echo $urun_boy_olcusu; ?></div>
+									<div class="col-md-2 col-8"><?= $urun_boy_olcusu; ?></div>
 
 									<?php } ?>
 
@@ -1045,7 +1045,7 @@
 
 									<div class="col-4 d-block d-sm-none">Toplam : </div>
 
-									<div class="col-md-2 col-8 px-0" style="text-align:center;"><small><?php echo $carpim." kg"; ?></small></div>
+									<div class="col-md-2 col-8 px-0" style="text-align:center;"><small><?= $carpim." kg"; ?></small></div>
 
 									<?php } ?>
 
@@ -1057,7 +1057,7 @@
 
 								<div class="col-4 d-block d-sm-none">Alış : </div>
 
-								<div class="col-md-1 col-8" style="text-align:center;"><b><?php echo $urun_alis." TL"; ?></b></div>
+								<div class="col-md-1 col-8" style="text-align:center;"><b><?= $urun_alis." TL"; ?></b></div>
 
 							<?php } ?>
 
@@ -1065,7 +1065,7 @@
 
 							<div class="col-4 d-block d-sm-none">Satış : </div>
 
-							<div class="col-md-1 col-8" style="text-align:center;"><b><?php echo $urun_satis." TL"; ?></b></div>
+							<div class="col-md-1 col-8" style="text-align:center;"><b><?= $urun_satis." TL"; ?></b></div>
 
 							<?php } ?>
 
@@ -1073,7 +1073,7 @@
 
 								<div class="col-4 d-block d-sm-none">Fabrika : </div>
 
-								<div class="col-md-1 col-8" style="text-align:center;"><b><?php echo $urun_fabrika_adi; ?></b></div>
+								<div class="col-md-1 col-8" style="text-align:center;"><b><?= $urun_fabrika_adi; ?></b></div>
 
 							<?php } ?>
 
@@ -1081,7 +1081,7 @@
 
 								<div class="col-4 d-block d-sm-none">Müşteri : </div>
 
-								<div class="col-md-1 col-8"><b><?php echo $musteri_ismi; ?></b></div>
+								<div class="col-md-1 col-8"><b><?= $musteri_ismi; ?></b></div>
 
 							<?php } ?>
 
@@ -1093,7 +1093,7 @@
 
 										<div class="col-md-3 col-3 p-1">
 
-											<a href="#" onclick="return false" onmousedown="javascript:ackapa4('teklifdivi<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Teklif</button></a>
+											<a href="#" onclick="return false" onmousedown="javascript:ackapa4('teklifdivi<?= $urun_id; ?>','siparisdiv<?= $urun_id; ?>','editdiv<?= $urun_id; ?>','sevkiyatdiv<?= $urun_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Teklif</button></a>
 
 										</div>
 
@@ -1103,7 +1103,7 @@
 
 										<div class="col-md-3 col-3 p-1">
 											
-											<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');">
+											<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('siparisdiv<?= $urun_id; ?>','teklifdivi<?= $urun_id; ?>','editdiv<?= $urun_id; ?>','sevkiyatdiv<?= $urun_id; ?>');">
 
 												<?php if($terminigecikmismi == 0){ ?>
 
@@ -1129,7 +1129,7 @@
 
 										<div class="col-md-3 col-3 p-1">
 
-											<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('sevkiyatdiv<?php echo $urun_id; ?>','editdiv<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>');"><button class="btn btn-dark btn-sm btn-block"><b>Sevkiyat</b></button></a>
+											<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('sevkiyatdiv<?= $urun_id; ?>','editdiv<?= $urun_id; ?>','siparisdiv<?= $urun_id; ?>','teklifdivi<?= $urun_id; ?>');"><button class="btn btn-dark btn-sm btn-block"><b>Sevkiyat</b></button></a>
 
 										</div>
 
@@ -1139,7 +1139,7 @@
 
 										<div class="col-md-3 col-3 p-1">
 
-											<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('editdiv<?php echo $urun_id; ?>','siparisdiv<?php echo $urun_id; ?>','teklifdivi<?php echo $urun_id; ?>','sevkiyatdiv<?php echo $urun_id; ?>');"><button class="btn btn-success btn-sm btn-block"><b>Düzenle</b></button></a>
+											<a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('editdiv<?= $urun_id; ?>','siparisdiv<?= $urun_id; ?>','teklifdivi<?= $urun_id; ?>','sevkiyatdiv<?= $urun_id; ?>');"><button class="btn btn-success btn-sm btn-block"><b>Düzenle</b></button></a>
 
 										</div>
 
@@ -1155,11 +1155,11 @@
 
 							<?php if (isset($_GET['teklifeklendi']) && $_GET['u'] == $urun_id) { ?>
 
-								<div id="teklifdivi<?php echo $urun_id; ?>" class="div2">
+								<div id="teklifdivi<?= $urun_id; ?>" class="div2">
 								
 							<?php }else{ ?>
 
-								<div id="teklifdivi<?php echo $urun_id; ?>" style="display: none;" class="div2">
+								<div id="teklifdivi<?= $urun_id; ?>" style="display: none;" class="div2">
 
 							<?php } ?>
 
@@ -1193,7 +1193,7 @@
 
 													<b>Kg Satış Fiyatı</b> (TL)
 													
-													<input type="text" class="form-control" name="teklifsatisfiyat" value="<?php echo $urun_satis; ?>">
+													<input type="text" class="form-control" name="teklifsatisfiyat" value="<?= $urun_satis; ?>">
 
 												</div>
 
@@ -1201,7 +1201,7 @@
 
 													<br/>
 
-													<input type="hidden" name="turunid" value="<?php echo $urun_id; ?>">
+													<input type="hidden" name="turunid" value="<?= $urun_id; ?>">
 													
 													<button class="btn btn-warning" name="teklifkaydet">Teklif Formuna Ekle</button>
 
@@ -1271,23 +1271,23 @@
 														
 														<div class="col-4 d-block d-sm-none">Firma Adı : </div>
 
-														<div class="col-md-3 col-8"><?php echo $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
+														<div class="col-md-3 col-8"><?= $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
 
 														<div class="col-4 d-block d-sm-none">Adet : </div>
 														
-														<div class="col-md-1 col-8"><?php echo $tadet; ?></div>
+														<div class="col-md-1 col-8"><?= $tadet; ?></div>
 
 														<div class="col-4 d-block d-sm-none">Satış Fiyatı : </div>
 
-														<div class="col-md-2 col-8"><?php echo $tsatisfiyati." TL"; ?></div>
+														<div class="col-md-2 col-8"><?= $tsatisfiyati." TL"; ?></div>
 
 														<div class="col-4 d-block d-sm-none">Toplam Fiyat : </div>
 
-														<div class="col-md-2 col-8"><?php echo $toplam_fiyat." TL"; ?></div>
+														<div class="col-md-2 col-8"><?= $toplam_fiyat." TL"; ?></div>
 
 														<div class="col-4 d-block d-sm-none">Tarih : </div>
 
-														<div class="col-md-2 col-8"><?php echo $ttarih; ?></div>
+														<div class="col-md-2 col-8"><?= $ttarih; ?></div>
 
 													</div>
 
@@ -1309,11 +1309,11 @@
 
 							<?php if ((isset($_GET['siparisalindi']) || isset($_GET['sipariseklendi'])) && $_GET['u'] == $urun_id) { ?>
 
-								<div id="siparisdiv<?php echo $urun_id; ?>" class="div2">
+								<div id="siparisdiv<?= $urun_id; ?>" class="div2">
 								
 							<?php }else{ ?>
 
-								<div style="display: none;" id="siparisdiv<?php echo $urun_id; ?>" class="div2">
+								<div style="display: none;" id="siparisdiv<?= $urun_id; ?>" class="div2">
 
 							<?php } ?>
 
@@ -1325,7 +1325,7 @@
 
 											<div class="row">
 
-												<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+												<input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
 
 												<div class="col-md-2 col-12">
 
@@ -1347,7 +1347,7 @@
 
 														?>
 
-																	<option value="<?php echo $hazirlayanadi; ?>"><?php echo $hazirlayanadi; ?></option>
+																	<option value="<?= $hazirlayanadi; ?>"><?= $hazirlayanadi; ?></option>
 
 														<?php
 
@@ -1403,7 +1403,7 @@
 
 												<div class="col-md-2 col-12"><b>İlgili Kişi</b><br/><input type="text" class="form-control" name="ilgilikisi" placeholder="İlgili Kişinin İsmini Yazınız"></div>
 
-												<div class="col-md-1 col-12"><b>Miktar</b><br/><input type="text" class="form-control" name="urun_stok" value="<?php echo $urun_stok; ?>"></div>
+												<div class="col-md-1 col-12"><b>Miktar</b><br/><input type="text" class="form-control" name="urun_stok" value="<?= $urun_stok; ?>"></div>
 
 												<div class="col-md-1 col-12"><b>Boy</b><br/><input type="text" name="siparisboy" value="6 metre" class="form-control"></div>
 
@@ -1411,7 +1411,7 @@
 													
 													<div class="row">
 														
-														<div class="col-md-5 col-12"><b>Termin</b><br/><input type="text" name="termin" value="<?php echo $tarihf2; ?>" id="tarih<?php echo $urunlistesira; ?>" class="form-control"></div>
+														<div class="col-md-5 col-12"><b>Termin</b><br/><input type="text" name="termin" value="<?= $tarihf2; ?>" id="tarih<?= $urunlistesira; ?>" class="form-control"></div>
 
 														<div class="col-md-7 col-12" style="padding-top: 25px;"><button type="submit" class="btn btn-info btn-sm" name="siparisformu">Sipariş Listesine Ekle</button></div>
 
@@ -1489,35 +1489,35 @@
 
 															<div class="col-4 d-block d-sm-none">Hazırlayan :</div>
 															
-															<div class="col-md-2 col-8"><?php echo $hazirlayankisi; ?></div>
+															<div class="col-md-2 col-8"><?= $hazirlayankisi; ?></div>
 
 															<div class="col-4 d-block d-sm-none">Fabrika :</div>
 
-															<div class="col-md-2 col-8"><?php echo $urun_fabrika_adi; ?></div>
+															<div class="col-md-2 col-8"><?= $urun_fabrika_adi; ?></div>
 
 															<div class="col-4 d-block d-sm-none">İlgili Kişi :</div>
 
-															<div class="col-md-2 col-8"><?php echo $ilgilikisi; ?></div>
+															<div class="col-md-2 col-8"><?= $ilgilikisi; ?></div>
 
 															<div class="col-4 d-block d-sm-none">Miktar :</div>
 
-															<div class="col-md-1 col-8"><input type="text" name="eklenenadet" class="form-control form-control-sm" value="<?php echo $urun_siparis_aded; ?>"></div>
+															<div class="col-md-1 col-8"><input type="text" name="eklenenadet" class="form-control form-control-sm" value="<?= $urun_siparis_aded; ?>"></div>
 
 															<div class="col-4 d-block d-sm-none">Tarih :</div>
 
-															<div class="col-md-1 col-8"><?php echo $siparistarih; ?></div>
+															<div class="col-md-1 col-8"><?= $siparistarih; ?></div>
 
 															<div class="col-4 d-block d-sm-none">Termin :</div>
 
-															<div class="col-md-1 col-8"><?php echo $termintarih; ?></div>
+															<div class="col-md-1 col-8"><?= $termintarih; ?></div>
 
 															<div class="col-md-1 col-6">
 																
-																<input type="hidden" name="siparis_id" value="<?php echo $siparis_id; ?>">
+																<input type="hidden" name="siparis_id" value="<?= $siparis_id; ?>">
 
-																<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+																<input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
 
-																<input type="hidden" name="urun_adet" value="<?php echo $urun_adet; ?>">
+																<input type="hidden" name="urun_adet" value="<?= $urun_adet; ?>">
 																
 																<button type="submit" name="siparisalindi" class="btn btn-danger btn-sm">Mağazaya Gönderildi</button>
 
@@ -1525,9 +1525,9 @@
 
 															<div class="col-md-1 col-6">
 
-																<input type="hidden" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>">
+																<input type="hidden" name="urun_depo_adet" value="<?= $urun_depo_adet; ?>">
 
-																<input type="hidden" name="urun_palet" value="<?php echo $urun_palet; ?>">
+																<input type="hidden" name="urun_palet" value="<?= $urun_palet; ?>">
 																
 																<button type="submit" name="deposiparisalindi" class="btn btn-danger btn-sm">Depoya Gönderildi</button>
 
@@ -1601,23 +1601,23 @@
 
 														<div class="col-4 d-block d-sm-none">Hazırlayan</div>
 														
-														<div class="col-md-2 col-8"><?php echo $hazirlayankisi; ?></div>
+														<div class="col-md-2 col-8"><?= $hazirlayankisi; ?></div>
 
 														<div class="col-4 d-block d-sm-none">Fabrika</div>
 
-														<div class="col-md-2 col-8"><?php echo $urun_fabrika_adi; ?></div>
+														<div class="col-md-2 col-8"><?= $urun_fabrika_adi; ?></div>
 
 														<div class="col-4 d-block d-sm-none">İlgili Kişi</div>
 
-														<div class="col-md-2 col-8"><?php echo $ilgilikisi; ?></div>
+														<div class="col-md-2 col-8"><?= $ilgilikisi; ?></div>
 
 														<div class="col-4 d-block d-sm-none">Adet</div>
 
-														<div class="col-md-2 col-8"><?php echo $urun_siparis_aded; ?></div>
+														<div class="col-md-2 col-8"><?= $urun_siparis_aded; ?></div>
 
 														<div class="col-4 d-block d-sm-none">Tarih</div>
 
-														<div class="col-md-2 col-8"><?php echo $siparistarih; ?></div>
+														<div class="col-md-2 col-8"><?= $siparistarih; ?></div>
 
 													</div>
 
@@ -1639,11 +1639,11 @@
 
 							<?php if (isset($_GET['sevkiyateklendi']) && $_GET['u'] == $urun_id) { ?>
 
-								<div id="sevkiyatdiv<?php echo $urun_id; ?>" class="div2">
+								<div id="sevkiyatdiv<?= $urun_id; ?>" class="div2">
 								
 							<?php }else{ ?>
 
-								<div id="sevkiyatdiv<?php echo $urun_id; ?>" style="display: none;" class="div2">
+								<div id="sevkiyatdiv<?= $urun_id; ?>" style="display: none;" class="div2">
 
 							<?php } ?>
 
@@ -1706,7 +1706,7 @@
 
 													<br/>
 
-													<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+													<input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
 													
 													<button class="btn btn-warning" name="sevkiyatkaydet">Kaydet</button>
 
@@ -1726,11 +1726,11 @@
 
 							<?php if ((isset($_GET['guncellendi']) || isset($_GET['urunsilinemez'])) && $_GET['u'] == $urun_id) { ?>
 
-								<div class="div2" id="editdiv<?php echo $urun_id; ?>" >
+								<div class="div2" id="editdiv<?= $urun_id; ?>" >
 							
 							<?php }else{ ?>
 
-								<div class="div2" style="display: none;" id="editdiv<?php echo $urun_id; ?>" >
+								<div class="div2" style="display: none;" id="editdiv<?= $urun_id; ?>" >
 
 							<?php } ?>	
 
@@ -1742,25 +1742,25 @@
 
 											<div class="row">
 
-												<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+												<input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
 
-												<?php if($sutunurunkoduizni == '1'){?><div class="col-md-1 col-12"><b>Ürün Kodu</b><input type="text" class="form-control" name="urun_kodu" value="<?php echo $urun_kodu; ?>"></div><?php } ?>	
+												<?php if($sutunurunkoduizni == '1'){?><div class="col-md-1 col-12"><b>Ürün Kodu</b><input type="text" class="form-control" name="urun_kodu" value="<?= $urun_kodu; ?>"></div><?php } ?>	
 											
-												<div class="col-md-2 col-12"><b>Ürün Adı</b><input type="text" class="form-control" name="urun_adi" value="<?php echo $urun_adi; ?>"></div>
+												<div class="col-md-2 col-12"><b>Ürün Adı</b><input type="text" class="form-control" name="urun_adi" value="<?= $urun_adi; ?>"></div>
 												
-												<?php if($sutunadetizni == '1' && $uye_adet_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?php echo $urun_adet; ?>"></div><?php } ?>	
+												<?php if($sutunadetizni == '1' && $uye_adet_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?= $urun_adet; ?>"></div><?php } ?>	
 
-												<?php if($sutunpaletizni == '1' && $uye_palet_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Palet</b><input type="text" class="form-control" name="urun_palet" value="<?php echo $urun_palet; ?>"></div><?php } ?>	
+												<?php if($sutunpaletizni == '1' && $uye_palet_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Palet</b><input type="text" class="form-control" name="urun_palet" value="<?= $urun_palet; ?>"></div><?php } ?>	
 														
-												<?php if($sutundepoadetizni == '1' && $uye_alkop_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>"></div><?php } ?>	
+												<?php if($sutundepoadetizni == '1' && $uye_alkop_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?= $urun_depo_adet; ?>"></div><?php } ?>	
 														
-												<?php if($sutunrafizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?php echo $urun_raf; ?>"></div><?php } ?>	
+												<?php if($sutunrafizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?= $urun_raf; ?>"></div><?php } ?>	
 													
-												<?php if($sutunbirimkgizni == '1'){?><div class="col-md-1 col-12"><b>Birim Kg</b><input type="text" class="form-control" name="urun_birimkg" value="<?php echo $urun_birimkg; ?>"></div><?php } ?>
+												<?php if($sutunbirimkgizni == '1'){?><div class="col-md-1 col-12"><b>Birim Kg</b><input type="text" class="form-control" name="urun_birimkg" value="<?= $urun_birimkg; ?>"></div><?php } ?>
 
-												<?php if($sutunsipariskiloizni == '1'){?><div class="col-md-1 col-12"><b>Sipariş Kilo</b><input type="text" class="form-control" name="urun_birimkg" value="<?php echo $urun_birimkg; ?>"></div><?php } ?>
+												<?php if($sutunsipariskiloizni == '1'){?><div class="col-md-1 col-12"><b>Sipariş Kilo</b><input type="text" class="form-control" name="urun_birimkg" value="<?= $urun_birimkg; ?>"></div><?php } ?>
 
-												<?php if($sutunboyolcusuizni == '1'){?><div class="col-md-1 col-12"><b>Boy Ölçüsü</b><input type="text" class="form-control" name="urun_boy_olcusu" value="<?php echo $urun_boy_olcusu; ?>"></div><?php } ?>			
+												<?php if($sutunboyolcusuizni == '1'){?><div class="col-md-1 col-12"><b>Boy Ölçüsü</b><input type="text" class="form-control" name="urun_boy_olcusu" value="<?= $urun_boy_olcusu; ?>"></div><?php } ?>			
 
 												<?php if($sutunalisizni == '1' && $uye_alis_yetkisi == '1'){ ?>
 
@@ -1768,7 +1768,7 @@
 
 														<b>Alış</b>
 
-														<input type="text" class="form-control" name="urun_alis" value="<?php echo $urun_alis; ?>">
+														<input type="text" class="form-control" name="urun_alis" value="<?= $urun_alis; ?>">
 
 													</div>
 
@@ -1786,7 +1786,7 @@
 
 														<b>Satış</b>
 
-														<input type="text" class="form-control" name="satis" value="<?php echo $urun_satis; ?>">
+														<input type="text" class="form-control" name="satis" value="<?= $urun_satis; ?>">
 
 													</div>
 
@@ -1834,17 +1834,17 @@
 
 												<?php } ?>
 
-												<?php if($sutunsiparisadediizni == '1'){?><div class="col-md-1 col-12"><b><small>Sipariş Adedi</small></b><input type="text" class="form-control" name="urun_stok" value="<?php echo $urun_stok; ?>"></div><?php } ?>
+												<?php if($sutunsiparisadediizni == '1'){?><div class="col-md-1 col-12"><b><small>Sipariş Adedi</small></b><input type="text" class="form-control" name="urun_stok" value="<?= $urun_stok; ?>"></div><?php } ?>
 
-												<?php if($sutunuyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Uyarı Adet</b><input type="text" class="form-control" name="urun_uyari_stok_adedi" value="<?php echo $urun_uyari_stok_adedi; ?>"></div><?php } ?>
+												<?php if($sutunuyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Uyarı Adet</b><input type="text" class="form-control" name="urun_uyari_stok_adedi" value="<?= $urun_uyari_stok_adedi; ?>"></div><?php } ?>
 
-												<?php if($sutundepouyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Depo Uyarı</b><input type="text" class="form-control" name="urun_depo_uyari_adet" value="<?php echo $urun_depo_uyari_adet; ?>"></div><?php } ?>
+												<?php if($sutundepouyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Depo Uyarı</b><input type="text" class="form-control" name="urun_depo_uyari_adet" value="<?= $urun_depo_uyari_adet; ?>"></div><?php } ?>
 
 												<div class="col-md-1 col-12">
 
 													<b>Liste Sıra</b>
 
-													<input type="hidden" name="urun_eski_sira" value="<?php echo $urun_sira; ?>">
+													<input type="hidden" name="urun_eski_sira" value="<?= $urun_sira; ?>">
 
 													<select class="form-control" id="exampleFormControlSelect1" name="urun_yeni_sira">
 														<?php
@@ -1880,7 +1880,7 @@
 													
 													<b>Ürün Açıklama</b>
 													
-													<input type="text" name="urun_aciklama" value="<?php echo $urun_aciklama; ?>" placeholder="Ürün açıklaması girebilirsiniz." class="form-control">
+													<input type="text" name="urun_aciklama" value="<?= $urun_aciklama; ?>" placeholder="Ürün açıklaması girebilirsiniz." class="form-control">
 												
 												</div>
 
@@ -1892,11 +1892,11 @@
 
 											<div class="row">
 
-												<?php if($sutunmusteriismiizni == '1'){?><div class="col-md-2 col-12"><b>Müşteri İsmi</b><input type="text" class="form-control" name="musteri_ismi" value="<?php echo $musteri_ismi; ?>"></div><?php } ?>
+												<?php if($sutunmusteriismiizni == '1'){?><div class="col-md-2 col-12"><b>Müşteri İsmi</b><input type="text" class="form-control" name="musteri_ismi" value="<?= $musteri_ismi; ?>"></div><?php } ?>
 
-												<?php if($sutuntarihizni == '1'){?><div class="col-md-2 col-12"><b>Tarih</b><input type="text" id="tarih<?php echo ($urunlistesira+500); ?>" name="tarih" value="<?php echo $tarih; ?>" class="form-control form-control-sm"></div><?php } ?>
+												<?php if($sutuntarihizni == '1'){?><div class="col-md-2 col-12"><b>Tarih</b><input type="text" id="tarih<?= ($urunlistesira+500); ?>" name="tarih" value="<?= $tarih; ?>" class="form-control form-control-sm"></div><?php } ?>
 												
-												<?php if($sutunterminizni == '1'){?><div class="col-md-2 col-12"><b>Termin</b><input type="text" id="tarih<?php echo $urunlistesira; ?>" name="termin" value="<?php echo $termin; ?>" class="form-control form-control-sm"></div><?php } ?>
+												<?php if($sutunterminizni == '1'){?><div class="col-md-2 col-12"><b>Termin</b><input type="text" id="tarih<?= $urunlistesira; ?>" name="termin" value="<?= $termin; ?>" class="form-control form-control-sm"></div><?php } ?>
 											
 											</div>
 
@@ -1908,15 +1908,15 @@
 
 										<form action="" method="POST">
 
-											<input type="hidden" name="urun_id" value="<?php echo $urun_id; ?>">
+											<input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
 
-											<input type="hidden" name="urun_adet" value="<?php echo $urun_adet; ?>">
+											<input type="hidden" name="urun_adet" value="<?= $urun_adet; ?>">
 
-											<input type="hidden" name="urun_palet" value="<?php echo $urun_palet; ?>">
+											<input type="hidden" name="urun_palet" value="<?= $urun_palet; ?>">
 
-											<input type="hidden" name="urun_depo_adet" value="<?php echo $urun_depo_adet; ?>">
+											<input type="hidden" name="urun_depo_adet" value="<?= $urun_depo_adet; ?>">
 
-											<input type="hidden" name="urun_sira" value="<?php echo $urun_sira; ?>">
+											<input type="hidden" name="urun_sira" value="<?= $urun_sira; ?>">
 												
 											<button type="submit" name="urunsil" class="btn btn-danger">Ürünü Sil</button>
 
@@ -1942,7 +1942,7 @@
 
 				<div class="row">
 
-					<div class="col-md-12"><b style="font-size: 20px;">Toplam Ürün : <?php echo $toplam_urun_kg; ?> Kg</b></div>
+					<div class="col-md-12"><b style="font-size: 20px;">Toplam Ürün : <?= $toplam_urun_kg; ?> Kg</b></div>
 
 				</div>
 

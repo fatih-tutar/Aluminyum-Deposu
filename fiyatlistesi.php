@@ -71,7 +71,7 @@
 		    		
 						    		<div class="col-sm-7 col-4" style="padding: 0px 0px 0px 5px;"><b>ÜRÜN NO : </b></div>
 
-						    		<div class="col-sm-5 col-8" style="padding: 0px;"><b><?php echo $urunno; ?></b></div>
+						    		<div class="col-sm-5 col-8" style="padding: 0px;"><b><?= $urunno; ?></b></div>
 
 						    	</div>
 
@@ -101,13 +101,13 @@
 				    		
 				    		<div class="col-sm-2 col-6" style="border:1px solid darkblue;">
 
-				    			<img src="img/fiyatlar/<?php echo $resim1; ?>" style="width: 100%; height: auto;">
+				    			<img src="img/fiyatlar/<?= $resim1; ?>" style="width: 100%; height: auto;">
 
 				    		</div>
 
 				    		<div class="col-6 d-block d-sm-none" style="border:1px solid darkblue;">
 
-				    			<img src="img/fiyatlar/<?php echo $resim2; ?>" style="width: 100%; height: auto;">
+				    			<img src="img/fiyatlar/<?= $resim2; ?>" style="width: 100%; height: auto;">
 
 				    		</div>
 
@@ -147,11 +147,11 @@
 
 					    			<div class="row">
 					    				
-					    				<div class="col-2" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue;"><?php echo $kod; ?></div>
+					    				<div class="col-2" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue;"><?= $kod; ?></div>
 
-							    		<div class="col-4" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue;"><?php echo $model; ?></div>
+							    		<div class="col-4" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue;"><?= $model; ?></div>
 
-							    		<div class="col-4" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue;"><?php echo $adetmetre; ?></div>
+							    		<div class="col-4" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue;"><?= $adetmetre; ?></div>
 
 							    		<div class="col-2" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue;">
 							    			<?php if($sirketfiyatlistesi == 0){ echo $fiyat; }else{ echo "Güncelleniyor..."; } ?>
@@ -165,13 +165,13 @@
 
 					    			<div class="row">
 					    				
-					    				<div class="col-2" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue; font-size: 13px;"><?php echo $kod; ?></div>
+					    				<div class="col-2" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue; font-size: 13px;"><?= $kod; ?></div>
 
-							    		<div class="col-4" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue; font-size: 13px;"><?php echo $model; ?></div>
+							    		<div class="col-4" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue; font-size: 13px;"><?= $model; ?></div>
 
-							    		<div class="col-4" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue; font-size: 13px;"><?php echo $adetmetre; ?></div>
+							    		<div class="col-4" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue; font-size: 13px;"><?= $adetmetre; ?></div>
 
-							    		<div class="col-2" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue; font-size: 13px;"><?php echo $fiyat; ?></div>
+							    		<div class="col-2" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue; font-size: 13px;"><?= $fiyat; ?></div>
 
 					    			</div>	
 
@@ -183,7 +183,7 @@
 
 					    			<div class="row" style="padding: 10px 0px 10px 0px; border: solid 1px darkblue;">
 					    		
-							    		<div class="col-12"><em><u><b>AÇIKLAMA :</b></u></em> <?php echo $aciklama; ?></div>
+							    		<div class="col-12"><em><u><b>AÇIKLAMA :</b></u></em> <?= $aciklama; ?></div>
 
 							    	</div>		
 
@@ -193,7 +193,7 @@
 
 					    			<div class="row" style="padding: 10px 0px 10px 0px; border: solid 1px darkblue; font-size: 13px;">
 				    		
-							    		<div class="col-12"><em><u><b>AÇIKLAMA :</b></u></em> <?php echo $aciklama; ?></div>
+							    		<div class="col-12"><em><u><b>AÇIKLAMA :</b></u></em> <?= $aciklama; ?></div>
 
 							    	</div>	
 
@@ -203,7 +203,7 @@
 
 				    		</div>	
 
-				    		<div class="col-2 d-none d-sm-block" style="border:1px solid darkblue;"><img src="img/fiyatlar/<?php echo $resim2; ?>" style="width: 100%; height: auto;"></div>
+				    		<div class="col-2 d-none d-sm-block" style="border:1px solid darkblue;"><img src="img/fiyatlar/<?= $resim2; ?>" style="width: 100%; height: auto;"></div>
 
 				    	</div>
 

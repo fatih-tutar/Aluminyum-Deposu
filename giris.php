@@ -59,7 +59,7 @@
 
 					<div class="div2">
 
-						<?php echo $hata; ?>
+						<?= $hata; ?>
 					
 						<form action="" method="POST">
 

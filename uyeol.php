@@ -90,7 +90,7 @@
 
 		<?php include 'template/banner.php' ?>
 
-		<?php echo $hata; ?>
+		<?= $hata; ?>
 
 		<div class="container">
 

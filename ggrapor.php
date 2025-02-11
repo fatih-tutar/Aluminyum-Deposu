@@ -69,7 +69,7 @@
 
 		<div class="row">
 			
-			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?php echo $sirketlogo; ?>" style="width: 350px; height: auto;"></div>
+			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $sirketlogo; ?>" style="width: 350px; height: auto;"></div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
@@ -135,15 +135,15 @@
 
 							<div class="row" style="font-size:18px;">
 								
-								<div class="col-md-4 col-12"><?php echo $hafta.". Hafta Toplam"; ?></div>
+								<div class="col-md-4 col-12"><?= $hafta.". Hafta Toplam"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $haftalikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $haftalikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $haftalikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $haftalikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 							</div><hr/>
 
@@ -164,15 +164,15 @@
 
 							<div class="row" style="font-size:22px; font-weight: bold; color:red;">
 									
-								<div class="col-md-4 col-12"><?php echo ayAdi($ay+1)." ayı toplamı"; ?></div>
+								<div class="col-md-4 col-12"><?= ayAdi($ay+1)." ayı toplamı"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $aylikGidenToplam." <small>(Giden)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $aylikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $aylikGelenToplam." <small>(Gelen)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $aylikGelenToplam." <small>(Gelen)</small>"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $aylikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $aylikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $aylikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $aylikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 							</div><hr/>
 
@@ -195,13 +195,13 @@
 									
 								<div class="col-md-4 col-12">Yıllık Toplam</div>
 
-								<div class="col-md-2 col-6"><?php echo $yillikGidenToplam." <small>(Giden)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $yillikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $yillikGelenToplam." <small>(Gelen)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $yillikGelenToplam." <small>(Gelen)</small>"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $yillikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $yillikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
 
-								<div class="col-md-2 col-6"><?php echo $yillikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
+								<div class="col-md-2 col-6"><?= $yillikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 							</div><hr/>
 
@@ -240,35 +240,35 @@
 
 		<div class="row" style="font-size:18px;">
 			
-			<div class="col-md-4 col-12"><?php echo ($hafta-1).". Hafta Toplam"; ?></div>
+			<div class="col-md-4 col-12"><?= ($hafta-1).". Hafta Toplam"; ?></div>
 
-			<div class="col-md-2 col-6"><?php echo $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
+			<div class="col-md-2 col-6"><?= $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
 
-			<div class="col-md-2 col-6"><?php echo $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
+			<div class="col-md-2 col-6"><?= $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
 
-			<div class="col-md-2 col-6"><?php echo $haftalikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+			<div class="col-md-2 col-6"><?= $haftalikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
 
-			<div class="col-md-2 col-6"><?php echo $haftalikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
+			<div class="col-md-2 col-6"><?= $haftalikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 		</div><hr/>
 
 		<div class="row" style="font-size:22px; font-weight: bold; color:red;">
 				
-			<div class="col-md-4 col-12"><?php echo ayAdi($ay)." Ayı Toplamı"; ?></div>
+			<div class="col-md-4 col-12"><?= ayAdi($ay)." Ayı Toplamı"; ?></div>
 
-			<div class="col-md-2 col-6"><?php echo $aylikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+			<div class="col-md-2 col-6"><?= $aylikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
 
-			<div class="col-md-2 col-6"><?php echo $aylikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
+			<div class="col-md-2 col-6"><?= $aylikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 		</div><hr/>
 
 		<div class="row" style="font-size:24px; font-weight: bold; color:blue;">
 				
-			<div class="col-md-4 col-12"><?php echo $yil." Yılı Toplamı" ?></div>
+			<div class="col-md-4 col-12"><?= $yil." Yılı Toplamı" ?></div>
 
-			<div class="col-md-2 col-6"><?php echo $yillikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
+			<div class="col-md-2 col-6"><?= $yillikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
 
-			<div class="col-md-2 col-6"><?php echo $yillikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
+			<div class="col-md-2 col-6"><?= $yillikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
 
 		</div>
 

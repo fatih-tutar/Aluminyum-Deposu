@@ -546,7 +546,7 @@
 			    		
 							    		<div class="col-6" style="padding: 0px 0px 0px 5px;"><b>ÜRÜN NO : </b></div>
 
-							    		<div class="col-6" style="padding: 0px;"><input type="text" name="urunno" value="<?php echo $urunno; ?>" class="form-control form-control-sm"></div>
+							    		<div class="col-6" style="padding: 0px;"><input type="text" name="urunno" value="<?= $urunno; ?>" class="form-control form-control-sm"></div>
 
 							    	</div>
 
@@ -576,11 +576,11 @@
 					    		
 					    		<div class="col-2">
 
-					    			<img src="img/fiyatlar/<?php echo $resim1; ?>" style="width: 100%; height: auto;"><br/>
+					    			<img src="img/fiyatlar/<?= $resim1; ?>" style="width: 100%; height: auto;"><br/>
 
 					    			<input type="file" name="uploadfile1" style="margin-bottom: 10px;">
 
-					    			<input type="hidden" name="resim1" value="<?php echo $resim1; ?>">
+					    			<input type="hidden" name="resim1" value="<?= $resim1; ?>">
 
 					    		</div>
 
@@ -606,21 +606,21 @@
 
 					    		?>
 
-					    			<input type="hidden" name="fiyatid<?php echo $satir; ?>" value="<?php echo $fiyatid; ?>">
+					    			<input type="hidden" name="fiyatid<?= $satir; ?>" value="<?= $fiyatid; ?>">
 
 					    			<div class="row" style="margin-top: 5px;">
 					    				
-					    				<div class="col-2" style="padding: 0px 1px 0px 5px;"><input type="text" name="kod<?php echo $satir; ?>" value="<?php echo $kod; ?>" class="form-control form-control-sm"></div>
+					    				<div class="col-2" style="padding: 0px 1px 0px 5px;"><input type="text" name="kod<?= $satir; ?>" value="<?= $kod; ?>" class="form-control form-control-sm"></div>
 
-							    		<div class="col-4" style="padding: 0px 1px 0px 5px;"><input type="text" name="model<?php echo $satir; ?>" value="<?php echo $model; ?>" class="form-control form-control-sm"></div>
+							    		<div class="col-4" style="padding: 0px 1px 0px 5px;"><input type="text" name="model<?= $satir; ?>" value="<?= $model; ?>" class="form-control form-control-sm"></div>
 
-							    		<div class="col-3" style="padding: 0px 1px 0px 5px;"><input type="text" name="adetmetre<?php echo $satir; ?>" value="<?php echo $adetmetre; ?>" class="form-control form-control-sm"></div>
+							    		<div class="col-3" style="padding: 0px 1px 0px 5px;"><input type="text" name="adetmetre<?= $satir; ?>" value="<?= $adetmetre; ?>" class="form-control form-control-sm"></div>
 
-							    		<div class="col-2" style="padding: 0px 1px 0px 5px;"><input type="text" name="fiyat<?php echo $satir; ?>" value="<?php echo $fiyat; ?>" class="form-control form-control-sm"></div>
+							    		<div class="col-2" style="padding: 0px 1px 0px 5px;"><input type="text" name="fiyat<?= $satir; ?>" value="<?= $fiyat; ?>" class="form-control form-control-sm"></div>
 
 							    		<div class="col-1">
 
-							    			<input type="hidden" name="fiyatid" value="<?php echo $fiyatid; ?>">
+							    			<input type="hidden" name="fiyatid" value="<?= $fiyatid; ?>">
 
 					    					<button type="submit" name="satirsil" style="border-style:none; background-color:white;"><i class="fas fa-minus" style="color:red;"></i></button>
 
@@ -634,21 +634,21 @@
 
 					    			<div class="row">
 					    				
-					    				<div class="col-2" style="padding: 0px 1px 0px 5px;"><input type="text" name="kod<?php echo ($satir+1); ?>" placeholder="Kod" class="form-control form-control-sm"></div>
+					    				<div class="col-2" style="padding: 0px 1px 0px 5px;"><input type="text" name="kod<?= ($satir+1); ?>" placeholder="Kod" class="form-control form-control-sm"></div>
 
-					    				<div class="col-4" style="padding: 0px 1px 0px 5px;"><input type="text" name="model<?php echo ($satir+1); ?>" placeholder="Model" class="form-control form-control-sm"></div>
+					    				<div class="col-4" style="padding: 0px 1px 0px 5px;"><input type="text" name="model<?= ($satir+1); ?>" placeholder="Model" class="form-control form-control-sm"></div>
 
-					    				<div class="col-3" style="padding: 0px 1px 0px 5px;"><input type="text" name="adetmetre<?php echo ($satir+1); ?>" placeholder="Adet / Metre" class="form-control form-control-sm"></div>
+					    				<div class="col-3" style="padding: 0px 1px 0px 5px;"><input type="text" name="adetmetre<?= ($satir+1); ?>" placeholder="Adet / Metre" class="form-control form-control-sm"></div>
 
-					    				<div class="col-2" style="padding: 0px 1px 0px 5px;"><input type="text" name="fiyat<?php echo ($satir+1); ?>" placeholder="Fiyat" class="form-control form-control-sm"></div>
+					    				<div class="col-2" style="padding: 0px 1px 0px 5px;"><input type="text" name="fiyat<?= ($satir+1); ?>" placeholder="Fiyat" class="form-control form-control-sm"></div>
 
 					    				<div class="col-1">
 
-					    					<input type="hidden" name="urunno" value="<?php echo $urunno; ?>">
+					    					<input type="hidden" name="urunno" value="<?= $urunno; ?>">
 
-					    					<input type="hidden" name="aciklama" value="<?php echo $aciklama; ?>">
+					    					<input type="hidden" name="aciklama" value="<?= $aciklama; ?>">
 
-					    					<input type="hidden" name="sira" value="<?php echo $sira; ?>">
+					    					<input type="hidden" name="sira" value="<?= $sira; ?>">
 
 					    					<button type="submit" name="satirekle" style="border-style:none; background-color:white;"><i class="fas fa-plus" style="color:green;"></i></button>
 
@@ -656,13 +656,13 @@
 
 					    			</div>
 
-					    			<input type="hidden" name="satirsayisi" value="<?php echo ($satir+1); ?>">
+					    			<input type="hidden" name="satirsayisi" value="<?= ($satir+1); ?>">
 
 					    			<div class="row" style="margin-top: 5px;">
 					    		
 							    		<div class="col-2"><b>Açıklama : </b></div>
 
-							    		<div class="col-10"><input type="text" name="aciklama" value="<?php echo $aciklama; ?>" class="form-control form-control-sm"></div>
+							    		<div class="col-10"><input type="text" name="aciklama" value="<?= $aciklama; ?>" class="form-control form-control-sm"></div>
 
 							    	</div>	
 
@@ -672,7 +672,7 @@
 
 							    		<div class="col-4">
 							    			
-							    		<input type="hidden" name="urun_eski_sira" value="<?php echo $sira; ?>">
+							    		<input type="hidden" name="urun_eski_sira" value="<?= $sira; ?>">
 
 											<select class="form-control form-control-sm" id="exampleFormControlSelect1" name="urun_yeni_sira">
 
@@ -709,11 +709,11 @@
 
 					    		<div class="col-2">
 
-					    			<img src="img/fiyatlar/<?php echo $resim2; ?>" style="width: 100%; height: auto;">
+					    			<img src="img/fiyatlar/<?= $resim2; ?>" style="width: 100%; height: auto;">
 
 					    			<input type="file" name="uploadfile2" style="margin-bottom: 10px;">
 
-					    			<input type="hidden" name="resim2" value="<?php echo $resim2; ?>">
+					    			<input type="hidden" name="resim2" value="<?= $resim2; ?>">
 
 					    		</div>
 
