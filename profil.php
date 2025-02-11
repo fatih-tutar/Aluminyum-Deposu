@@ -12,7 +12,7 @@
 
 		$profil_id = guvenlik($_GET['id']);
 
-		if ($profil_id != $uye_id && $uye_tipi != 2) {
+		if ($profil_id != $user->id && $uye_tipi != 2) {
 			
 			header("Location:index.php");
 
@@ -20,7 +20,7 @@
 
 		}else{
 
-			$profil = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$profil_id}'")->fetch(PDO::FETCH_ASSOC);
+			$profil = $db->query("SELECT * FROM uyeler WHERE id = '{$profil_id}'")->fetch(PDO::FETCH_ASSOC);
 			$profil_yetkiler = guvenlik($profil['uye_yetkiler']);
 			$profil_adi = guvenlik($profil['uye_adi']);
 			$profil_mail = guvenlik($profil['uye_mail']);
@@ -104,7 +104,7 @@
 			}elseif (empty($uye_tel) === true) {
 				$hata = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
 			}else{
-				$query = $db->prepare("UPDATE uyeler SET uye_adi = ?, uye_mail = ?, uye_unvan = ?, uye_tel = ?, tel_2 = ?, ise_giris_tarihi = ?, adres = ?, foto = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE uye_id = ?"); 
+				$query = $db->prepare("UPDATE uyeler SET uye_adi = ?, uye_mail = ?, uye_unvan = ?, uye_tel = ?, tel_2 = ?, ise_giris_tarihi = ?, adres = ?, foto = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE id = ?");
 				$guncelle = $query->execute(array($uye_adi, $uye_mail, $uye_unvan, $uye_tel, $tel_2, $ise_giris_tarihi, $adres, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
 				header("Location:profil.php?id=".$profil_id."&guncellendi");
 				exit();
@@ -125,7 +125,7 @@
 				
 				$hata = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Formda boş bırakılan alanlar var lütfen kontrol ediniz.</div>';
 
-			}elseif ($uye_sifre != md5($eski_sifre)) {
+			}elseif ($user->uye_sifre != md5($eski_sifre)) {
 				
 				$hata = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Mevcut şifrenizi yanlış girdiniz. Lütfen tekrar deneyiniz.</div>';
 
@@ -135,11 +135,11 @@
 
 			}else{
 
-				$query = $db->prepare("UPDATE uyeler SET uye_sifre = ? WHERE uye_id = ?"); 
+				$query = $db->prepare("UPDATE uyeler SET uye_sifre = ? WHERE id = ?");
 
-				$guncelle = $query->execute(array($md5lisifre,$uye_id));
+				$guncelle = $query->execute(array($md5lisifre,$user->id));
 
-				header("Location:profil.php?id=".$uye_id."&guncellendi");
+				header("Location:profil.php?id=".$user->id."&guncellendi");
 
 				exit();
 
@@ -193,7 +193,7 @@
 
 			$kullanici_yetkileri = implode(",", $kullanici_yetkileri_arrayi);
 
-			$query = $db->prepare("UPDATE uyeler SET uye_yetkiler = ? WHERE uye_id = ?"); 
+			$query = $db->prepare("UPDATE uyeler SET uye_yetkiler = ? WHERE id = ?");
 
 			$guncelle = $query->execute(array($kullanici_yetkileri,$profil_id));
 

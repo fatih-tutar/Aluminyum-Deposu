@@ -26,14 +26,14 @@
 
 	function getOfisType($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
+		$uye = $db->query("SELECT * FROM uyeler WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
 		$yetkiArray = explode(",", $uye['uye_yetkiler']);
 		return $yetkiArray[14];
 	}
 
 	function iseGirisTarihiGetir($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
+		$uye = $db->query("SELECT * FROM uyeler WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
 		return $uye['ise_giris_tarihi'];
 	}
 	
@@ -46,7 +46,7 @@
 
 	function yillikIzinHesapla($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
+		$uye = $db->query("SELECT * FROM uyeler WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
 		$iseGirisTarihi = $uye['ise_giris_tarihi'];
 		$bugun = new DateTime();
 		$baslamaTarihi = new DateTime($iseGirisTarihi);
@@ -77,7 +77,7 @@
 
 	function getUsername($userId){
 		global $db;
-		$user = $db->query("SELECT uye_adi FROM uyeler WHERE uye_id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		$user = $db->query("SELECT uye_adi FROM uyeler WHERE id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 		if($user) {
 			return $user['uye_adi'];
 		}else{
@@ -378,8 +378,8 @@ function ayAdi($ay){
 	function giris($uye_adi, $sifre){
 		global $db;
 		$query = $db->query("SELECT * FROM uyeler WHERE uye_adi = '{$uye_adi}'")->fetch(PDO::FETCH_ASSOC);
-        if($query && isset($query['uye_id'])) {
-            $uye_id = $query['uye_id'];
+        if($query && isset($query['id'])) {
+            $userId = $query['id'];
         }
 		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE uye_adi = '{$uye_adi}' AND uye_sifre = '{$sifre}'");
 		$sorgu->execute();
@@ -387,7 +387,7 @@ function ayAdi($ay){
 		if ($say == '0') {
 			return false;
 		}else{
-			return $uye_id;
+			return $userId;
 		}
 	}
 
@@ -415,11 +415,11 @@ function ayAdi($ay){
 		return ($say == '0') ? '0' : '1';
 	}
 
-	function uye_id_var_mi($uye_id){
+	function uye_id_var_mi($userId){
 
 		global $db;
 
-		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE uye_id = '{$uye_id}'");
+		$sorgu = $db->prepare("SELECT COUNT(*) FROM uyeler WHERE id = '{$userId}'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
 
@@ -565,11 +565,11 @@ function ayAdi($ay){
 
 	}
 
-	function uyeadcek($uye_id){
+	function uyeadcek($userId){
 
 		global $db;
 
-		$uyeadcek = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$uye_id}'")->fetch(PDO::FETCH_ASSOC);
+		$uyeadcek = $db->query("SELECT * FROM uyeler WHERE id = '{$userId}'")->fetch(PDO::FETCH_ASSOC);
 
 		$uye_adi = $uyeadcek['uye_adi'];
 

@@ -24,7 +24,7 @@
 				
 						<a class="dropdown-item" href="index.php"><b>ANA SAYFA</b></a>
 				
-						<a class="dropdown-item" href="profil.php?id=<?= $uye_id; ?>"><b>PROFİL</b></a>
+						<a class="dropdown-item" href="profil.php?id=<?= $user->id; ?>"><b>PROFİL</b></a>
 				
 						<?php if($uye_tipi == '2' || $uye_tipi == '1' || $uye_tipi == '3'){?>
 				

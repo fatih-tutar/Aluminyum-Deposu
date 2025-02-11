@@ -36,7 +36,7 @@
 
 			$query = $db->prepare("INSERT INTO kalip_listesi SET musteri = ?, ilgilikisi = ?, urunmiktar = ?, fabrika = ?, aciklama = ?, teklifveren = ?, tarih = ?, silik = ?");
 
-			$insert = $query->execute(array($musteri,$ilgilikisi,$urunmiktar,$fabrika,$aciklama,$uye_id,$su_an,'0'));
+			$insert = $query->execute(array($musteri,$ilgilikisi,$urunmiktar,$fabrika,$aciklama,$user->id,$su_an,'0'));
 
 			header("Location:tekliflistesi.php");
 
@@ -64,7 +64,7 @@
 
 			$query = $db->prepare("UPDATE kalip_listesi SET musteri = ?, ilgilikisi = ?, urunmiktar = ?, fiyat = ?, fabrika = ?, fabrikafiyat = ?, teklifveren = ?, aciklama = ?, tarih = ? WHERE teklifid = ?"); 
 
-			$guncelle = $query->execute(array($musteri,$ilgilikisi,$urunmiktar,$fiyat,$fabrika,$fabrikafiyat,$uye_id,$aciklama,$su_an,$teklifid));
+			$guncelle = $query->execute(array($musteri,$ilgilikisi,$urunmiktar,$fiyat,$fabrika,$fabrikafiyat,$user->id,$aciklama,$su_an,$teklifid));
 
 			header("Location:tekliflistesi.php");
 

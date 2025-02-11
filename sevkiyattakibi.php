@@ -47,7 +47,7 @@
         }
         if(!empty($kilolar)){
             $query = $db->prepare("UPDATE sevkiyat SET kilolar = ?, durum = ?, hazirlayan = ? WHERE id = ?");
-            $update = $query->execute(array($kilolar,'1',$uye_id,$sevkiyatID));
+            $update = $query->execute(array($kilolar,'1',$user->id,$sevkiyatID));
         }else{
             $hata = '<br/><div class="alert alert-danger" role="alert">Ürünlere tek tek veya toplam olarak kilo girmelisiniz.</div>';
         }
@@ -68,7 +68,7 @@
     if(isset($_POST['faturahazir'])){
         $sevkiyatID = guvenlik($_POST['sevkiyatID']);
         $query = $db->prepare("UPDATE sevkiyat SET durum = ?, faturaci = ? WHERE id = ?");
-        $update = $query->execute(array('2',$uye_id,$sevkiyatID));
+        $update = $query->execute(array('2',$user->id,$sevkiyatID));
         header("Location: index.php");
         exit();
     }
@@ -165,7 +165,7 @@
                 $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $uye_sirket));
             }else{
                 $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, manuel = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                $insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$uye_id,'',$sevkTipi,$arac_id,$aciklama,'0','0','0',$su_an, $uye_sirket));
+                $insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$user->id,'',$sevkTipi,$arac_id,$aciklama,'0','0','0',$su_an, $uye_sirket));
             }
             header("Location:index.php");
             exit();

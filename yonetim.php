@@ -64,7 +64,7 @@
 			
 			$kullanici_id = guvenlik($_POST['kullanici_id']);
 
-			$query = $db->prepare("UPDATE uyeler SET uye_silik = ? WHERE uye_id = ?"); 
+			$query = $db->prepare("UPDATE uyeler SET uye_silik = ? WHERE id = ?");
 
 			$guncelle = $query->execute(array('1',$kullanici_id));
 
@@ -162,7 +162,7 @@
 								$query = $db->query("SELECT * FROM uyeler WHERE uye_firma = '$uye_firma' AND uye_tipi != '2' AND uye_silik = '0' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
 								if ( $query->rowCount() ){
 									foreach( $query as $row ){
-										$kullanici_id = guvenlik($row['uye_id']);
+										$kullanici_id = guvenlik($row['id']);
 										$kullanici_adi = guvenlik($row['uye_adi']);	
 										$kullanici_unvan = guvenlik($row['uye_unvan']);
 							?>

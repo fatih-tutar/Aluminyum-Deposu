@@ -219,7 +219,7 @@
                         $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $uye_sirket));
                     } else {
                         $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $uye_id, '', $sevkTipi, $aciklama, '0', '0', $su_an, $uye_sirket));
+                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $aciklama, '0', '0', $su_an, $uye_sirket));
                     }
                     header("Location:urunler.php?id=" . $kategori_id . "&u=" . $urunId . "&sevkiyateklendi#" . $urunId);
                     exit();
@@ -374,7 +374,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($uye_id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$uye_sirket));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$uye_sirket));
 
 				}
 				
@@ -382,7 +382,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($uye_id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),$su_an,'1',$uye_sirket));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),$su_an,'1',$uye_sirket));
 
 				}
 
@@ -420,7 +420,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($uye_id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$uye_sirket));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$uye_sirket));
 
 				}
 
@@ -454,7 +454,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($uye_id,$urun_id,$eskiadet,$urun_depo_adet,$su_an,'1',$uye_sirket));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,$su_an,'1',$uye_sirket));
 
 				}
 

@@ -8,7 +8,7 @@
             $yil = date("Y", time());
             $otuzbirMart = $yil . "-10-31";
             $birOcak = $yil . "-01-01";
-            $izinli = isset($_POST['izinli']) && !empty($_POST['izinli']) ? guvenlik($_POST['izinli']) : $uye_id;
+            $izinli = isset($_POST['izinli']) && !empty($_POST['izinli']) ? guvenlik($_POST['izinli']) : $user->id;
             $izinBaslangicTarihi = guvenlik($_POST['izin_baslangic_tarihi']);
             $iseBaslamaTarihi = guvenlik($_POST['ise_baslama_tarihi']);
             $gunSayisi = guvenlik($_POST['gun_sayisi']);
@@ -94,7 +94,7 @@
                                     $calisanlaricek = $db->query("SELECT * FROM uyeler WHERE uye_firma = '{$uye_sirket}' AND uye_tipi != '2' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
                                     if ( $calisanlaricek->rowCount() ){
                                         foreach( $calisanlaricek as $cc ){
-                                            $calisanId = guvenlik($cc['uye_id']);
+                                            $calisanId = guvenlik($cc['id']);
                                             $calisanAdi = guvenlik($cc['uye_adi']);
                                 ?>
                                             <option value="<?= $calisanId; ?>"><?= $calisanAdi; ?></option>
@@ -222,7 +222,7 @@
                 $uyeler = $db->query("SELECT * FROM uyeler WHERE uye_tipi != '2' AND uye_firma = '{$uye_sirket}' AND uye_silik = '0' ORDER BY uye_adi ASC", PDO::FETCH_ASSOC);
                 if ( $uyeler->rowCount() ){
                     foreach( $uyeler as $key => $uye ){
-                        $uyeId = guvenlik($uye['uye_id']);
+                        $uyeId = guvenlik($uye['id']);
                         $uyeAdi = guvenlik($uye['uye_adi']);
                         $iseGirisTarihi = guvenlik($uye['ise_giris_tarihi']);
                         $toplamHakedis = yillikIzinHesapla($uyeId);

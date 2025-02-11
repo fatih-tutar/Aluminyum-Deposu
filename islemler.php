@@ -89,7 +89,7 @@
 
 				$yapanid = $row['yapanid'];
 
-				$yapanadicek = $db->query("SELECT * FROM uyeler WHERE uye_id = '{$yapanid}'")->fetch(PDO::FETCH_ASSOC);
+				$yapanadicek = $db->query("SELECT * FROM uyeler WHERE id = '{$yapanid}'")->fetch(PDO::FETCH_ASSOC);
 
 				$yapanadi = $yapanadicek['uye_adi'];
 
