@@ -2,7 +2,7 @@
     include 'fonksiyonlar/bagla.php';
     $aracId = guvenlik($_GET['id']);
     // SEVKİYATLAR
-    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE arac_id = '{$aracId}' AND silik = '0' AND durum != '3'", PDO::FETCH_OBJ)->fetchAll();
+    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE arac_id = '{$aracId}' AND silik = '0' AND nakliye_durumu = '0'", PDO::FETCH_OBJ)->fetchAll();
     // FİRMALAR
     $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'", PDO::FETCH_OBJ)->fetchAll();
     // ARAÇLAR

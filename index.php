@@ -80,7 +80,7 @@
 				margin-bottom: 5px;
 			}
             .sevkCardDarkBlue{
-                background-color: #146e9f;
+                background-color: #90ee90;
                 border-radius: 5px;
                 color: black;
                 margin-bottom: 5px;
@@ -123,10 +123,10 @@
 				</div>
 				<div class="col-md-10">
 					<div class="row mx-1">
-						<?php include 'tools/agirlikhesaplama.php'; ?>
+						<?php include 'agirlikhesaplama.php'; ?>
 					</div>
-					<?php include 'tools/isplani.php'; ?>
-					<?php include 'tools/sevkiyattakibi.php'; ?>
+					<?php include 'isplani.php'; ?>
+					<?php include 'sevkiyattakibi.php'; ?>
 				</div>
 			</div>	
 		</div>

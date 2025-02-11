@@ -89,6 +89,8 @@
       $sigorta_bitis_tarihi = $_POST['sigorta_bitis_tarihi'];
       $muayene_tarihi = $_POST['muayene_tarihi'];
       $aciklama = $_POST['aciklama'];
+      $nakliye = '0';
+      if(isset($_POST['nakliye'])){ $nakliye = '1'; }
 
       // Dosya yükleme işlemleri
       $uploads = [];
@@ -120,10 +122,11 @@
                   kasko_bitis_tarihi = ?, 
                   sigorta_bitis_tarihi = ?, 
                   muayene_tarihi = ?, 
-                  aciklama = ?";
+                  aciklama = ?,
+                  nakliye = ?";
 
       // Dosya alanlarını kontrol et ve SQL sorgusuna ekle
-      $params = [$arac_adi, $plaka, $araci_kullanan, $kasko_bitis_tarihi, $sigorta_bitis_tarihi, $muayene_tarihi, $aciklama];
+      $params = [$arac_adi, $plaka, $araci_kullanan, $kasko_bitis_tarihi, $sigorta_bitis_tarihi, $muayene_tarihi, $aciklama, $nakliye];
       
       foreach ($uploads as $key => $path) {
           $sql .= ", $key = ?";
@@ -408,8 +411,10 @@
                       <textarea name="aciklama" id="aciklama" placeholder="Bu alan not girebilirsiniz." class="form-control form-control-sm"><?= $row['aciklama'] ?></textarea>
                     </div>
                     <div class="col-md-2 col-12">
-                      <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                      <button type="submit" name="aracduzenle" class="btn btn-primary btn-block btn-sm">Kaydet</button>
+                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                        <input type="checkbox" id="nakliyeCheckbox" name="nakliye" <?= $row['nakliye'] == '1' ? 'checked' : '' ?>>
+                        <label for="nakliyeCheckbox">Nakliye Aracı</label>
+                        <button type="submit" name="aracduzenle" class="btn btn-primary btn-block btn-sm">Kaydet</button>
                     </div>
                   </div>
                 </form>

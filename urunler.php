@@ -207,7 +207,7 @@
                     $hata = '<br/><div class="alert alert-danger" role="alert">Sevk tipi : '.$sevkTipi.' Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
                 }else {
                     $firmaId = getFirmaID($firma);
-                    $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+                    $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND manuel = '0' AND silik = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
                     if ($sevkiyatList) {
                         $urunler = guvenlik($sevkiyatList['urunler']);
                         $adetler = guvenlik($sevkiyatList['adetler']);

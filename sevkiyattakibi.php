@@ -1,6 +1,6 @@
 <?php
     // SEVKİYATLAR
-    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND durum != '3'", PDO::FETCH_OBJ)->fetchAll();
+    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND manuel = '0' AND durum != '3'", PDO::FETCH_OBJ)->fetchAll();
     $alinanSiparisler = [];
     $hazirlananSiparisler = [];
     $faturasiKesilenler = [];
@@ -153,7 +153,7 @@
             $kategori_bir = trim($urunArray[2]);
             $urunId = getUrunID($urun,$kategori_iki,$kategori_bir);
             $firmaId = getFirmaID($firma);
-            $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+            $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND manuel = '0' AND sirket_id = '{$uye_sirket}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
             if($sevkiyatList){
                 $urunler = guvenlik($sevkiyatList['urunler']);
                 $adetler = guvenlik($sevkiyatList['adetler']);
@@ -164,8 +164,8 @@
                 $query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?");
                 $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $uye_sirket));
             }else{
-                $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                $insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$uye_id,'',$sevkTipi,$arac_id,$aciklama,'0','0',$su_an, $uye_sirket));
+                $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, manuel = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
+                $insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$uye_id,'',$sevkTipi,$arac_id,$aciklama,'0','0','0',$su_an, $uye_sirket));
             }
             header("Location:index.php");
             exit();
@@ -634,58 +634,4 @@
                 }
         ?>
     </div>
-</div>
-<?php
-$ids = [];
-foreach ($araclar as $arac) {
-    $ids[] = $arac->id;
-}
-$column = 12 / count($araclar);
-?>
-<div class="row cerceve" style="padding-top: 10px; padding-bottom:10px;">
-    <?php
-        foreach ($araclar as $arac) {
-    ?>
-            <div class="col-12 col-md-<?=$column?>">
-                <div class="row">
-                    <div class="col-8">
-                        <h4><i class="fa fa-car"></i> <?= $arac->arac_adi ?></h4>
-                    </div>
-                    <div class="col-4">
-                        <a href="aracsevkiyat.php?id=<?=$arac->id?>" target="_blank">
-                            <button class="btn btn-primary btn-block btn-sm">
-                                Çıktı Al
-                            </button>
-                        </a>
-                    </div>
-                </div>
-                <?php if (isset($sevkiyatGruplari[$arac->id])): ?>
-                    <?php
-                        foreach ($sevkiyatGruplari[$arac->id] as $sevkiyat):
-                            $firma = reset(array_filter($firmalar, fn($firma) => $firma->firmaid == $sevkiyat->firma_id));
-                            $firmaAdi = $firma->firmaadi;
-                            $firmaAdres = $firma->firmaadres;
-                            $kilolar = $sevkiyat->kilolar;
-                            $toplamkg = 0;
-                            if(strpos($kilolar, ',')){
-                                $kiloArray = explode(",",$kilolar);
-                                foreach($kiloArray as $kilo){
-                                    $toplamkg += $kilo;
-                                }
-                            }else{
-                                $toplamkg = $kilolar;
-                            }
-                    ?>
-                        <hr/>
-                        Firma Adı : <?= $firmaAdi ?><br/>
-                        Firma Adres : <?= $firmaAdres ?><br/>
-                        Kilo : <?= $toplamkg ?><br/>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    Bu araca atanmış sevkiyat bulunmuyor.
-                <?php endif; ?>
-            </div>
-    <?php
-        }
-    ?>
 </div>
