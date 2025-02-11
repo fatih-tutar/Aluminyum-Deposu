@@ -24,7 +24,7 @@
 			$hata = '<div class="alert alert-danger" role="alert">Üyeliğiniz pasifleştirilmiştir.</div>';
 		}else{
 			if (is_numeric(giris($uye_adi,$sifreli)) === true) {
-				$_SESSION['uye_id'] = giris($uye_adi,$sifreli);
+				$_SESSION['user_id'] = giris($uye_adi,$sifreli);
 				header("Location: index.php");
 				exit();
 			}

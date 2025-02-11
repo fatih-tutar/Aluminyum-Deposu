@@ -393,7 +393,7 @@ function ayAdi($ay){
 
 	function giris_yapti_mi(){
 
-		return (isset($_SESSION['uye_id'])) ? true: false;
+		return (isset($_SESSION['user_id'])) ? true: false;
 	}
 
 	function pasifmi($uye_adi){
@@ -415,7 +415,7 @@ function ayAdi($ay){
 		return ($say == '0') ? '0' : '1';
 	}
 
-	function uye_id_var_mi($userId){
+	function checkUserById($userId){
 
 		global $db;
 

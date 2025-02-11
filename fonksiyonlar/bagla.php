@@ -19,7 +19,7 @@
 	$sirketfiyatlistesi = guvenlik($fiyatlistesi['fiyatlistesi']);
 	$site_adresi = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 	if(giris_yapti_mi() === true){
-		$uye_session_id = $_SESSION['uye_id'];
+		$uye_session_id = $_SESSION['user_id'];
         $user = $db->query("SELECT * FROM uyeler WHERE id = '$uye_session_id'", PDO::FETCH_OBJ)->fetch();
 		$uye_verileri = $db->query("SELECT * FROM uyeler WHERE id = '{$uye_session_id}'")->fetch(PDO::FETCH_ASSOC);
 		$uye_adi = $uye_verileri['uye_adi'];
@@ -58,7 +58,7 @@
 	}
 	if (giris_yapti_mi() === true ) {
 		$girdi = 1;
-		if (uye_id_var_mi($uye_session_id) == '0') {
+		if (checkUserById($uye_session_id) == '0') {
 			header("Location:cikis.php");
 		}
 	}else{
