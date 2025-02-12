@@ -42,25 +42,25 @@
 
 							<?php } ?>
 
-							<?php if($uye_ziyaret_yetkisi == '1'){?>
+							<?php if($user->permissions->visit == '1'){?>
 
 								<a class="dropdown-item" href="ziyaretler.php"><b>ZİYARETLER</b></a>
 
 							<?php } ?>
 
-							<?php if($uye_gelen_giden_yetkisi == '1'){?>
+							<?php if($user->permissions->stock_flow == '1'){?>
 
 								<a class="dropdown-item" href="gelengiden.php"><b>GELEN/GİDEN</b></a>
 
 							<?php } ?>
 
-							<?php if($uye_islemleri_gorme_yetkisi == '1'){?>
+							<?php if($user->permissions->transaction == '1'){?>
 
 								<a class="dropdown-item" href="islemler.php"><b>İŞLEMLER</b></a>
 
 							<?php } ?>
 
-                            <?php if($uye_arac_yetkisi == '1'){?>
+                            <?php if($user->permissions->vehicle == '1'){?>
 
                                 <a class="dropdown-item" href="arac.php"><b>ARAÇLAR</b></a>
 

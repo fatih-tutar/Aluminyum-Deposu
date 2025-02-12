@@ -10,7 +10,7 @@
 
 	}else{
 
-		if($uye_islemleri_gorme_yetkisi != '1'){
+		if($user->permissions->transaction != '1'){
 
 			header("Location:index.php");
 

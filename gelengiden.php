@@ -10,7 +10,7 @@
 
 	}else{
 
-		if($uye_gelen_giden_yetkisi != '1'){
+		if($user->permissions->stock_flow != '1'){
 
 			header("Location:index.php");
 

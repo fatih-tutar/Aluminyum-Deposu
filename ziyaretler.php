@@ -10,7 +10,7 @@
 
 	}else{
 
-        if($uye_ziyaret_yetkisi != '1'){
+        if($user->permissions->visit != '1'){
 
             header("Location:index.php");
 

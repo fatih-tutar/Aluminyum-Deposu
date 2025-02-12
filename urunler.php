@@ -659,11 +659,11 @@
 						</div>
 					</div>
 
-					<?php if($sutunalisizni == '1' && $uye_alis_yetkisi == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Alış</b></div><?php  } ?>
+					<?php if($sutunalisizni == '1' && $user->permissions->buying_price == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Alış</b></div><?php  } ?>
 
-					<?php if($sutunsatisizni == '1' && $uye_satis_yetkisi == '1' || $user->type == '2'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Satış</b></div><?php } ?>
+					<?php if($sutunsatisizni == '1' && $user->permissions->selling_price == '1' || $user->type == '2'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Satış</b></div><?php } ?>
 
-					<?php if($sutunfabrikaizni == '1' && $uye_fabrika_yetkisi == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Fabrika</b></div><?php } ?>	
+					<?php if($sutunfabrikaizni == '1' && $user->permissions->factory == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Fabrika</b></div><?php } ?>	
 
 					<?php if($sutunmusteriismiizni == '1'){?><div class="col-md-1 col-1"><b>Müşteri</b></div><?php } ?>	
 
@@ -1053,7 +1053,7 @@
 							
 							</div>
 
-							<?php if($sutunalisizni == '1' && $uye_alis_yetkisi == '1'){ ?>
+							<?php if($sutunalisizni == '1' && $user->permissions->buying_price == '1'){ ?>
 
 								<div class="col-4 d-block d-sm-none">Alış : </div>
 
@@ -1061,7 +1061,7 @@
 
 							<?php } ?>
 
-							<?php if($sutunsatisizni == '1' && $uye_satis_yetkisi == '1' || $user->type == '2'){?>
+							<?php if($sutunsatisizni == '1' && $user->permissions->selling_price == '1' || $user->type == '2'){?>
 
 							<div class="col-4 d-block d-sm-none">Satış : </div>
 
@@ -1069,7 +1069,7 @@
 
 							<?php } ?>
 
-							<?php if($sutunfabrikaizni == '1' && $uye_fabrika_yetkisi == '1'){?>
+							<?php if($sutunfabrikaizni == '1' && $user->permissions->factory == '1'){?>
 
 								<div class="col-4 d-block d-sm-none">Fabrika : </div>
 
@@ -1089,7 +1089,7 @@
 
 								<div class="row">
 
-									<?php if($sutunteklifbutonuizni == '1' && $uye_teklif_yetkisi == '1'){ ?>
+									<?php if($sutunteklifbutonuizni == '1' && $user->permissions->quote == '1'){ ?>
 
 										<div class="col-md-3 col-3 p-1">
 
@@ -1099,7 +1099,7 @@
 
 									<?php } ?>
 
-									<?php if($sutunsiparisbutonuizni == '1' && $uye_siparis_yetkisi == '1'){ ?>
+									<?php if($sutunsiparisbutonuizni == '1' && $user->permissions->order == '1'){ ?>
 
 										<div class="col-md-3 col-3 p-1">
 											
@@ -1125,7 +1125,7 @@
 
 									<?php } ?>
 
-									<?php if($sutunsevkiyatbutonuizni == '1' && $uye_sevkiyat_yetkisi == '1'){ ?>
+									<?php if($sutunsevkiyatbutonuizni == '1' && $user->permissions->shipment == '1'){ ?>
 
 										<div class="col-md-3 col-3 p-1">
 
@@ -1135,7 +1135,7 @@
 
 									<?php } ?> 
 
-									<?php if($sutunduzenlebutonuizni == '1' && $uye_duzenleme_yetkisi == '1'){ ?>
+									<?php if($sutunduzenlebutonuizni == '1' && $user->permissions->editing == '1'){ ?>
 
 										<div class="col-md-3 col-3 p-1">
 
@@ -1151,7 +1151,7 @@
 
 						</div>
 
-						<?php if($uye_teklif_yetkisi == '1'){?>
+						<?php if($user->permissions->quote == '1'){?>
 
 							<?php if (isset($_GET['teklifeklendi']) && $_GET['u'] == $urun_id) { ?>
 
@@ -1305,7 +1305,7 @@
 
 						<?php } ?>
 
-						<?php if($uye_siparis_yetkisi == '1'){ ?>
+						<?php if($user->permissions->order == '1'){ ?>
 
 							<?php if ((isset($_GET['siparisalindi']) || isset($_GET['sipariseklendi'])) && $_GET['u'] == $urun_id) { ?>
 
@@ -1635,7 +1635,7 @@
 
 						<?php } ?>
 
-						<?php if($uye_sevkiyat_yetkisi == '1'){?>
+						<?php if($user->permissions->shipment == '1'){?>
 
 							<?php if (isset($_GET['sevkiyateklendi']) && $_GET['u'] == $urun_id) { ?>
 
@@ -1722,7 +1722,7 @@
 
 							<?php } ?>
 
-						<?php if($uye_duzenleme_yetkisi == '1'){ ?>
+						<?php if($user->permissions->editing == '1'){ ?>
 
 							<?php if ((isset($_GET['guncellendi']) || isset($_GET['urunsilinemez'])) && $_GET['u'] == $urun_id) { ?>
 
@@ -1748,11 +1748,11 @@
 											
 												<div class="col-md-2 col-12"><b>Ürün Adı</b><input type="text" class="form-control" name="urun_adi" value="<?= $urun_adi; ?>"></div>
 												
-												<?php if($sutunadetizni == '1' && $uye_adet_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?= $urun_adet; ?>"></div><?php } ?>	
+												<?php if($sutunadetizni == '1' && $user->permissions->piece == '1'){?><div class="col-md-1 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?= $urun_adet; ?>"></div><?php } ?>	
 
-												<?php if($sutunpaletizni == '1' && $uye_palet_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Palet</b><input type="text" class="form-control" name="urun_palet" value="<?= $urun_palet; ?>"></div><?php } ?>	
+												<?php if($sutunpaletizni == '1' && $user->permissions->pallet == '1'){?><div class="col-md-1 col-12 px-1"><b>Palet</b><input type="text" class="form-control" name="urun_palet" value="<?= $urun_palet; ?>"></div><?php } ?>	
 														
-												<?php if($sutundepoadetizni == '1' && $uye_alkop_yetkisi == '1'){?><div class="col-md-1 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?= $urun_depo_adet; ?>"></div><?php } ?>	
+												<?php if($sutundepoadetizni == '1' && $user->permissions->alkop == '1'){?><div class="col-md-1 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?= $urun_depo_adet; ?>"></div><?php } ?>	
 														
 												<?php if($sutunrafizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?= $urun_raf; ?>"></div><?php } ?>	
 													
@@ -1762,7 +1762,7 @@
 
 												<?php if($sutunboyolcusuizni == '1'){?><div class="col-md-1 col-12"><b>Boy Ölçüsü</b><input type="text" class="form-control" name="urun_boy_olcusu" value="<?= $urun_boy_olcusu; ?>"></div><?php } ?>			
 
-												<?php if($sutunalisizni == '1' && $uye_alis_yetkisi == '1'){ ?>
+												<?php if($sutunalisizni == '1' && $user->permissions->buying_price == '1'){ ?>
 
 													<div class="col-md-1 col-12">
 
@@ -1780,7 +1780,7 @@
 
 												<?php } ?>
 
-												<?php if($sutunmanuelsatisizni == '1' && $uye_satis_yetkisi == '1' || $user->type == '2'){?>
+												<?php if($sutunmanuelsatisizni == '1' && $user->permissions->selling_price == '1' || $user->type == '2'){?>
 
 													<div class="col-md-1 col-12">
 
@@ -1792,7 +1792,7 @@
 
 												<?php } ?>
 
-												<?php if($sutunfabrikaizni == '1' && $uye_fabrika_yetkisi == '1'){?>
+												<?php if($sutunfabrikaizni == '1' && $user->permissions->factory == '1'){?>
 
 												<div class="col-md-1 col-12"><b>Fabrika</b>
 													
