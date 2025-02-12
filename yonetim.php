@@ -2,13 +2,13 @@
 
 	include 'fonksiyonlar/bagla.php';
 
-	if ($girdi != 1) {
+	if (!isLoggedIn()) {
 		
 		header("Location:giris.php");
 
 		exit();
 
-	}elseif ($girdi == 1) {
+	}elseif (isLoggedIn()) {
 
 		if($user->type == '0' || $user->type == '1'){
 
@@ -64,7 +64,7 @@
 			
 			$kullanici_id = guvenlik($_POST['kullanici_id']);
 
-			$query = $db->prepare("UPDATE users SET uye_silik = ? WHERE id = ?");
+			$query = $db->prepare("UPDATE users SET is_deleted = ? WHERE id = ?");
 
 			$guncelle = $query->execute(array('1',$kullanici_id));
 
@@ -94,7 +94,7 @@
 
 			}else{
 
-				$query = $db->prepare("INSERT INTO users SET name = ?, email = ?, password = ?, company_id = ?, type = ?, permissions = ?, uye_silik = ?");
+				$query = $db->prepare("INSERT INTO users SET name = ?, email = ?, password = ?, company_id = ?, type = ?, permissions = ?, is_deleted = ?");
 
 				$insert = $query->execute(array($name,$email,$password,$user->company_id,'0',$yeni_uye_yetki,'0'));
 
@@ -159,7 +159,7 @@
 						<h4>Kullanıcılar</h4>
 						<div class="row">
 							<?php	
-								$query = $db->query("SELECT * FROM users WHERE company_id = '$user->company_id' AND type != '2' AND uye_silik = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
+								$query = $db->query("SELECT * FROM users WHERE company_id = '$user->company_id' AND type != '2' AND is_deleted = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
 								if ( $query->rowCount() ){
 									foreach( $query as $row ){
 										$kullanici_id = guvenlik($row['id']);

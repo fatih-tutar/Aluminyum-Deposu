@@ -5,7 +5,7 @@
 
 /* Database Bağlantısı */
 
-    if ($girdi != '1') {
+    if (!isLoggedIn()) {
         header("Location:giris.php");
         exit();
     }else{

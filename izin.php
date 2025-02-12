@@ -1,6 +1,6 @@
 <?php 
 	include 'fonksiyonlar/bagla.php'; 
-	if ($girdi != '1') {
+	if (!isLoggedIn()) {
 		header("Location:giris.php");
 		exit();
 	}else{
@@ -219,12 +219,12 @@
             </div>
             <hr/>
             <?php
-                $users = $db->query("SELECT * FROM users WHERE type != '2' AND company_id = '{$user->company_id}' AND uye_silik = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
+                $users = $db->query("SELECT * FROM users WHERE type != '2' AND company_id = '{$user->company_id}' AND is_deleted = '0' ORDER BY name ASC", PDO::FETCH_ASSOC);
                 if ( $users->rowCount() ){
                     foreach( $users as $key => $uye ){
                         $uyeId = guvenlik($uye['id']);
                         $uyeAdi = guvenlik($uye['name']);
-                        $iseGirisTarihi = guvenlik($uye['ise_giris_tarihi']);
+                        $iseGirisTarihi = guvenlik($uye['hire_date']);
                         $toplamHakedis = yillikIzinHesapla($uyeId);
                         $kullanilanIzin = kullanilanIzinHesapla($uyeId);
                         $kalanIzin = $toplamHakedis - $kullanilanIzin;

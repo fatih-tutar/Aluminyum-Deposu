@@ -1,4 +1,4 @@
-<?php if($girdi == 1){ ?>
+<?php if(isLoggedIn()){ ?>
 
 	<div class="container-fluid" style="position: fixed; z-index: 5; background-color: black;">
 
@@ -90,7 +90,7 @@
 
 	</div>
 
-<?php }elseif ($girdi == 0) { ?>
+<?php }elseif (!isLoggedIn()) { ?>
 
 	<div class="container-fluid" style="position: fixed; z-index: 2; background-color: white;">
 
@@ -122,11 +122,11 @@
 
 <?php
 
-if(giris_yapti_mi() === true){
+if(isLoggedIn() === true){
 
 	if((time() - (60 * 60 * 7)) > $sirketyedekalmasaniye && $user->type == '2'){
 
-		otomatikyedekal($user->company_id, $sayfa);
+		otomatikyedekal($user->company_id);
 
 	}
 

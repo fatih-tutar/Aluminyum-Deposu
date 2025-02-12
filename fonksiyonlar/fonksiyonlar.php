@@ -26,15 +26,15 @@
 
 	function getOfisType($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
+		$uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
 		$yetkiArray = explode(",", $uye['permissions']);
 		return $yetkiArray[14];
 	}
 
 	function iseGirisTarihiGetir($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
-		return $uye['ise_giris_tarihi'];
+		$uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
+		return $uye['hire_date'];
 	}
 	
 	function kullanilanIzinHesapla($uyeId) {
@@ -46,8 +46,8 @@
 
 	function yillikIzinHesapla($uyeId) {
 		global $db;
-		$uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND uye_silik = '0'")->fetch(PDO::FETCH_ASSOC);
-		$iseGirisTarihi = $uye['ise_giris_tarihi'];
+		$uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
+		$iseGirisTarihi = $uye['hire_date'];
 		$bugun = new DateTime();
 		$baslamaTarihi = new DateTime($iseGirisTarihi);
 		$fark = $bugun->diff($baslamaTarihi);
@@ -391,14 +391,14 @@ function ayAdi($ay){
 		}
 	}
 
-	function giris_yapti_mi(){
+	function isLoggedIn(){
 
 		return (isset($_SESSION['user_id'])) ? true: false;
 	}
 
 	function pasifmi($name){
 		global $db;
-		$sorgu = $db->prepare("SELECT COUNT(*) FROM users WHERE name = '{$name}' AND pasiflik = '1'");
+		$sorgu = $db->prepare("SELECT COUNT(*) FROM users WHERE name = '{$name}' AND is_passive = '1'");
 		$sorgu->execute();
 		$say = $sorgu->fetchColumn();
 		return ($say == '0') ? '0' : '1';
@@ -490,9 +490,12 @@ function ayAdi($ay){
 
 	}
 
-	function otomatikyedekal($companyId, $sayfa){
+	function otomatikyedekal($companyId){
 
 		global $db;
+
+        $sayfa = explode('/',$_SERVER['SCRIPT_NAME']);
+        $sayfa = end($sayfa);
 
 		$dbhost = "aluminyumdeposu.com"; //Veritabanın bulunduğu host
 		$dbuser = "u9022286_depokullanici"; //Veritabanı Kullanıcı Adı

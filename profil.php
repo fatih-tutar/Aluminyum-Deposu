@@ -2,13 +2,13 @@
 
 	include 'fonksiyonlar/bagla.php'; 
 
-	if ($girdi != '1') {
+	if (!isLoggedIn()) {
 		
 		header("Location:giris.php");
 
 		exit();
 
-	}elseif($girdi == '1'){
+	}elseif(isLoggedIn()){
 
 		$profil_id = guvenlik($_GET['id']);
 
@@ -26,14 +26,14 @@
 			$profil_mail = guvenlik($profil['email']);
 			$profil_tel = guvenlik($profil['phone']);
 			$profil_phone_2 = guvenlik($profil['phone_2']);
-			$profil_foto = guvenlik($profil['foto']);
+			$profil_foto = guvenlik($profil['photo']);
 			$unvan = guvenlik($profil['title']);
 			$address = guvenlik($profil['address']);
-			$nufus_cuzdani = guvenlik($profil['nufus_cuzdani']);
-			$is_basvuru_formu = guvenlik($profil['is_basvuru_formu']);
-			$ikametgah_belgesi = guvenlik($profil['ikametgah_belgesi']);
-			$saglik_raporu = guvenlik($profil['saglik_raporu']);
-			$ise_giris_tarihi = guvenlik($profil['ise_giris_tarihi']);
+			$nufus_cuzdani = guvenlik($profil['identity_card']);
+			$is_basvuru_formu = guvenlik($profil['application_form']);
+			$ikametgah_belgesi = guvenlik($profil['residence_certificate']);
+			$saglik_raporu = guvenlik($profil['health_report']);
+			$hireDate = guvenlik($profil['hire_date']);
 			$profil_yetkileri_arrayi = explode(",", $profil_yetkiler);
 
 		}
@@ -46,7 +46,7 @@
 			$phone = guvenlik($_POST['phone']);
 			$phone_2 = guvenlik($_POST['phone_2']);
 			$address = guvenlik($_POST['address']);
-			$ise_giris_tarihi = guvenlik($_POST['ise_giris_tarihi']);
+			$hireDate = guvenlik($_POST['hire_date']);
 			if (!empty($_FILES['uploadfile']['name'])) {
 				$temp = explode(".", $_FILES['uploadfile']['name']);
 				$dosyaadi = $temp[0];
@@ -104,8 +104,8 @@
 			}elseif (empty($phone) === true) {
 				$hata = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
 			}else{
-				$query = $db->prepare("UPDATE users SET name = ?, email = ?, title = ?, phone = ?, phone_2 = ?, ise_giris_tarihi = ?, address = ?, foto = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE id = ?");
-				$guncelle = $query->execute(array($name, $email, $title, $phone, $phone_2, $ise_giris_tarihi, $address, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
+				$query = $db->prepare("UPDATE users SET name = ?, email = ?, title = ?, phone = ?, phone_2 = ?, hire_date = ?, address = ?, photo = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE id = ?");
+				$guncelle = $query->execute(array($name, $email, $title, $phone, $phone_2, $hireDate, $address, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
 				header("Location:profil.php?id=".$profil_id."&guncellendi");
 				exit();
 			}
@@ -251,7 +251,7 @@
 					<div style="text-align:right;">
 						<h6>
 							<i class="fas fa-calendar-alt mr-2"></i>
-							<?= (new DateTime($ise_giris_tarihi))->format('d.m.Y') ?></h6>
+							<?= (new DateTime($hireDate))->format('d.m.Y') ?></h6>
 						<h6>
 							<i class="fas fa-id-card mr-2"></i>
 							<?php if(empty($nufus_cuzdani)){ ?>
@@ -332,7 +332,7 @@
 							<div class="col-md-6">
 								<?php if($user->type == 2){?>
 									<b>İşe Giriş Tarihi</b>
-									<input type="date" class="form-control form-control-sm mb-1" name="ise_giris_tarihi" value="<?= $ise_giris_tarihi ?>">	
+									<input type="date" class="form-control form-control-sm mb-1" name="hire_date" value="<?= $hireDate ?>">	
 								<?php } ?>
 								<h6 class="mt-2"><b>Belgeler</b></h6>
 								<a href="<?= empty($nufus_cuzdani) ? '#' : 'img/belgeler/'.$nufus_cuzdani ?>" target="_blank" class="btn btn-<?= empty($nufus_cuzdani) ? 'secondary' : 'primary' ?> btn-sm mb-1">Nüfus Cüzdanı Fotokopisi</a>

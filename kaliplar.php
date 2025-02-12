@@ -2,7 +2,7 @@
 
 include 'fonksiyonlar/bagla.php'; 
 
-if($girdi == '0'){
+if(!isLoggedIn()){
 
     header("Location:index.php");
 

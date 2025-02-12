@@ -4,7 +4,7 @@
 
 	header("Location:giris.php");
 
-	if ($girdi == 1) {
+	if (isLoggedIn()) {
 		
 		header("Location:index.php");
 
@@ -52,7 +52,7 @@
 
 				$sifre = md5($sifre);
 
-				$query = $db->prepare("INSERT INTO users SET name = ?, email = ?, password = ?, company_id = ?, type = ?, permissions = ?, uye_silik =?");
+				$query = $db->prepare("INSERT INTO users SET name = ?, email = ?, password = ?, company_id = ?, type = ?, permissions = ?, is_deleted =?");
 
 				$insert = $query->execute(array($uyeadi,$eposta,$sifre,'0','0',$yeni_uye_yetki,'1'));
 

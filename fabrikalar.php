@@ -2,13 +2,13 @@
 
 	include 'fonksiyonlar/bagla.php';
 
-	if ($girdi != 1) {
+	if (!isLoggedIn()) {
 		
 		header("Location:giris.php");
 
 		exit();
 
-	}elseif ($girdi == 1) {
+	}elseif (isLoggedIn()) {
 
 		if($user->type == '0'){
 

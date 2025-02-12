@@ -1,10 +1,11 @@
 <?php
 include 'fonksiyonlar/bagla.php';
-if ($girdi != '1') {
+if (!isLoggedIn()) {
     header("Location:giris.php");
     exit();
 }else{
-
+    $dolar = getDolar();
+    $lme = getLME();
 }
 ?>
 <!DOCTYPE html>
