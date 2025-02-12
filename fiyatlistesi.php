@@ -36,7 +36,7 @@
     			<b style="color:red; font-size:100%;">FİYATLARIMIZ KG X BİRİM FİYAT = METRE MALİYET OLARAK LİSTELENMİŞTİR.</b>
     		</div>
     		<div class="col-md-5 col-12">
-    			<?php if($sirketfiyatlistesi == 1){ ?>
+    			<?php if($companyPriceList == 1){ ?>
     			<b style="font-size:100%;">FİYAT GÜNCELLEME SIRASINDA FİYAT ALMAK İÇİN ARAYINIZ.</b>
     			<?php } ?>
     		</div>
@@ -154,7 +154,7 @@
 							    		<div class="col-4" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue;"><?= $adetmetre; ?></div>
 
 							    		<div class="col-2" style="padding: 0px 0px 0px 5px; border: solid 1px darkblue;">
-							    			<?php if($sirketfiyatlistesi == 0){ echo $fiyat; }else{ echo "Güncelleniyor..."; } ?>
+							    			<?php if($companyPriceList == 0){ echo $fiyat; }else{ echo "Güncelleniyor..."; } ?>
 							    		</div>
 
 					    			</div>	

@@ -310,14 +310,14 @@
 		}
 
 		if (isset($_POST['fiyatgoster'])) {
-			$query = $db->prepare("UPDATE sirketler SET fiyatlistesi = ? WHERE sirketid = ?"); 
+			$query = $db->prepare("UPDATE companies SET fiyatlistesi = ? WHERE sirketid = ?"); 
 			$guncelle = $query->execute(array(0,$user->company_id));
 			header("Location:fiyatlar.php");
 			exit();
 		}
 
 		if (isset($_POST['fiyatgizle'])) {
-			$query = $db->prepare("UPDATE sirketler SET fiyatlistesi = ? WHERE sirketid = ?"); 
+			$query = $db->prepare("UPDATE companies SET fiyatlistesi = ? WHERE sirketid = ?"); 
 			$guncelle = $query->execute(array(1,$user->company_id));
 			header("Location:fiyatlar.php");
 			exit();
@@ -351,7 +351,7 @@
     				<div class="col-md-6 col-12"><h4 style="font-weight: bold;">Ürün Ekleme Formu</h4></div>
     				<div class="col-md-6 col-12">
     					<form action="" method="POST">
-    						<?php if($sirketfiyatlistesi == 0){ ?>
+    						<?php if($companyPriceList == 0){ ?>
     							<button type="submit" name="fiyatgizle" class="btn btn-danger btn-block btn-sm">Fiyatları Gizle</button>
     						<?php }else{ ?> 
     							<button type="submit" name="fiyatgoster" class="btn btn-success btn-block btn-sm">Fiyatları Göster</button>

@@ -69,13 +69,13 @@
 
 		<div class="row">
 			
-			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $sirketlogo; ?>" style="width: 350px; height: auto;"></div>
+			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $company->photo; ?>" style="width: 350px; height: auto;"></div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
 				<p style="font-size: 15px;">
 			
-					<?php $sirketaciklama = str_replace("\n", "<br/>", $sirketaciklama); echo $sirketaciklama; ?>
+					<?= str_replace("\n", "<br/>", $company->description); ?>
 
 				</p>
 

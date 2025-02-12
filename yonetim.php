@@ -18,101 +18,102 @@
 
 		}
 
-	if($user->type != '3'){
+        if($user->type != '3'){
 
-		if (isset($_POST['aciklamaguncelle'])) {
-			
-			$sirketaciklama = yollaf($_POST['sirketaciklama']);
+            if (isset($_POST['aciklamaguncelle'])) {
 
-			$query = $db->prepare("UPDATE sirketler SET sirketaciklama = ? WHERE sirketid = ?"); 
+                $description = yollaf($_POST['description']);
 
-			$guncelle = $query->execute(array($sirketaciklama,$user->company_id));
+                $query = $db->prepare("UPDATE companies SET description = ? WHERE id = ?");
 
-			header("Location:yonetim.php");
+                $update = $query->execute(array($description,$user->company_id));
 
-			exit();
+                header("Location:yonetim.php");
 
-		}
+                exit();
 
-		if (isset($_POST['logoguncelle'])) {
+            }
 
-			$allow = array('pdf');
+            if (isset($_POST['logoguncelle'])) {
 
-            $temp = explode(".", $_FILES['uploadfile']['name']);
+                $allow = array('pdf');
 
-            $dosyaadi = $temp[0];
+                $temp = explode(".", $_FILES['uploadfile']['name']);
 
-            $extension = end($temp);
+                $dosyaadi = $temp[0];
 
-            $randomsayi = rand(0,10000);;
+                $extension = end($temp);
 
-            $upload_file = $dosyaadi.$randomsayi.".".$extension;
+                $randomsayi = rand(0,10000);;
 
-            move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/file/".$upload_file);
+                $upload_file = $dosyaadi.$randomsayi.".".$extension;
 
-            $query = $db->prepare("UPDATE sirketler SET sirketlogo = ? WHERE sirketid = ?"); 
+                move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/file/".$upload_file);
 
-			$guncelle = $query->execute(array($upload_file,$user->company_id));
+                $query = $db->prepare("UPDATE companies SET photo = ? WHERE id = ?");
 
-			header("Location:yonetim.php");
+                $guncelle = $query->execute(array($upload_file,$user->company_id));
 
-			exit();
+                header("Location:yonetim.php");
 
-		}
+                exit();
 
-		if (isset($_POST['kullanicisil'])) {
-			
-			$kullanici_id = guvenlik($_POST['kullanici_id']);
+            }
 
-			$query = $db->prepare("UPDATE users SET is_deleted = ? WHERE id = ?");
+            if (isset($_POST['kullanicisil'])) {
 
-			$guncelle = $query->execute(array('1',$kullanici_id));
+                $kullanici_id = guvenlik($_POST['kullanici_id']);
 
-			header("Location:yonetim.php");
+                $query = $db->prepare("UPDATE users SET is_deleted = ? WHERE id = ?");
 
-			exit();
+                $guncelle = $query->execute(array('1',$kullanici_id));
 
-		}
+                header("Location:yonetim.php");
 
-		if (isset($_POST['uye_ekle'])) {
-			
-			$name = guvenlik($_POST['name']);
+                exit();
 
-			$email = guvenlik($_POST['email']);
+            }
 
-			$password = "81dc9bdb52d04dc20036dbd8313ed055";
+            if (isset($_POST['uye_ekle'])) {
 
-			$yeni_uye_yetki = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
+                $name = guvenlik($_POST['name']);
 
-			if (empty($name)) {
-				
-				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Kullanıcı adı kısmını boş bıraktınız.</div>';
+                $email = guvenlik($_POST['email']);
 
-			}elseif (checkUserById($name) == '1') {
-				
-				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Bu kullanıcı adı kullanılıyor.</div>';				
+                $password = "81dc9bdb52d04dc20036dbd8313ed055";
 
-			}else{
+                $yeni_uye_yetki = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
 
-				$query = $db->prepare("INSERT INTO users SET name = ?, email = ?, password = ?, company_id = ?, type = ?, permissions = ?, is_deleted = ?");
+                if (empty($name)) {
 
-				$insert = $query->execute(array($name,$email,$password,$user->company_id,'0',$yeni_uye_yetki,'0'));
+                    $hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Kullanıcı adı kısmını boş bıraktınız.</div>';
 
-				header("Location:yonetim.php");
+                }elseif (checkUserById($name) == '1') {
 
-				exit();
+                    $hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Bu kullanıcı adı kullanılıyor.</div>';
 
-			}
-			
-		}
+                }else{
 
-		if (isset($_POST['yedekal'])) {
-			
-			yedekal();
+                    $query = $db->prepare("INSERT INTO users SET name = ?, email = ?, password = ?, company_id = ?, type = ?, permissions = ?, is_deleted = ?");
 
-		}
+                    $insert = $query->execute(array($name,$email,$password,$user->company_id,'0',$yeni_uye_yetki,'0'));
 
-	}}
+                    header("Location:yonetim.php");
+
+                    exit();
+
+                }
+
+            }
+
+            if (isset($_POST['yedekal'])) {
+
+                yedekal();
+
+            }
+
+        }
+    }
 
 ?>
 
@@ -216,7 +217,7 @@
 
 						<form action="" method="POST" enctype="multipart/form-data">
 							
-							<textarea name="sirketaciklama" class="form-control" rows="5"><?= $sirketaciklama; ?></textarea><br/>
+							<textarea name="description" class="form-control" rows="5"><?= $company->description; ?></textarea><br/>
 
 							<button type="submit" class="btn btn-warning btn-sm" name="aciklamaguncelle">Kaydet</button>
 

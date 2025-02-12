@@ -18,33 +18,33 @@
 
 	$firmatel = $firmabilgicek['firmatel'];
 
-if($user->type != '3'){
+    if($user->type != '3'){
 
-	if (isset($_POST['formkaydet'])) {
+        if (isset($_POST['formkaydet'])) {
 
-		$tekliflistesi = guvenlik($_POST['tekliflistesi']);
+            $tekliflistesi = guvenlik($_POST['tekliflistesi']);
 
-		$tekliflistesipatlat = explode(",", $tekliflistesi);
+            $tekliflistesipatlat = explode(",", $tekliflistesi);
 
-		foreach ($tekliflistesipatlat as $key => $value) {
-				
-			$query = $db->prepare("UPDATE teklif SET formda = ? WHERE teklifid = ?"); 
+            foreach ($tekliflistesipatlat as $key => $value) {
 
-			$guncelle = $query->execute(array('1',$value));
+                $query = $db->prepare("UPDATE teklif SET formda = ? WHERE teklifid = ?");
 
-		}
-		
-		$query = $db->prepare("INSERT INTO teklifformlari SET tekliflistesi = ?, firmaid = ?, saniye = ?, sirketid = ?, silik = ?");
+                $guncelle = $query->execute(array('1',$value));
 
-		$insert = $query->execute(array($tekliflistesi,$firmaid,time(),$user->company_id,'0'));
+            }
 
-		header("Location:firmalar.php");
+            $query = $db->prepare("INSERT INTO teklifformlari SET tekliflistesi = ?, firmaid = ?, saniye = ?, sirketid = ?, silik = ?");
 
-		exit();
+            $insert = $query->execute(array($tekliflistesi,$firmaid,time(),$user->company_id,'0'));
 
-	}
+            header("Location:firmalar.php");
 
-}
+            exit();
+
+        }
+
+    }
 
 ?>
 
@@ -61,13 +61,13 @@ if($user->type != '3'){
 
 		<div class="row">
 			
-			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
+			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $company->photo; ?>" style="width: 370px; height: auto;"></div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
 				<p style="font-size: 15px;">
 			
-					<?php $sirketaciklama = str_replace("\n", "<br/>", $sirketaciklama); echo $sirketaciklama; ?>
+					<?= str_replace("\n", "<br/>", $company->description); ?>
 
 				</p>
 

@@ -6,7 +6,7 @@
 
 			<div class="col-xl-2 col-lg-3 col-md-4 col-sm-5 col-7" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
 
-				<a href="index.php"><img src="img/file/<?= $sirketlogo; ?>" class="img-responsive" alt="Alüminyum Deposu" width="100%" height="auto"></a>
+				<a href="index.php"><img src="img/file/<?= $company->photo; ?>" class="img-responsive" alt="Alüminyum Deposu" width="100%" height="auto"></a>
 
 			</div>
 
@@ -124,7 +124,7 @@
 
 if(isLoggedIn() === true){
 
-	if((time() - (60 * 60 * 7)) > $sirketyedekalmasaniye && $user->type == '2'){
+	if((time() - (60 * 60 * 7)) > $company->backup_time && $user->type == '2'){
 
 		otomatikyedekal($user->company_id);
 

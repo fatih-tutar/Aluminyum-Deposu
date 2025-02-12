@@ -16,33 +16,33 @@
 
 	$ilgilikisi = $query['ilgilikisi'];
 
-if($user->type != '3'){
+    if($user->type != '3'){
 
-	if (isset($_POST['formkaydet'])) {
+        if (isset($_POST['formkaydet'])) {
 
-		$siparislistesi = guvenlik($_POST['siparislistesi']);
+            $siparislistesi = guvenlik($_POST['siparislistesi']);
 
-		$siparislistesipatlat = explode(",", $siparislistesi);
+            $siparislistesipatlat = explode(",", $siparislistesi);
 
-		foreach ($siparislistesipatlat as $key => $value) {
-				
-			$query = $db->prepare("UPDATE siparis SET formda = ? WHERE siparis_id = ?"); 
+            foreach ($siparislistesipatlat as $key => $value) {
 
-			$guncelle = $query->execute(array('1',$value));
+                $query = $db->prepare("UPDATE siparis SET formda = ? WHERE siparis_id = ?");
 
-		}
-		
-		$query = $db->prepare("INSERT INTO siparisformlari SET siparisler = ?, fabrikaid = ?, saniye = ?, sirketid = ?, silik = ?");
+                $guncelle = $query->execute(array('1',$value));
 
-		$insert = $query->execute(array($siparislistesi,$urun_fabrika_id,time(),$user->company_id,'0'));
+            }
 
-		header("Location:fabrikalar.php");
+            $query = $db->prepare("INSERT INTO siparisformlari SET siparisler = ?, fabrikaid = ?, saniye = ?, sirketid = ?, silik = ?");
 
-		exit();
+            $insert = $query->execute(array($siparislistesi,$urun_fabrika_id,time(),$user->company_id,'0'));
 
-	}
+            header("Location:fabrikalar.php");
 
-}
+            exit();
+
+        }
+
+    }
 
 ?>
 
@@ -67,13 +67,13 @@ if($user->type != '3'){
 
 		<div class="row">
 			
-			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $sirketlogo; ?>" style="width: 370px; height: auto;"></div>
+			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $company->photo; ?>" style="width: 370px; height: auto;"></div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
 				<p style="font-size: 15px;">
 			
-					<?php $sirketaciklama = str_replace("\n", "<br/>", $sirketaciklama); echo $sirketaciklama; ?>
+					<?= str_replace("\n", "<br/>", $company->description); ?>
 
 				</p>
 
