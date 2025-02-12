@@ -50,7 +50,7 @@
 
                     $ayliklariGuncelle = $db->prepare("INSERT INTO plan SET plan = ?, plan_tarihi = ?, plan_tekrar = ?, plan_saniye = ?, plan_durum = ?, plan_silik = ?");
 
-                    $aylikGuncelle = $ayliklariGuncelle->execute(array($plan,$plan_tarihi,$plan_tekrar,$su_an,'0','0'));
+                    $aylikGuncelle = $ayliklariGuncelle->execute(array($plan,$plan_tarihi,$plan_tekrar,time(),'0','0'));
 
                     $plantekrarsil = $db->prepare("UPDATE plan SET plan_tekrar = ? WHERE plan_id = ?"); 
 
@@ -74,7 +74,7 @@
 
             $query = $db->prepare("INSERT INTO plan SET plan = ?, plan_tarihi = ?, plan_tekrar = ?, plan_saniye = ?, plan_durum = ?, plan_silik = ?");
 
-            $insert = $query->execute(array($plan,$plan_tarihi,$plan_tekrar,$su_an,'0','0'));
+            $insert = $query->execute(array($plan,$plan_tarihi,$plan_tekrar,time(),'0','0'));
 
             header("Location: plan.php");
 
@@ -224,7 +224,7 @@
 
                     $gecmis = 0;
 
-                    if($plan_tarihi < $su_an){
+                    if($plan_tarihi < time()){
                         $gecmis = 1;
                     }
 
@@ -380,7 +380,7 @@
 
                     $gecmis = 0;
 
-                    if($plan_tarihi < $su_an){ $gecmis = 1; }
+                    if($plan_tarihi < time()){ $gecmis = 1; }
 
                     $plan_tarihi = date("d-m-Y",$plan_tarihi);
 

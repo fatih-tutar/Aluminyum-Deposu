@@ -237,7 +237,7 @@
     					
 	    					<div class="col-md-2 col-12" style="font-weight: bold;">
 								
-									<input type="text" id="tarih" name="tarih" value="<?= $bugunformatlitarih; ?>" class="form-control form-control-lg">
+									<input type="text" id="tarih" name="tarih" value="<?= $tarihf2; ?>" class="form-control form-control-lg">
 
 									<input type="hidden" id="tarih-db" name="tarih2">
 

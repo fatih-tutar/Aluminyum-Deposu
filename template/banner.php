@@ -124,9 +124,9 @@
 
 if(giris_yapti_mi() === true){
 
-	if(($su_an - (60 * 60 * 7)) > $sirketyedekalmasaniye && $user->type == '2'){
+	if((time() - (60 * 60 * 7)) > $sirketyedekalmasaniye && $user->type == '2'){
 
-		otomatikyedekal($su_an, $user->company_id, $sayfa);
+		otomatikyedekal($user->company_id, $sayfa);
 
 	}
 

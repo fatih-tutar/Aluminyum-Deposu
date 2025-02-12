@@ -36,7 +36,7 @@ if($user->type != '3'){
 		
 		$query = $db->prepare("INSERT INTO teklifformlari SET tekliflistesi = ?, firmaid = ?, saniye = ?, sirketid = ?, silik = ?");
 
-		$insert = $query->execute(array($tekliflistesi,$firmaid,$su_an,$user->company_id,'0'));
+		$insert = $query->execute(array($tekliflistesi,$firmaid,time(),$user->company_id,'0'));
 
 		header("Location:yonetim.php");
 

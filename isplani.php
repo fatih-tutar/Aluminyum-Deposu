@@ -22,7 +22,7 @@
 
                 $gecmis = 0;
 
-                if($plan_tarihi < $su_an){ $gecmis = 1; }
+                if($plan_tarihi < time()){ $gecmis = 1; }
 
                 $plan_tarihi = date("d-m-Y",$plan_tarihi);
 

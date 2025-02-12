@@ -28,7 +28,7 @@
                 $hata = '<br/><div class="alert alert-danger" role="alert">Sizin departmanınızda aynı tarihlerde izin alan başka bir çalışan var. Lütfen yıllık izin planından kontrol ediniz.</div>';        
             }else{
                 $query = $db->prepare("INSERT INTO izinler SET izinli = ?, izin_baslangic_tarihi = ?, ise_baslama_tarihi = ?, gun_sayisi = ?, durum = ?, ofis = ?, sirket = ?, silik = ?, saniye = ?");
-                $insert = $query->execute(array($izinli, $izinBaslangicTarihi, $iseBaslamaTarihi, $gunSayisi, '0', $ofis, $user->company_id, '0', $su_an));
+                $insert = $query->execute(array($izinli, $izinBaslangicTarihi, $iseBaslamaTarihi, $gunSayisi, '0', $ofis, $user->company_id, '0', time()));
                 header("Location: izin.php");
                 exit();
             }

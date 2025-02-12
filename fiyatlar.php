@@ -100,7 +100,7 @@
 				
 				$query = $db->prepare("INSERT INTO fiyatlar SET urunno = ?, kod = ?, model = ?, adetmetre = ?, fiyat = ?, resim1 = ?, resim2 = ?, aciklama = ?, saniye = ?, silik = ?, sira = ?");
 
-				$insert = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$upload_file1,$upload_file2,$aciklama,$su_an,'0',$yenisira));
+				$insert = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$upload_file1,$upload_file2,$aciklama,time(),'0',$yenisira));
 
 			}    
 
@@ -213,7 +213,7 @@
 
 					$query = $db->prepare("UPDATE fiyatlar SET urunno = ?, kod = ?, model = ?, adetmetre = ?, fiyat = ?, resim1 = ?, resim2 = ?, aciklama = ?, saniye = ?, sira = ? WHERE fiyatid = ?"); 
 
-					$guncelle = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$upload_file1,$upload_file2,$aciklama,$su_an,$urun_yeni_sira,$fiyatid));
+					$guncelle = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$upload_file1,$upload_file2,$aciklama,time(),$urun_yeni_sira,$fiyatid));
 
 				}
 
@@ -287,7 +287,7 @@
 
 			$query = $db->prepare("INSERT INTO fiyatlar SET urunno = ?, kod = ?, model = ?, adetmetre = ?, fiyat = ?, resim1 = ?, resim2 = ?, aciklama = ?, saniye = ?, silik = ?, sira = ?");
 
-			$insert = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$resim1,$resim2,$aciklama,$su_an,'0',$sira));	
+			$insert = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$resim1,$resim2,$aciklama,time(),'0',$sira));	
 
 			header("Location:fiyatlar.php");
 

@@ -165,7 +165,7 @@
                 $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $user->company_id));
             }else{
                 $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, manuel = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                $insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$user->id,'',$sevkTipi,$arac_id,$aciklama,'0','0','0',$su_an, $user->company_id));
+                $insert = $query->execute(array($urunId,$firmaId,$adet,'',$fiyat,$user->id,'',$sevkTipi,$arac_id,$aciklama,'0','0','0',time(), $user->company_id));
             }
             header("Location:index.php");
             exit();

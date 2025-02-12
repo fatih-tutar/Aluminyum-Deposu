@@ -32,7 +32,7 @@
                 $ziyaretnotu = guvenlik($_POST['ziyaretnotu']);
 
                 $query = $db->prepare("INSERT INTO ziyaretler SET il = ?, ilce = ?, iskolu = ?, musteriismi = ?, yetkilikisi = ?, telefon = ?, ziyarettarihi = ?, planlanantarih = ?, acikadres = ?, ziyaretnotu = ?, saniye = ?, silik = ? ");
-                $insert = $query->execute(array($il,$ilce,$iskolu,$musteriismi,$yetkilikisi,$telefon,$ziyarettarihi,$planlanantarih,$acikadres,$ziyaretnotu,$su_an,'0'));
+                $insert = $query->execute(array($il,$ilce,$iskolu,$musteriismi,$yetkilikisi,$telefon,$ziyarettarihi,$planlanantarih,$acikadres,$ziyaretnotu,time(),'0'));
 
                 header("Location:ziyaretler.php");
                 exit();
@@ -52,7 +52,7 @@
                 $ziyaretnotu = guvenlik($_POST['ziyaretnotu']);
 
                 $query = $db->prepare("UPDATE ziyaretler SET il = ?, musteriismi = ?, yetkilikisi = ?, telefon = ?, ziyarettarihi = ?, planlanantarih = ?, acikadres = ?, ziyaretnotu = ?, saniye = ?, silik = ? WHERE id = ?");
-                $insert = $query->execute(array($il,$musteriismi,$yetkilikisi,$telefon,$ziyarettarihi,$planlanantarih,$acikadres,$ziyaretnotu,$su_an,'0',$ziyaretid));
+                $insert = $query->execute(array($il,$musteriismi,$yetkilikisi,$telefon,$ziyarettarihi,$planlanantarih,$acikadres,$ziyaretnotu,time(),'0',$ziyaretid));
 
                 header("Location:ziyaretler.php"); exit();
 
@@ -75,7 +75,7 @@
 
                 $query = $db->prepare("INSERT INTO ziyaret_kategori SET adi = ?, saniye = ?, silik = ?, sirketid = ?");
 
-                $insert = $query->execute(array($iskoluadi,$su_an,'0',$user->company_id));
+                $insert = $query->execute(array($iskoluadi,time(),'0',$user->company_id));
 
                 header("Location:ziyaretler.php"); exit();
 

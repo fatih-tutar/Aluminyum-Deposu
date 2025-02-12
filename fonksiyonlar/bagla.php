@@ -1,12 +1,9 @@
 <?php
 	session_start();
 	ob_start();
-	$su_an = time();
-	$tarih = date("Y-m-d H:i:s", time());
-	$bugunformatlitarih = date("d-m-Y", time());
-	$bugununsaniyesi = strtotime($bugunformatlitarih);
-	$tarihf2 = date("d-m-Y",$su_an);
-	$tarihv3 = date("Y-m-d",$su_an);
+	$tarihf2 = date("d-m-Y",time());
+    $bugununsaniyesi = strtotime($tarihf2);
+	$tarihv3 = date("Y-m-d",time());
 	$girdi = 0;
 	$hata = "";
 	setlocale(LC_TIME, "turkish");

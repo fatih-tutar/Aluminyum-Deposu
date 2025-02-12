@@ -22,7 +22,7 @@ if ( $query->rowCount() ){
 
 $query = $db->prepare("INSERT INTO siparis SET siparisboy = ?, taslak = ?, siparissaniye = ?");
 
-$insert = $query->execute(array($siparisboy,'1',$su_an));
+$insert = $query->execute(array($siparisboy,'1',time()));
 
 //UPDATE
 

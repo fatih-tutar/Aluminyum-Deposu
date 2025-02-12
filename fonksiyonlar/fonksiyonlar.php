@@ -490,7 +490,7 @@ function ayAdi($ay){
 
 	}
 
-	function otomatikyedekal($su_an, $companyId, $sayfa){
+	function otomatikyedekal($companyId, $sayfa){
 
 		global $db;
 
@@ -518,7 +518,7 @@ function ayAdi($ay){
 
 				$yedekal = $db->prepare("UPDATE sirketler SET yedekalmasaniye = ? WHERE sirketid = ?"); 
 
-				$yedekguncelle = $yedekal->execute(array($su_an,$companyId));
+				$yedekguncelle = $yedekal->execute(array(time(),$companyId));
 
 				echo '<div class="alert alert-warning" style="position:fixed; z-index:1; left:10%; border-width:3px; border-color:#856404;" >
 						Veritabanı yedeğiniz sunucuya alındı.<br/>Bilgisayarınıza da indirmek istiyorsanız<br/>aşağıdaki evet butonuna tıklayın.

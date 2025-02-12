@@ -37,7 +37,7 @@
 			
 			$query = $db->prepare("INSERT INTO siparisformlari SET siparisler = ?, fabrikaid = ?, saniye = ?, sirketid = ?, silik = ?");
 
-			$insert = $query->execute(array($siparislistesi,$urun_fabrika_id,$su_an,$user->company_id,'0'));
+			$insert = $query->execute(array($siparislistesi,$urun_fabrika_id,time(),$user->company_id,'0'));
 
 			header("Location:yonetim.php");
 

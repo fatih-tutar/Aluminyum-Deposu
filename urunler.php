@@ -150,7 +150,7 @@
 
 				$query = $db->prepare("INSERT INTO teklif SET turunid = ?, tverilenfirma = ?, tadet = ?, tsatisfiyati = ?, tsaniye = ?, formda = ?, sirketid = ?, silik = ?");
 
-				$insert = $query->execute(array($turunid,$tekliffirma,$teklifadet,$teklifsatisfiyat,$su_an,'0',$user->company_id,'0'));
+				$insert = $query->execute(array($turunid,$tekliffirma,$teklifadet,$teklifsatisfiyat,time(),'0',$user->company_id,'0'));
 
 				header("Location:urunler.php?id=".$kategori_id."&u=".$turunid."&teklifeklendi#".$turunid);
 
@@ -182,7 +182,7 @@
 
 				$query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?");
 
-				$insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',$su_an,'0',$user->company_id,'0'));
+				$insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',time(),'0',$user->company_id,'0'));
 
 				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&sipariseklendi#".$urun_id);
 
@@ -219,7 +219,7 @@
                         $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $user->company_id));
                     } else {
                         $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $aciklama, '0', '0', $su_an, $user->company_id));
+                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $aciklama, '0', '0', time(), $user->company_id));
                     }
                     header("Location:urunler.php?id=" . $kategori_id . "&u=" . $urunId . "&sevkiyateklendi#" . $urunId);
                     exit();
@@ -374,7 +374,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,time(),'0',$user->company_id));
 
 				}
 				
@@ -382,7 +382,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),$su_an,'1',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),time(),'1',$user->company_id));
 
 				}
 
@@ -420,7 +420,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,$su_an,'0',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,time(),'0',$user->company_id));
 
 				}
 
@@ -454,7 +454,7 @@
 					
 					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,$su_an,'1',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,time(),'1',$user->company_id));
 
 				}
 
@@ -949,7 +949,7 @@
 
 							<?php } ?>
 
-							<?php if($sutunterminizni == 1 && $urunterminsaniye < $su_an){ ?>
+							<?php if($sutunterminizni == 1 && $urunterminsaniye < time()){ ?>
 
 								<div class="col-4 d-block d-sm-none"><b style="color: red;">Ürün Adı :</b></div>
 
