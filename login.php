@@ -1,6 +1,6 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
 	if (isLoggedIn()) {
 		
@@ -15,13 +15,13 @@
 		$sifre = guvenlik($_POST['sifre']);
 		$sifreli = md5($sifre);
 		if (empty($name) === true) {
-			$hata = '<div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
+			$error = '<div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
 		}elseif(empty($sifre) === true){
-			$hata = '<div class="alert alert-danger" role="alert">Şifre kısmını boş bıraktınız.</div>';
+			$error = '<div class="alert alert-danger" role="alert">Şifre kısmını boş bıraktınız.</div>';
 		}elseif(giris($name,$sifreli) === false){
-			$hata = '<div class="alert alert-danger" role="alert">E-posta veya şifreyi yanlış girdiniz.</div>';
+			$error = '<div class="alert alert-danger" role="alert">E-posta veya şifreyi yanlış girdiniz.</div>';
 		}elseif(pasifmi($name) == '1'){
-			$hata = '<div class="alert alert-danger" role="alert">Üyeliğiniz pasifleştirilmiştir.</div>';
+			$error = '<div class="alert alert-danger" role="alert">Üyeliğiniz pasifleştirilmiştir.</div>';
 		}else{
 			if (is_numeric(giris($name,$sifreli)) === true) {
 				$_SESSION['user_id'] = giris($name,$sifreli);
@@ -59,7 +59,7 @@
 
 					<div class="div2">
 
-						<?= $hata; ?>
+						<?= $error; ?>
 					
 						<form action="" method="POST">
 

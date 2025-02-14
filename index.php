@@ -1,14 +1,14 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
 		
-		header("Location:giris.php");
+		header("Location:login.php");
 
 		exit();
 
-	}elseif (isLoggedIn()) {
+	}else {
 
 		if(isset($_POST['plan_duzenle'])){
 
@@ -114,7 +114,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12">
-					<?= $hata; ?>
+					<?= $error; ?>
 				</div>
 			</div>
 			<div class="row">

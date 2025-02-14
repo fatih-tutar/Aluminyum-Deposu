@@ -1,6 +1,6 @@
 <?php
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
 	if($user->type == '0'){
 

@@ -1,10 +1,10 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php'; 
+	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
 		
-		header("Location:giris.php");
+		header("Location:login.php");
 
 		exit();
 
@@ -98,11 +98,11 @@
 				$saglikraporu = $saglik_raporu;
 			}
 			if (empty($name) === true) {
-				$hata = '<br/><div class="alert alert-danger" role="alert">Kullanıcı adınızı boş bıraktınız.</div>';
+				$error = '<br/><div class="alert alert-danger" role="alert">Kullanıcı adınızı boş bıraktınız.</div>';
 			}elseif (empty($email) === true) {
-				$hata = '<br/><div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
+				$error = '<br/><div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
 			}elseif (empty($phone) === true) {
-				$hata = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
+				$error = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
 			}else{
 				$query = $db->prepare("UPDATE users SET name = ?, email = ?, title = ?, phone = ?, phone_2 = ?, hire_date = ?, address = ?, photo = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE id = ?");
 				$guncelle = $query->execute(array($name, $email, $title, $phone, $phone_2, $hireDate, $address, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
@@ -123,15 +123,15 @@
 
 			if (empty($eski_sifre) === true || empty($yeni_sifre) === true || empty($sifre_tekrar) === true) {
 				
-				$hata = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Formda boş bırakılan alanlar var lütfen kontrol ediniz.</div>';
+				$error = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Formda boş bırakılan alanlar var lütfen kontrol ediniz.</div>';
 
 			}elseif ($user->password != md5($eski_sifre)) {
 				
-				$hata = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Mevcut şifrenizi yanlış girdiniz. Lütfen tekrar deneyiniz.</div>';
+				$error = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Mevcut şifrenizi yanlış girdiniz. Lütfen tekrar deneyiniz.</div>';
 
 			}elseif ($yeni_sifre != $sifre_tekrar) {
 				
-				$hata = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Yeni şifreniz ve tekrarı birbiriyle örtüşmüyor. Lütfen tekrar deneyiniz.</div>';
+				$error = '<br/><div class="alert alert-danger" role="alert" style="text-align:center;">Yeni şifreniz ve tekrarı birbiriyle örtüşmüyor. Lütfen tekrar deneyiniz.</div>';
 
 			}else{
 
@@ -149,7 +149,7 @@
 
 		if (isset($_GET['guncellendi'])) {
 			
-			$hata = '<br/><div class="alert alert-success" role="alert" style="text-align:center;">Bilgileriniz başarıyla güncellendi.</div>';
+			$error = '<br/><div class="alert alert-success" role="alert" style="text-align:center;">Bilgileriniz başarıyla güncellendi.</div>';
 
 		}
 		
@@ -230,7 +230,7 @@
 
     <?php include 'template/banner.php' ?>
 
-    <?= $hata; ?>
+    <?= $error; ?>
 
     <div class="container">
 

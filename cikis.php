@@ -1,10 +1,10 @@
 <?php
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
 	session_destroy();
 
-	header("Location: giris.php");
+	header("Location: login.php");
 
 	exit();
 

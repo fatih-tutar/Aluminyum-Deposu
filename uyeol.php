@@ -1,8 +1,8 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
-	header("Location:giris.php");
+	header("Location:login.php");
 
 	if (isLoggedIn()) {
 		
@@ -26,27 +26,27 @@
 
 			if (empty($uyeadi)) {
 				
-				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Kullanıcı adı kısmını boş bıraktınız.</div>';
+				$error = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Kullanıcı adı kısmını boş bıraktınız.</div>';
 
 			}elseif (empty($eposta)) {
 			
-				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">E-posta kısmını boş bıraktınız.</div>';
+				$error = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">E-posta kısmını boş bıraktınız.</div>';
 
 			}elseif (empty($sifre)) {
 				
-				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Şifre kısmını boş bıraktınız.</div>';
+				$error = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Şifre kısmını boş bıraktınız.</div>';
 
 			}elseif (empty($sifretekrar)) {
 				
-				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Şifre tekrarı kısmını boş bıraktınız.</div>';
+				$error = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Şifre tekrarı kısmını boş bıraktınız.</div>';
 
 			}elseif ($sifretekrar != $sifre) {
 				
-				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Şifre ve şifre tekrarı birbiriyle uyuşmuyor.</div>';				
+				$error = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Şifre ve şifre tekrarı birbiriyle uyuşmuyor.</div>';				
 
 			}elseif (checkUserById($uyeadi) == '1') {
 				
-				$hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Bu kullanıcı adı kullanılıyor.</div>';				
+				$error = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Bu kullanıcı adı kullanılıyor.</div>';				
 
 			}else{
 
@@ -66,7 +66,7 @@
 
 		if (isset($_GET['ut'])) {
 			
-			$hata = '<div class="alert alert-success" style="text-align:center; font-weight:bolder;">Üyeliğiniz başarıyla oluşturuldu. Site yönetiminin onayından sonra stok programınızı kullanmaya başlayabilirsiniz.</div>';
+			$error = '<div class="alert alert-success" style="text-align:center; font-weight:bolder;">Üyeliğiniz başarıyla oluşturuldu. Site yönetiminin onayından sonra stok programınızı kullanmaya başlayabilirsiniz.</div>';
 
 		}
 
@@ -90,7 +90,7 @@
 
 		<?php include 'template/banner.php' ?>
 
-		<?= $hata; ?>
+		<?= $error; ?>
 
 		<div class="container">
 

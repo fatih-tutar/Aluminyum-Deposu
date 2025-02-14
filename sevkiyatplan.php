@@ -1,7 +1,7 @@
 <?php
-    include 'fonksiyonlar/bagla.php';
+    include 'functions/init.php';
     if (!isLoggedIn()) {
-        header("Location:giris.php");
+        header("Location:login.php");
         exit();
     }else{
         // SEVKİYATLAR
@@ -11,7 +11,7 @@
             $sevkiyatGruplari[$sevkiyat->arac_id][] = $sevkiyat;
         }
         // ARAÇLAR
-        $araclar = $db->query("SELECT * FROM araclar WHERE silik = '0' AND nakliye = '1'", PDO::FETCH_OBJ)->fetchAll();
+        $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0' AND is_transport = '1'", PDO::FETCH_OBJ)->fetchAll();
         // FİRMALAR
         $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'", PDO::FETCH_OBJ)->fetchAll();
 
@@ -19,14 +19,15 @@
             $firma = guvenlik($_POST['firma']);
             $kilolar = guvenlik($_POST['kilolar']);
             $arac_id = guvenlik($_POST['arac_id']);
+            $aciklama = guvenlik($_POST['aciklama']);
             $firmaId = getFirmaID($firma);
             if(empty($firma)){
-                $hata = '<br/><div class="alert alert-danger" role="alert">Firma seçmediniz.</div>';
+                $error = '<br/><div class="alert alert-danger" role="alert">Firma seçmediniz.</div>';
             }else if(empty($kilolar)){
-                $hata = '<br/><div class="alert alert-danger" role="alert">Kilo bilgisi yazmadınız.</div>';
+                $error = '<br/><div class="alert alert-danger" role="alert">Kilo bilgisi yazmadınız.</div>';
             }else{
                 $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, manuel = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                $insert = $query->execute(array('',$firmaId,'',$kilolar,'',$user->id,'','',$arac_id,'','1','0','0',time(), $user->company_id));
+                $insert = $query->execute(array('',$firmaId,'',$kilolar,'',$user->id,'','',$arac_id,$aciklama,'1','0','0',time(), $user->company_id));
                 header("Location:sevkiyatplan.php");
                 exit();
             }
@@ -36,6 +37,23 @@
             $sevkiyatId = guvenlik($_POST['sevkiyat_id']);
             $query = $db->prepare("UPDATE sevkiyat SET nakliye_durumu = ? WHERE id = ?");
             $guncelle = $query->execute(array('1',$sevkiyatId));
+            header("Location:sevkiyatplan.php");
+            exit();
+        }
+
+        if(isset($_POST['sevkiyattoplusil'])){
+            $arac_id = guvenlik($_POST['arac_id']);
+            $query = $db->prepare("UPDATE sevkiyat SET nakliye_durumu = ? WHERE arac_id = ?");
+            $guncelle = $query->execute(array('1',$arac_id));
+            header("Location:sevkiyatplan.php");
+            exit();
+        }
+
+        if(isset($_POST['sevkiyatguncelle'])){
+            $sevkiyatId = guvenlik($_POST['sevkiyat_id']);
+            $aciklama = guvenlik($_POST['aciklama']);
+            $query = $db->prepare("UPDATE sevkiyat SET aciklama = ? WHERE id = ?");
+            $guncelle = $query->execute(array($aciklama,$sevkiyatId));
             header("Location:sevkiyatplan.php");
             exit();
         }
@@ -61,25 +79,6 @@
             margin-bottom: 5px;
             padding:5px;
         }
-        .road {
-            position: relative;
-            width: 100%;
-            height: 30px;
-        }
-        .truck {
-            position: absolute;
-            bottom: 5px;
-            width: 30px;
-            animation: moveCar 20s ease-in-out infinite;
-        }
-        @keyframes moveCar {
-            from {
-                left: 50px;
-            }
-            to {
-                left: 100%;
-            }
-        }
     </style>
 </head>
 <body>
@@ -103,18 +102,25 @@
                 ?>
                 <div class="col-12 col-md-<?=$column?>">
                     <div class="row pb-1">
-                        <div class="col-8 col-md-9">
+                        <div class="col-6">
                             <div class="road">
-                                <?= $arac->arac_adi ?>
-                                <img src="https://st2.depositphotos.com/47577860/46115/v/950/depositphotos_461154212-stock-illustration-pickup-truck-transport-icon.jpg" class="truck" alt="Truck Icon">
+                                <h5><?= $arac->name ?> Sevkiyat Planı<br/><?= date('d/m/Y'); ?></h5>
                             </div>
                         </div>
-                        <div class="col-4 col-md-3">
+                        <div class="col-3">
                             <a href="aracsevkiyat.php?id=<?=$arac->id?>" target="_blank">
                                 <button class="btn btn-primary btn-block btn-sm">
                                     Çıktı Al
                                 </button>
                             </a>
+                        </div>
+                        <div class="col-3">
+                            <form action="" method="POST">
+                                <input type="hidden" name="arac_id" value="<?= $arac->id; ?>">
+                                <button type="submit" class="btn btn-secondary btn-block btn-sm" name="sevkiyattoplusil" onclick="return confirmForm('Bu araca ait sevkiyat planını toplu olarak silmek istediğinize emin misiniz?')">
+                                    Toplu Sil
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <?php if (isset($sevkiyatGruplari[$arac->id])): ?>
@@ -150,7 +156,19 @@
                                     </div>
                                 </div>
                                 <div id="firmakart<?=$sevkiyat->id?>" style="display: none;">
-                                    <b>Firma Adres : </b><?= $firmaAdres ?>
+                                    <b>Firma Tel : </b><?= $firma->firmatel; ?><br/>
+                                    <b>Firma Adres : </b><?= $firmaAdres; ?>
+                                    <form action="" method="POST">
+                                        <div class="row">
+                                            <div class="col-md-9 col-12">
+                                                <input type="text" name="aciklama" class="form-control form-control-sm" value="<?= $sevkiyat->aciklama; ?>" placeholder="Sevkiyat açıklaması giriniz.">
+                                            </div>
+                                            <div class="col-md-3 col-12">
+                                                <input type="hidden" name="sevkiyat_id" value="<?= $sevkiyat->id; ?>">
+                                                <button type="submit" class="btn btn-sm btn-primary" name="sevkiyatguncelle">Kaydet</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -162,7 +180,7 @@
                         <div class="row">
                             <div class="col-md-6 col-12 search-box">
                                 <b>Firma</b>
-                                <input autofocus="autofocus" name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
+                                <input name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
                                 <ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
                             </div>
                             <div class="col-md-3 col-12">
@@ -173,6 +191,9 @@
                                 <br/>
                                 <input type="hidden" name="arac_id" value="<?=$arac->id?>">
                                 <button type="submit" name="manuelSevkiyatKaydet" class="btn btn-primary btn-block btn-sm">Kaydet</button>
+                            </div>
+                            <div class="col-12 pt-2">
+                                <textarea class="form-control" name="aciklama" placeholder="Sevkiyat ile alakalı açıklama girebilirsiniz."></textarea>
                             </div>
                         </div>
                     </form>

@@ -1,9 +1,9 @@
 <?php
 
-    include 'fonksiyonlar/bagla.php';
+    include 'functions/init.php';
 
     if (!isLoggedIn()) {
-		header("Location:giris.php");
+		header("Location:login.php");
 		exit();
 	}else{
 

@@ -1,6 +1,6 @@
 <?php
     // SEVKİYATLAR
-    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND manuel = '0' AND durum != '3'", PDO::FETCH_OBJ)->fetchAll();
+    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND manuel = '0' AND durum != '3' ORDER BY saniye DESC", PDO::FETCH_OBJ)->fetchAll();
     $alinanSiparisler = [];
     $hazirlananSiparisler = [];
     $faturasiKesilenler = [];
@@ -18,7 +18,7 @@
         $sevkiyatGruplari[$sevkiyat->arac_id][] = $sevkiyat;
     }
     // ARAÇLAR
-    $araclar = $db->query("SELECT * FROM araclar WHERE silik = '0'", PDO::FETCH_OBJ)->fetchAll();
+    $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'", PDO::FETCH_OBJ)->fetchAll();
 
     // FİRMALAR
     $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'", PDO::FETCH_OBJ)->fetchAll();
@@ -28,7 +28,7 @@
         $malzemeAdeti = guvenlik($_POST['malzemeAdeti']);
         $kilolar = guvenlik($_POST['kilolar']);
         if(!empty($kilolar) && !is_numeric($kilolar)){
-            $hata = '<br/><div class="alert alert-danger" role="alert">Kilo kısmına sadece sayısal bir değer girebilirsiniz.</div>';
+            $error = '<br/><div class="alert alert-danger" role="alert">Kilo kısmına sadece sayısal bir değer girebilirsiniz.</div>';
         }
         if(empty($kilolar)){
             for($i = 0; $i < $malzemeAdeti; $i++){
@@ -40,7 +40,7 @@
                             $kilolar = $kilolar.",".guvenlik($_POST['kilo_'.$i]);
                         }
                     }else{
-                        $hata = '<br/><div class="alert alert-danger" role="alert">Kilo kısmına sadece sayısal bir değer girebilirsiniz.</div>';
+                        $error = '<br/><div class="alert alert-danger" role="alert">Kilo kısmına sadece sayısal bir değer girebilirsiniz.</div>';
                     }
                 }
             }
@@ -49,9 +49,9 @@
             $query = $db->prepare("UPDATE sevkiyat SET kilolar = ?, durum = ?, hazirlayan = ? WHERE id = ?");
             $update = $query->execute(array($kilolar,'1',$user->id,$sevkiyatID));
         }else{
-            $hata = '<br/><div class="alert alert-danger" role="alert">Ürünlere tek tek veya toplam olarak kilo girmelisiniz.</div>';
+            $error = '<br/><div class="alert alert-danger" role="alert">Ürünlere tek tek veya toplam olarak kilo girmelisiniz.</div>';
         }
-        if(!$hata){
+        if(!$error){
             header("Location: index.php");
             exit();
         }
@@ -137,15 +137,15 @@
         $aciklama =  guvenlik($_POST['aciklama']);
         $firma = guvenlik($_POST['firma']);
         if(empty($urun)){
-            $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir ürün seçiniz.</div>';
+            $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir ürün seçiniz.</div>';
         }else if(empty($firma)){
-            $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir firma seçiniz.</div>';
+            $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir firma seçiniz.</div>';
         }else if(empty($adet)){
-            $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir adet belirtiniz.</div>';
+            $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir adet belirtiniz.</div>';
         }else if(empty($fiyat)){
-            $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir fiyat yazınız.</div>';
+            $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir fiyat yazınız.</div>';
         }else if($sevkTipi === "null") {
-            $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
+            $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
         }else{
             $urunArray = explode("/",$urun);
             $urun = trim($urunArray[0]);
@@ -244,7 +244,7 @@
                     <?php
                             foreach( $araclar as $arac ){
                     ?>
-                                <option value="<?= $arac->id ?>"><?= $arac->arac_adi ?></option>
+                                <option value="<?= $arac->id ?>"><?= $arac->name ?></option>
                     <?php
                             }
                     ?>
@@ -300,7 +300,7 @@
                     $sevkTipi = guvenlik($alinanSiparis->sevk_tipi);
                     $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
                     $arac_id = guvenlik($alinanSiparis->arac_id);
-                    $arac_adi = reset(array_filter($araclar, fn($arac) => $arac->id == $arac_id))->arac_adi;
+                    $arac_adi = reset(array_filter($araclar, fn($arac) => $arac->id == $arac_id))->name;
                     $aciklama = guvenlik($alinanSiparis->aciklama);
                     $saniye = guvenlik($alinanSiparis->saniye);
                     $tarih = getdmY($saniye);
@@ -337,7 +337,7 @@
                                                 <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
                                                 <div class="col-md-4 col-8"><?= $urun['urun_adi'].' '. getCategoryShortName($urun['kategori_iki']) ?></div>
                                                 <div class="col-4 d-block d-sm-none">Cinsi : </div>
-                                                <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
+                                                <div class="col-md-2 col-8"><?= mb_substr(getCategoryShortName($urun['kategori_bir']), 0, 7, 'UTF-8'); ?></div>
                                                 <div class="col-4 d-block d-sm-none">Adet : </div>
                                                 <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
                                                 <div class="col-4 d-block d-sm-none">Kilo : </div>
@@ -424,7 +424,7 @@
                     $sevkTipi = guvenlik($hazirlananSiparis->sevk_tipi);
                     $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
                     $arac_id = guvenlik($hazirlananSiparis->arac_id);
-                    $arac_adi = reset(array_filter($araclar, fn($arac) => $arac->id == $arac_id))->arac_adi;
+                    $arac_adi = reset(array_filter($araclar, fn($arac) => $arac->id == $arac_id))->name;
                     $aciklama = guvenlik($hazirlananSiparis->aciklama);
                     $saniye = guvenlik($hazirlananSiparis->saniye);
                     $tarih = getdmY($saniye);
@@ -461,7 +461,7 @@
                                                 <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
                                                 <div class="col-md-4 col-8"><?= $urun['urun_adi'].' '. getCategoryShortName($urun['kategori_iki']) ?></div>
                                                 <div class="col-4 d-block d-sm-none">Cinsi : </div>
-                                                <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
+                                                <div class="col-md-2 col-8"><?= mb_substr(getCategoryShortName($urun['kategori_bir']), 0, 7, 'UTF-8'); ?></div>
                                                 <div class="col-4 d-block d-sm-none">Adet : </div>
                                                 <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
                                                 <div class="col-4 d-block d-sm-none">Kilo : </div>
@@ -542,7 +542,7 @@
                     $sevkTipi = guvenlik($faturasiKesilen->sevk_tipi);
                     $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
                     $arac_id = guvenlik($faturasiKesilen->arac_id);
-                    $arac_adi = $db->query("SELECT * FROM araclar WHERE id = '{$arac_id}'")->fetch(PDO::FETCH_ASSOC)['arac_adi'];
+                    $arac_adi = $db->query("SELECT * FROM vehicles WHERE id = '{$arac_id}'")->fetch(PDO::FETCH_ASSOC)['name'];
                     $aciklama = guvenlik($faturasiKesilen->aciklama);
                     $saniye = guvenlik($faturasiKesilen->saniye);
                     $tarih = getdmY($saniye);
@@ -579,7 +579,7 @@
                                                 <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
                                                 <div class="col-md-4 col-8"><?= $urun['urun_adi'].' '. getCategoryShortName($urun['kategori_iki']) ?></div>
                                                 <div class="col-4 d-block d-sm-none">Cinsi : </div>
-                                                <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
+                                                <div class="col-md-2 col-8"><?= mb_substr(getCategoryShortName($urun['kategori_bir']), 0, 7, 'UTF-8'); ?></div>
                                                 <div class="col-4 d-block d-sm-none">Adet : </div>
                                                 <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
                                                 <div class="col-4 d-block d-sm-none">Kilo : </div>

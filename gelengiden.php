@@ -1,10 +1,10 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php'; 
+	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
 		
-		header("Location:giris.php");
+		header("Location:login.php");
 
 		exit();
 
@@ -84,7 +84,7 @@
 
 				}else{
 
-					$hata = '<br/><div class="alert alert-danger" role="alert">Bu tarihle zaten bir kayıt var onu düzenleyebilirsiniz.</div>';
+					$error = '<br/><div class="alert alert-danger" role="alert">Bu tarihle zaten bir kayıt var onu düzenleyebilirsiniz.</div>';
 
 				}
 
@@ -149,7 +149,7 @@
 
     <?php include 'template/banner.php' ?>
 
-    <?= $hata; ?>
+    <?= $error; ?>
 
     <div class="container-fluid">
     	

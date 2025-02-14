@@ -1,10 +1,10 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
 		
-		header("Location:giris.php");
+		header("Location:login.php");
 
 		exit();
 
@@ -26,7 +26,7 @@
 
 			if (kategoridolumu($kategori_id) == '1') {
 				
-				$hata = '<br/><div class="alert alert-danger" role="alert">Silmek istediğiniz kategoride kayıtlı ürünler var. O ürünleri silmeden kategoriyi silemezsiniz.</a></div>';
+				$error = '<br/><div class="alert alert-danger" role="alert">Silmek istediğiniz kategoride kayıtlı ürünler var. O ürünleri silmeden kategoriyi silemezsiniz.</a></div>';
 
 			}else{
 
@@ -295,7 +295,7 @@
 				
 				<div class="col-md-12">
 					
-					<?= $hata; ?>
+					<?= $error; ?>
 
 				</div>
 

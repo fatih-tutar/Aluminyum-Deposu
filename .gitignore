@@ -1,8 +1,8 @@
-fonksiyonlar/baglan.php
+functions/connect.php
 yedekler/
 .gitignore
 error_log
 files/
 img/
-fonksiyonlar/database.php
+functions/database.php
 vcs.xml

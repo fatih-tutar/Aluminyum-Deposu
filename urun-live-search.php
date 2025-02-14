@@ -1,12 +1,12 @@
 <?php
 /* Database Bağlantısı */
 
-    include 'fonksiyonlar/bagla.php';
+    include 'functions/init.php';
 
 /* Database Bağlantısı */
 
     if (!isLoggedIn()) {
-        header("Location:giris.php");
+        header("Location:login.php");
         exit();
     }else{
     

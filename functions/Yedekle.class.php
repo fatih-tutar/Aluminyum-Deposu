@@ -44,7 +44,7 @@ class Yedekle {
 	 * Alınan hataların dizi olarak aktarıldığı değişken
 	 * @var
 	 */
-	private $hata = array();
+	private $error = array();
 	/**
 	 * Başarılı olduğumuzda kullanacağımız sonuç dizesi
 	 * @var

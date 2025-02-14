@@ -1,14 +1,20 @@
 <?php
-    include 'fonksiyonlar/bagla.php';
+    include 'functions/init.php';
     $aracId = guvenlik($_GET['id']);
     // SEVKİYATLAR
     $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE arac_id = '{$aracId}' AND silik = '0' AND nakliye_durumu = '0'", PDO::FETCH_OBJ)->fetchAll();
     // FİRMALAR
     $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'", PDO::FETCH_OBJ)->fetchAll();
     // ARAÇLAR
-    $arac = $db->query("SELECT * FROM araclar WHERE id = '{$aracId}'")->fetch(PDO::FETCH_ASSOC);
+    $arac = $db->query("SELECT * FROM vehicles WHERE id = '{$aracId}'")->fetch(PDO::FETCH_ASSOC);
 ?>
-<h4><i class="fa fa-car"></i> <?= $arac['arac_adi'] ?></h4>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sevkiyat Planı</title>
+</head>
+<body style="padding:20px;">
+<h4><i class="fa fa-car"></i> <?= $arac['name'] ?> Sevkiyat Planı - <?= date('d/m/Y'); ?></h4>
 <?php if (isset($sevkiyatlar)): ?>
     <?php
     foreach ($sevkiyatlar as $sevkiyat):
@@ -27,10 +33,14 @@
         }
         ?>
         <hr/>
-        Firma Adı : <?= $firmaAdi ?><br/>
-        Firma Adres : <?= $firmaAdres ?><br/>
-        Kilo : <?= $toplamkg ?><br/>
+        Firma Adı : <?= $firmaAdi; ?><br/>
+        Firma Tel : <?= $firma->firmatel; ?><br/>
+        Firma Adres : <?= $firmaAdres; ?><br/>
+        Kilo : <?= $toplamkg; ?><br/>
+        Açıklama : <?= $sevkiyat->aciklama; ?><br/>
     <?php endforeach; ?>
 <?php else: ?>
     Bu araca atanmış sevkiyat bulunmuyor.
 <?php endif; ?>
+</body>
+</html>

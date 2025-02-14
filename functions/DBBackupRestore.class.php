@@ -250,10 +250,10 @@ private function dokumVeri($tabloAdi,$vtip){
 }
 
 
-private function hatabul($hata, $kodu, $mesaj) {
+private function hatabul($error, $kodu, $mesaj) {
 	$htmsj = "<b>PHP PDO HATA:</b> " . strval($kodu) . "<br><br>";
 	$i=0;
-    foreach ($hata as $a){
+    foreach ($error as $a){
 	if($i==0){ $htmsj .="<b>Class tarafı hata bilgileri</b><br>"; }else{ $htmsj .="<b>Dosya tarafı hata bilgileri</b><br>"; }
 	$htmsj .= "Hatalı Function: ". $a["function"] . "<br>";
 	$htmsj .= "Hatalı Dosya: ". $a["file"] . "<br>";

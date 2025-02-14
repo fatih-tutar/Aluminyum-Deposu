@@ -1,10 +1,10 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
 		
-		header("Location:giris.php");
+		header("Location:login.php");
 
 		exit();
 
@@ -52,7 +52,7 @@
 
 			if (fabrikakullanimdami($fabrika_id) == '1') {
 			
-				$hata = '<br/><div class="alert alert-danger" role="alert">Bu fabrikanın kayıtlı olduğu bir ürün, sipariş veya sipariş formu var o yüzden silemiyoruz.</div>';
+				$error = '<br/><div class="alert alert-danger" role="alert">Bu fabrikanın kayıtlı olduğu bir ürün, sipariş veya sipariş formu var o yüzden silemiyoruz.</div>';
 
 			}else{
 			
@@ -268,7 +268,7 @@
 				
 				<div class="col-md-12">
 					
-					<?= $hata; ?>
+					<?= $error; ?>
 
 				</div>
 

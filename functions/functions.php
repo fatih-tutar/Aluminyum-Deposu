@@ -519,7 +519,7 @@ function ayAdi($ay){
 
 			if($backup){ 
 
-				$yedekal = $db->prepare("UPDATE companies SET yedekalmasaniye = ? WHERE sirketid = ?"); 
+				$yedekal = $db->prepare("UPDATE companies SET backup_time = ? WHERE id = ?");
 
 				$yedekguncelle = $yedekal->execute(array(time(),$companyId));
 

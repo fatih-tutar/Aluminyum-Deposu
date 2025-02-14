@@ -1,6 +1,6 @@
 <?php
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
 	$urun_fabrika_id = guvenlik($_GET['id']);
 

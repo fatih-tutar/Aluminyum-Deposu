@@ -1,10 +1,10 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
 		
-		header("Location:giris.php");
+		header("Location:login.php");
 
 		exit();
 
@@ -86,11 +86,11 @@
 
                 if (empty($name)) {
 
-                    $hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Kullanıcı adı kısmını boş bıraktınız.</div>';
+                    $error = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Kullanıcı adı kısmını boş bıraktınız.</div>';
 
                 }elseif (checkUserById($name) == '1') {
 
-                    $hata = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Bu kullanıcı adı kullanılıyor.</div>';
+                    $error = '<div class="alert alert-danger" style="text-align:center; font-weight:bolder;">Bu kullanıcı adı kullanılıyor.</div>';
 
                 }else{
 
@@ -146,7 +146,7 @@
 				
 				<div class="col-md-12">
 					
-					<?= $hata; ?>
+					<?= $error; ?>
 
 				</div>
 

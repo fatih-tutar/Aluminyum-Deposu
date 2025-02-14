@@ -1,132 +1,128 @@
 <?php 
-	include 'fonksiyonlar/bagla.php'; 
-	if (!isLoggedIn()) {
-		header("Location:giris.php");
-		exit();
-	}else{
+	include 'functions/init.php';
 
-    if (isset($_POST['aracekle'])) {
+    if (isset($_POST['addVehicle'])) {
       // Formdan gelen verileri alalım
-      $arac_adi = $_POST['arac_adi'];
-      $plaka = $_POST['plaka'];
-      $kasko_bitis_tarihi = $_POST['kasko_bitis_tarihi'];
-      $sigorta_bitis_tarihi = $_POST['sigorta_bitis_tarihi'];
-      $muayene_tarihi = $_POST['muayene_tarihi'];
-      $araci_kullanan = $_POST['araci_kullanan'];
-      $aciklama = $_POST['aciklama'];
-      $saniye = time();  // Anlık timestamp değeri
-      $silik = 0;  // Varsayılan değer
+      $name = $_POST['name'];
+      $licensePlate = $_POST['license_plate'];
+      $cascoEndDate = $_POST['casco_end_date'];
+      $insuranceEndDate = $_POST['insurance_end_date'];
+      $inspectionDate = $_POST['inspection_date'];
+      $driver = $_POST['driver'];
+      $description = $_POST['description'];
+      $time = time();  // Anlık timestamp değeri
+      $isDeleted = 0;  // Varsayılan değer
   
       // Dosya yükleme işlemleri
-      $kasko_pdf = null;
-      $sigorta_pdf = null;
-      $ruhsat_pdf = null;
+      $casco_pdf = null;
+      $insurance_pdf = null;
+      $registration_pdf = null;
   
       // Dosyaların kaydedileceği klasör
-      $uploadDir = 'files/arac/';
+      $uploadDir = 'files/vehicles/';
   
       // Kasko PDF dosyası yüklendiyse
-      if (isset($_FILES['kasko_pdf']) && $_FILES['kasko_pdf']['error'] == 0) {
-          $kasko_pdf = $uploadDir . uniqid() . "_" . $_FILES['kasko_pdf']['name'];
-          move_uploaded_file($_FILES['kasko_pdf']['tmp_name'], $kasko_pdf);
+      if (isset($_FILES['casco_pdf']) && $_FILES['casco_pdf']['error'] == 0) {
+          $cascoPdf = $uploadDir . uniqid() . "_" . $_FILES['casco_pdf']['name'];
+          move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $cascoPdf);
       }
   
       // Sigorta PDF dosyası yüklendiyse
-      if (isset($_FILES['sigorta_pdf']) && $_FILES['sigorta_pdf']['error'] == 0) {
-          $sigorta_pdf = $uploadDir . uniqid() . "_" . $_FILES['sigorta_pdf']['name'];
-          move_uploaded_file($_FILES['sigorta_pdf']['tmp_name'], $sigorta_pdf);
+      if (isset($_FILES['insurance_pdf']) && $_FILES['insurance_pdf']['error'] == 0) {
+          $insurancePdf = $uploadDir . uniqid() . "_" . $_FILES['insurance_pdf']['name'];
+          move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $insurancePdf);
       }
   
       // Ruhsat PDF dosyası yüklendiyse
-      if (isset($_FILES['ruhsat_pdf']) && $_FILES['ruhsat_pdf']['error'] == 0) {
-          $ruhsat_pdf = $uploadDir . uniqid() . "_" . $_FILES['ruhsat_pdf']['name'];
-          move_uploaded_file($_FILES['ruhsat_pdf']['tmp_name'], $ruhsat_pdf);
+      if (isset($_FILES['registration_pdf']) && $_FILES['registration_pdf']['error'] == 0) {
+          $registrationPdf = $uploadDir . uniqid() . "_" . $_FILES['registration_pdf']['name'];
+          move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $registrationPdf);
       }
   
       // Veritabanına kayıt ekle
-      $sql = "INSERT INTO araclar (arac_adi, plaka, kasko_bitis_tarihi, sigorta_bitis_tarihi, kasko_pdf, sigorta_pdf, muayene_tarihi, araci_kullanan, ruhsat_pdf, aciklama, saniye, silik) 
-              VALUES (:arac_adi, :plaka, :kasko_bitis_tarihi, :sigorta_bitis_tarihi, :kasko_pdf, :sigorta_pdf, :muayene_tarihi, :araci_kullanan, :ruhsat_pdf, :aciklama, :saniye, :silik)";
+      $sql = "INSERT INTO vehicles (name, license_plate, casco_end_date, insurance_end_date, casco_pdf, insurance_pdf, inspection_date, driver, registration_pdf, description, time, is_deleted) 
+              VALUES (:name, :license_plate, :casco_end_date, :insurance_end_date, :casco_pdf, :insurance_pdf, :inspection_date, :driver, :registration_pdf, :description, :time, :is_deleted)";
   
       $stmt = $db->prepare($sql);
 
-      $stmt->bindParam(':arac_adi', $arac_adi);
-      $stmt->bindParam(':plaka', $plaka);
-      $stmt->bindParam(':kasko_bitis_tarihi', $kasko_bitis_tarihi);
-      $stmt->bindParam(':sigorta_bitis_tarihi', $sigorta_bitis_tarihi);
-      $stmt->bindParam(':kasko_pdf', $kasko_pdf);
-      $stmt->bindParam(':sigorta_pdf', $sigorta_pdf);
-      $stmt->bindParam(':muayene_tarihi', $muayene_tarihi);
-      $stmt->bindParam(':araci_kullanan', $araci_kullanan);
-      $stmt->bindParam(':ruhsat_pdf', $ruhsat_pdf);
-      $stmt->bindParam(':aciklama', $aciklama);
-      $stmt->bindParam(':saniye', $saniye);
-      $stmt->bindParam(':silik', $silik);
+      $stmt->bindParam(':name', $name);
+      $stmt->bindParam(':license_plate', $licensePlate);
+      $stmt->bindParam(':casco_end_date', $cascoEndDate);
+      $stmt->bindParam(':insurance_end_date', $insuranceEndDate);
+      $stmt->bindParam(':casco_pdf', $casco_pdf);
+      $stmt->bindParam(':insurance_pdf', $insurance_pdf);
+      $stmt->bindParam(':inspection_date', $inspectionDate);
+      $stmt->bindParam(':driver', $driver);
+      $stmt->bindParam(':registration_pdf', $registration_pdf);
+      $stmt->bindParam(':description', $description);
+      $stmt->bindParam(':time', $time);
+      $stmt->bindParam(':is_deleted', $isDeleted);
   
       // Kayıt işlemi başarılı ise
       if ($stmt->execute()) {
-          header("Location:arac.php");
+          header("Location:vehicle.php");
           exit();
       } else {
-          $hata = '<br/><div class="alert alert-danger" role="alert">Bir hata oluştu, araç eklenemedi.</div>';   
+          $error = '<br/><div class="alert alert-danger" role="alert">Bir hata oluştu, araç eklenemedi.</div>';   
       }
     }
 
-    if(isset($_POST['aracsil'])) {
+    if(isset($_POST['deleteVehicle'])) {
       $id = guvenlik($_POST['id']);
-      $query = $db->prepare("UPDATE araclar SET silik = ? WHERE id = ?");
+      $query = $db->prepare("UPDATE vehicles SET is_deleted = ? WHERE id = ?");
       $update = $query->execute(array('1',$id));
-      header("Location:arac.php");
+      header("Location:vehicle.php");
       exit();
     }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['aracduzenle'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editVehicle'])) {
       // POST verilerini al
       $id = $_POST['id'];
-      $arac_adi = $_POST['arac_adi'];
-      $plaka = $_POST['plaka'];
-      $araci_kullanan = $_POST['araci_kullanan'];
-      $kasko_bitis_tarihi = $_POST['kasko_bitis_tarihi'];
-      $sigorta_bitis_tarihi = $_POST['sigorta_bitis_tarihi'];
-      $muayene_tarihi = $_POST['muayene_tarihi'];
-      $aciklama = $_POST['aciklama'];
-      $nakliye = '0';
-      if(isset($_POST['nakliye'])){ $nakliye = '1'; }
+      $name = $_POST['name'];
+      $licensePlate = $_POST['licence_plate'];
+      $driver = $_POST['driver'];
+      $cascoEndDate = $_POST['casco_end_date'];
+      $insuranceEndDate = $_POST['insurance_end_date'];
+      $inspectionDate = $_POST['inspection_date'];
+      $description = $_POST['description'];
+      $isTransport = '0';
+      if(isset($_POST['is_transport'])){ $isTransport = '1'; }
 
       // Dosya yükleme işlemleri
       $uploads = [];
-      $upload_dir = 'files/arac/';
+      $upload_dir = 'files/vehicles/';
 
-      if (!empty($_FILES['kasko_pdf']['name'])) {
-          $unique_name = uniqid() . '-' . basename($_FILES['kasko_pdf']['name']);
-          $uploads['kasko_pdf'] = $upload_dir . $unique_name;
-          move_uploaded_file($_FILES['kasko_pdf']['tmp_name'], $uploads['kasko_pdf']);
+      if (!empty($_FILES['casco_pdf']['name'])) {
+          $unique_name = uniqid() . '-' . basename($_FILES['casco_pdf']['name']);
+          $uploads['casco_pdf'] = $upload_dir . $unique_name;
+          move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $uploads['casco_pdf']);
       }
       
-      if (!empty($_FILES['sigorta_pdf']['name'])) {
-          $unique_name = uniqid() . '-' . basename($_FILES['sigorta_pdf']['name']);
-          $uploads['sigorta_pdf'] = $upload_dir . $unique_name;
-          move_uploaded_file($_FILES['sigorta_pdf']['tmp_name'], $uploads['sigorta_pdf']);
+      if (!empty($_FILES['insurance_pdf_pdf']['name'])) {
+          $unique_name = uniqid() . '-' . basename($_FILES['insurance_pdf_pdf']['name']);
+          $uploads['insurance_pdf_pdf'] = $upload_dir . $unique_name;
+          move_uploaded_file($_FILES['insurance_pdf_pdf']['tmp_name'], $uploads['insurance_pdf_pdf']);
       }
 
-      if (!empty($_FILES['ruhsat_pdf']['name'])) {
-          $unique_name = uniqid() . '-' . basename($_FILES['ruhsat_pdf']['name']);
-          $uploads['ruhsat_pdf'] = $upload_dir . $unique_name;
-          move_uploaded_file($_FILES['ruhsat_pdf']['tmp_name'], $uploads['ruhsat_pdf']);
+      if (!empty($_FILES['registration_pdf']['name'])) {
+          $unique_name = uniqid() . '-' . basename($_FILES['registration_pdf']['name']);
+          $uploads['registration_pdf'] = $upload_dir . $unique_name;
+          move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $uploads['registration_pdf']);
       }
 
       // SQL sorgusunu oluştur
-      $sql = "UPDATE araclar SET 
-                  arac_adi = ?, 
-                  plaka = ?, 
-                  araci_kullanan = ?, 
-                  kasko_bitis_tarihi = ?, 
-                  sigorta_bitis_tarihi = ?, 
-                  muayene_tarihi = ?, 
-                  aciklama = ?,
-                  nakliye = ?";
+      $sql = "UPDATE vehicles SET 
+                  name = ?, 
+                  license_plate = ?, 
+                  driver = ?, 
+                  casco_end_date = ?, 
+                  insurance_end_date = ?, 
+                  inspection_date = ?, 
+                  description = ?,
+                  is_transport = ?";
 
       // Dosya alanlarını kontrol et ve SQL sorgusuna ekle
-      $params = [$arac_adi, $plaka, $araci_kullanan, $kasko_bitis_tarihi, $sigorta_bitis_tarihi, $muayene_tarihi, $aciklama, $nakliye];
+      $params = [$name, $licensePlate, $driver, $cascoEndDate, $insuranceEndDate, $inspectionDate, $description, $isTransport];
       
       foreach ($uploads as $key => $path) {
           $sql .= ", $key = ?";
@@ -141,13 +137,15 @@
       $result = $stmt->execute($params);
 
       if ($result) {
-        header("Location:arac.php");
+        header("Location:vehicle.php");
         exit();
       } else {
-        $hata = '<br/><div class="alert alert-danger" role="alert">Bir hata oluştu, araç bilgileri güncellenemedi.</div>';  
+        $error = '<br/><div class="alert alert-danger" role="alert">Bir hata oluştu, araç bilgileri güncellenemedi.</div>';  
       }
-    } 
-	}
+    }
+
+    $vehicles = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -163,12 +161,12 @@
     <?php include 'template/banner.php' ?>
     <div class="row">		
       <div class="col-md-12">			
-          <?= isset($hata) ? $hata : ''; ?>
+          <?= $error ?>
       </div>
 		</div>
     <div class="div4" style="text-align: center;">
       <!-- Başlık -->
-      <a href="#" onclick="return false" onmousedown="javascript:ackapa('araceklemeformudivi');">
+      <a href="#" onclick="return false" onmousedown="javascript:ackapa('vehicle_add_form_div');">
           <button class="btn btn-primary btn-sm">
               <h2 class="mt-2 text-center">
                   <i class="fas fa-angle-double-down"></i>&nbsp;&nbsp;&nbsp;
@@ -177,24 +175,24 @@
               </h2>
           </button>
       </a>
-      <form action="" method="POST" enctype="multipart/form-data" style="display:none;" id="araceklemeformudivi" class="mt-4">
+      <form action="" method="POST" enctype="multipart/form-data" style="display:none;" id="vehicle_add_form_div" class="mt-4">
         <div class="row">
           <div class="col-md-1 col-12">
             <div class="row">
                 <div class="col-md-12 col-5">Araç Adı</div>
-                <div class="col-md-12 col-7 pb-2"><input type="text" name="arac_adi" class="form-control form-control-sm" placeholder="Araç Adı"></div>
+                <div class="col-md-12 col-7 pb-2"><input type="text" name="name" class="form-control form-control-sm" placeholder="Araç Adı"></div>
             </div>
           </div>
           <div class="col-md-1 col-12">
             <div class="row">
               <div class="col-md-12 col-5">Plaka</div>
-              <div class="col-md-12 col-7 pb-2"><input type="text" name="plaka" class="form-control form-control-sm" placeholder="Plaka"></div>
+              <div class="col-md-12 col-7 pb-2"><input type="text" name="license_plate" class="form-control form-control-sm" placeholder="Plaka"></div>
             </div>
           </div>
           <div class="col-md-2 col-12">
             <div class="row">
               <div class="col-md-12 col-5">Kullanan Kişi</div>
-              <div class="col-md-12 col-7"><input type="text" name="araci_kullanan" class="form-control form-control-sm" placeholder="Aracı Kullanan Kişi"></div>
+              <div class="col-md-12 col-7"><input type="text" name="driver" class="form-control form-control-sm" placeholder="Aracı Kullanan Kişi"></div>
             </div>
           </div>
           <div class="col-md-5 col-12">
@@ -202,19 +200,19 @@
                   <div class="col-md-4 col-12">
                     <div class="row">
                       <div class="col-md-12 col-5">Kasko Bitiş Tarihi</div>
-                      <div class="col-md-12 col-7 pb-2"><input type="date" name="kasko_bitis_tarihi" id="kasko_bitis_tarihi_inputu" class="form-control form-control-sm"></div>
+                      <div class="col-md-12 col-7 pb-2"><input type="date" name="casco_end_date" id="kasko_bitis_tarihi_inputu" class="form-control form-control-sm"></div>
                     </div>
                   </div>
                   <div class="col-md-4 col-12">
                     <div class="row">
                       <div class="col-md-12 col-5">Sigorta Bitiş Tarihi</div>
-                      <div class="col-md-12 col-7 pb-2"><input type="date" name="sigorta_bitis_tarihi" id="sigorta_bitis_tarihi_inputu" class="form-control form-control-sm"></div>
+                      <div class="col-md-12 col-7 pb-2"><input type="date" name="insurance_end_date" id="sigorta_bitis_tarihi_inputu" class="form-control form-control-sm"></div>
                     </div>
                   </div>
                   <div class="col-md-4 col-12">
                     <div class="row">
                       <div class="col-md-12 col-5">Muayene Tarihi</div>
-                      <div class="col-md-12 col-7 pb-2"><input type="date" name="muayene_tarihi" id="muayene_tarihi_inputu" class="form-control form-control-sm"></div>
+                      <div class="col-md-12 col-7 pb-2"><input type="date" name="inspection_date" id="muayene_tarihi_inputu" class="form-control form-control-sm"></div>
                     </div>
                   </div>
               </div>
@@ -222,36 +220,31 @@
           <div class="col-md-1 col-12">
             <div class="row">
               <div class="col-md-12 col-5">Kasko PDF</div>
-              <div class="col-md-12 col-7 pb-2"><input type="file" name="kasko_pdf" id="kasko_pdf_inputu" style="width:88px;"></div>
+              <div class="col-md-12 col-7 pb-2"><input type="file" name="casco_pdf" id="kasko_pdf_inputu" style="width:88px;"></div>
             </div>
           </div>
           <div class="col-md-1 col-12">
             <div class="row">
               <div class="col-md-12 col-5 px-md-1">Sigorta PDF</div>
-              <div class="col-md-12 col-7 px-md-1 pb-2"><input type="file" name="sigorta_pdf" id="sigorta_pdf_inputu" style="width:88px;"></div>
+              <div class="col-md-12 col-7 px-md-1 pb-2"><input type="file" name="insurance_pdf" id="sigorta_pdf_inputu" style="width:88px;"></div>
             </div>
           </div>
           <div class="col-md-1 col-12">
             <div class="row">
               <div class="col-md-12 col-5">Ruhsat PDF</div>
-              <div class="col-md-12 col-7 pb-2"><input type="file" name="ruhsat_pdf" id="ruhsat_pdf_inputu" style="width:88px;"></div>
+              <div class="col-md-12 col-7 pb-2"><input type="file" name="registration_pdf" id="ruhsat_pdf_inputu" style="width:88px;"></div>
             </div>
           </div>
           <div class="col-md-12 col-12 mb-2">
-            <textarea name="aciklama" id="aciklama" placeholder="Bu alan not girebilirsiniz." class="form-control form-control-sm"></textarea>
+            <textarea name="description" id="aciklama" placeholder="Bu alan not girebilirsiniz." class="form-control form-control-sm"></textarea>
           </div>
           <div class="col-md-12">
-            <button type="submit" name="aracekle" class="btn btn-primary btn-block btn-sm">Araç Ekle</button>
+            <button type="submit" name="addVehicle" class="btn btn-primary btn-block btn-sm">Araç Ekle</button>
           </div>
         </div>
       </form>
     </div>
     <div class="div4">
-      <?php
-        // PDO sorgusu ve verilerin çekilmesi
-        $araclar = $db->query("SELECT * FROM araclar WHERE silik = '0'");
-        $rows = $araclar->fetchAll(PDO::FETCH_ASSOC);
-      ?>
 
       <div class="container-fluid mt-4">
           <!-- Başlık -->
@@ -277,62 +270,62 @@
               <div class="col-md-1 p-0"><button class="btn btn-primary btn-sm">Ruhsat PDF</button></div>
           </div>
 
-          <?php foreach ($rows as $index => $row): ?>
+          <?php foreach ($vehicles as $index => $vehicle): ?>
             <form action="" method="POST">
               <div class="row py-2" style="background-color: <?= $index % 2 === 0 ? '#ffffff' : '#d0d4d7' ?>; border-bottom: 1px solid #dee2e6;">
                 <div class="col-md-1 col-12">
                   <span class="d-md-none font-weight-bold">Araç Adı: </span>
-                  <?= guvenlik($row['arac_adi']) ?>
+                  <?= guvenlik($vehicle->name) ?>
                 </div>
                 <div class="col-md-1 col-12">
                     <span class="d-md-none font-weight-bold">Plaka: </span>
-                    <?= htmlspecialchars($row['plaka']) ?>
+                    <?= guvenlik($vehicle->license_plate) ?>
                 </div>
                 <div class="col-md-2 col-12">
                     <span class="d-md-none font-weight-bold">Kullanan Kişi: </span>
-                    <?= htmlspecialchars($row['araci_kullanan']) ?>
+                    <?= guvenlik($vehicle->driver) ?>
                 </div>
                 <div class="col-md-4 col-12">
                   <div class="row">
                     <div class="col-md-4 col-12">
                       <span class="d-md-none font-weight-bold">Kasko Bitiş Tarihi: </span>
-                      <?= htmlspecialchars($row['kasko_bitis_tarihi']) ?>
+                      <?= guvenlik($vehicle->casco_end_date) ?>
                     </div>
                     <div class="col-md-4 col-12">
                       <span class="d-md-none font-weight-bold">Sigorta Bitiş Tarihi: </span>
-                      <?= htmlspecialchars($row['sigorta_bitis_tarihi']) ?>
+                      <?= guvenlik($vehicle->insurance_end_date) ?>
                     </div>
                     <div class="col-md-4 col-12">
                       <span class="d-md-none font-weight-bold">Muayene Tarihi: </span>
-                      <?= htmlspecialchars($row['muayene_tarihi']) ?>
+                      <?= guvenlik($vehicle->inspection_date) ?>
                     </div>
                   </div>
                 </div>
                 <!-- Kasko PDF -->
                 <div class="col-md-1 col-12">
                     <span class="d-md-none font-weight-bold">Kasko PDF: </span>
-                    <a href="<?= htmlspecialchars($row['kasko_pdf']) ?>" target="_blank">Kasko PDF</a>
+                    <a href="<?= guvenlik($vehicle->casco_pdf) ?>" target="_blank">Kasko PDF</a>
                 </div>
                 <!-- Sigorta PDF -->
                 <div class="col-md-1 col-12">
                     <span class="d-md-none font-weight-bold">Sigorta PDF: </span>
-                    <a href="<?= htmlspecialchars($row['sigorta_pdf']) ?>" target="_blank">Sigorta PDF</a>
+                    <a href="<?= guvenlik($vehicle->insurance_pdf) ?>" target="_blank">Sigorta PDF</a>
                 </div>
                 <!-- Ruhsat PDF -->
                 <div class="col-md-1 col-12">
                     <span class="d-md-none font-weight-bold">Ruhsat PDF: </span>
-                    <a href="<?= htmlspecialchars($row['ruhsat_pdf']) ?>" target="_blank">Ruhsat PDF</a>
+                    <a href="<?= guvenlik($vehicle->registration_pdf) ?>" target="_blank">Ruhsat PDF</a>
                 </div>
                 <div class="col-md-1 col-12">
                   <div class="row">
                     <div class="col-md-6 col-6">
-                      <a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $row['id'] ?>');">
+                      <a href="#" onclick="return false" onmousedown="javascript:ackapa('edit-div-<?= $row['id'] ?>');">
                         <button class="btn btn-success btn-block btn-sm"><i class="fas fa-pen"></i></button>
                       </a>
                     </div>
                     <div class="col-md-6 col-6">
                       <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                      <button type="submit" name="aracsil" class="btn btn-secondary btn-block btn-sm" onclick="return confirmForm('Aracı silmek istediğinize emin misiniz?');">
+                      <button type="submit" name="deleteVehicle" class="btn btn-secondary btn-block btn-sm" onclick="return confirmForm('Aracı silmek istediğinize emin misiniz?');">
                         <i class="fas fa-trash"></i>
                       </button>
                     </div>
@@ -341,30 +334,30 @@
                 <!-- Açıklama (alt satırda) -->
                 <div class="col-12">
                     <span class="font-weight-bold">Açıklama: </span>
-                    <?= htmlspecialchars($row['aciklama']) ?>
+                    <?= guvenlik($vehicle->description) ?>
                 </div>
               </div>
             </form>
             <form action="" method="POST" enctype="multipart/form-data">
-              <div id="duzenlemedivi<?= $row['id'] ?>" class="my-3" style="display:none;">
+              <div id="edit-div-<?= $row['id'] ?>" class="my-3" style="display:none;">
                 <form action="" method="POST" enctype="multipart/form-data">
                   <div class="row">
                     <div class="col-md-1 col-12">
                       <div class="row">
                           <div class="col-md-12 col-5">Araç Adı</div>
-                          <div class="col-md-12 col-7 pb-2"><input type="text" name="arac_adi" class="form-control form-control-sm" placeholder="Plaka" value="<?= $row['arac_adi']?>"></div>
+                          <div class="col-md-12 col-7 pb-2"><input type="text" name="name" class="form-control form-control-sm" placeholder="Plaka" value="<?= $vehicle->name; ?>"></div>
                       </div>
                     </div>
                     <div class="col-md-1 col-12">
                       <div class="row">
                         <div class="col-md-12 col-5">Plaka</div>
-                        <div class="col-md-12 col-7 pb-2"><input type="text" name="plaka" class="form-control form-control-sm" placeholder="Plaka" value="<?= $row['plaka']?>"></div>
+                        <div class="col-md-12 col-7 pb-2"><input type="text" name="license_plate" class="form-control form-control-sm" placeholder="Plaka" value="<?= $vehicle->license_plate; ?>"></div>
                       </div>
                     </div>
                     <div class="col-md-2 col-12">
                       <div class="row">
                         <div class="col-md-12 col-5">Kullanan Kişi</div>
-                        <div class="col-md-12 col-7"><input type="text" name="araci_kullanan" class="form-control form-control-sm" placeholder="Aracı Kullanan Kişi" value="<?= $row['araci_kullanan'] ?>"></div>
+                        <div class="col-md-12 col-7"><input type="text" name="driver" class="form-control form-control-sm" placeholder="Aracı Kullanan Kişi" value="<?= $vehicle->driver; ?>"></div>
                       </div>
                     </div>
                     <div class="col-md-5 col-12">
@@ -372,19 +365,19 @@
                         <div class="col-md-4 col-12">
                           <div class="row">
                             <div class="col-md-12 col-5">Kasko Bitiş Tarihi</div>
-                            <div class="col-md-12 col-7 pb-2"><input type="date" name="kasko_bitis_tarihi" id="kasko_bitis_tarihi_inputu" class="form-control form-control-sm" value="<?= $row['kasko_bitis_tarihi'] ?>"></div>
+                            <div class="col-md-12 col-7 pb-2"><input type="date" name="casco_end_date" class="form-control form-control-sm" value="<?= $vehicle->casco_end_date; ?>"></div>
                           </div>
                         </div>
                         <div class="col-md-4 col-12">
                           <div class="row">
                             <div class="col-md-12 col-5">Sigorta Bitiş Tarihi</div>
-                            <div class="col-md-12 col-7 pb-2"><input type="date" name="sigorta_bitis_tarihi" id="sigorta_bitis_tarihi_inputu" class="form-control form-control-sm" value="<?= $row['sigorta_bitis_tarihi'] ?>"></div>
+                            <div class="col-md-12 col-7 pb-2"><input type="date" name="insurance_end_date" class="form-control form-control-sm" value="<?= $vehicle->insurance_end_date; ?>"></div>
                           </div>
                         </div>
                         <div class="col-md-4 col-12">
                           <div class="row">
                             <div class="col-md-12 col-5">Muayene Tarihi</div>
-                            <div class="col-md-12 col-7 pb-2"><input type="date" name="muayene_tarihi" id="muayene_tarihi_inputu" class="form-control form-control-sm" value="<?= $row['muayene_tarihi'] ?>"></div>
+                            <div class="col-md-12 col-7 pb-2"><input type="date" name="inspection_date" class="form-control form-control-sm" value="<?= $vehicle->inspection_date; ?>"></div>
                           </div>
                         </div>
                       </div>
@@ -392,29 +385,29 @@
                     <div class="col-md-1 col-12">
                       <div class="row">
                         <div class="col-md-12 col-5">Kasko PDF</div>
-                        <div class="col-md-12 col-7 pb-2"><input type="file" name="kasko_pdf" id="kasko_pdf_inputu" style="width:88px;"></div>
+                        <div class="col-md-12 col-7 pb-2"><input type="file" name="casco_pdf" style="width:88px;"></div>
                       </div>
                     </div>
                     <div class="col-md-1 col-12">
                       <div class="row">
                         <div class="col-md-12 col-5 px-md-1">Sigorta PDF</div>
-                        <div class="col-md-12 col-7 px-md-1 pb-2"><input type="file" name="sigorta_pdf" id="sigorta_pdf_inputu" style="width:88px;"></div>
+                        <div class="col-md-12 col-7 px-md-1 pb-2"><input type="file" name="insurance_pdf" style="width:88px;"></div>
                       </div>
                     </div>
                     <div class="col-md-1 col-12">
                       <div class="row">
                         <div class="col-md-12 col-5">Ruhsat PDF</div>
-                        <div class="col-md-12 col-7 pb-2"><input type="file" name="ruhsat_pdf" id="ruhsat_pdf_inputu" style="width:88px;"></div>
+                        <div class="col-md-12 col-7 pb-2"><input type="file" name="registration_pdf" style="width:88px;"></div>
                       </div>
                     </div>
                     <div class="col-md-10 col-12">
-                      <textarea name="aciklama" id="aciklama" placeholder="Bu alan not girebilirsiniz." class="form-control form-control-sm"><?= $row['aciklama'] ?></textarea>
+                      <textarea name="description" placeholder="Bu alan not girebilirsiniz." class="form-control form-control-sm"><?= $vehicle->description; ?></textarea>
                     </div>
                     <div class="col-md-2 col-12">
                         <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                        <input type="checkbox" id="nakliyeCheckbox" name="nakliye" <?= $row['nakliye'] == '1' ? 'checked' : '' ?>>
-                        <label for="nakliyeCheckbox">Nakliye Aracı</label>
-                        <button type="submit" name="aracduzenle" class="btn btn-primary btn-block btn-sm">Kaydet</button>
+                        <input type="checkbox" id="transportCheckbox" name="is_transport" <?= $vehicle->is_transport == '1' ? 'checked' : '' ?>>
+                        <label for="transportCheckbox">Nakliye Aracı</label>
+                        <button type="submit" name="editVehicle" class="btn btn-primary btn-block btn-sm">Kaydet</button>
                     </div>
                   </div>
                 </form>

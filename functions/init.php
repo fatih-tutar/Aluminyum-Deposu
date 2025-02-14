@@ -6,10 +6,11 @@
     $tarihf2 = date("d-m-Y",time());
     $bugununsaniyesi = strtotime($tarihf2);
 	$tarihv3 = date("Y-m-d",time());
-	$hata = "";
+	$error = "";
+    $currentPage = basename($_SERVER['PHP_SELF']);
 
     include 'database.php';
-	include 'fonksiyonlar.php';
+	include 'functions.php';
 
     $dbInstance = new Database();
     $db = $dbInstance->getConnection();
@@ -31,5 +32,8 @@
         $company = $db->query("SELECT * FROM companies WHERE id = '{$user->company_id}'", PDO::FETCH_OBJ)->fetch();
 
         $companyPriceList = guvenlik($company->price_list);
-	}
+	}else if (!isLoggedIn() && !in_array($currentPage, ['login.php', 'fiyatlistesi.php'])) {
+        header("Location: login.php");
+        exit();
+    }
 ?>

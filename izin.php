@@ -1,7 +1,7 @@
 <?php 
-	include 'fonksiyonlar/bagla.php'; 
+	include 'functions/init.php';
 	if (!isLoggedIn()) {
-		header("Location:giris.php");
+		header("Location:login.php");
 		exit();
 	}else{
         if(isset($_POST['izin_kaydet'])) {
@@ -15,17 +15,17 @@
             $kalanIzin = yillikIzinHesapla($izinli) - kullanilanIzinHesapla($izinli);
             $ofis = getOfisType($izinli);
             if(empty($izinBaslangicTarihi) || empty($iseBaslamaTarihi)) {
-                $hata = '<br/><div class="alert alert-danger" role="alert">Tarih alanları boş bırakılamaz.</div>';        
+                $error = '<br/><div class="alert alert-danger" role="alert">Tarih alanları boş bırakılamaz.</div>';        
             }elseif($tarihv3 > $otuzbirMart) {
-                $hata = '<br/><div class="alert alert-danger" role="alert">Sadece 1 Ocak ile 31 Mart tarihleri arasında izin girişi yapabilirsiniz. Bu tarihler dışında lütfen yöneticinizle iletişime geçiniz.</div>';
+                $error = '<br/><div class="alert alert-danger" role="alert">Sadece 1 Ocak ile 31 Mart tarihleri arasında izin girişi yapabilirsiniz. Bu tarihler dışında lütfen yöneticinizle iletişime geçiniz.</div>';
             }elseif($gunSayisi > 14) {
-                $hata = '<br/><div class="alert alert-danger" role="alert">Tek seferde en fazla 14 günlük izin girebilirsiniz.</div>';
+                $error = '<br/><div class="alert alert-danger" role="alert">Tek seferde en fazla 14 günlük izin girebilirsiniz.</div>';
             }elseif(getLastLeaveDate($izinli) + 150 > $izinBaslangicTarihi){
-                $hata = '<br/><div class="alert alert-danger" role="alert">İzin başlangıç tarihiniz son izninizin bitiş tarihinden en az 150 gün (5 ay) sonra olmalıdır.</div>';    
+                $error = '<br/><div class="alert alert-danger" role="alert">İzin başlangıç tarihiniz son izninizin bitiş tarihinden en az 150 gün (5 ay) sonra olmalıdır.</div>';    
             }elseif($kalanIzin < $gunSayisi) {
-                $hata = '<br/><div class="alert alert-danger" role="alert">Kalan izin hakkınız '.$kalanIzin.' gündür. Daha fazla izin talep edemezsiniz.</div>';    
+                $error = '<br/><div class="alert alert-danger" role="alert">Kalan izin hakkınız '.$kalanIzin.' gündür. Daha fazla izin talep edemezsiniz.</div>';    
             }elseif(izinTarihKontrol($izinBaslangicTarihi, $iseBaslamaTarihi, $ofis) != 0) {
-                $hata = '<br/><div class="alert alert-danger" role="alert">Sizin departmanınızda aynı tarihlerde izin alan başka bir çalışan var. Lütfen yıllık izin planından kontrol ediniz.</div>';        
+                $error = '<br/><div class="alert alert-danger" role="alert">Sizin departmanınızda aynı tarihlerde izin alan başka bir çalışan var. Lütfen yıllık izin planından kontrol ediniz.</div>';        
             }else{
                 $query = $db->prepare("INSERT INTO izinler SET izinli = ?, izin_baslangic_tarihi = ?, ise_baslama_tarihi = ?, gun_sayisi = ?, durum = ?, ofis = ?, sirket = ?, silik = ?, saniye = ?");
                 $insert = $query->execute(array($izinli, $izinBaslangicTarihi, $iseBaslamaTarihi, $gunSayisi, '0', $ofis, $user->company_id, '0', time()));
@@ -77,7 +77,7 @@
     <div class="container-fluid">
         <div class="row">		
             <div class="col-md-12">			
-                <?= isset($hata) ? $hata : ''; ?>
+                <?= isset($error) ? $error : ''; ?>
             </div>
 		</div>
         <div class="div4" style="padding-top: 20px; text-align: center;">

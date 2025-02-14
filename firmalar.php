@@ -1,10 +1,10 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php';
+	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
 		
-		header("Location:giris.php");
+		header("Location:login.php");
 
 		exit();
 
@@ -52,7 +52,7 @@
 
 			if (firmakullanimdami($firmaid) == '1') {
 			
-				$hata = '<br/><div class="alert alert-danger" role="alert">Bu firmanın kayıtlı olduğu bir ürün, teklif veya teklif formu var o yüzden silemiyoruz.</a></div>';
+				$error = '<br/><div class="alert alert-danger" role="alert">Bu firmanın kayıtlı olduğu bir ürün, teklif veya teklif formu var o yüzden silemiyoruz.</a></div>';
 
 			}else{
 			
@@ -208,7 +208,7 @@
 				
 				<div class="col-md-12">
 					
-					<?= $hata; ?>
+					<?= $error; ?>
 
 				</div>
 

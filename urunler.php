@@ -1,10 +1,10 @@
 <?php 
 
-	include 'fonksiyonlar/bagla.php'; 
+	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
 		
-		header("Location:giris.php");
+		header("Location:login.php");
 
 		exit();
 
@@ -198,13 +198,13 @@
                 $aciklama = guvenlik($_POST['aciklama']);
                 $firma = guvenlik($_POST['firma']);
                 if(empty($firma)){
-                    $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir firma seçiniz.</div>';
+                    $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir firma seçiniz.</div>';
                 }else if(empty($adet)){
-                    $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir adet belirtiniz.</div>';
+                    $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir adet belirtiniz.</div>';
                 }else if(empty($fiyat)){
-                    $hata = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir fiyat yazınız.</div>';
+                    $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir fiyat yazınız.</div>';
                 }else if($sevkTipi === "null") {
-                    $hata = '<br/><div class="alert alert-danger" role="alert">Sevk tipi : '.$sevkTipi.' Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
+                    $error = '<br/><div class="alert alert-danger" role="alert">Sevk tipi : '.$sevkTipi.' Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
                 }else {
                     $firmaId = getFirmaID($firma);
                     $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND manuel = '0' AND silik = '0' AND sirket_id = '{$user->company_id}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
@@ -524,49 +524,49 @@
 
 			if (isset($_GET['guncellendi'])) {
 				
-				$hata = '<br/><div class="alert alert-success" role="alert">İlgili ürüne ait bilgiler başarıyla güncellendi.</a></div>';
+				$error = '<br/><div class="alert alert-success" role="alert">İlgili ürüne ait bilgiler başarıyla güncellendi.</a></div>';
 
 			}
 
 			if (isset($_GET['sipariseklendi'])) {
 				
-				$hata = '<br/><div class="alert alert-success" role="alert"><a href="fabrikalar.php" target="m_blank">Siparişin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından sipariş formlarına ulaşabilirsin.</a></div>';
+				$error = '<br/><div class="alert alert-success" role="alert"><a href="fabrikalar.php" target="m_blank">Siparişin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından sipariş formlarına ulaşabilirsin.</a></div>';
 
 			}
 
 			if (isset($_GET['teklifeklendi'])) {
 				
-				$hata = '<br/><div class="alert alert-success" role="alert"><a href="firmalar.php" target="m_blank">Teklifin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından teklif formlarına ulaşabilirsin.</a></div>';
+				$error = '<br/><div class="alert alert-success" role="alert"><a href="firmalar.php" target="m_blank">Teklifin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından teklif formlarına ulaşabilirsin.</a></div>';
 
 			}
 
 			if (isset($_GET['siparisalindi'])) {
 				
-				$hata = '<br/><div class="alert alert-success" role="alert"><a href="fabrikalar.php" target="m_blank">Sipariş alındı ve sipariş kaydı geçmiş siparişlere eklendi.</a></div>';
+				$error = '<br/><div class="alert alert-success" role="alert"><a href="fabrikalar.php" target="m_blank">Sipariş alındı ve sipariş kaydı geçmiş siparişlere eklendi.</a></div>';
 
 			}
 
 			if (isset($_GET['urunsilinemez'])) {
 				
-				$hata = '<br/><div class="alert alert-danger" role="alert">İlgili ürüne ait stokda malzeme bulunduğudan kaydını silemezsiniz.</a></div>';
+				$error = '<br/><div class="alert alert-danger" role="alert">İlgili ürüne ait stokda malzeme bulunduğudan kaydını silemezsiniz.</a></div>';
 
 			}
 
 			if (isset($_GET['urunsilindi'])) {
 				
-				$hata = '<br/><div class="alert alert-success" role="alert">Ürünün stokta kaydı olmadığından emin olunmuş ve ürün başarıyla silinmiştir.</div>';
+				$error = '<br/><div class="alert alert-success" role="alert">Ürünün stokta kaydı olmadığından emin olunmuş ve ürün başarıyla silinmiştir.</div>';
 
 			}
 
 			if (isset($_GET['envantereeklendi'])) {
 				
-				$hata = '<br/><div class="alert alert-success" role="alert">Hazır kalıp listesine ekleme yapıldı.</div>';
+				$error = '<br/><div class="alert alert-success" role="alert">Hazır kalıp listesine ekleme yapıldı.</div>';
 
 			}
 
 			if (isset($_GET['envanterguncellendi'])) {
 				
-				$hata = '<br/><div class="alert alert-success" role="alert">İlgili ürünün hazır kalıp bilgisi güncellendi.</div>';
+				$error = '<br/><div class="alert alert-success" role="alert">İlgili ürünün hazır kalıp bilgisi güncellendi.</div>';
 
 			}
 
@@ -593,10 +593,10 @@
 
     <div class="container-fluid" style="padding: 0px;">
 
-        <?php if(isset($hata)){ ?>
+        <?php if(isset($error)){ ?>
             <div class="row">
                 <div class="col-md-12">
-                    <?= $hata; ?>
+                    <?= $error; ?>
                 </div>
             </div>
         <?php } ?>
