@@ -16,8 +16,25 @@ class DBYedek {
 
 public function __construct() {
     global $dbhost, $dbuser, $dbpass, $dbdata;
+
+    $aluminyumDeposu = [
+        'host' => 'aluminyumdeposu.com',
+        'name' => 'u9022286_depoveritabani',
+        'user' => 'u9022286_depokullanici',
+        'password' => 'Sifrem10'
+    ];
+
+    $aluminyumStok = [
+        'host' => 'aluminyumstok.com',
+        'name' => 'aluminy4_db',
+        'user' => 'aluminy4_fatih',
+        'password' => 'ZWT3?CR?k}+y'
+    ];
+
+    $database = $aluminyumDeposu;
+
 	try {
-		$this->baglan = new PDO("mysql:host=aluminyumdeposu.com;dbname=z","u9022286_depokullanici","Sifrem10",
+		$this->baglan = new PDO("mysql:host={$database['host']};dbname={$database['name']}","{$database['user']}","{$database['password']}",
 		array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 		//echo "Veritabanı bağlantısı PDO:: >>>> ΟΚ<br><br>";
 	} catch (PDOException $e) {

@@ -20,7 +20,7 @@
 
     if(isLoggedIn() === true){
 		$userSessionId = $_SESSION['user_id'];
-        $user = $db->query("SELECT * FROM users WHERE id = '{$userSessionId}'", PDO::FETCH_OBJ)->fetch();
+        $user = $db->query("SELECT * FROM users WHERE id = '{$userSessionId}'")->fetch(PDO::FETCH_OBJ);
 
         $userPermissionKeys = [
             'buying_price','factory','quote','order','editing','transaction','stock_flow','selling_price',
@@ -29,7 +29,7 @@
         $userPermissionValues = explode(",", $user->permissions);
         $user->permissions = (object) array_combine($userPermissionKeys, $userPermissionValues);
 
-        $company = $db->query("SELECT * FROM companies WHERE id = '{$user->company_id}'", PDO::FETCH_OBJ)->fetch();
+        $company = $db->query("SELECT * FROM companies WHERE id = '{$user->company_id}'")->fetch(PDO::FETCH_OBJ);
 
         $companyPriceList = guvenlik($company->price_list);
 	}else if (!isLoggedIn() && !in_array($currentPage, ['login.php', 'fiyatlistesi.php'])) {

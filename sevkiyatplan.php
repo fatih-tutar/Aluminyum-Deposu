@@ -5,15 +5,15 @@
         exit();
     }else{
         // SEVKİYATLAR
-        $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND nakliye_durumu = '0'", PDO::FETCH_OBJ)->fetchAll();
+        $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND nakliye_durumu = '0'")->fetchAll(PDO::FETCH_OBJ);
         $sevkiyatGruplari = [];
         foreach ($sevkiyatlar as $sevkiyat) {
             $sevkiyatGruplari[$sevkiyat->arac_id][] = $sevkiyat;
         }
         // ARAÇLAR
-        $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0' AND is_transport = '1'", PDO::FETCH_OBJ)->fetchAll();
+        $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0' AND is_transport = '1'")->fetchAll(PDO::FETCH_OBJ);
         // FİRMALAR
-        $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'", PDO::FETCH_OBJ)->fetchAll();
+        $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'")->fetchAll(PDO::FETCH_OBJ);
 
         if(isset($_POST['manuelSevkiyatKaydet'])){
             $firma = guvenlik($_POST['firma']);

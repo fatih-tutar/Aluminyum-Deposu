@@ -2,9 +2,9 @@
     include 'functions/init.php';
     $aracId = guvenlik($_GET['id']);
     // SEVKİYATLAR
-    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE arac_id = '{$aracId}' AND silik = '0' AND nakliye_durumu = '0'", PDO::FETCH_OBJ)->fetchAll();
+    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE arac_id = '{$aracId}' AND silik = '0' AND nakliye_durumu = '0'")->fetchAll(PDO::FETCH_OBJ);
     // FİRMALAR
-    $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'", PDO::FETCH_OBJ)->fetchAll();
+    $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'")->fetchAll(PDO::FETCH_OBJ);
     // ARAÇLAR
     $arac = $db->query("SELECT * FROM vehicles WHERE id = '{$aracId}'")->fetch(PDO::FETCH_ASSOC);
 ?>

@@ -1,7 +1,7 @@
 <?php 
 	include 'functions/init.php';
 
-    if (isset($_POST['addVehicle'])) {
+    if (isset($_POST['add_vehicle'])) {
       // Formdan gelen verileri alalım
       $name = $_POST['name'];
       $licensePlate = $_POST['license_plate'];
@@ -67,7 +67,7 @@
       }
     }
 
-    if(isset($_POST['deleteVehicle'])) {
+    if(isset($_POST['delete_vehicle'])) {
       $id = guvenlik($_POST['id']);
       $query = $db->prepare("UPDATE vehicles SET is_deleted = ? WHERE id = ?");
       $update = $query->execute(array('1',$id));
@@ -75,7 +75,7 @@
       exit();
     }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editVehicle'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_vehicle'])) {
       // POST verilerini al
       $id = $_POST['id'];
       $name = $_POST['name'];
@@ -239,7 +239,7 @@
             <textarea name="description" id="aciklama" placeholder="Bu alan not girebilirsiniz." class="form-control form-control-sm"></textarea>
           </div>
           <div class="col-md-12">
-            <button type="submit" name="addVehicle" class="btn btn-primary btn-block btn-sm">Araç Ekle</button>
+            <button type="submit" name="add_vehicle" class="btn btn-primary btn-block btn-sm">Araç Ekle</button>
           </div>
         </div>
       </form>
@@ -325,7 +325,7 @@
                     </div>
                     <div class="col-md-6 col-6">
                       <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                      <button type="submit" name="deleteVehicle" class="btn btn-secondary btn-block btn-sm" onclick="return confirmForm('Aracı silmek istediğinize emin misiniz?');">
+                      <button type="submit" name="delete_vehicle" class="btn btn-secondary btn-block btn-sm" onclick="return confirmForm('Aracı silmek istediğinize emin misiniz?');">
                         <i class="fas fa-trash"></i>
                       </button>
                     </div>
@@ -404,10 +404,10 @@
                       <textarea name="description" placeholder="Bu alan not girebilirsiniz." class="form-control form-control-sm"><?= $vehicle->description; ?></textarea>
                     </div>
                     <div class="col-md-2 col-12">
-                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                        <input type="hidden" name="id" value="<?= $vehicle->id ?>">
                         <input type="checkbox" id="transportCheckbox" name="is_transport" <?= $vehicle->is_transport == '1' ? 'checked' : '' ?>>
                         <label for="transportCheckbox">Nakliye Aracı</label>
-                        <button type="submit" name="editVehicle" class="btn btn-primary btn-block btn-sm">Kaydet</button>
+                        <button type="submit" name="edit_vehicle" class="btn btn-primary btn-block btn-sm">Kaydet</button>
                     </div>
                   </div>
                 </form>

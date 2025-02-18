@@ -62,7 +62,7 @@
 
                             <?php if($user->permissions->vehicle == '1'){?>
 
-                                <a class="dropdown-item" href="arac.php"><b>ARAÇLAR</b></a>
+                                <a class="dropdown-item" href="vehicle.php"><b>ARAÇLAR</b></a>
 
                             <?php } ?>
 

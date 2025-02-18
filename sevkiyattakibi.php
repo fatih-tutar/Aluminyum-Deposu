@@ -1,6 +1,6 @@
 <?php
     // SEVKİYATLAR
-    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND manuel = '0' AND durum != '3' ORDER BY saniye DESC", PDO::FETCH_OBJ)->fetchAll();
+    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND manuel = '0' AND durum != '3' ORDER BY saniye DESC")->fetchAll(PDO::FETCH_OBJ);
     $alinanSiparisler = [];
     $hazirlananSiparisler = [];
     $faturasiKesilenler = [];
@@ -18,10 +18,10 @@
         $sevkiyatGruplari[$sevkiyat->arac_id][] = $sevkiyat;
     }
     // ARAÇLAR
-    $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'", PDO::FETCH_OBJ)->fetchAll();
+    $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
 
     // FİRMALAR
-    $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'", PDO::FETCH_OBJ)->fetchAll();
+    $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'")->fetchAll(PDO::FETCH_OBJ);
 
     if(isset($_POST['sevkiyathazir'])){
         $sevkiyatID = guvenlik($_POST['sevkiyatID']);
@@ -185,7 +185,7 @@
 
                 <b>Ürün</b>
 
-                <input autofocus="autofocus" name="urun" id="uruninputu" type="text" class="form-control" autocomplete="off" placeholder="Ürün Adı"/>
+                <input name="urun" id="uruninputu" type="text" class="form-control" autocomplete="off" placeholder="Ürün Adı"/>
 
                 <ul class="list-group urunliveresult" id="urunsonuc" style="position: absolute; z-index: 1;"></ul>
 
@@ -195,7 +195,7 @@
 
                 <b>Firma</b>
                 
-                <input autofocus="autofocus" name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
+                <input name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
 
                 <ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
 

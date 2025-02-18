@@ -3,19 +3,16 @@
 	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
-		
 		header("Location:login.php");
-
 		exit();
-
 	}else if(!isset($_GET['id']) || empty($_GET['id']) || !is_numeric($_GET['id'])){
 		header("Location:index.php");
 		exit();
 	}else{
 
-		$kategori_id = guvenlik($_GET['id']);
+		$categoryId = guvenlik($_GET['id']);
 
-		$ustkategoriyicek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_id}' AND silik = '0' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+		$ustkategoriyicek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$categoryId}' AND silik = '0' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 		if(!$ustkategoriyicek) {
 			header("Location:index.php");
@@ -96,13 +93,13 @@
 
 				if ($urun_adet != 0 || $urun_depo_adet != 0 || $urun_palet != 0) {
 
-					header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&urunsilinemez");
+					header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&urunsilinemez");
 
 					exit();
 
 				}elseif ($urun_adet == 0 && $urun_depo_adet == 0 && $urun_palet == 0) {
 
-					$siralar = $db->query("SELECT * FROM urun WHERE urun_sira > '{$urun_sira}' AND kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
+					$siralar = $db->query("SELECT * FROM urun WHERE urun_sira > '{$urun_sira}' AND kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
 
 					if ( $siralar->rowCount() ){
 
@@ -126,7 +123,7 @@
 
 					$delete = $sil->execute(array('1',$urun_id));
 
-					header("Location:urunler.php?id=".$kategori_id."&urunsilindi#".$urun_id);
+					header("Location:urunler.php?id=".$categoryId."&urunsilindi#".$urun_id);
 
 					exit();
 
@@ -152,7 +149,7 @@
 
 				$insert = $query->execute(array($turunid,$tekliffirma,$teklifadet,$teklifsatisfiyat,time(),'0',$user->company_id,'0'));
 
-				header("Location:urunler.php?id=".$kategori_id."&u=".$turunid."&teklifeklendi#".$turunid);
+				header("Location:urunler.php?id=".$categoryId."&u=".$turunid."&teklifeklendi#".$turunid);
 
 				exit();
 
@@ -184,7 +181,7 @@
 
 				$insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',time(),'0',$user->company_id,'0'));
 
-				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&sipariseklendi#".$urun_id);
+				header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&sipariseklendi#".$urun_id);
 
 				exit();
 
@@ -221,7 +218,7 @@
                         $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
                         $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $aciklama, '0', '0', time(), $user->company_id));
                     }
-                    header("Location:urunler.php?id=" . $kategori_id . "&u=" . $urunId . "&sevkiyateklendi#" . $urunId);
+                    header("Location:urunler.php?id=" . $categoryId . "&u=" . $urunId . "&sevkiyateklendi#" . $urunId);
                     exit();
                 }
 			}
@@ -302,7 +299,7 @@
 					
 					$kayacakurunsayisi = $urun_yeni_sira - $urun_eski_sira;
 
-					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $urun_eski_sira,$kayacakurunsayisi", PDO::FETCH_ASSOC);
+					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $urun_eski_sira,$kayacakurunsayisi", PDO::FETCH_ASSOC);
 
 					if ( $kaycaklaricek->rowCount() ){
 
@@ -328,7 +325,7 @@
 
 					$bionce = $urun_yeni_sira - 1;
 
-					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $bionce,$kayacakurunsayisi", PDO::FETCH_ASSOC);
+					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $bionce,$kayacakurunsayisi", PDO::FETCH_ASSOC);
 
 					if ( $kaycaklaricek->rowCount() ){
 
@@ -398,7 +395,7 @@
 
 				}
 
-				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&guncellendi#".$urun_id);
+				header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&guncellendi#".$urun_id);
 
 				exit();
 
@@ -432,7 +429,7 @@
 
 				$guncelle = $query->execute(array('0',$siparis_id));
 
-				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&siparisalindi#".$urun_id);
+				header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
 
 				exit();
 
@@ -466,60 +463,62 @@
 
 				$guncelle = $query->execute(array('0',$siparis_id));
 
-				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&siparisalindi#".$urun_id);
+				header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
 
 				exit();
 
 			}
 
-			if (isset($_POST['envanter_ekle'])) {
+			if (isset($_POST['add_inventory'])) {
 
-				$kod = guvenlik($_POST['kod']);
+				$code = guvenlik($_POST['code']);
 
-				$cap = guvenlik($_POST['cap']);
+                $dimension_1 = guvenlik($_POST['dimension_1']);
 
-				$kalinlik = guvenlik($_POST['kalinlik']);
+                $dimension_2 = guvenlik($_POST['dimension_2']);
 
-				$c = guvenlik($_POST['c']);
+				$dimension_3 = guvenlik($_POST['dimension_3']);
 
-				$kutle = guvenlik($_POST['kutle']);
+				$density = guvenlik($_POST['density']);
 
-				$fabrika = guvenlik($_POST['fabrika']);
+                $factory_name = guvenlik($_POST['factory_name']);
 
-				$query = $db->prepare("INSERT INTO envanter SET urun_id = ?, kod = ?, cap = ?, kalinlik = ?, c = ?, kutle = ?, fabrika = ?, silik = ?, sirket_id = ?");
+				$query = $db->prepare("INSERT INTO inventory SET category_id = ?, code = ?, dimension_1 = ?, dimension_2 = ?, dimension_3 = ?, density = ?, factory_name = ?, is_deleted = ?, company_id = ?");
 
-				$insert = $query->execute(array($kategori_id,$kod,$cap,$kalinlik,$c,$kutle,$fabrika,'0',$user->company_id));
+				$insert = $query->execute(array($categoryId,$code,$dimension_1,$dimension_2,$dimension_3,$density,$factory_name,'0',$user->company_id));
 
-				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&envantereeklendi");
+				header("Location:urunler.php?id=".$categoryId."&inventory_added");
 
 				exit();
 
 			}
 
-			if (isset($_POST['envanter_guncelle'])) {
+			if (isset($_POST['update_inventory'])) {
 				
-				$envanter_id = guvenlik($_POST['envanter_id']);
+				$id = guvenlik($_POST['id']);
 
-				$kod = guvenlik($_POST['kod']);
+				$code = guvenlik($_POST['code']);
 
-				$cap = guvenlik($_POST['cap']);
+				$dimension_1 = guvenlik($_POST['dimension_1']);
 
-				$kalinlik = guvenlik($_POST['kalinlik']);
+				$dimension_2 = guvenlik($_POST['dimension_2']);
 
-				$c = guvenlik($_POST['c']);
+				$dimension_3 = guvenlik($_POST['dimension_3']);
 
-				$kutle = guvenlik($_POST['kutle']);
+				$density = guvenlik($_POST['density']);
 
-				$fabrika = guvenlik($_POST['fabrika']);
+				$factory_name = guvenlik($_POST['factory_name']);
 
-				$query = $db->prepare("UPDATE envanter SET kod = ?, cap = ?, kalinlik = ?, kutle = ?, c = ?, fabrika = ? WHERE envanter_id = ?"); 
+				$query = $db->prepare("UPDATE inventories SET code = ?, dimension_1 = ?, dimension_2 = ?, dimension_3 = ?, density = ?, factory_name = ? WHERE id = ?");
 
-				$guncelle = $query->execute(array($kod,$cap,$kalinlik,$kutle,$fabrika,$envanter_id));
+				$update = $query->execute(array($code,$dimension_1,$dimension_2,$dimension_3,$density,$factory_name,$id));
 
-				header("Location:urunler.php?id=".$kategori_id."&u=".$urun_id."&envanterguncellendi");
-
-				exit();
-
+                if($update) {
+                    header("Location:urunler.php?id=".$categoryId."&inventory_updated");
+                    exit();
+                }else{
+                    $error = '<br/><div class="alert alert-danger" role="alert">Güncelleme işlemi gerçekleştirilemedi.</div>';
+                }
 			}
 
 			if (isset($_GET['guncellendi'])) {
@@ -558,20 +557,23 @@
 
 			}
 
-			if (isset($_GET['envantereeklendi'])) {
+			if (isset($_GET['inventory_added'])) {
 				
 				$error = '<br/><div class="alert alert-success" role="alert">Hazır kalıp listesine ekleme yapıldı.</div>';
 
 			}
 
-			if (isset($_GET['envanterguncellendi'])) {
+			if (isset($_GET['inventory_updated'])) {
 				
 				$error = '<br/><div class="alert alert-success" role="alert">İlgili ürünün hazır kalıp bilgisi güncellendi.</div>';
 
 			}
 
 		}
-	}
+
+        $inventories = $db->query("SELECT * FROM inventories WHERE category_id = '$categoryId' AND company_id = '{$user->company_id}' AND is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
+
+    }
 
 ?>
 
@@ -623,7 +625,7 @@
 
     				<div class="col-6">
     					
-    					<a href="#" onclick="return false" onmousedown="javascript:ackapa('envanter');">
+    					<a href="#" onclick="return false" onmousedown="javascript:ackapa('inventory-div');">
 						
 							<button class="btn btn-primary btn-sm btn-block">
 	    		
@@ -687,7 +689,7 @@
 
 							<div class="col-6">
 								
-								<a href="#" onclick="return false" onmousedown="javascript:ackapa('envanter');">
+								<a href="#" onclick="return false" onmousedown="javascript:ackapa('inventory-div');">
 						
 									<button class="btn btn-primary btn-sm btn-block">
 			    		
@@ -707,13 +709,13 @@
 
 			</div>
 
-		<?php if (isset($_GET['envanterguncellendi']) || isset($_GET['envantereeklendi'])) { ?>
+		<?php if (isset($_GET['inventory_updated']) || isset($_GET['inventory_added'])) { ?>
 
-			<div id="envanter">
+			<div id="inventory-div">
 			
 		<?php }else{ ?>
 
-			<div style="display: none;" id="envanter">
+			<div style="display: none;" id="inventory-div">
 
 		<?php } ?>
 
@@ -747,95 +749,67 @@
 
 					<div class="row" style="margin-bottom: 3px;">
 						
-						<div class="col-md-1 col-2" style="padding: 0px;"><input type="text" name="kod" class="form-control form-control-sm" placeholder="KOD NO."></div>
+						<div class="col-md-1 col-2" style="padding: 0px;"><input type="text" name="code" class="form-control form-control-sm" placeholder="KOD NO."></div>
 
 						<div class="col-md-6 col-4" style="padding: 0px;">
 										
 							<div class="row" style="margin: 0px; padding: 0px;">
 								
-								<div class="col-4" style="padding: 0px;"><input type="text" name="cap" class="form-control form-control-sm" placeholder="(mm)"></div>
+								<div class="col-4" style="padding: 0px;"><input type="text" name="dimension_1" class="form-control form-control-sm" placeholder="(mm)"></div>
 
-								<div class="col-4" style="padding: 0px;"><input type="text" name="kalinlik" class="form-control form-control-sm" placeholder="(mm)"></div>
+								<div class="col-4" style="padding: 0px;"><input type="text" name="dimension_2" class="form-control form-control-sm" placeholder="(mm)"></div>
 
-								<div class="col-4" style="padding: 0px;"><input type="text" name="c" class="form-control form-control-sm" placeholder="(mm)"></div>
+								<div class="col-4" style="padding: 0px;"><input type="text" name="dimension_3" class="form-control form-control-sm" placeholder="(mm)"></div>
 
 							</div>
 
 						</div>						
 
-						<div class="col-md-2 col-2" style="padding: 0px;"><input type="text" name="kutle" class="form-control form-control-sm" placeholder="(KG/M)"></div>
+						<div class="col-md-2 col-2" style="padding: 0px;"><input type="text" name="density" class="form-control form-control-sm" placeholder="(KG/M)"></div>
 
-						<div class="col-md-2 col-3" style="padding: 0px;"><input type="text" name="fabrika" class="form-control form-control-sm" placeholder="FABRİKA"></div>
+						<div class="col-md-2 col-3" style="padding: 0px;"><input type="text" name="factory_name" class="form-control form-control-sm" placeholder="FABRİKA"></div>
 
-						<div class="col-md-1 col-1" style="padding: 0px;"><button type="submit" name="envanter_ekle" class="btn btn-block btn-warning btn-sm" ><i class="fas fa-plus"></i></button></div>
+						<div class="col-md-1 col-1" style="padding: 0px;"><button type="submit" name="add_inventory" class="btn btn-block btn-warning btn-sm" ><i class="fas fa-plus"></i></button></div>
 
 					</div>
 
 				</form>
 
-				<?php
+				<?php foreach($inventories as $inventory ){ ?>
 
-					$envantercek = $db->query("SELECT * FROM envanter WHERE urun_id = '{$kategori_id}' AND sirket_id = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
+                    <form action="" method="POST">
 
-					if ( $envantercek->rowCount() ){
+                        <input type="hidden" name="id" value="<?= $inventory->id; ?>">
 
-						foreach( $envantercek as $ec ){
+                        <div class="row" style="margin-bottom: 3px;">
 
-							$envanter_id = guvenlik($ec['envanter_id']);
+                            <div class="col-md-1 col-2" style="padding: 0px;"><input type="text" name="code" class="form-control form-control-sm" value="<?= $inventory->code; ?>"></div>
 
-							$kod = guvenlik($ec['kod']);
+                            <div class="col-md-6 col-4" style="padding: 0px;">
 
-							$cap = guvenlik($ec['cap']);
+                                <div class="row" style="margin: 0px; padding: 0px;">
 
-							$kalinlik = guvenlik($ec['kalinlik']);
+                                    <div class="col-4" style="padding: 0px;"><input type="text" name="dimension_1" class="form-control form-control-sm" value="<?= $inventory->dimension_1; ?>"></div>
 
-							$c = guvenlik($ec['c']);
+                                    <div class="col-4" style="padding: 0px;"><input type="text" name="dimension_2" class="form-control form-control-sm" value="<?= $inventory->dimension_2; ?>"></div>
 
-							$kutle = guvenlik($ec['kutle']);
+                                    <div class="col-4" style="padding: 0px;"><input type="text" name="dimension_3" class="form-control form-control-sm" value="<?= $inventory->dimension_3; ?>"></div>
 
-							$fabrika = guvenlik($ec['fabrika']);
+                                </div>
 
-				?>
+                            </div>
 
-							<form action="" method="POST">
+                            <div class="col-md-2 col-2" style="padding: 0px;"><input type="text" name="density" class="form-control form-control-sm" value="<?= $inventory->density; ?>"></div>
 
-								<input type="hidden" name="envanter_id" value="<?= $envanter_id; ?>">
+                            <div class="col-md-2 col-3" style="padding: 0px;"><input type="text" name="factory_name" class="form-control form-control-sm" value="<?= $inventory->factory_name; ?>"></div>
 
-								<div class="row" style="margin-bottom: 3px;">
-									
-									<div class="col-md-1 col-2" style="padding: 0px;"><input type="text" name="kod" class="form-control form-control-sm" value="<?= $kod; ?>"></div>
+                            <div class="col-md-1 col-1" style="padding: 0px;"><button type="submit" name="update_inventory" class="btn btn-block btn-primary btn-sm"><i class="fas fa-check"></i></button></div>
 
-									<div class="col-md-6 col-4" style="padding: 0px;">
-										
-										<div class="row" style="margin: 0px; padding: 0px;">
-											
-											<div class="col-4" style="padding: 0px;"><input type="text" name="cap" class="form-control form-control-sm" value="<?= $cap; ?>"></div>
+                        </div>
 
-											<div class="col-4" style="padding: 0px;"><input type="text" name="kalinlik" class="form-control form-control-sm" value="<?= $kalinlik; ?>"></div>
+                    </form>
 
-											<div class="col-4" style="padding: 0px;"><input type="text" name="c" class="form-control form-control-sm" value="<?= $c; ?>"></div>
-
-										</div>
-
-									</div>
-
-									<div class="col-md-2 col-2" style="padding: 0px;"><input type="text" name="kutle" class="form-control form-control-sm" value="<?= $kutle; ?>"></div>
-
-									<div class="col-md-2 col-3" style="padding: 0px;"><input type="text" name="fabrika" class="form-control form-control-sm" value="<?= $fabrika; ?>"></div>
-
-									<div class="col-md-1 col-1" style="padding: 0px;"><button type="submit" name="envanter_guncelle" class="btn btn-block btn-primary btn-sm"><i class="fas fa-check"></i></button></div>
-
-								</div>
-
-							</form>
-
-				<?php
-
-						}
-
-					}
-
-				?>
+				<?php } ?>
 
 			</div>
 
@@ -847,7 +821,7 @@
 
 				$urunlistesira = 0;
 
-				$urun = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
+				$urun = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
 
 				if ( $urun->rowCount() ){
 
@@ -1849,7 +1823,7 @@
 													<select class="form-control" id="exampleFormControlSelect1" name="urun_yeni_sira">
 														<?php
 
-															$sirayicek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_id}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
+															$sirayicek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
 
 															if ( $sirayicek->rowCount() ){
 
