@@ -1,8 +1,10 @@
 functions/connect.php
+functions/DBBackupRestore.class.php
+functions/database.php
+functions/Yedekle.class.php
 yedekler/
 .gitignore
 error_log
 files/
 img/
-functions/database.php
 vcs.xml
