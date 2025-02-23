@@ -191,6 +191,7 @@
                 $urunId = $_POST['urun_id'];
                 $adet = guvenlik($_POST['adet']);
                 $fiyat = guvenlik($_POST['fiyat']);
+                $arac_id =  guvenlik($_POST['arac_id']);
                 $sevkTipi = guvenlik($_POST['sevk_tipi']);
                 $aciklama = guvenlik($_POST['aciklama']);
                 $firma = guvenlik($_POST['firma']);
@@ -215,8 +216,8 @@
                         $query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?");
                         $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $user->company_id));
                     } else {
-                        $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $aciklama, '0', '0', time(), $user->company_id));
+                        $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
+                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $arac_id, $aciklama, '0', '0', time(), $user->company_id));
                     }
                     header("Location:urunler.php?id=" . $categoryId . "&u=" . $urunId . "&sevkiyateklendi#" . $urunId);
                     exit();
@@ -570,6 +571,8 @@
 			}
 
 		}
+
+        $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
 
         $inventories = $db->query("SELECT * FROM inventories WHERE category_id = '$categoryId' AND company_id = '{$user->company_id}' AND is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
 
@@ -1668,7 +1671,25 @@
 													<input type="text" class="form-control" name="fiyat" placeholder="TL">
 												</div>
 
-												<div class="col-md-5 col-12">
+                                                <div class="col-md-1 col-12">
+                                                    <b>Araç</b>
+
+                                                    <select name="arac_id" id="arac_id" class="form-control">
+
+                                                        <option value="null">Araç seçiniz.</option>
+                                                        <?php
+                                                        foreach( $araclar as $arac ){
+                                                            ?>
+                                                            <option value="<?= $arac->id ?>"><?= $arac->name ?></option>
+                                                            <?php
+                                                        }
+                                                        ?>
+
+                                                    </select>
+
+                                                </div>
+
+												<div class="col-md-4 col-12">
 
 													<b>Açıklama</b>
 
