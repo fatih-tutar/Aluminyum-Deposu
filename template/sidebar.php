@@ -176,7 +176,7 @@
         </a>
     </div>
     <div class="card p-1">
-        <a href="izin.php" target="_blank" class="sidebar-font">
+        <a href="leave.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/izin.png" alt="" width="35" height="35">

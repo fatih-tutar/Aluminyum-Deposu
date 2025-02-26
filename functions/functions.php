@@ -24,7 +24,7 @@ function izinTarihKontrol($izinBaslangicTarihi, $iseBaslamaTarihi, $ofis) {
     return $izin->rowCount();
 }
 
-function getOfisType($uyeId) {
+function getOfficeType($uyeId) {
     global $db;
     $uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
     $yetkiArray = explode(",", $uye['permissions']);
@@ -44,6 +44,13 @@ function kullanilanIzinHesapla($uyeId) {
     return !$kullanilanIzin['toplam_kullanilan'] ? 0 : $kullanilanIzin['toplam_kullanilan'];
 }
 
+function calculateUsedLeave($uyeId) {
+    global $db;
+    $year = date("Y");
+    $usedLeave = $db->query("SELECT SUM(leave_days) as total_used_leave FROM leaves WHERE user_id = '{$uyeId}' AND YEAR(start_date) = '{$year}' AND status = '1' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
+    return !$usedLeave['total_used_leave'] ? 0 : $usedLeave['total_used_leave'];
+}
+
 function yillikIzinHesapla($uyeId) {
     global $db;
     $uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
@@ -57,6 +64,25 @@ function yillikIzinHesapla($uyeId) {
     } elseif ($yilFarki >= 1 && $yilFarki < 5) {
         return 14; // 1-5 yıl arası 14 gün izin
     } elseif ($yilFarki >= 5 && $yilFarki < 15) {
+        return 20; // 5-15 yıl arası 20 gün izin
+    } else {
+        return 26; // 15 yıldan fazla ise 26 gün izin
+    }
+}
+
+function calculateAnnualLeave($uyeId) {
+    global $db;
+    $uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
+    $hireDate = $uye['hire_date'];
+    $today = new DateTime();
+    $startDate = new DateTime($hireDate);
+    $differance = $today->diff($startDate);
+    $yearDifference = $differance->y;
+    if ($yearDifference < 1) {
+        return 0; // 0-1 yıl arası izin hakkı yok
+    } elseif ($yearDifference >= 1 && $yearDifference < 5) {
+        return 14; // 1-5 yıl arası 14 gün izin
+    } elseif ($yearDifference >= 5 && $yearDifference < 15) {
         return 20; // 5-15 yıl arası 20 gün izin
     } else {
         return 26; // 15 yıldan fazla ise 26 gün izin

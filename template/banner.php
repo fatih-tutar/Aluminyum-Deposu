@@ -126,7 +126,7 @@ if(isLoggedIn() === true){
 
 	if((time() - (60 * 60 * 7)) > $company->backup_time && $user->type == '2'){
 
-		otomatikyedekal($user->company_id);
+		//otomatikyedekal($user->company_id);
 
 	}
 

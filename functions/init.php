@@ -5,7 +5,6 @@
 
     $tarihf2 = date("d-m-Y",time());
     $bugununsaniyesi = strtotime($tarihf2);
-	$tarihv3 = date("Y-m-d",time());
 	$error = "";
     $currentPage = basename($_SERVER['PHP_SELF']);
 
