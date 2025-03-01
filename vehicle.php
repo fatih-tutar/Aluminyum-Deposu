@@ -2,69 +2,50 @@
 	include 'functions/init.php';
 
     if (isset($_POST['add_vehicle'])) {
-      // Formdan gelen verileri alalım
-      $name = $_POST['name'];
-      $licensePlate = $_POST['license_plate'];
-      $cascoEndDate = $_POST['casco_end_date'];
-      $insuranceEndDate = $_POST['insurance_end_date'];
-      $inspectionDate = $_POST['inspection_date'];
-      $driver = $_POST['driver'];
-      $description = $_POST['description'];
-      $time = time();  // Anlık timestamp değeri
-      $isDeleted = 0;  // Varsayılan değer
-  
-      // Dosya yükleme işlemleri
-      $casco_pdf = null;
-      $insurance_pdf = null;
-      $registration_pdf = null;
-  
-      // Dosyaların kaydedileceği klasör
-      $uploadDir = 'files/vehicles/';
-  
-      // Kasko PDF dosyası yüklendiyse
-      if (isset($_FILES['casco_pdf']) && $_FILES['casco_pdf']['error'] == 0) {
+        // Formdan gelen verileri alalım
+        $name = $_POST['name'];
+        $licensePlate = $_POST['license_plate'];
+        $cascoEndDate = $_POST['casco_end_date'];
+        $insuranceEndDate = $_POST['insurance_end_date'];
+        $inspectionDate = $_POST['inspection_date'];
+        $driver = $_POST['driver'];
+        $description = $_POST['description'];
+        $time = time();  // Anlık timestamp değeri
+        $isDeleted = 0;  // Varsayılan değer
+        $isTransport = 0;
+
+        // Dosya yükleme işlemleri
+        $cascoPdf = '';
+        $insurancePdf = '';
+        $registrationPdf = '';
+
+        // Dosyaların kaydedileceği klasör
+        $uploadDir = 'files/vehicles/';
+
+        // Kasko PDF dosyası yüklendiyse
+        if (isset($_FILES['casco_pdf']) && $_FILES['casco_pdf']['error'] == 0) {
           $cascoPdf = $uploadDir . uniqid() . "_" . $_FILES['casco_pdf']['name'];
           move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $cascoPdf);
-      }
-  
-      // Sigorta PDF dosyası yüklendiyse
-      if (isset($_FILES['insurance_pdf']) && $_FILES['insurance_pdf']['error'] == 0) {
+        }
+
+        // Sigorta PDF dosyası yüklendiyse
+        if (isset($_FILES['insurance_pdf']) && $_FILES['insurance_pdf']['error'] == 0) {
           $insurancePdf = $uploadDir . uniqid() . "_" . $_FILES['insurance_pdf']['name'];
           move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $insurancePdf);
-      }
-  
-      // Ruhsat PDF dosyası yüklendiyse
-      if (isset($_FILES['registration_pdf']) && $_FILES['registration_pdf']['error'] == 0) {
-          $registrationPdf = $uploadDir . uniqid() . "_" . $_FILES['registration_pdf']['name'];
-          move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $registrationPdf);
-      }
-  
-      // Veritabanına kayıt ekle
-      $sql = "INSERT INTO vehicles (name, license_plate, casco_end_date, insurance_end_date, casco_pdf, insurance_pdf, inspection_date, driver, registration_pdf, description, time, is_deleted) 
-              VALUES (:name, :license_plate, :casco_end_date, :insurance_end_date, :casco_pdf, :insurance_pdf, :inspection_date, :driver, :registration_pdf, :description, :time, :is_deleted)";
-  
-      $stmt = $db->prepare($sql);
+        }
 
-      $stmt->bindParam(':name', $name);
-      $stmt->bindParam(':license_plate', $licensePlate);
-      $stmt->bindParam(':casco_end_date', $cascoEndDate);
-      $stmt->bindParam(':insurance_end_date', $insuranceEndDate);
-      $stmt->bindParam(':casco_pdf', $casco_pdf);
-      $stmt->bindParam(':insurance_pdf', $insurance_pdf);
-      $stmt->bindParam(':inspection_date', $inspectionDate);
-      $stmt->bindParam(':driver', $driver);
-      $stmt->bindParam(':registration_pdf', $registration_pdf);
-      $stmt->bindParam(':description', $description);
-      $stmt->bindParam(':time', $time);
-      $stmt->bindParam(':is_deleted', $isDeleted);
-  
-      // Kayıt işlemi başarılı ise
-      if ($stmt->execute()) {
-          header("Location:vehicle.php");
-          exit();
-      } else {
-          $error = '<br/><div class="alert alert-danger" role="alert">Bir hata oluştu, araç eklenemedi.</div>';   
-      }
+        // Ruhsat PDF dosyası yüklendiyse
+        if (isset($_FILES['registration_pdf']) && $_FILES['registration_pdf']['error'] == 0) {
+            $registrationPdf = $uploadDir . uniqid() . "_" . $_FILES['registration_pdf']['name'];
+            move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $registrationPdf);
+        }
+
+        $query = $db->prepare("INSERT INTO vehicles SET name = ?, license_plate = ?, casco_end_date = ?, insurance_end_date = ?, casco_pdf = ?, insurance_pdf = ?, inspection_date = ?, driver = ?, registration_pdf = ?, description = ?, is_transport = ?, time = ?, is_deleted = ?");
+
+        $insert = $query->execute(array($name, $licensePlate, $cascoEndDate, $insuranceEndDate, $cascoPdf, $insurancePdf, $inspectionDate, $driver, $registrationPdf, $description, $isTransport, $time, $isDeleted));
+
+        header("Location:vehicle.php");
+        exit();
     }
 
     if(isset($_POST['delete_vehicle'])) {
@@ -75,43 +56,43 @@
       exit();
     }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_vehicle'])) {
-      // POST verilerini al
-      $id = $_POST['id'];
-      $name = $_POST['name'];
-      $licensePlate = $_POST['licence_plate'];
-      $driver = $_POST['driver'];
-      $cascoEndDate = $_POST['casco_end_date'];
-      $insuranceEndDate = $_POST['insurance_end_date'];
-      $inspectionDate = $_POST['inspection_date'];
-      $description = $_POST['description'];
-      $isTransport = '0';
-      if(isset($_POST['is_transport'])){ $isTransport = '1'; }
+    if (isset($_POST['edit_vehicle'])) {
+        // POST verilerini al
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $licensePlate = $_POST['licence_plate'];
+        $driver = $_POST['driver'];
+        $cascoEndDate = $_POST['casco_end_date'];
+        $insuranceEndDate = $_POST['insurance_end_date'];
+        $inspectionDate = $_POST['inspection_date'];
+        $description = $_POST['description'];
+        $isTransport = '0';
+        if(isset($_POST['is_transport'])){ $isTransport = '1'; }
 
-      // Dosya yükleme işlemleri
-      $uploads = [];
-      $upload_dir = 'files/vehicles/';
+        // Dosya yükleme işlemleri
+        $uploads = [];
+        $upload_dir = 'files/vehicles/';
 
-      if (!empty($_FILES['casco_pdf']['name'])) {
+        if (!empty($_FILES['casco_pdf']['name'])) {
           $unique_name = uniqid() . '-' . basename($_FILES['casco_pdf']['name']);
           $uploads['casco_pdf'] = $upload_dir . $unique_name;
           move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $uploads['casco_pdf']);
-      }
-      
-      if (!empty($_FILES['insurance_pdf_pdf']['name'])) {
+        }
+
+        if (!empty($_FILES['insurance_pdf_pdf']['name'])) {
           $unique_name = uniqid() . '-' . basename($_FILES['insurance_pdf_pdf']['name']);
           $uploads['insurance_pdf_pdf'] = $upload_dir . $unique_name;
           move_uploaded_file($_FILES['insurance_pdf_pdf']['tmp_name'], $uploads['insurance_pdf_pdf']);
-      }
+        }
 
-      if (!empty($_FILES['registration_pdf']['name'])) {
+        if (!empty($_FILES['registration_pdf']['name'])) {
           $unique_name = uniqid() . '-' . basename($_FILES['registration_pdf']['name']);
           $uploads['registration_pdf'] = $upload_dir . $unique_name;
           move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $uploads['registration_pdf']);
-      }
+        }
 
-      // SQL sorgusunu oluştur
-      $sql = "UPDATE vehicles SET 
+        // SQL sorgusunu oluştur
+        $sql = "UPDATE vehicles SET 
                   name = ?, 
                   license_plate = ?, 
                   driver = ?, 
@@ -121,27 +102,27 @@
                   description = ?,
                   is_transport = ?";
 
-      // Dosya alanlarını kontrol et ve SQL sorgusuna ekle
-      $params = [$name, $licensePlate, $driver, $cascoEndDate, $insuranceEndDate, $inspectionDate, $description, $isTransport];
-      
-      foreach ($uploads as $key => $path) {
+        // Dosya alanlarını kontrol et ve SQL sorgusuna ekle
+        $params = [$name, $licensePlate, $driver, $cascoEndDate, $insuranceEndDate, $inspectionDate, $description, $isTransport];
+
+        foreach ($uploads as $key => $path) {
           $sql .= ", $key = ?";
           $params[] = $path;
-      }
+        }
 
-      $sql .= " WHERE id = ?";
-      $params[] = $id;
+        $sql .= " WHERE id = ?";
+        $params[] = $id;
 
-      // Sorguyu çalıştır
-      $stmt = $db->prepare($sql);
-      $result = $stmt->execute($params);
+        // Sorguyu çalıştır
+        $stmt = $db->prepare($sql);
+        $result = $stmt->execute($params);
 
-      if ($result) {
-        header("Location:vehicle.php");
-        exit();
-      } else {
-        $error = '<br/><div class="alert alert-danger" role="alert">Bir hata oluştu, araç bilgileri güncellenemedi.</div>';  
-      }
+        if ($result) {
+            header("Location:vehicle.php");
+            exit();
+        } else {
+            $error = '<br/><div class="alert alert-danger" role="alert">Bir hata oluştu, araç bilgileri güncellenemedi.</div>';
+        }
     }
 
     $vehicles = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
@@ -271,7 +252,6 @@
           </div>
 
           <?php foreach ($vehicles as $index => $vehicle): ?>
-            <form action="" method="POST">
               <div class="row py-2" style="background-color: <?= $index % 2 === 0 ? '#ffffff' : '#d0d4d7' ?>; border-bottom: 1px solid #dee2e6;">
                 <div class="col-md-1 col-12">
                   <span class="d-md-none font-weight-bold">Araç Adı: </span>
@@ -319,15 +299,17 @@
                 <div class="col-md-1 col-12">
                   <div class="row">
                     <div class="col-md-6 col-6">
-                      <a href="#" onclick="return false" onmousedown="javascript:ackapa('edit-div-<?= $row['id'] ?>');">
+                      <a href="#" onclick="return false" onmousedown="javascript:ackapa('edit-div-<?= $vehicle->id ?>');">
                         <button class="btn btn-success btn-block btn-sm"><i class="fas fa-pen"></i></button>
                       </a>
                     </div>
                     <div class="col-md-6 col-6">
-                      <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                      <button type="submit" name="delete_vehicle" class="btn btn-secondary btn-block btn-sm" onclick="return confirmForm('Aracı silmek istediğinize emin misiniz?');">
-                        <i class="fas fa-trash"></i>
-                      </button>
+                        <form action="" method="POST">
+                          <input type="hidden" name="id" value="<?= $vehicle->id ?>">
+                          <button type="submit" name="delete_vehicle" class="btn btn-secondary btn-block btn-sm" onclick="return confirmForm('Aracı silmek istediğinize emin misiniz?');">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </form>
                     </div>
                   </div>
                 </div>
@@ -337,9 +319,7 @@
                     <?= guvenlik($vehicle->description) ?>
                 </div>
               </div>
-            </form>
-            <form action="" method="POST" enctype="multipart/form-data">
-              <div id="edit-div-<?= $row['id'] ?>" class="my-3" style="display:none;">
+              <div id="edit-div-<?= $vehicle->id ?>" class="my-3" style="display:none;">
                 <form action="" method="POST" enctype="multipart/form-data">
                   <div class="row">
                     <div class="col-md-1 col-12">
@@ -412,7 +392,6 @@
                   </div>
                 </form>
               </div>
-            </form>
           <?php endforeach; ?>
       </div>
     </div>

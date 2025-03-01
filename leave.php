@@ -20,8 +20,8 @@ if (!isLoggedIn()) {
             $error = '<br/><div class="alert alert-danger" role="alert">Sadece 1 Ocak ile 31 Mart tarihleri arasında izin girişi yapabilirsiniz. Bu tarihler dışında lütfen yöneticinizle iletişime geçiniz.</div>';
         }elseif($leaveDays > 14) {
             $error = '<br/><div class="alert alert-danger" role="alert">Tek seferde en fazla 14 günlük izin girebilirsiniz.</div>';
-        }elseif(getLastLeaveDate($userId) + 100 > $startDate){
-            $error = '<br/><div class="alert alert-danger" role="alert">İzin başlangıç tarihiniz son izninizin bitiş tarihinden en az 100 gün (5 ay) sonra olmalıdır.</div>';
+        }elseif (strtotime(getLastLeaveDate($userId) . ' +100 days') > strtotime($startDate)) {
+            $error = '<br/><div class="alert alert-danger" role="alert">İzin başlangıç tarihiniz son izninizin bitiş tarihinden en az 100 gün sonra olmalıdır.</div>';
         }elseif($remainingLeave < $leaveDays) {
             $error = '<br/><div class="alert alert-danger" role="alert">Kalan izin hakkınız '.$remainingLeave.' gündür. Daha fazla izin talep edemezsiniz.</div>';
         }elseif(izinTarihKontrol($startDate, $returnDate, $office) != 0) {

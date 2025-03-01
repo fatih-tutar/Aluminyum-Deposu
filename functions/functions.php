@@ -91,8 +91,8 @@ function calculateAnnualLeave($uyeId) {
 
 function getLastLeaveDate($izinli) {
     global $db;
-    $lastLeave = $db->query("SELECT * FROM izinler WHERE izinli = '{$izinli}' AND silik = '0' AND durum != '2' ORDER BY izin_baslangic_tarihi DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-    return $lastLeave['ise_baslama_tarihi'];
+    $lastLeave = $db->query("SELECT * FROM leaves WHERE user_id = '{$izinli}' AND is_deleted = '0' AND status != '2' ORDER BY start_date DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    return $lastLeave['return_date'];
 }
 
 function getSevkiyatInfo($sevkiyatID){

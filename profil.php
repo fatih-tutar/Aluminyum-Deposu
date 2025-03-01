@@ -104,7 +104,7 @@
 			}elseif (empty($phone) === true) {
 				$error = '<br/><div class="alert alert-danger" role="alert">Telefon kısmını boş bıraktınız.</div>';
 			}else{
-				$query = $db->prepare("UPDATE users SET name = ?, email = ?, title = ?, phone = ?, phone_2 = ?, hire_date = ?, address = ?, photo = ?, nufus_cuzdani = ?, is_basvuru_formu = ?, ikametgah_belgesi = ?, saglik_raporu = ? WHERE id = ?");
+				$query = $db->prepare("UPDATE users SET name = ?, email = ?, title = ?, phone = ?, phone_2 = ?, hire_date = ?, address = ?, photo = ?, identity_card = ?, application_form = ?, residence_certificate = ?, health_report = ? WHERE id = ?");
 				$guncelle = $query->execute(array($name, $email, $title, $phone, $phone_2, $hireDate, $address, $upload_file, $nufuscuzdani, $isbasvuruformu, $ikametgahbelgesi, $saglikraporu, $profil_id));
 				header("Location:profil.php?id=".$profil_id."&guncellendi");
 				exit();
