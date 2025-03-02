@@ -107,9 +107,7 @@
             }
 
             if (isset($_POST['yedekal'])) {
-
-                yedekal();
-
+                backupDatabaseDownload($db, $dbInstance);
             }
 
         }

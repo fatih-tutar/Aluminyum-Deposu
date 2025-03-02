@@ -31,6 +31,12 @@
         $company = $db->query("SELECT * FROM companies WHERE id = '{$user->company_id}'")->fetch(PDO::FETCH_OBJ);
 
         $companyPriceList = guvenlik($company->price_list);
+
+        if((time() - (60 * 60 * 24)) > $company->backup_time && $user->type == '2'){
+            $query = $db->prepare("UPDATE companies SET backup_time = ? WHERE id = ?");
+            $guncelle = $query->execute(array(time(),$user->company_id));
+            backupDatabaseSave($db, $dbInstance);
+        }
 	}else if (!isLoggedIn() && !in_array($currentPage, ['login.php', 'fiyatlistesi.php'])) {
         header("Location: login.php");
         exit();

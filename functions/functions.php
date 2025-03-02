@@ -516,95 +516,6 @@ function cekf($veri){
 
 }
 
-function otomatikyedekal($companyId){
-
-    global $db;
-
-    $sayfa = explode('/',$_SERVER['SCRIPT_NAME']);
-    $sayfa = end($sayfa);
-
-    include 'DBBackupRestore.class.php'; //DBBackup.class.php dosyamızı dahil ediyoruz
-    $dbBackup = new DBYedek(); // class'imizla $dbBackup nesnemizi olusturduk
-
-    //$kayityeri klasor yolu belirtirken sonunda mutlaka / olmali (klasoradi/) seklinde
-    $kayityeri	= "yedekler/";	// ayni dizin için $kayityeri degiskeni bos birakilmali
-    $arsiv		= false;	//Yedeği zip arsivi olarak almak için true // .sql olarak almak için false
-    $tablosil	= false;		//DROP TABLE IF EXISTS satırı eklemek için true // istenmiyorsa false
-    //Veri için kullanılacak sözdizimi:
-    $veritipi	= 1; // INSERT INTO tbl_adı VALUES (1,2,3);
-    //$veritipi	= 2; // INTO tbl_adı VALUES (1,2,3), (4,5,6), (7,8,9);
-    //$veritipi	= 3; // INSERT INTO tbl_adı (sütun_A,sütun_B,sütun_C) VALUES (1,2,3);
-    //$veritipi	= 4; // INSERT INTO tbl_adı (col_A,col_B,col_C) VALUES (1,2,3), (4,5,6), (7,8,9);
-
-    $backup = $dbBackup->Disa_Aktar($kayityeri, $arsiv, $tablosil, $veritipi);
-
-    if($backup){
-
-        $yedekal = $db->prepare("UPDATE companies SET backup_time = ? WHERE id = ?");
-
-        $yedekguncelle = $yedekal->execute(array(time(),$companyId));
-
-        echo '<div class="alert alert-warning" style="position:fixed; z-index:1; left:10%; border-width:3px; border-color:#856404;" >
-						Veritabanı yedeğiniz sunucuya alındı.<br/>Bilgisayarınıza da indirmek istiyorsanız<br/>aşağıdaki evet butonuna tıklayın.
-						<br/><br/>
-						<a href="' . $backup . '" download="' . $backup . '">
-							<button class="btn btn-warning">Evet, indirmek istiyorum.</button
-						</a>
-						<a href="' . $sayfa . '">
-							<button class="btn btn-warning">Hayır, indirmek istemiyorum.</button
-						</a>
-
-					</div>';
-    } else {
-        echo 'Beklenmedik hata oluştu!';
-    }
-
-    $dbBackup->kapat();// $dbBackup nesnemizi kapattik
-
-}
-
-function yedekal(){
-
-    include 'Yedekle.class.php';
-
-    $aluminyumDeposu = [
-        'host' => 'aluminyumdeposu.com',
-        'name' => 'u9022286_depoveritabani',
-        'user' => 'u9022286_depokullanici',
-        'password' => 'Sifrem10'
-    ];
-
-    $aluminyumStok = [
-        'host' => 'aluminyumstok.com',
-        'name' => 'aluminy4_db',
-        'user' => 'aluminy4_fatih',
-        'password' => 'ZWT3?CR?k}+y'
-    ];
-
-    $database = $aluminyumDeposu;
-
-    $bilgiler = [
-        'src' => 'mysql',
-        'host' => $database['host'],
-        'kadi' => $database['user'],
-        'parola' => $database['password'],
-        'veritabani' => $database['name']
-    ];
-
-    $olustur = new Yedekle($bilgiler);
-    $yedekle = $olustur->yedek();
-    if(!$yedekle['hata']){
-
-        header('Content-type: text/plain');
-        header('Content-disposition: attachment; filename=vt_'.uniqid().'.sql');
-        echo $yedekle['mesaj'];
-
-    } else {
-        echo 'İşlem başarısız oldu!';
-    }
-
-}
-
 function uyeadcek($userId){
 
     global $db;
@@ -671,5 +582,79 @@ function ara($bas, $son, $yazi)
         '(.*?)'. preg_quote($son, '/').'/i', $yazi, $m);
     return @$m[1];
 }
+
+function backupDatabaseSave($db, $dbInstance)
+{
+    $config = ['dbname' => $dbInstance->getDbConfig()['dbname']];
+    $backupDir = __DIR__ . "/../backups";
+    $backupFile = $backupDir . "/backup_" . date("Y-m-d_H-i-s") . ".sql";
+    $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
+    $sqlDump = "-- Veritabanı Yedeği: {$config['dbname']}\n-- Tarih: " . date("Y-m-d H:i:s") . "\n\n";
+    foreach ($tables as $table) {
+        $createTableStmt = $db->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
+        $sqlDump .= "DROP TABLE IF EXISTS `$table`;\n" . $createTableStmt['Create Table'] . ";\n\n";
+        $rows = $db->query("SELECT * FROM `$table`")->fetchAll(PDO::FETCH_ASSOC);
+        if ($rows) {
+            foreach ($rows as $row) {
+                $values = array_map([$db, 'quote'], array_values($row));
+                $sqlDump .= "INSERT INTO `$table` VALUES (" . implode(", ", $values) . ");\n";
+            }
+            $sqlDump .= "\n";
+        }
+    }
+    file_put_contents($backupFile, $sqlDump);
+
+    return true;
+}
+
+function backupDatabaseDownload($db, $dbInstance)
+{
+    $config = ['dbname' => $dbInstance->getDbConfig()['dbname']];
+
+    // Yedekleme dosyasını kaydetme işlemini kaldırdık, sadece indirme işlemi yapılacak
+    $zipFile = tempnam(sys_get_temp_dir(), 'backup_') . ".zip"; // Geçici bir ZIP dosyası oluşturuluyor
+    $zip = new ZipArchive();
+
+    // Veritabanı yedeğini al
+    $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
+    $sqlDump = "-- Veritabanı Yedeği: {$config['dbname']}\n-- Tarih: " . date("Y-m-d H:i:s") . "\n\n";
+
+    foreach ($tables as $table) {
+        $createTableStmt = $db->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
+        $sqlDump .= "DROP TABLE IF EXISTS `$table`;\n" . $createTableStmt['Create Table'] . ";\n\n";
+
+        $rows = $db->query("SELECT * FROM `$table`")->fetchAll(PDO::FETCH_ASSOC);
+        if ($rows) {
+            foreach ($rows as $row) {
+                $values = array_map([$db, 'quote'], array_values($row));
+                $sqlDump .= "INSERT INTO `$table` VALUES (" . implode(", ", $values) . ");\n";
+            }
+            $sqlDump .= "\n";
+        }
+    }
+
+    // SQL yedeğini geçici bir dosyaya yaz
+    $tempSqlFile = sys_get_temp_dir() . "/backup.sql";
+    file_put_contents($tempSqlFile, $sqlDump);
+
+    // ZIP dosyasını oluştur ve SQL dosyasını ekle
+    if ($zip->open($zipFile, ZipArchive::CREATE) === TRUE) {
+        $zip->addFile($tempSqlFile, basename($tempSqlFile));
+        $zip->close();
+        unlink($tempSqlFile); // SQL dosyasını geçici dosyadan sil
+    } else {
+        echo "ZIP dosyası oluşturulamadı!";
+        return;
+    }
+
+    // ZIP dosyasını indir
+    header('Content-Type: application/zip');
+    header('Content-Disposition: attachment; filename="' . basename($zipFile) . '"');
+    header('Content-Length: ' . filesize($zipFile));
+    readfile($zipFile);
+    unlink($zipFile); // ZIP dosyasını da sil
+    exit;
+}
+
 
 ?>
