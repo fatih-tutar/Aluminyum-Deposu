@@ -245,7 +245,7 @@
 					<h6><i class="fas fa-envelope mr-2"></i><?= $profil_mail ?></h6>
 					<h6><i class="fas fa-mobile-alt mr-2" ></i><?= $profil_tel ?></h6>
 					<h6><i class="fas fa-phone mr-2"></i><?= $profil_phone_2 ?></h6>
-					<p class="mb-1"><i class="fas fa-map-marker mr-2"></i><?= $adres ?></p>
+					<p class="mb-1"><i class="fas fa-map-marker mr-2"></i><?= $address ?></p>
 				</div>
 				<div class="col-md-5 col-5 pt-3 pl-0" style="display:flex; justify-content:end; align-items:end;">
 					<div style="text-align:right;">
@@ -327,7 +327,7 @@
 								<b>İkinci Telefon Numarası</b>
 								<input type="text" class="form-control form-control-sm mb-1" placeholder="İkinci Telefon Numarası" name="phone_2" value="<?= $profil_phone_2 ?>">
 								<b>Adres</b>
-								<textarea name="adres" id="adres" rows="3" class="form-control form-control-sm mb-1" placeholder="Adresinizi giriniz."><?= $adres ?></textarea>
+								<textarea name="address" id="adres" rows="3" class="form-control form-control-sm mb-1" placeholder="Adresinizi giriniz."><?= $address ?></textarea>
 							</div>
 							<div class="col-md-6">
 								<?php if($user->type == 2){?>
