@@ -24,6 +24,34 @@ function izinTarihKontrol($izinBaslangicTarihi, $iseBaslamaTarihi, $ofis) {
     return $izin->rowCount();
 }
 
+function hasOverlappingLeave($startDate, $returnDate, $office, $excludeId = null) {
+    global $db;
+
+    $sql = "SELECT * FROM leaves WHERE office = :office AND is_deleted = '0' AND status != '2' 
+            AND (
+                (:startDate >= start_date AND :startDate < return_date) 
+                OR 
+                (:returnDate >= start_date AND :returnDate < return_date)
+            )";
+
+    // Eğer $excludeId varsa, bu ID'yi hariç tut
+    if ($excludeId !== null) {
+        $sql .= " AND id != :exclude_id";
+    }
+
+    $query = $db->prepare($sql);
+    $query->bindParam(':office', $office, PDO::PARAM_INT);
+    $query->bindParam(':startDate', $startDate, PDO::PARAM_STR);
+    $query->bindParam(':returnDate', $returnDate, PDO::PARAM_STR);
+
+    if ($excludeId !== null) {
+        $query->bindParam(':exclude_id', $excludeId, PDO::PARAM_INT);
+    }
+
+    $query->execute();
+    return $query->rowCount();
+}
+
 function getOfficeType($uyeId) {
     global $db;
     $uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
@@ -44,10 +72,35 @@ function kullanilanIzinHesapla($uyeId) {
     return !$kullanilanIzin['toplam_kullanilan'] ? 0 : $kullanilanIzin['toplam_kullanilan'];
 }
 
-function calculateUsedLeave($uyeId) {
+function calculateUsedLeave($uyeId, $leaveId = null) {
     global $db;
     $year = date("Y");
-    $usedLeave = $db->query("SELECT SUM(leave_days) as total_used_leave FROM leaves WHERE user_id = '{$uyeId}' AND YEAR(start_date) = '{$year}' AND status = '1' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
+
+    // SQL sorgusu oluştur
+    $sql = "SELECT SUM(leave_days) as total_used_leave 
+            FROM leaves 
+            WHERE user_id = :uyeId 
+            AND YEAR(start_date) = :year 
+            AND status = '1' 
+            AND is_deleted = '0'";
+
+    // Eğer leaveId verilmişse, bu ID'yi hariç tut
+    if ($leaveId !== null) {
+        $sql .= " AND id != :leaveId";
+    }
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':uyeId', $uyeId, PDO::PARAM_INT);
+    $stmt->bindParam(':year', $year, PDO::PARAM_INT);
+
+    // Eğer leaveId varsa parametre olarak ekle
+    if ($leaveId !== null) {
+        $stmt->bindParam(':leaveId', $leaveId, PDO::PARAM_INT);
+    }
+
+    $stmt->execute();
+    $usedLeave = $stmt->fetch(PDO::FETCH_ASSOC);
+
     return !$usedLeave['total_used_leave'] ? 0 : $usedLeave['total_used_leave'];
 }
 
@@ -89,16 +142,92 @@ function calculateAnnualLeave($uyeId) {
     }
 }
 
-function getLastLeaveDate($izinli) {
+function isLeaveDateValid($userId, $startDate, $returnDate, $excludeId = null) {
     global $db;
-    $lastLeave = $db->query("SELECT * FROM leaves WHERE user_id = '{$izinli}' AND is_deleted = '0' AND status != '2' ORDER BY start_date DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-    return $lastLeave['return_date'];
+
+    // Kullanıcının izinlerini alıyoruz
+    $sql = "SELECT * FROM leaves WHERE user_id = :user_id AND is_deleted = '0' AND status != '2'";
+
+    // Eğer bir excludeId varsa, o izni hariç tutuyoruz
+    if ($excludeId !== null) {
+        $sql .= " AND id != :exclude_id";
+    }
+
+    $sql .= " ORDER BY start_date ASC"; // İzinleri başlangıç tarihine göre sıralıyoruz
+
+    $query = $db->prepare($sql);
+    $query->bindParam(':user_id', $userId, PDO::PARAM_INT);
+
+    if ($excludeId !== null) {
+        $query->bindParam(':exclude_id', $excludeId, PDO::PARAM_INT);
+    }
+
+    $query->execute();
+    $leaves = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    // İzinlerin her biri için kontrol yapıyoruz
+    foreach ($leaves as $leave) {
+        // Mevcut izinlerin başlangıç ve bitiş tarihlerini alıyoruz
+        $leaveStartDate = $leave['start_date'];
+        $leaveReturnDate = $leave['return_date'];
+
+        // Yeni izin başlangıç tarihi ile mevcut izin bitiş tarihi arasındaki farkı kontrol ediyoruz
+        $dateDiff1 = abs(strtotime($startDate) - strtotime($leaveReturnDate)); // Mutlak fark
+        if ($dateDiff1 < 100 * 24 * 60 * 60) { // 100 gün = 100 * 24 * 60 * 60 saniye
+            // Eğer yeni izin başlangıç tarihi ile mevcut iznin bitiş tarihi arasında 100 gün yoksa
+            return false;
+        }
+
+        // Yeni izin bitiş tarihi ile mevcut izin başlangıç tarihi arasındaki farkı kontrol ediyoruz
+        $dateDiff2 = abs(strtotime($returnDate) - strtotime($leaveStartDate)); // Mutlak fark
+        if ($dateDiff2 < 100 * 24 * 60 * 60) { // 100 gün = 100 * 24 * 60 * 60 saniye
+            // Eğer yeni izin bitiş tarihi ile mevcut iznin başlangıç tarihi arasında 100 gün yoksa
+            return false;
+        }
+    }
+
+    // Eğer hiç bir çakışma yoksa, tarih geçerli
+    return true;
+}
+
+function getLastLeaveDate($izinli, $excludeId = null) {
+    global $db;
+
+    $sql = "SELECT * FROM leaves WHERE user_id = :user_id AND is_deleted = '0' AND status != '2'";
+
+    if ($excludeId !== null) {
+        $sql .= " AND id != :exclude_id";
+    }
+
+    $sql .= " ORDER BY start_date DESC LIMIT 1";
+
+    $query = $db->prepare($sql);
+    $query->bindParam(':user_id', $izinli, PDO::PARAM_INT);
+
+    if ($excludeId !== null) {
+        $query->bindParam(':exclude_id', $excludeId, PDO::PARAM_INT);
+    }
+
+    $query->execute();
+    $lastLeave = $query->fetch(PDO::FETCH_ASSOC);
+
+    return $lastLeave ? $lastLeave['return_date'] : null;
 }
 
 function getSevkiyatInfo($sevkiyatID){
     global $db;
     $sevkiyat = $db->query("SELECT * FROM sevkiyat WHERE id = '{$sevkiyatID}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
     return $sevkiyat;
+}
+
+function getUser($userId){
+    global $db;
+    $user = $db->query("SELECT * FROM users WHERE id = '{$userId}' LIMIT 1")->fetch(PDO::FETCH_OBJ);
+    if($user) {
+        return $user;
+    }else{
+        return null;
+    }
 }
 
 function getUsername($userId){

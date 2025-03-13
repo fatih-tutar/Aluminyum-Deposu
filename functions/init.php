@@ -1,12 +1,14 @@
 <?php
 	session_start();
 	ob_start();
-    setlocale(LC_TIME, "turkish");
+    setlocale(LC_TIME, 'tr_TR.UTF-8');
 
     $tarihf2 = date("d-m-Y",time());
+    $date = date("Y-m-d",time());
     $bugununsaniyesi = strtotime($tarihf2);
 	$error = "";
     $currentPage = basename($_SERVER['PHP_SELF']);
+    $currentYear = date("Y");
 
     include 'database.php';
 	include 'functions.php';
@@ -20,6 +22,7 @@
     if(isLoggedIn() === true){
 		$userSessionId = $_SESSION['user_id'];
         $user = $db->query("SELECT * FROM users WHERE id = '{$userSessionId}'")->fetch(PDO::FETCH_OBJ);
+        $authUser = $user;
 
         $userPermissionKeys = [
             'buying_price','factory','quote','order','editing','transaction','stock_flow','selling_price',
@@ -27,6 +30,7 @@
         ];
         $userPermissionValues = explode(",", $user->permissions);
         $user->permissions = (object) array_combine($userPermissionKeys, $userPermissionValues);
+        $authUser->permissions = $user->permissions;
 
         $company = $db->query("SELECT * FROM companies WHERE id = '{$user->company_id}'")->fetch(PDO::FETCH_OBJ);
 

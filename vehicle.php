@@ -60,7 +60,7 @@
         // POST verilerini al
         $id = $_POST['id'];
         $name = $_POST['name'];
-        $licensePlate = $_POST['licence_plate'];
+        $licensePlate = $_POST['license_plate'];
         $driver = $_POST['driver'];
         $cascoEndDate = $_POST['casco_end_date'];
         $insuranceEndDate = $_POST['insurance_end_date'];
@@ -79,10 +79,10 @@
           move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $uploads['casco_pdf']);
         }
 
-        if (!empty($_FILES['insurance_pdf_pdf']['name'])) {
-          $unique_name = uniqid() . '-' . basename($_FILES['insurance_pdf_pdf']['name']);
-          $uploads['insurance_pdf_pdf'] = $upload_dir . $unique_name;
-          move_uploaded_file($_FILES['insurance_pdf_pdf']['tmp_name'], $uploads['insurance_pdf_pdf']);
+        if (!empty($_FILES['insurance_pdf']['name'])) {
+          $unique_name = uniqid() . '-' . basename($_FILES['insurance_pdf']['name']);
+          $uploads['insurance_pdf'] = $upload_dir . $unique_name;
+          move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $uploads['insurance_pdf']);
         }
 
         if (!empty($_FILES['registration_pdf']['name'])) {
