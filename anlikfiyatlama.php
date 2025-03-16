@@ -6,7 +6,6 @@ if (!isLoggedIn()) {
 }else{
     $dolar = getDolar();
     $lme = getLME();
-    echo $dolar."<br/>".$lme."<br/>";
 }
 ?>
 <!DOCTYPE html>

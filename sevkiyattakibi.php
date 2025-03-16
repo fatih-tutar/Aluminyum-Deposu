@@ -172,103 +172,66 @@
         }
     }
 ?>
-<div class="div4 p-2 mb-4">
+<div style="text-align: right; display: block; width: 100%;">
+    <a href="#" onclick="openModal('form-div')">
+        <button class="btn btn-primary btn mb-2" style="background-color: #003566; border-color: #003566;">
+            <i class="fas fa-pen mr-2"></i>
+            Yeni Sevkiyat
+        </button>
+    </a>
+</div>
+<div id="overlay" class="overlay" onclick="closeModal()"></div>
+<div id="form-div" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
     <form action="" method="POST">
-                                
-        <div class="row">
-
-            <div class="col-12">
-                <h3><b>Müşteri Sipariş Formu</b></h3>
-            </div>
-
-            <div class="col-md-5 col-12 urun-search-box">
-
-                <b>Ürün</b>
-
-                <input name="urun" id="uruninputu" type="text" class="form-control" autocomplete="off" placeholder="Ürün Adı"/>
-
-                <ul class="list-group urunliveresult" id="urunsonuc" style="position: absolute; z-index: 1;"></ul>
-
-            </div>
-
-            <div class="col-md-3 col-12 search-box">
-
-                <b>Firma</b>
-                
-                <input name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
-
-                <ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
-
-            </div>
-            
-            <div class="col-md-2 col-12">
-
-                <b>Adet</b>
-                
-                <input type="text" class="form-control" name="adet" placeholder="(Boy)">
-
-            </div>
-
-            <div class="col-md-2 col-12">
-                <b>Fiyat</b>
-                <input type="text" class="form-control" name="fiyat" placeholder="TL">
-            </div>
-
+        <div>
+            <h4><b>Müşteri Sipariş Formu</b></h4>
         </div>
-
-        <div class="row">
-
-            <div class="col-md-2 col-12">
-
-                <b>Sevk Tipi</b>
-
-                <select name="sevk_tipi" id="sevk_tipi" class="form-control">
-
-                    <option value="null">Sevk tipi seçiniz.</option>
-                    <option value="0">Müşteri Çağlayan</option>
-                    <option value="1">Müşteri Alkop</option>
-                    <option value="2">Tarafımızca sevk</option>
-                    <option value="3">Ambara tarafımızca sevk</option>
-
-                </select>
-
-            </div>
-
-            <div class="col-md-2 col-12">
-
-                <b>Araç</b>
-
-                <select name="arac_id" id="arac_id" class="form-control">
-
-                    <option value="null">Araç seçiniz.</option>
-                    <?php
-                            foreach( $araclar as $arac ){
-                    ?>
-                                <option value="<?= $arac->id ?>"><?= $arac->name ?></option>
-                    <?php
-                            }
-                    ?>
-
-                </select>
-
-            </div>
-
-            <div class="col-md-6 col-12">
-
-                <b>Açıklama</b>
-
-                <input type="text" class="form-control" name="aciklama" placeholder="Sevkiyat ile ilgili açıklama yazabilirsiniz.">
-
-            </div>
-
-            <div class="col-md-2 col-12">
-                <br/>
-                <button class="btn btn-warning btn-block" name="sevkiyatkaydet">Kaydet</button>
-
-            </div>
-
+        <div class="urun-search-box">
+            <b>Ürün</b>
+            <input name="urun" id="uruninputu" type="text" class="form-control" autocomplete="off" placeholder="Ürün Adı"/>
+            <ul class="list-group urunliveresult" id="urunsonuc" style="position: absolute; z-index: 1;"></ul>
         </div>
-
+        <div class="search-box">
+            <b>Firma</b>
+            <input name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Adı"/>
+            <ul class="list-group liveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
+        </div>
+        <div>
+            <b>Adet</b>
+            <input type="text" class="form-control" name="adet" placeholder="(Boy)">
+        </div>
+        <div>
+            <b>Fiyat</b>
+            <input type="text" class="form-control" name="fiyat" placeholder="TL">
+        </div>
+        <div>
+            <b>Sevk Tipi</b>
+            <select name="sevk_tipi" id="sevk_tipi" class="form-control">
+                <option value="null">Sevk tipi seçiniz.</option>
+                <option value="0">Müşteri Çağlayan</option>
+                <option value="1">Müşteri Alkop</option>
+                <option value="2">Tarafımızca sevk</option>
+                <option value="3">Ambara tarafımızca sevk</option>
+            </select>
+        </div>
+        <div>
+            <b>Araç</b>
+            <select name="arac_id" id="arac_id" class="form-control">
+                <option value="null">Araç seçiniz.</option>
+                <?php foreach( $araclar as $arac ){ ?>
+                    <option value="<?= $arac->id ?>"><?= $arac->name ?></option>
+                <?php } ?>
+            </select>
+        </div>
+        <div>
+            <b>Açıklama</b>
+            <input type="text" class="form-control" name="aciklama" placeholder="Sevkiyat ile ilgili açıklama yazabilirsiniz.">
+        </div>
+        <div>
+            <br/>
+            <button class="btn btn-warning btn-block" name="sevkiyatkaydet">Kaydet</button>
+        </div>
     </form>
 </div>
 <div id="sevkiyattakibidivi" class="row">

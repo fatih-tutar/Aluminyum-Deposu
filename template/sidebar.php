@@ -4,7 +4,7 @@
         font-weight:bold;
     }
 </style>
-<div id="accordion" class="mt-2">
+<div id="accordion" class="mt-2 mb-2">
     <?php
         $i = 0;
         $query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}'", PDO::FETCH_ASSOC);

@@ -202,8 +202,10 @@
         <div id="overlay" class="overlay" onclick="closeModal()"></div>
         <div id="form-div" class="modal">
             <span class="close" onclick="closeModal()">&times;</span>
-            <div style="padding-top: 20px;">
-                <form action="" method="POST">
+            <div>
+                <h4><b>İzin Giriş Formu</b></h4>
+            </div>
+            <form action="" method="POST">
                     <?php if($user->type == 2) { ?>
                         <b>Çalışan</b>
                         <select name="user_id" id="user_id" class="form-control mb-2">
@@ -230,7 +232,6 @@
                     <input type="text" id="leave_days" name="leave_days" class="form-control mb-2" readonly>
                     <button type="submit" class="btn btn-primary btn-block" name="add_leave">İzni Kaydet</button>
                 </form>
-            </div>
         </div>
         <div class="row pl-3 pb-4 pr-3 bb-grey">
             <div style="text-align: right; display: block; width: 100%;" class="d-none d-md-block">
