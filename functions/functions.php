@@ -9,10 +9,10 @@ function controlProductById($productId){
         return false;
     }
 }
-function getFactoryInfos($fabrikaId) {
+function getFactoryInfos($factoryId) {
     global $db;
-    $fabrika = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$fabrikaId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-    return $fabrika;
+    $factory = $db->query("SELECT * FROM factories WHERE id = '{$factoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    return $factory;
 }
 
 function izinTarihKontrol($izinBaslangicTarihi, $iseBaslamaTarihi, $ofis) {
@@ -603,15 +603,15 @@ function kategoridolumu($kategori_id){
     return ($say == '0') ? '0' : '1';
 }
 
-function siparisvarmi($fabrika_id){
+function siparisvarmi($factoryId){
 
     global $db;
 
-    $sorgu = $db->prepare("SELECT COUNT(*) FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}'");
-    $sorgu->execute();
-    $say = $sorgu->fetchColumn();
+    $query = $db->prepare("SELECT COUNT(*) FROM siparis WHERE urun_fabrika_id = '{$factoryId}'");
+    $query->execute();
+    $count = $query->fetchColumn();
 
-    return ($say == '0') ? '0' : '1';
+    return ($count == '0') ? '0' : '1';
 }
 
 function teklifvarmi($firmaid){
@@ -669,19 +669,19 @@ function firmaadcek($firmaid){
 
 }
 
-function fabrikakullanimdami($fabrika_id){
+function isFactoryInUse($factoryId){
 
     global $db;
 
-    $sorgu = $db->prepare("SELECT COUNT(*) FROM urun WHERE urun_fabrika = '{$fabrika_id}'");
+    $sorgu = $db->prepare("SELECT COUNT(*) FROM urun WHERE urun_fabrika = '{$factoryId}'");
     $sorgu->execute();
     $usay = $sorgu->fetchColumn();
 
-    $sorgu = $db->prepare("SELECT COUNT(*) FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}'");
+    $sorgu = $db->prepare("SELECT COUNT(*) FROM siparis WHERE urun_fabrika_id = '{$factoryId}'");
     $sorgu->execute();
     $ssay = $sorgu->fetchColumn();
 
-    $sorgu = $db->prepare("SELECT COUNT(*) FROM siparisformlari WHERE fabrikaid = '{$fabrika_id}'");
+    $sorgu = $db->prepare("SELECT COUNT(*) FROM siparisformlari WHERE fabrikaid = '{$factoryId}'");
     $sorgu->execute();
     $sfsay = $sorgu->fetchColumn();
 

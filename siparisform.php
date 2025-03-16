@@ -127,7 +127,7 @@
 
 			<div class="col-md-4">
 				
-				<?= $fabrika['fabrika_adi'] ?>
+				<?= $fabrika['name'] ?>
 
 			</div>
 

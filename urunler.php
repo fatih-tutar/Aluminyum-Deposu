@@ -530,7 +530,7 @@
 
 			if (isset($_GET['sipariseklendi'])) {
 				
-				$error = '<br/><div class="alert alert-success" role="alert"><a href="fabrikalar.php" target="m_blank">Siparişin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından sipariş formlarına ulaşabilirsin.</a></div>';
+				$error = '<br/><div class="alert alert-success" role="alert"><a href="factory.php" target="m_blank">Siparişin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından sipariş formlarına ulaşabilirsin.</a></div>';
 
 			}
 
@@ -542,7 +542,7 @@
 
 			if (isset($_GET['siparisalindi'])) {
 				
-				$error = '<br/><div class="alert alert-success" role="alert"><a href="fabrikalar.php" target="m_blank">Sipariş alındı ve sipariş kaydı geçmiş siparişlere eklendi.</a></div>';
+				$error = '<br/><div class="alert alert-success" role="alert"><a href="factory.php" target="m_blank">Sipariş alındı ve sipariş kaydı geçmiş siparişlere eklendi.</a></div>';
 
 			}
 
@@ -884,9 +884,9 @@
 
 						$urun_fabrika = $orw['urun_fabrika'];
 
-						$u_fabrika = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+						$u_fabrika = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-						$urun_fabrika_adi = $u_fabrika['fabrika_adi'] ?? null;
+						$urun_fabrika_adi = $u_fabrika['name'] ?? null;
 
 						$urun_aciklama = $orw['urun_aciklama'];
 
@@ -1356,15 +1356,15 @@
 
 														}
 
-														$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}'", PDO::FETCH_ASSOC);
+														$fabrika = $db->query("SELECT * FROM factories WHERE company_id = '{$user->company_id}'", PDO::FETCH_ASSOC);
 
 														if ( $fabrika->rowCount() ){
 
 															foreach( $fabrika as $fbrk ){
 
-																$fabrika_id = $fbrk['fabrika_id'];
+																$fabrika_id = $fbrk['id'];
 
-																$fabrika_adi = $fbrk['fabrika_adi'];
+																$fabrika_adi = $fbrk['name'];
 
 																echo "<option value='".$fabrika_id."'>".$fabrika_adi."</option>";
 
@@ -1454,9 +1454,9 @@
 
 													$termintarih = date("d-m-Y", $terminsaniye);
 
-													$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+													$fabrikaadcek = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-													$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
+													$urun_fabrika_adi = $fabrikaadcek['name'];
 
 										?>
 
@@ -1568,9 +1568,9 @@
 
 													$siparistarih = date("d-m-Y", $siparissaniye);
 
-													$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+													$fabrikaadcek = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-													$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
+													$urun_fabrika_adi = $fabrikaadcek['name'];
 
 										?>
 
@@ -1805,15 +1805,15 @@
 
 														}
 
-														$fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+														$fabrika = $db->query("SELECT * FROM factories WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
 														if ( $fabrika->rowCount() ){
 
 															foreach( $fabrika as $fbrk ){
 
-																$fabrika_id = $fbrk['fabrika_id'];
+																$fabrika_id = $fbrk['id'];
 
-																$fabrika_adi = $fbrk['fabrika_adi'];
+																$fabrika_adi = $fbrk['name'];
 
 																echo "<option value='".$fabrika_id."'>".$fabrika_adi."</option>";
 

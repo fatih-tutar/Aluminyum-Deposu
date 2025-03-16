@@ -140,15 +140,15 @@ if(!isLoggedIn()){
 
                                     <?php
 
-                                    $fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+                                    $fabrika = $db->query("SELECT * FROM factories WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
                                     if ( $fabrika->rowCount() ){
 
                                         foreach( $fabrika as $fbrk ){
 
-                                            $fabrika_id = $fbrk['fabrika_id'];
+                                            $fabrika_id = $fbrk['id'];
 
-                                            $fabrika_adi = $fbrk['fabrika_adi'];
+                                            $fabrika_adi = $fbrk['name'];
 
                                             echo "<option value='".$fabrika_id."'>".$fabrika_adi."</option>";
 
@@ -214,9 +214,9 @@ if(!isLoggedIn()){
 
                         $fabrikaid = $row['fabrikaid'];
 
-                        $fabrikadicek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$fabrikaid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+                        $fabrikadicek = $db->query("SELECT * FROM factories WHERE id = '{$fabrikaid}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-                        $fabrikaadi = $fabrikadicek['fabrika_adi'];
+                        $fabrikaadi = $fabrikadicek['name'];
 
                         $pdf = $row['pdf'];
 
@@ -330,15 +330,15 @@ if(!isLoggedIn()){
 
                                             <?php
 
-                                            $fabrika = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+                                            $fabrika = $db->query("SELECT * FROM factories WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
                                             if ( $fabrika->rowCount() ){
 
                                                 foreach( $fabrika as $fbrk ){
 
-                                                    $fabrika_id = $fbrk['fabrika_id'];
+                                                    $fabrika_id = $fbrk['id'];
 
-                                                    $fabrika_adi = $fbrk['fabrika_adi'];
+                                                    $fabrika_adi = $fbrk['name'];
 
                                                     if ($fabrika_id == $fabrikaid) {
 

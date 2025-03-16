@@ -15,9 +15,9 @@
 
 		$siparistarih = date("d-m-Y", time());
 
-		$adcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}'")->fetch(PDO::FETCH_ASSOC);
+		$adcek = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}'")->fetch(PDO::FETCH_ASSOC);
 
-		$urun_fabrika_adi = $adcek['fabrika_adi'];
+		$urun_fabrika_adi = $adcek['name'];
 
 		$ilgilikisi = $query['ilgilikisi'];
 

@@ -6,6 +6,7 @@ if (!isLoggedIn()) {
 }else{
     $dolar = getDolar();
     $lme = getLME();
+    echo $dolar."<br/>".$lme."<br/>";
 }
 ?>
 <!DOCTYPE html>
@@ -30,17 +31,17 @@ if (!isLoggedIn()) {
 
                     <?php
 
-                    $query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+                    $query = $db->query("SELECT * FROM factories WHERE company_id = '{$authUser->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
                     if ( $query->rowCount() ){
 
                         foreach( $query as $row ){
 
-                            $fabrika_id = guvenlik($row['fabrika_id']);
+                            $fabrika_id = guvenlik($row['id']);
 
-                            $fabrika_adi = guvenlik($row['fabrika_adi']);
+                            $fabrika_adi = guvenlik($row['name']);
 
-                            $fabrikaiscilik = guvenlik($row['fabrikaiscilik']);
+                            $fabrikaiscilik = guvenlik($row['labor_cost']);
 
                             $fiyat = ($lme + $fabrikaiscilik) * $dolar / 1000;
 

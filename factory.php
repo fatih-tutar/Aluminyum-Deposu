@@ -20,49 +20,49 @@
 
 	if($user->type != '3'){
 
-		if (isset($_POST['fabrikabilgileriguncelle'])) {
+		if (isset($_POST['update_factory'])) {
 			
-			$fabrika_id = guvenlik($_POST['fabrika_id']);
+			$id = guvenlik($_POST['id']);
 
-			$fabrika_adi = guvenlik($_POST['fabrika_adi']);
+			$name = guvenlik($_POST['name']);
 
-			$fabrikatel = guvenlik($_POST['fabrikatel']);
+			$phone = guvenlik($_POST['phone']);
 
-			$fabrikaeposta = guvenlik($_POST['fabrikaeposta']);
+			$email = guvenlik($_POST['email']);
 
-			$fabrikaiscilik = guvenlik($_POST['fabrikaiscilik']);
+			$laborCost = guvenlik($_POST['labor_cost']);
 
-			$fabrikaadres = guvenlik($_POST['fabrikaadres']);
+			$address = guvenlik($_POST['address']);
 
-			$query = $db->prepare("UPDATE fabrikalar SET fabrika_adi = ?, fabrikatel = ?, fabrikaeposta = ?, fabrikaiscilik = ?, fabrikaadres = ? WHERE fabrika_id = ?"); 
+			$query = $db->prepare("UPDATE factories SET name = ?, phone = ?, email = ?, labor_cost = ?, address = ? WHERE id = ?");
 
-			$guncelle = $query->execute(array($fabrika_adi, $fabrikatel, $fabrikaeposta, $fabrikaiscilik, $fabrikaadres, $fabrika_id));
+			$guncelle = $query->execute(array($name,$phone,$email,$laborCost,$address,$id));
 
-			$siraid = guvenlik($_POST['siraid']);
+			$orderId = guvenlik($_POST['order_id']);
 
-			header("Location:fabrikalar.php#".($siraid - 2));
+			header("Location:factory.php#".($orderId - 2));
 
 			exit();
 
 		}
 
-		if (isset($_POST['fabrikasil'])) {
+		if (isset($_POST['delete_factory'])) {
 
-			$fabrika_id = guvenlik($_POST['fabrika_id']);
+			$id = guvenlik($_POST['id']);
 
-			if (fabrikakullanimdami($fabrika_id) == '1') {
+			if (isFactoryInUse($id) == '1') {
 			
 				$error = '<br/><div class="alert alert-danger" role="alert">Bu fabrikanın kayıtlı olduğu bir ürün, sipariş veya sipariş formu var o yüzden silemiyoruz.</div>';
 
 			}else{
 			
-				$sil = $db->prepare("UPDATE fabrikalar SET silik = ? WHERE fabrika_id = ?");
+				$delete = $db->prepare("UPDATE factories SET is_deleted = ? WHERE id = ?");
 
-				$delete = $sil->execute(array('1',$fabrika_id));
+				$delete = $delete->execute(array('1',$id));
 
-				$siraid = guvenlik($_POST['siraid']);
+				$orderId = guvenlik($_POST['order_id']);
 
-				header("Location:fabrikalar.php#".($siraid - 2));
+				header("Location:factory.php#".($orderId - 2));
 
 				exit();
 
@@ -70,173 +70,163 @@
 
 		}
 
-		if (isset($_POST['siparisformunusil'])) {
+		if (isset($_POST['delete_order_form'])) {
 			
-			$formid = guvenlik($_POST['formid']);
+			$id = guvenlik($_POST['id']);
 
-			$siparisler = guvenlik($_POST['siparisler']);
+			$orders = guvenlik($_POST['orders']);
 
-			$silmekicinpatlat = explode(",", $siparisler);
+			$orderArray = explode(",", $orders);
 
-			foreach ($silmekicinpatlat as $key => $value) {
+			foreach ($orderArray as $key => $value) {
 
 				$query = $db->prepare("UPDATE siparis SET silik = ? WHERE siparis_id = ?"); 
 
-				$guncelle = $query->execute(array('1',$value));
+				$update = $query->execute(array('1',$value));
 
 			}
 
-			$silici = $db->prepare("UPDATE siparisformlari SET silik = ? WHERE formid = ?"); 
+            $query = $db->prepare("UPDATE siparisformlari SET silik = ? WHERE formid = ?"); 
 
-			$deleter = $query->execute(array('1',$formid));
+			$delete = $query->execute(array('1',$id));
 
-			$siraid = guvenlik($_POST['siraid']);
+			$orderId = guvenlik($_POST['order_id']);
 
-			header("Location:fabrikalar.php#".($siraid - 2));
-
-			exit();
-
-		}
-
-		if (isset($_POST['fabrika_ekleme_formu'])) {
-			
-			$fabrika_adi = guvenlik($_POST['fabrika_adi']);
-
-			$fabrikatel = guvenlik($_POST['fabrikatel']);
-
-			$fabrikaeposta = guvenlik($_POST['fabrikaeposta']);
-
-			$fabrikaadres = guvenlik($_POST['fabrikaadres']);
-
-			$fabrikaalacak = 0;
-
-			$fabrikaalacaktarih = 0;
-
-			$query = $db->prepare("INSERT INTO fabrikalar SET fabrika_adi = ?, fabrikatel = ?, fabrikaeposta = ?, fabrikaadres = ?, fabrikaalacak = ?, fabrikaalacaktarih = ?, sirketid = ?, silik = ?");
-
-			$insert = $query->execute(array($fabrika_adi, $fabrikatel, $fabrikaeposta, $fabrikaadres, $fabrikaalacak, $fabrikaalacaktarih, $user->company_id,'0'));
-
-			header("Location:fabrikalar.php");
+			header("Location:factory.php#".($orderId - 2));
 
 			exit();
 
 		}
 
-		if (isset($_POST['siparissil'])) {
+		if (isset($_POST['add_factory'])) {
 			
-			$siparis_id = guvenlik($_POST['siparis_id']);
+			$name = guvenlik($_POST['name']);
+
+			$phone = guvenlik($_POST['phone']);
+
+			$email = guvenlik($_POST['email']);
+
+			$address = guvenlik($_POST['address']);
+
+			$debt = 0;
+
+			$dueDate = 0;
+
+			$query = $db->prepare("INSERT INTO factories SET name = ?, phone = ?, email = ?, address = ?, debt = ?, due_date = ?, company_id = ?, is_deleted = ?");
+
+			$insert = $query->execute(array($name, $phone, $email, $address, $debt, $dueDate, $authUser->company_id,'0'));
+
+			header("Location:factory.php");
+
+			exit();
+
+		}
+
+		if (isset($_POST['delete_order'])) {
+			
+			$id = guvenlik($_POST['id']);
 
 			$query = $db->prepare("UPDATE siparis SET silik = ? WHERE siparis_id = ?"); 
 
-			$guncelle = $query->execute(array('1',$siparis_id));
+			$update = $query->execute(array('1',$id));
 
-			$siraid = guvenlik($_POST['siraid']);
+			$orderId = guvenlik($_POST['order_id']);
 
-			header("Location:fabrikalar.php#".($siraid - 2));
+			header("Location:factory.php#".($orderId - 2));
 
 			exit();
 
 		}
 
-		if (isset($_POST['formlusiparissil'])) {
+		if (isset($_POST['delete_order_with_form'])) {
 			
-			$siparis_id = guvenlik($_POST['siparis_id']);
+			$id = guvenlik($_POST['id']);
 
-			$siparisformid = guvenlik($_POST['siparisformid']);
+			$orderFormId = guvenlik($_POST['order_form_id']);
 
-			$siparisler = guvenlik($_POST['siparisler']);
+			$orders = guvenlik($_POST['orders']);
 
-			$sipariskey = guvenlik($_POST['sipariskey']);
+			$orderKey = guvenlik($_POST['order_key']);
 
-			$siparislerinipatlat = explode(",", $siparisler);
+			$orderArray = explode(",", $orders);
 
-			unset($siparislerinipatlat[$sipariskey]);
+			unset($orderArray[$orderKey]);
 
-			$siparisler = implode(",", $siparislerinipatlat);
+			$orders = implode(",", $orderArray);
 
 			$query = $db->prepare("UPDATE siparisformlari SET siparisler = ? WHERE formid = ?"); 
 
-			$guncelle = $query->execute(array($siparisler,$siparisformid));
+			$update = $query->execute(array($orders,$orderFormId));
 
-			$sil = $db->prepare("UPDATE siparis SET silik = ? WHERE siparis_id = ?"); 
+			$query = $db->prepare("UPDATE siparis SET silik = ? WHERE siparis_id = ?");
 
-			$delete = $query->execute(array('1',$siparis_id));
+			$delete = $query->execute(array('1',$id));
 
-			$siraid = guvenlik($_POST['siraid']);
+			$orderId = guvenlik($_POST['order_id']);
 
-			header("Location:fabrikalar.php#".($siraid - 2));
+			header("Location:factory.php#".($orderId - 2));
 
 			exit();
 
 		}
 
-		if (isset($_POST['arandi'])) {
+		if (isset($_POST['called'])) {
 
-			$fabrikaid = guvenlik($_POST['fabrikaid']);
+			$id = guvenlik($_POST['id']);
 			
-			$fabrikaalacak = guvenlik($_POST['tutar']);
+			$debt = guvenlik($_POST['debt']);
 
-			$fabrikaalacaktarih = guvenlik($_POST['vefo_tarih']);
+			$dueDate = guvenlik($_POST['due_date']);
 
-			$fabrikaalacaktarih = strtotime($fabrikaalacaktarih);
+            $dueDate = strtotime($dueDate);
 
-			$query = $db->prepare("UPDATE fabrikalar SET fabrikaalacak = ?, fabrikaalacaktarih = ? WHERE fabrika_id = ?"); 
+			$query = $db->prepare("UPDATE factories SET debt = ?, due_date = ? WHERE id = ?"); 
 
-			$guncelle = $query->execute(array($fabrikaalacak, $fabrikaalacaktarih, $fabrikaid));
+			$update = $query->execute(array($debt, $dueDate, $id));
 
-			$siraid = guvenlik($_POST['siraid']);
+			$orderId = guvenlik($_POST['order_id']);
 
-			header("Location:fabrikalar.php#".($siraid - 2));
+			header("Location:factory.php#".($orderId - 2));
 
 			exit();
 
 		}
 
-		if (isset($_POST['kaydet'])) {
+		if (isset($_POST['save'])) {
 
-			$fabrikaid = guvenlik($_POST['fabrikaid']);
+			$id = guvenlik($_POST['id']);
 			
-			$fabrikaalacak = guvenlik($_POST['tutar']);
+			$debt = guvenlik($_POST['debt']);
 
-			$fabrikaalacaktarih = 0;
+			$dueDate = 0;
 
-			$query = $db->prepare("UPDATE fabrikalar SET fabrikaalacak = ?, fabrikaalacaktarih = ? WHERE fabrika_id = ?"); 
+			$query = $db->prepare("UPDATE factories SET debt = ?, due_date = ? WHERE id = ?"); 
 
-			$guncelle = $query->execute(array($fabrikaalacak, $fabrikaalacaktarih, $fabrikaid));
+			$update = $query->execute(array($debt, $dueDate, $id));
 
-			$siraid = guvenlik($_POST['siraid']);
+			$orderId = guvenlik($_POST['order_id']);
 
-			header("Location:fabrikalar.php#".($siraid - 2));
+			header("Location:factory.php#".($orderId - 2));
 
 			exit();
 
 		}
 
-		if (isset($_POST['tahsilattamamlandi'])) {
+		if (isset($_POST['payment_completed'])) {
 
-			$fabrikaid = guvenlik($_POST['fabrikaid']);
+			$id = guvenlik($_POST['id']);
 			
-			$fabrikaalacak = 0;
+			$debt = 0;
 
-			$fabrikaalacaktarih = 0;
+			$dueDate = 0;
 
-			$query = $db->prepare("UPDATE fabrikalar SET fabrikaalacak = ?, fabrikaalacaktarih = ? WHERE fabrika_id = ?"); 
+			$query = $db->prepare("UPDATE factories SET debt = ?, due_date = ? WHERE id = ?"); 
 
-			$guncelle = $query->execute(array($fabrikaalacak, $fabrikaalacaktarih, $fabrikaid));
+			$update = $query->execute(array($debt, $dueDate, $id));
 
-			$siraid = guvenlik($_POST['siraid']);
+			$orderId = guvenlik($_POST['order_id']);
 
-			header("Location:fabrikalar.php#".($siraid - 2));
-
-			exit();
-
-		}
-
-		if(isset($_POST['siparisleregit'])){
-
-			$fabrikaid = guvenlik($_POST['fabrikaid']);
-
-			header("Location:fabrikasiparis.php?id=".$fabrikaid);
+			header("Location:factory.php#".($orderId - 2));
 
 			exit();
 
@@ -252,7 +242,7 @@
 
 	<head>
 
-		<title>Alüminyum Deposu</title>
+		<title>Fabrikalar</title>
 
 		<?php include 'template/head.php'; ?>
 
@@ -280,19 +270,25 @@
 					
 					<div class="div4" style="padding-top: 20px; text-align: center;">
 
-						<a href="#" onclick="return false" onmousedown="javascript:ackapa('formdivi');"><h5><i class="fas fa-angle-double-down"></i>&nbsp;&nbsp;&nbsp;&nbsp;<b>Fabrika Ekleme Formu</b>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-angle-double-down"></i></h5></a>
+						<a href="#" onclick="return false" onmousedown="javascript:ackapa('formdivi');">
+                            <h5>
+                                <i class="fas fa-angle-double-down"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <b>Fabrika Ekleme Formu</b>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <i class="fas fa-angle-double-down"></i>
+                            </h5>
+                        </a>
 
 						<div id="formdivi" style="display: none;">
 						
 							<form action="" method="POST">
 									
-								<div><input type="text" name="fabrika_adi" class="form-control" style="margin-bottom: 10px;" placeholder="Fabrika Adı"></div>
+								<div><input type="text" name="name" class="form-control" style="margin-bottom: 10px;" placeholder="Fabrika Adı"></div>
 
-								<div><input type="text" name="fabrikatel" class="form-control" style="margin-bottom: 10px;" placeholder="Fabrika Telefonu"></div>
+								<div><input type="text" name="phone" class="form-control" style="margin-bottom: 10px;" placeholder="Fabrika Telefonu"></div>
 
-								<div><input type="text" name="fabrikaeposta" class="form-control" style="margin-bottom: 10px;" placeholder="Fabrika E-posta Adresi"></div>
+								<div><input type="text" name="email" class="form-control" style="margin-bottom: 10px;" placeholder="Fabrika E-posta Adresi"></div>
 
-								<div><button type="submit" class="btn btn-primary btn-block" name="fabrika_ekleme_formu">Fabrika Ekle</button></div>
+								<div><button type="submit" class="btn btn-primary btn-block" name="add_factory">Fabrika Ekle</button></div>
 
 							</form>
 
@@ -304,13 +300,13 @@
 
 				<div class="col-md-9 col-12" style="text-align: right; padding-top: 15px;">
 					
-					<a href="fabrikalar.php"><button class="btn btn-sm btn-success">Tüm Liste</button></a>
+					<a href="factory.php"><button class="btn btn-sm btn-success">Tüm Liste</button></a>
 
-					<a href="fabrikalar.php?odemeler"><button class="btn btn-sm btn-info">Tutarlılar</button></a>
+					<a href="factory.php?odemeler"><button class="btn btn-sm btn-info">Tutarlılar</button></a>
 
-					<a href="fabrikalar.php?arananlar"><button class="btn btn-sm btn-primary">Aranılanlar</button></a>
+					<a href="factory.php?arananlar"><button class="btn btn-sm btn-primary">Aranılanlar</button></a>
 					
-					<a href="fabrikalar.php?tahsilatigecenler"><button class="btn btn-sm btn-danger">Gecikenler</button></a>
+					<a href="factory.php?tahsilatigecenler"><button class="btn btn-sm btn-danger">Gecikenler</button></a>
 
 				</div>
 
@@ -344,23 +340,23 @@
 
 					$id = 0;
 
-					$toplamfabrikaborc = 0;
+					$totalFactoryDebt = 0;
 
 					if(isset($_GET['arananlar'])){
 
-						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' AND fabrikaalacak != 0 AND fabrikaalacaktarih != '0' AND fabrikaalacaktarih > '{$bugununsaniyesi}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM factories WHERE company_id = '{$authUser->company_id}' AND debt != 0 AND due_date != '0' AND due_date > '{$bugununsaniyesi}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
 					}elseif (isset($_GET['odemeler'])) {
 
-						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' AND fabrikaalacak != 0 ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM factories WHERE company_id = '{$authUser->company_id}' AND debt != 0 ORDER BY name ASC", PDO::FETCH_ASSOC);
 						
 					}elseif (isset($_GET['tahsilatigecenler'])) {
 
-						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' AND fabrikaalacak != 0 AND fabrikaalacaktarih != '0' AND fabrikaalacaktarih <= '{$bugununsaniyesi}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM factories WHERE company_id = '{$authUser->company_id}' AND debt != 0 AND due_date != '0' AND due_date <= '{$bugununsaniyesi}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 						
 					}else{
 
-						$query = $db->query("SELECT * FROM fabrikalar WHERE sirketid = '{$user->company_id}' ORDER BY fabrika_adi ASC", PDO::FETCH_ASSOC);
+						$query = $db->query("SELECT * FROM factories WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
 					}	
 
@@ -370,25 +366,25 @@
 
 							$id++;
 
-							$fabrika_id = guvenlik($row['fabrika_id']);
+							$id = guvenlik($row['id']);
 
-							$fabrika_adi = guvenlik($row['fabrika_adi']);
+							$name = guvenlik($row['name']);
 
-							$fabrikatel = guvenlik($row['fabrikatel']);
+							$phone = guvenlik($row['phone']);
 
-							$fabrikaeposta = guvenlik($row['fabrikaeposta']);
+							$email = guvenlik($row['email']);
 
-							$fabrikaiscilik = guvenlik($row['fabrikaiscilik']);
+							$laborCost = guvenlik($row['labor_cost']);
 
-							$fabrikaadres = guvenlik($row['fabrikaadres']);
+							$address = guvenlik($row['address']);
 
-							$fabrikaalacak = guvenlik($row['fabrikaalacak']);
+							$debt = guvenlik($row['debt']);
 
-							$toplamfabrikaborc = $toplamfabrikaborc + $fabrikaalacak;
+							$totalFactoryDebt = $totalFactoryDebt + $debt;
 
-							$fabrikaalacaktarih = guvenlik($row['fabrikaalacaktarih']);
+							$dueDate = guvenlik($row['due_date']);
 
-							$fabrikaalacaktarihv2 = date("d-m-Y",$fabrikaalacaktarih);
+							$dueDateV2 = date("d-m-Y",$dueDate);
 
 				?>
 
@@ -396,9 +392,9 @@
 
 								<div class="col-md-3 col-12" style="margin-top: 7px;">
 									
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('siparislerdivi<?= $fabrika_id; ?>');">
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('orders-div-<?= $id; ?>');">
 
-										<b><?= $fabrika_adi;?></b>
+										<b><?= $name;?></b>
 											
 									</a>
 
@@ -406,7 +402,7 @@
 
 								<div class="col-md-2" style="margin-top: 7px;">
 
-									<b><?= $fabrikatel; ?></b>									
+									<b><?= $phone; ?></b>
 
 								</div>
 
@@ -414,11 +410,11 @@
 
 									<?php
 
-									if($fabrikaalacaktarih == 0){
+									if($dueDate == 0){
 
 										echo '<form action="" method="POST"><div class="row" style="margin:0px; padding:5px;">';							
 
-									}elseif($fabrikaalacaktarih > $bugununsaniyesi){
+									}elseif($dueDate > $bugununsaniyesi){
 
 										echo '<form action="" method="POST"><div class="row btn-primary" style="margin:0px; padding:5px;">';
 
@@ -432,31 +428,41 @@
 											
 											<div class="col-md-4">
 												
-												<?php if($fabrikaalacak == 0){?><input type="text" name="tutar" class="form-control" placeholder="Tutar giriniz." style="margin-bottom: 5px;"><?php }else{ ?><input type="text" name="tutar" class="form-control" value="<?= $fabrikaalacak; ?>" style="margin-bottom: 5px;"><?php } ?>
+												<?php if($debt == 0){?>
+                                                    <input type="text" name="debt" class="form-control" placeholder="Tutar giriniz." style="margin-bottom: 5px;">
+                                                <?php }else{ ?>
+                                                    <input type="text" name="debt" class="form-control" value="<?= $debt; ?>" style="margin-bottom: 5px;">
+                                                <?php } ?>
 
 											</div>
 
 											<div class="col-md-2">
 												
-												<button class="btn btn-dark btn-sm" type="submit" name="kaydet"><i class="fas fa-save"></i></button>
+												<button class="btn btn-dark btn-sm" type="submit" name="save"><i class="fas fa-save"></i></button>
 
 											</div>
 
 											<div class="col-md-4">
 												
-												<?php if($fabrikaalacaktarih == 0){?><input type="text" id="tarih<?= $id; ?>" name="vefo_tarih" value="<?= "Tarih seçiniz."; ?>" class="form-control form-control-sm"><?php }else{ ?><input type="text" id="tarih<?= $id; ?>" name="vefo_tarih" value="<?= $fabrikaalacaktarihv2; ?>" class="form-control form-control-sm"><?php } ?>
+												<?php if($debt == 0){?>
+                                                    <input type="text" id="tarih<?= $id; ?>" name="due_date" value="<?= "Tarih seçiniz."; ?>" class="form-control form-control-sm">
+                                                <?php }else{ ?>
+                                                    <input type="text" id="tarih<?= $id; ?>" name="due_date" value="<?= $dueDateV2; ?>" class="form-control form-control-sm">
+                                                <?php } ?>
 
 											</div>
 
 											<div class="col-md-2">
 
-												<input type="hidden" id="tarih-db" name="vefat_tarih">
+												<input type="hidden" id="tarih-db" name="due_date">
 
-												<input type="hidden" name="fabrikaid" value="<?= $fabrika_id; ?>">
+												<input type="hidden" name="id" value="<?= $id; ?>">
 
-												<input type="hidden" name="siraid" value="<?= $id; ?>">
+												<input type="hidden" name="order_id" value="<?= $id; ?>">
 												
-												<button class="btn btn-dark btn-sm" type="submit" name="arandi"><i class="fas fa-phone"></i></button>												
+												<button class="btn btn-dark btn-sm" type="submit" name="called">
+                                                    <i class="fas fa-phone"></i>
+                                                </button>												
 
 											</div>	
 
@@ -468,61 +474,61 @@
 
 								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<button class="btn btn-success btn-sm btn-block" type="submit" name="tahsilattamamlandi">Temizle</button>																		
+									<button class="btn btn-success btn-sm btn-block" type="submit" name="payment_completed">Temizle</button>																		
 									
 								</div>
 
 								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<a href="fabrikasiparis.php?id=<?= $fabrika_id; ?>"><button class="btn btn-info btn-sm btn-block">Siparişler</button></a>												
+									<a href="fabrikasiparis.php?id=<?= $id; ?>"><button class="btn btn-info btn-sm btn-block">Siparişler</button></a>												
 									
 								</div>		
 
 								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $fabrika_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Düzenle</button></a>
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('edit-div-<?= $id; ?>');"><button class="btn btn-warning btn-sm btn-block">Düzenle</button></a>
 									
 								</div>
 
 								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $fabrika_id; ?>');"><button class="btn btn-secondary btn-sm btn-block">Sil</button></a>
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('delete-div-<?= $id; ?>');"><button class="btn btn-secondary btn-sm btn-block">Sil</button></a>
 									
 								</div>
 
 							</div>
 
-							<div id="silmedivi<?= $fabrika_id; ?>" class="alert alert-danger" style="display: none; text-align: right; margin-top: 15px;">												
+							<div id="delete-div-<?= $id; ?>" class="alert alert-danger" style="display: none; text-align: right; margin-top: 15px;">												
 
 								<form action="" method="POST">
 
-									<input type="hidden" name="fabrika_id" value="<?= $fabrika_id; ?>">
+									<input type="hidden" name="id" value="<?= $id; ?>">
 
-									<input type="hidden" name="siraid" value="<?= $id; ?>">
+									<input type="hidden" name="order_id" value="<?= $id; ?>">
 
 									Silmek istediğinize emin misiniz?&nbsp;&nbsp;&nbsp;
 
-									<button class="btn btn-success btn-sm" name="fabrikasil" type="submit">Evet</button>&nbsp;&nbsp;&nbsp;
+									<button class="btn btn-success btn-sm" name="delete_factory" type="submit">Evet</button>&nbsp;&nbsp;&nbsp;
 
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $fabrika_id; ?>');"><button class="btn btn-danger btn-sm">Hayır</button></a>
+									<a href="#" onclick="return false" onmousedown="javascript:ackapa('delete-div-<?= $id; ?>');"><button class="btn btn-danger btn-sm">Hayır</button></a>
 
 								</form>
 
 							</div>
 
-							<div id="duzenlemedivi<?= $fabrika_id; ?>" style="display: none; position: fixed; top: 20%; left: 20%; z-index: 1; " class="div2">			
+							<div id="edit-div-<?= $id; ?>" style="display: none; position: fixed; top: 20%; left: 20%; z-index: 1; " class="div2">			
 
 								<div class="row">
 									
 									<div class="col-md-8 col-8">
 										
-										<h5><b><?= $fabrika_adi; ?></b></h5>
+										<h5><b><?= $name; ?></b></h5>
 
 									</div>
 
 									<div class="col-md-4 col-4" style="text-align: right;">
 										
-										<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $fabrika_id; ?>');"><span style="font-size: 24px;"><i class="fas fa-times"></i></span></a>
+										<a href="#" onclick="return false" onmousedown="javascript:ackapa('edit-div-<?= $id; ?>');"><span style="font-size: 24px;"><i class="fas fa-times"></i></span></a>
 
 									</div>
 
@@ -540,9 +546,9 @@
 
 												<b>Fabrika Adı</b>
 												
-												<input type="hidden" name="fabrika_id" value="<?= $fabrika_id; ?>">
+												<input type="hidden" name="id" value="<?= $id; ?>">
 											
-												<input type="text" name="fabrika_adi" class="form-control" value="<?= $fabrika_adi; ?>">
+												<input type="text" name="name" class="form-control" value="<?= $name; ?>">
 
 											</div>
 
@@ -550,7 +556,7 @@
 
 												<b>Telefon</b><br/>
 												
-												<input type="text" name="fabrikatel" class="form-control" value="<?= $fabrikatel; ?>">
+												<input type="text" name="phone" class="form-control" value="<?= $phone; ?>">
 
 											</div>
 
@@ -558,7 +564,7 @@
 
 												<b>E-posta</b><br/>
 												
-												<input type="text" name="fabrikaeposta" class="form-control" value="<?= $fabrikaeposta; ?>">
+												<input type="text" name="email" class="form-control" value="<?= $email; ?>">
 
 											</div>
 
@@ -570,7 +576,7 @@
 
 												<b>İşçilik</b><br/>
 												
-												<input type="text" name="fabrikaiscilik" class="form-control" placeholder="Sadece sayı giriniz." value="<?= $fabrikaiscilik; ?>">
+												<input type="text" name="labor_cost" class="form-control" placeholder="Sadece sayı giriniz." value="<?= $laborCost; ?>">
 
 											</div>
 
@@ -582,7 +588,7 @@
 
 												<b>Adres</b><br/>
 
-												<textarea name="fabrikaadres" class="form-control" rows="1"><?= $fabrikaadres; ?></textarea>
+												<textarea name="address" class="form-control" rows="1"><?= $address; ?></textarea>
 
 											</div>
 
@@ -592,9 +598,9 @@
 											
 											<div class="col-md-12 col-12"  style="margin-top: 5px;">
 
-												<input type="hidden" name="siraid" value="<?= $id; ?>">
+												<input type="hidden" name="order_id" value="<?= $id; ?>">
 												
-												<button class="btn btn-primary" type="submit" name="fabrikabilgileriguncelle">Güncelle</button>
+												<button class="btn btn-primary" type="submit" name="update_factory">Güncelle</button>
 
 											</div>
 
@@ -606,7 +612,7 @@
 
 							</div>
 
-							<div id="siparislerdivi<?= $fabrika_id; ?>" class="div2" style="display: none; margin: 0px -20px 0px -20px;">
+							<div id="orders-div-<?= $id; ?>" class="div2" style="display: none; margin: 0px -20px 0px -20px;">
 
 								<div class="alert alert-primary">
 
@@ -614,13 +620,13 @@
 										
 										<div class="col-6" style="text-align: left;"><h5><b style="line-height: 40px;">Siparişler</b></h5></div>
 
-										<div class="col-6" style="text-align: right;"><a href="pdf.php?id=<?= $fabrika_id; ?>" target="_blank"><button class="btn btn-primary btn-sm">Sipariş Formuna Git</button></a></div>
+										<div class="col-6" style="text-align: right;"><a href="pdf.php?id=<?= $id; ?>" target="_blank"><button class="btn btn-primary btn-sm">Sipariş Formuna Git</button></a></div>
 
 									</div>																
 
 									<?php
 
-										$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$fabrika_id}' AND formda = '0' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
+										$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$id}' AND formda = '0' AND sirketid = '{$authUser->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
 
 										if ( $sipariscek->rowCount() ){
 
@@ -664,9 +670,9 @@
 
 												$siparistarih = date("d-m-Y", $siparissaniye);
 
-												$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+												$fabrikaadcek = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}' AND company_id = '{$authUser->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-												$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
+												$urun_fabrika_adi = $fabrikaadcek['name'];
 
 									?>
 
@@ -700,11 +706,11 @@
 														
 														<form action="" method="POST">
 
-															<input type="hidden" name="siparis_id" value="<?= $siparis_id; ?>">
+															<input type="hidden" name="id" value="<?= $siparis_id; ?>">
 
-															<input type="hidden" name="siraid" value="<?= $id; ?>">
+															<input type="hidden" name="order_id" value="<?= $id; ?>">
 															
-															<button type="submit" class="btn btn-danger btn-sm btn-block" name="siparissil" style="margin-bottom: 5px;">Sil</button>
+															<button type="submit" class="btn btn-danger btn-sm btn-block" name="delete_order" style="margin-bottom: 5px;">Sil</button>
 
 														</form>
 
@@ -730,7 +736,7 @@
 
 									<?php
 
-									$formcek = $db->query("SELECT * FROM siparisformlari WHERE fabrikaid = '{$fabrika_id}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY saniye DESC LIMIT 10", PDO::FETCH_ASSOC);
+									$formcek = $db->query("SELECT * FROM siparisformlari WHERE fabrikaid = '{$id}' AND sirketid = '{$authUser->company_id}' AND silik = '0' ORDER BY saniye DESC LIMIT 10", PDO::FETCH_ASSOC);
 
 									if ( $formcek->rowCount() ){
 
@@ -834,9 +840,9 @@
 
 																$siparistarih = date("d-m-Y", $siparissaniye);
 
-																$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$urun_fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+																$fabrikaadcek = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-																$urun_fabrika_adi = $fabrikaadcek['fabrika_adi'];
+																$urun_fabrika_adi = $fabrikaadcek['name'];
 
 												?>
 
@@ -870,17 +876,17 @@
 															
 																		<form action="" method="POST">
 
-																			<input type="hidden" name="siparisformid" value="<?= $formid; ?>">
+																			<input type="hidden" name="order_form_id" value="<?= $formid; ?>">
 
-																			<input type="hidden" name="siparisler" value="<?= $siparisler; ?>">
+																			<input type="hidden" name="orders" value="<?= $siparisler; ?>">
 
-																			<input type="hidden" name="sipariskey" value="<?= $key; ?>">
+																			<input type="hidden" name="order_key" value="<?= $key; ?>">
 
-																			<input type="hidden" name="siparis_id" value="<?= $siparis_id; ?>">
+																			<input type="hidden" name="id" value="<?= $siparis_id; ?>">
 
-																			<input type="hidden" name="siraid" value="<?= $id; ?>">
+																			<input type="hidden" name="order_id" value="<?= $id; ?>">
 																			
-																			<button type="submit" class="btn btn-danger btn-sm btn-block" name="formlusiparissil" style="margin-bottom: 5px;">Sil</button>
+																			<button type="submit" class="btn btn-danger btn-sm btn-block" name="delete_order_with_form" style="margin-bottom: 5px;">Sil</button>
 
 																		</form>
 
@@ -926,7 +932,7 @@
 
 				<div class="row">
 
-					<div class="col-md-12" style="padding-top: 20px; padding-bottom: 10px; text-align: center;"><b style="font-size: 20px;">Toplam Borç Tutarı : <?= $toplamfabrikaborc; ?> TL</b></div>
+					<div class="col-md-12" style="padding-top: 20px; padding-bottom: 10px; text-align: center;"><b style="font-size: 20px;">Toplam Borç Tutarı : <?= $totalFactoryDebt; ?> TL</b></div>
 
 				</div>
 

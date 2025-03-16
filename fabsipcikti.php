@@ -14,9 +14,9 @@
 			
 			$fabrika_id = guvenlik($_GET['id']);
 
-			$fabrikaadcek = $db->query("SELECT * FROM fabrikalar WHERE fabrika_id = '{$fabrika_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+			$fabrikaadcek = $db->query("SELECT * FROM factories WHERE id = '{$fabrika_id}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-			$fabrika_adi = $fabrikaadcek['fabrika_adi'];
+			$fabrika_adi = $fabrikaadcek['name'];
 
 		}
 
