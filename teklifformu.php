@@ -14,13 +14,13 @@
 
 	$query = $db->query("SELECT * FROM teklifformlari WHERE tformid = '{$tformid}' AND silik = '0' ORDER BY tformid ASC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 
-	$firmaid = $query['firmaid'];
+	$firmaid = $query[ 'id']; 
 
-	$firmabilgicek = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$firmaid}' ORDER BY firmaid ASC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+	$firmabilgicek = $db->query("SELECT * FROM clients WHERE id = '{$firmaid}'")->fetch(PDO::FETCH_ASSOC);
 
-	$firmaadi = $firmabilgicek['firmaadi'];
+	$firmaadi = $firmabilgicek['name']; 
 
-	$firmatel = $firmabilgicek['firmatel'];
+	$firmatel = $firmabilgicek[ 'phone']; 
 
 	$tekliflistesi = $query['tekliflistesi'];
 

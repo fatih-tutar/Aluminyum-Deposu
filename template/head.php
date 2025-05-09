@@ -14,7 +14,7 @@
 
 <link href="fontawesome/css/all.css" rel="stylesheet">
 
-<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/style9.css">
 
 <link rel="stylesheet" type="text/css" href="css/datepicker.css">
 
@@ -103,3 +103,5 @@
     } 
 
 </script>
+
+<div id="overlay" class="overlay" onclick="closeModal()"></div>

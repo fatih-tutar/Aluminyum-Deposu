@@ -32,11 +32,11 @@
 
 			$firmaadres = guvenlik($_POST['firmaadres']);
 
-			$query = $db->prepare("UPDATE firmalar SET firmaadi = ?, firmatel = ?, firmaeposta = ?, firmaadres = ? WHERE firmaid = ?"); 
+			$query = $db->prepare("UPDATE clients SET name = ?, phone = ?, email = ?, address = ? WHERE id = ?");
 
 			$guncelle = $query->execute(array($firmaadi, $firmatel, $firmaeposta, $firmaadres, $firmaid));
 
-			header("Location:firmalar.php");
+			header("Location:client.php");
 
 			exit();
 
@@ -46,17 +46,17 @@
 
 			$firmaid = guvenlik($_POST['firmaid']);
 
-			if (firmakullanimdami($firmaid) == '1') {
+			if (isCompanyInUse($firmaid) == '1') {
 			
 				$error = '<br/><div class="alert alert-danger" role="alert">Bu firmanın kayıtlı olduğu bir ürün, teklif veya teklif formu var o yüzden silemiyoruz.</a></div>';
 
 			}else{
 			
-				$sil = $db->prepare("UPDATE firmalar SET silik = ? WHERE firmaid = ?");
+				$sil = $db->prepare("UPDATE clients SET is_deleted = ? WHERE id = ?");
 
 				$delete = $sil->execute(array('1',$firmaid));
 
-				header("Location:firmalar.php");
+				header("Location:client.php");
 
 				exit();
 
@@ -84,7 +84,7 @@
 
 			$deleter = $query->execute(array('1',$tformid));
 
-			header("Location:firmalar.php");
+			header("Location:client.php");
 
 			exit();
 
@@ -100,11 +100,11 @@
 
 			$firmaadres = guvenlik($_POST['firmaadres']);
 
-			$query = $db->prepare("INSERT INTO firmalar SET firmaadi = ?, firmatel = ?, firmaeposta = ?, firmaadres = ?, sirketid = ?, silik = ?");
+			$query = $db->prepare("INSERT INTO clients SET name = ?, phone = ?, email = ?, address = ?, company_id = ?, is_deleted = ?");
 
 			$insert = $query->execute(array($firmaadi, $firmatel, $firmaeposta, $firmaadres, $user->company_id,'0'));
 
-			header("Location:firmalar.php");
+			header("Location:client.php");
 
 			exit();
 
@@ -162,15 +162,15 @@
 
 	                                    <?php
 
-	                                    $fabrika = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$user->company_id}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
+	                                    $fabrika = $db->query("SELECT * FROM clients WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
 	                                    if ( $fabrika->rowCount() ){
 
 	                                        foreach( $fabrika as $fbrk ){
 
-	                                            $firmaid = $fbrk['firmaid'];
+	                                            $firmaid = $fbrk[ 'id']; 
 
-	                                            $firmaadi = $fbrk['firmaadi'];
+	                                            $firmaadi = $fbrk['name']; 
 
 	                                            echo "<option value='".$firmaid."'>".$firmaadi."</option>";
 
@@ -226,21 +226,21 @@
 				
 				<?php 
 
-					$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$user->company_id}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
+					$query = $db->query("SELECT * FROM clients WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
 					if ( $query->rowCount() ){
 
 						foreach( $query as $row ){
 
-							$firmaid = $row['firmaid'];
+							$firmaid = $row[ 'id']; 
 
-							$firmaadi = $row['firmaadi'];
+							$firmaadi = $row['name']; 
 
-							$firmatel = $row['firmatel'];
+							$firmatel = $row[ 'phone']; 
 
-							$firmaeposta = $row['firmaeposta'];
+							$firmaeposta = $row[ 'email']; 
 
-							$firmaadres = $row['firmaadres'];
+							$firmaadres = $row[ 'address']; 
 
 				?>
 
@@ -406,9 +406,9 @@
 
 											$tverilenfirmaid = $tklfrow['tverilenfirma'];
 
-											$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+											$firmabilgi = $db->query("SELECT * FROM clients WHERE id = '{$tverilenfirmaid}'")->fetch(PDO::FETCH_ASSOC);
 
-											$tverilenfirmaadi = $firmabilgi['firmaadi'];
+											$tverilenfirmaadi = $firmabilgi['name']; 
 
 											$tadet = $tklfrow['tadet'];
 
@@ -558,9 +558,9 @@
 
 												$tverilenfirmaid = $tklfrow['tverilenfirma'];
 
-												$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+												$firmabilgi = $db->query("SELECT * FROM clients WHERE id = '{$tverilenfirmaid}'")->fetch(PDO::FETCH_ASSOC);
 
-												$tverilenfirmaadi = $firmabilgi['firmaadi'];
+												$tverilenfirmaadi = $firmabilgi['name']; 
 
 												$tadet = $tklfrow['tadet'];
 

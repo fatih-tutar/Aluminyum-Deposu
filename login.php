@@ -57,36 +57,21 @@
 				
 				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-12">
 
-					<div class="div2">
-
-						<?= $error; ?>
-					
-						<form action="" method="POST">
-
-							<h2 style="text-align:center;">Kullanıcı Girişi</h2>
-
-							<div class="input-group mb-3">
-								
-								<input type="text" class="form-control" placeholder="Kullanıcı Adı" aria-label="name" aria-describedby="basic-addon1" name="name" style="text-align: center; font-weight: bold; border:2px grey solid;">
-							
-							</div>
-
-							<div class="input-group mb-3">
-								
-								<input type="password" class="form-control" placeholder="Şifre" aria-label="sifre" aria-describedby="basic-addon1" name="sifre" style="text-align: center; font-weight: bold; border:2px grey solid;">
-							
-							</div>
-
-							<div class="input-group mb-3">
-								
-								<button type="submit" class="btn btn-danger btn-block" name="giris">Giriş Yap</button>
-
-							</div>
-						
-						</form>
-
-					</div>
-
+                    <div class="card p-4 shadow-lg">
+                        <?= $error; ?>
+                        <h4 class="text-center mb-3">Giriş Yap</h4>
+                        <form action="" method="POST">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Kullanıcı Adı</label>
+                                <input type="text" class="form-control" id="username" name="name" placeholder="Kullanıcı adınızı girin">
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Şifre</label>
+                                <input type="password" class="form-control" id="password" name="sifre" placeholder="Şifrenizi girin">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100" name="giris">Giriş Yap</button>
+                        </form>
+                    </div>
 				</div>
 
 				<div class="col-xl-4 col-lg-4 col-md-3 col-sm-2 col-12"></div>

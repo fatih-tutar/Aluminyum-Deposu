@@ -137,9 +137,9 @@
 				
 				$tekliffirma = guvenlik($_POST['tekliffirma']);
 
-				$firmaidcek = $db->query("SELECT * FROM firmalar WHERE firmaadi = '{$tekliffirma}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+				$firmaidcek = $db->query("SELECT * FROM clients WHERE name = '{$tekliffirma}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-				$tekliffirma = $firmaidcek['firmaid'];
+				$tekliffirma = $firmaidcek[ 'id']; 
 
 				$teklifadet =  guvenlik($_POST['teklifadet']);
 
@@ -350,13 +350,13 @@
 
 				// SIRALAMA AYARI BİTİŞ
 
-				$query = $db->query("SELECT * FROM firmalar WHERE sirketid = '{$user->company_id}' ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
+				$query = $db->query("SELECT * FROM clients WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
 
 				if ( $query->rowCount() ){
 
 					foreach( $query as $row ){
 
-						$firmaid = $row['firmaid'];
+						$firmaid = $row[ 'id']; 
 
 					}
 
@@ -536,7 +536,7 @@
 
 			if (isset($_GET['teklifeklendi'])) {
 				
-				$error = '<br/><div class="alert alert-success" role="alert"><a href="firmalar.php" target="m_blank">Teklifin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından teklif formlarına ulaşabilirsin.</a></div>';
+				$error = '<br/><div class="alert alert-success" role="alert"><a href="client.php" target="m_blank">Teklifin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından teklif formlarına ulaşabilirsin.</a></div>';
 
 			}
 
@@ -1228,9 +1228,9 @@
 
 													$tverilenfirmaid = $tklfrow['tverilenfirma'];
 
-													$firmabilgi = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$tverilenfirmaid}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+													$firmabilgi = $db->query("SELECT * FROM clients WHERE id = '{$tverilenfirmaid}'")->fetch(PDO::FETCH_ASSOC);
 
-													$tverilenfirmaadi = $firmabilgi['firmaadi'];
+													$tverilenfirmaadi = $firmabilgi['name']; 
 
 													$tadet = $tklfrow['tadet'];
 

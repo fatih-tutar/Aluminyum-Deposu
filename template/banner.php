@@ -74,11 +74,11 @@
 
 							<hr class="m-1"/>
 
-							<a class="dropdown-item" href="yardim.php"><b>YARDIM</b></a>
+							<a class="dropdown-item" href="guide.php"><b>YARDIM</b></a>
 					
 						<?php } ?>
 
-						<a class="dropdown-item" href="cikis.php"><b>ÇIKIŞ</b></a>
+						<a class="dropdown-item" href="logout.php"><b>ÇIKIŞ</b></a>
 				
 					</div>
 				

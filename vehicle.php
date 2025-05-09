@@ -269,15 +269,15 @@
                   <div class="row">
                     <div class="col-md-4 col-12">
                       <span class="d-md-none font-weight-bold">Kasko Bitiş Tarihi: </span>
-                      <?= guvenlik($vehicle->casco_end_date) ?>
+                      <?= guvenlik((new DateTime($vehicle->casco_end_date))->format('d/m/Y')) ?>
                     </div>
                     <div class="col-md-4 col-12">
                       <span class="d-md-none font-weight-bold">Sigorta Bitiş Tarihi: </span>
-                      <?= guvenlik($vehicle->insurance_end_date) ?>
+                      <?= guvenlik((new DateTime($vehicle->insurance_end_date))->format('d/m/Y')) ?>
                     </div>
                     <div class="col-md-4 col-12">
                       <span class="d-md-none font-weight-bold">Muayene Tarihi: </span>
-                      <?= guvenlik($vehicle->inspection_date) ?>
+                      <?= guvenlik((new DateTime($vehicle->inspection_date))->format('d/m/Y')) ?>
                     </div>
                   </div>
                 </div>

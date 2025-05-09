@@ -201,6 +201,22 @@
         return confirm(message);
     }
 
+    function openModal(divId) {
+        document.getElementById(divId).style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+        var id = divId.replace("edit-div-", "");
+        calculateDayDifferenceWithId(id);
+    }
+
+    function closeModal() {
+        document.querySelectorAll(".modal").forEach(modal => {
+            if (modal.style.display === "block") {
+                modal.style.display = "none";
+            }
+        });
+        document.getElementById("overlay").style.display = "none";
+    }
+
 </script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->

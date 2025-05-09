@@ -144,7 +144,7 @@
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="firmalar.php" target="_blank" class="sidebar-font">
+        <a href="client.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/firmalar.png" alt="" width="35" height="35">

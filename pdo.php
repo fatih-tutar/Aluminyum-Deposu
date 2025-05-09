@@ -6,13 +6,13 @@ $query = $db->query("SELECT * FROM users WHERE id = '{$id}'")->fetch(PDO::FETCH_
 
 //TOPLU ÇEKİM
 
-$query = $db->query("SELECT * FROM firmalar ORDER BY firmaadi ASC", PDO::FETCH_ASSOC);
+$query = $db->query("SELECT * FROM clients ORDER BY name ASC", PDO::FETCH_ASSOC);
 
 if ( $query->rowCount() ){
 
 	foreach( $query as $row ){
 
-		$firmaid = $row['firmaid'];
+		$firmaid = $row[ 'id']; 
 
 	}
 

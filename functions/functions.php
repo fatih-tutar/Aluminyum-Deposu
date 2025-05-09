@@ -1,5 +1,33 @@
 <?php
 
+function getProduct($productId)
+{
+    global $db;
+    $product = $db->query("SELECT * FROM urun WHERE urun_id = {$productId} AND silik = '0'");
+    return $product->fetch(PDO::FETCH_OBJ);
+}
+
+function getCategory($categoryId)
+{
+    global $db;
+    $category = $db->query("SELECT * FROM kategori WHERE kategori_id = {$categoryId} AND silik = '0'");
+    return $category->fetch(PDO::FETCH_OBJ);
+}
+
+function getOrder($orderId)
+{
+    global $db;
+    $order = $db->query("SELECT * FROM teklif WHERE teklifid = {$orderId} AND silik = '0'");
+    return $order->fetch(PDO::FETCH_OBJ);
+}
+
+function getClient($clientId)
+{
+    global $db;
+    $client = $db->query("SELECT * FROM clients WHERE id = {$clientId} AND is_deleted = '0'");
+    return $client->fetch(PDO::FETCH_OBJ);
+}
+
 function controlProductById($productId){
     global $db;
     $product = $db->query("SELECT * FROM urun WHERE urun_id='{$productId}' AND silik='0'");
@@ -327,21 +355,20 @@ function getdmY($saniye){
 
 function getFirmaInfos($firmaId){
     global $db;
-    $firmaInfos = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
+    $firmaInfos = $db->query("SELECT * FROM clients WHERE id = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
     return $firmaInfos;
 }
-
 function getFirmaID($firmaAdi){
     global $db;
-    $query = $db->query("SELECT firmaid FROM firmalar WHERE firmaadi = '{$firmaAdi}'")->fetch(PDO::FETCH_ASSOC);
-    $firmaid = $query['firmaid'];
+    $query = $db->query("SELECT id FROM clients WHERE name = '{$firmaAdi}'")->fetch(PDO::FETCH_ASSOC);
+    $firmaid = $query[ 'id']; 
     return $firmaid;
 }
 function getFirmaAdi($firmaId){
     global $db;
-    $query = $db->query("SELECT firmaadi FROM firmalar WHERE firmaid = '{$firmaId}' AND silik='0'")->fetch(PDO::FETCH_ASSOC);
-    if ($query && isset($query['firmaadi'])) {
-        return $query['firmaadi'];
+    $query = $db->query("SELECT name FROM clients WHERE id = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
+    if ($query && isset($query['name'])) {
+        return $query['name']; 
     }
     return null;
 }
@@ -661,9 +688,9 @@ function firmaadcek($firmaid){
 
     global $db;
 
-    $firmaadcek = $db->query("SELECT * FROM firmalar WHERE firmaid = '{$firmaid}'")->fetch(PDO::FETCH_ASSOC);
+    $firmaadcek = $db->query("SELECT * FROM clients WHERE id = '{$firmaid}'")->fetch(PDO::FETCH_ASSOC);
 
-    $firmaadi = $firmaadcek['firmaadi'];
+    $firmaadi = $firmaadcek['name']; 
 
     return $firmaadi;
 
@@ -689,15 +716,15 @@ function isFactoryInUse($factoryId){
 
 }
 
-function firmakullanimdami($firmaid){
+function isCompanyInUse($id){
 
     global $db;
 
-    $sorgu = $db->prepare("SELECT COUNT(*) FROM teklif WHERE tverilenfirma = '{$firmaid}'");
+    $sorgu = $db->prepare("SELECT COUNT(*) FROM teklif WHERE tverilenfirma = '{$id}'");
     $sorgu->execute();
     $ssay = $sorgu->fetchColumn();
 
-    $sorgu = $db->prepare("SELECT COUNT(*) FROM teklifformlari WHERE firmaid = '{$firmaid}'");
+    $sorgu = $db->prepare("SELECT COUNT(*) FROM teklifformlari WHERE firmaid = '{$id}'");
     $sorgu->execute();
     $sfsay = $sorgu->fetchColumn();
 

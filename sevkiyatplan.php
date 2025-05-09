@@ -13,7 +13,7 @@
         // ARAÇLAR
         $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0' AND is_transport = '1'")->fetchAll(PDO::FETCH_OBJ);
         // FİRMALAR
-        $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'")->fetchAll(PDO::FETCH_OBJ);
+        $firmalar = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
 
         if(isset($_POST['manuelSevkiyatKaydet'])){
             $firma = guvenlik($_POST['firma']);
@@ -126,9 +126,9 @@
                     <?php if (isset($sevkiyatGruplari[$arac->id])): ?>
                         <?php
                         foreach ($sevkiyatGruplari[$arac->id] as $sevkiyat):
-                            $firma = reset(array_filter($firmalar, fn($firma) => $firma->firmaid == $sevkiyat->firma_id));
-                            $firmaAdi = $firma->firmaadi;
-                            $firmaAdres = $firma->firmaadres;
+                            $firma = reset(array_filter($firmalar, fn($firma) => $firma->id == $sevkiyat->firma_id));
+                            $firmaAdi = $firma->name;
+                            $firmaAdres = $firma->address;
                             $kilolar = $sevkiyat->kilolar;
                             $toplamkg = 0;
                             if(strpos($kilolar, ',')){
@@ -156,7 +156,7 @@
                                     </div>
                                 </div>
                                 <div id="firmakart<?=$sevkiyat->id?>" style="display: none;">
-                                    <b>Firma Tel : </b><?= $firma->firmatel; ?><br/>
+                                    <b>Firma Tel : </b><?= $firma->phone; ?><br/>
                                     <b>Firma Adres : </b><?= $firmaAdres; ?>
                                     <form action="" method="POST">
                                         <div class="row">

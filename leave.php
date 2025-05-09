@@ -60,7 +60,7 @@ if (!isLoggedIn()) {
             $error = '<br/><div class="alert alert-danger" role="alert">Sizin departmanınızda aynı tarihlerde izin alan başka bir çalışan var. Lütfen yıllık izin planından kontrol ediniz.</div>';
         }else{
             $query = $db->prepare("UPDATE leaves SET start_date = ?, return_date = ?, leave_days = ?, status = ? WHERE id = ?");
-            $update = $query->execute(array($startDate,$returnDate,$leaveDays,'0',$id));
+            $update = $query->execute(array($startDate,$returnDate,$leaveDays,$status,$id));
             header("Location: leave.php");
             exit();
         }
@@ -113,63 +113,6 @@ if (!isLoggedIn()) {
     <title>İzinler</title>
     <?php include 'template/head.php'; ?>
     <style>
-        body {
-            background-color: white;
-        }
-        .add-button {
-            background-color:#1b9bee;
-            border-radius:32px;
-            bottom:20px;
-            color:white;
-            height:64px;
-            padding:15px;
-            position: fixed;
-            right:20px;
-            text-align: center;
-            width:64px;
-            z-index:2;
-        }
-        .bb-grey {
-            border-bottom: 1px solid #f4f4f4;
-        }
-        .br-grey {
-            border-right: 1px solid #f4f4f4;
-        }
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .icon-button {
-            background-color: white;
-            border-style: none;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 30%;
-            height: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-        }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
         .table-responsive {
             overflow-x: auto;
             white-space: nowrap;
@@ -177,18 +120,9 @@ if (!isLoggedIn()) {
         .table thead th, .table tbody td {
             white-space: nowrap;
         }
-        @media screen and (max-width: 768px) {
-            .modal {
-                width: 96%;
-                left: 2%;
-                transform: translate(0, -50%);
-                border-radius: 0; /* Köşeleri kaldır */
-                height: auto; /* İçeriğe göre yükseklik */
-            }
-        }
     </style>
 </head>
-<body>
+<body class="body2">
 <?php include 'template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
@@ -202,7 +136,6 @@ if (!isLoggedIn()) {
                     <i class="fa fa-plus fa-2x"></i>
                 </div>
             </a>
-            <div id="overlay" class="overlay" onclick="closeModal()"></div>
             <div id="form-div" class="modal">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <div>
@@ -248,21 +181,20 @@ if (!isLoggedIn()) {
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
-                        <tr style="color:#003566">
-                            <?php if($authUser->type == 2){ ?><th scope="col">Personel</th><?php } ?>
-                            <th scope="col">İzin Başlama Tarihi</th>
-                            <th scope="col">İşe Dönüş Tarihi</th>
-                            <th scope="col">İzin Süresi</th>
-                            <th scope="col">Durum</th>
-                            <th scope="col"></th>
-                        </tr>
+                            <tr style="color:#003566">
+                                <th scope="col">Personel</th>
+                                <th scope="col">İzin Başlama Tarihi</th>
+                                <th scope="col">İşe Dönüş Tarihi</th>
+                                <th scope="col">İzin Süresi</th>
+                                <th scope="col">Durum</th>
+                                <?php if($authUser->type == 2){ ?><th scope="col"></th><?php } ?>
+                            </tr>
                         </thead>
                         <tbody>
                         <?php
                         $leaveCounter = 0;
                         $oldLeavesCounter = 0;
                         foreach( $leaves as $leave){
-                            if ($authUser->type == 2 || $leave->user_id == $authUser->id) {
                                 $leaveCounter++;
                                 $leaveUser = getUser($leave->user_id);
                                 $startDate = strftime('%e %B %Y %A', (new DateTime($leave->start_date))->getTimestamp());
@@ -277,11 +209,12 @@ if (!isLoggedIn()) {
                                     </tr>
                                 <?php } ?>
                                 <tr <?= $leave->return_date < $date ? 'style="background-color:#f8f8f8;"' : ''; ?>>
-                                    <?php if($authUser->type == 2){ ?><th scope="row"><?= $leaveUser->name.' '.$leaveUser->surname ?></th><?php } ?>
+                                    <th scope="row"><?= $leaveUser->name.' '.$leaveUser->surname ?></th>
                                     <td><?= $startDate ?></td>
                                     <td><?= $returnDate ?></td>
                                     <td><?= $leave->leave_days ?></td>
-                                    <td><?= $leaveStatuses[$leave->status] ?></td>
+                                    <td style="<?= $leave->status == 0 ? 'color:red;' : '' ?>"><?= $leaveStatuses[$leave->status] ?></td>
+                                    <?php if($authUser->type == 2){ ?>
                                     <td style="display: flex; justify-content: space-evenly;">
                                         <a href="#" onclick="openModal('edit-div-<?= $leave->id ?>')">
                                             <i class="fas fa-pen mr-3" style="color:#003566"></i>
@@ -319,8 +252,9 @@ if (!isLoggedIn()) {
                                             </button>
                                         </form>
                                     </td>
+                                    <?php } ?>
                                 </tr>
-                            <?php } }
+                            <?php }
                         if ($leaveCounter == 0) { ?>
                             <tr>
                                 <td colspan="5" style="text-align: center; color: #003566; font-weight: bold;">

@@ -1,28 +1,4 @@
 <?php
-    // SEVKİYATLAR
-    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND manuel = '0' AND durum != '3' ORDER BY saniye DESC")->fetchAll(PDO::FETCH_OBJ);
-    $alinanSiparisler = [];
-    $hazirlananSiparisler = [];
-    $faturasiKesilenler = [];
-    foreach ($sevkiyatlar as $sevkiyat) {
-        if ($sevkiyat->durum == 0) {
-            $alinanSiparisler[] = $sevkiyat;
-        } elseif ($sevkiyat->durum == 1) {
-            $hazirlananSiparisler[] = $sevkiyat;
-        } elseif ($sevkiyat->durum == 2) {
-            $faturasiKesilenler[] = $sevkiyat;
-        }
-    }
-    $sevkiyatGruplari = [];
-    foreach ($sevkiyatlar as $sevkiyat) {
-        $sevkiyatGruplari[$sevkiyat->arac_id][] = $sevkiyat;
-    }
-    // ARAÇLAR
-    $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
-
-    // FİRMALAR
-    $firmalar = $db->query("SELECT * FROM firmalar WHERE silik = '0'")->fetchAll(PDO::FETCH_OBJ);
-
     if(isset($_POST['sevkiyathazir'])){
         $sevkiyatID = guvenlik($_POST['sevkiyatID']);
         $malzemeAdeti = guvenlik($_POST['malzemeAdeti']);
@@ -171,22 +147,35 @@
             exit();
         }
     }
+
+    // SEVKİYATLAR
+    $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND manuel = '0' AND durum != '3' ORDER BY saniye DESC")->fetchAll(PDO::FETCH_OBJ);
+    $alinanSiparisler = [];
+    $hazirlananSiparisler = [];
+    $faturasiKesilenler = [];
+    foreach ($sevkiyatlar as $sevkiyat) {
+        if ($sevkiyat->durum == 0) {
+            $alinanSiparisler[] = $sevkiyat;
+        } elseif ($sevkiyat->durum == 1) {
+            $hazirlananSiparisler[] = $sevkiyat;
+        } elseif ($sevkiyat->durum == 2) {
+            $faturasiKesilenler[] = $sevkiyat;
+        }
+    }
+    $sevkiyatGruplari = [];
+    foreach ($sevkiyatlar as $sevkiyat) {
+        $sevkiyatGruplari[$sevkiyat->arac_id][] = $sevkiyat;
+    }
+    // ARAÇLAR
+    $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
+
+    // FİRMALAR
+    $firmalar = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
 ?>
-<div style="text-align: right; display: block; width: 100%;">
-    <a href="#" onclick="openModal('form-div')">
-        <button class="btn btn-primary btn mb-2" style="background-color: #003566; border-color: #003566;">
-            <i class="fas fa-pen mr-2"></i>
-            Yeni Sevkiyat
-        </button>
-    </a>
-</div>
-<div id="overlay" class="overlay" onclick="closeModal()"></div>
 <div id="form-div" class="modal">
     <span class="close" onclick="closeModal()">&times;</span>
     <form action="" method="POST">
-        <div>
-            <h4><b>Müşteri Sipariş Formu</b></h4>
-        </div>
+        <h4><b>Müşteri Sipariş Formu</b></h4>
         <div class="urun-search-box">
             <b>Ürün</b>
             <input name="urun" id="uruninputu" type="text" class="form-control" autocomplete="off" placeholder="Ürün Adı"/>
@@ -234,7 +223,7 @@
         </div>
     </form>
 </div>
-<div id="sevkiyattakibidivi" class="row">
+<div id="sevkiyattakibidivi" class="row mt-2">
     <div class="col-md-4 col-12">
         <div class="sevkCardBlue p-1" style="text-align:center; font-size:25px;">
             Alınan Siparişler
@@ -245,7 +234,7 @@
                     $urunler = guvenlik($alinanSiparis->urunler);
                     $urunArray = explode(",",$urunler);
                     $firmaId = guvenlik($alinanSiparis->firma_id);
-                    $firmaAdi = reset(array_filter($firmalar, fn($firma) => $firma->firmaid == $firmaId))->firmaadi;
+                    $firmaAdi = reset(array_filter($firmalar, fn($firma) => $firma->id == $firmaId))->name;
                     $adetler = guvenlik($alinanSiparis->adetler);
                     $adetArray = explode(",",$adetler);
                     $kilolar = guvenlik($alinanSiparis->kilolar);
@@ -369,7 +358,7 @@
                     $urunler = guvenlik($hazirlananSiparis->urunler);
                     $urunArray = explode(",",$urunler);
                     $firmaId = guvenlik($hazirlananSiparis->firma_id);
-                    $firmaAdi = reset(array_filter($firmalar, fn($firma) => $firma->firmaid == $firmaId))->firmaadi;
+                    $firmaAdi = reset(array_filter($firmalar, fn($firma) => $firma->id == $firmaId))->name;
                     $adetler = guvenlik($hazirlananSiparis->adetler);
                     $adetArray = explode(",",$adetler);
                     $kilolar = guvenlik($hazirlananSiparis->kilolar);
@@ -486,7 +475,7 @@
                     $urunler = guvenlik($faturasiKesilen->urunler);
                     $urunArray = explode(",",$urunler);
                     $firmaId = guvenlik($faturasiKesilen->firma_id);
-                    $firmaAdi = reset(array_filter($firmalar, fn($firma) => $firma->firmaid == $firmaId))->firmaadi;
+                    $firmaAdi = reset(array_filter($firmalar, fn($firma) => $firma->id == $firmaId))->name;
                     $adetler = guvenlik($faturasiKesilen->adetler);
                     $adetArray = explode(",",$adetler);
                     $kilolar = guvenlik($faturasiKesilen->kilolar);

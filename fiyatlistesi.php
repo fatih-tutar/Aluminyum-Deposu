@@ -47,17 +47,17 @@
 
 				$hafizaurunno = "";
 
-	    		$query = $db->query("SELECT * FROM fiyatlar WHERE silik = '0' ORDER BY sira ASC", PDO::FETCH_ASSOC);
+	    		$query = $db->query("SELECT * FROM catalog WHERE is_deleted = '0' ORDER BY sort_order ASC", PDO::FETCH_ASSOC);
 
 				if ( $query->rowCount() ){
 
 					foreach( $query as $row ){
 
-						$fiyatid = guvenlik($row['fiyatid']);
-						$urunno = guvenlik($row['urunno']);
-						$resim1 = guvenlik($row['resim1']);
-						$resim2 = guvenlik($row['resim2']);
-						$aciklama = guvenlik($row['aciklama']);
+						$fiyatid = guvenlik($row['id']);
+						$urunno = guvenlik($row['product']);
+						$resim1 = guvenlik($row['image_1']);
+						$resim2 = guvenlik($row['image_2']);
+						$aciklama = guvenlik($row['description']);
 
 			?>
 
@@ -131,15 +131,15 @@
 
 				    		<?php
 
-				    			$icsorgu = $db->query("SELECT * FROM fiyatlar WHERE urunno = '{$urunno}' AND silik = '0' ORDER BY fiyatid ASC", PDO::FETCH_ASSOC);
+				    			$icsorgu = $db->query("SELECT * FROM catalog WHERE product = '{$urunno}' AND is_deleted = '0'", PDO::FETCH_ASSOC);
 
 								if ( $icsorgu->rowCount() ){
 
 									foreach( $icsorgu as $row ){
-										$kod = guvenlik($row['kod']);
+										$kod = guvenlik($row['code']);
 										$model = guvenlik($row['model']);
-										$adetmetre = guvenlik($row['adetmetre']);
-										$fiyat = guvenlik($row['fiyat']);
+										$adetmetre = guvenlik($row['quantity']);
+										$fiyat = guvenlik($row['price']);
 
 				    		?>
 

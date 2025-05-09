@@ -135,56 +135,12 @@
         .br-grey {
             border-right: 1px solid #f4f4f4;
         }
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .icon-button {
-            background-color: white;
-            border-style: none;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 30%;
-            height: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-        }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
         .table-responsive {
             overflow-x: auto;
             white-space: nowrap;
         }
         .table thead th, .table tbody td {
             white-space: nowrap;
-        }
-        @media screen and (max-width: 768px) {
-            .modal {
-                width: 96%;
-                left: 2%;
-                transform: translate(0, -50%);
-                border-radius: 0; /* Köşeleri kaldır */
-                height: auto; /* İçeriğe göre yükseklik */
-            }
         }
     </style>
 </head>
@@ -194,14 +150,14 @@
 <div class="row">
     <div class="col-md-12 col-12">
         <?= isset($error) ? $error : ''; ?>
-        <a href="#" onclick="openModal('form-div')">
+        <a href="#" onclick="openModalLeave('form-div')">
             <div class="add-button d-block d-md-none">
                 <i class="fa fa-plus fa-2x"></i>
             </div>
         </a>
-        <div id="overlay" class="overlay" onclick="closeModal()"></div>
+        <div id="overlay" class="overlay" onclick="closeModalLeave()"></div>
         <div id="form-div" class="modal">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModalLeave()">&times;</span>
             <div>
                 <h4><b>İzin Giriş Formu</b></h4>
             </div>
@@ -235,7 +191,7 @@
         </div>
         <div class="row pl-3 pb-4 pr-3 bb-grey">
             <div style="text-align: right; display: block; width: 100%;" class="d-none d-md-block">
-                <a href="#" onclick="openModal('form-div')">
+                <a href="#" onclick="openModalLeave('form-div')">
                     <button class="btn btn-primary btn mb-2" style="background-color: #003566; border-color: #003566;">
                         <i class="fas fa-pen mr-2"></i>
                         Yeni İzin Girişi
@@ -280,11 +236,11 @@
                                 <td><?= $leave->leave_days ?></td>
                                 <td><?= $leaveStatuses[$leave->status] ?></td>
                                 <td style="display: flex; justify-content: space-evenly;">
-                                    <a href="#" onclick="openModal('edit-div-<?= $leave->id ?>')">
+                                    <a href="#" onclick="openModalLeave('edit-div-<?= $leave->id ?>')">
                                         <i class="fas fa-pen mr-3" style="color:#003566"></i>
                                     </a>
                                     <div id="edit-div-<?= $leave->id ?>" class="modal">
-                                        <span class="close" onclick="closeModal()">&times;</span>
+                                        <span class="close" onclick="closeModalLeave()">&times;</span>
                                         <div style="padding-top: 20px;">
                                             <form action="" method="POST">
                                                 <b>İzin Başlangıç Tarihi</b><br/>
@@ -394,14 +350,14 @@
     // Her iki tarih girişini dinleyen olay tetikleyicisi
     document.getElementById("start_date").addEventListener("change", hesaplaGunFarki);
     document.getElementById("return_date").addEventListener("change", hesaplaGunFarki);
-    function openModal(divId) {
+    function openModalLeave(divId) {
         document.getElementById(divId).style.display = "block";
         document.getElementById("overlay").style.display = "block";
         var id = divId.replace("edit-div-", "");
         calculateDayDifferenceWithId(id);
     }
 
-    function closeModal() {
+    function closeModalLeave() {
         document.querySelectorAll(".modal").forEach(modal => {
             if (modal.style.display === "block") {
                 modal.style.display = "none";

@@ -1,15 +1,9 @@
-<?php 
-
+<?php
 	include 'functions/init.php';
-
 	if (!isLoggedIn()) {
-		
 		header("Location:login.php");
-
 		exit();
-
 	}elseif($user->type == '0' || $user->type == '1'){
-
 		header("Location:index.php");
 
 		exit();
@@ -18,13 +12,13 @@
 
 		// sıralama için kullandığımız sıra numaralarından en sondakini bulabilmek için
 
-		$query = $db->query("SELECT * FROM fiyatlar WHERE silik = '0' ORDER BY sira DESC LIMIT 1", PDO::FETCH_ASSOC);
+		$query = $db->query("SELECT * FROM catalog WHERE is_deleted = '0' ORDER BY sort_order DESC LIMIT 1", PDO::FETCH_ASSOC);
 
 		if ( $query->rowCount() ){
 
 			foreach( $query as $row ){
 
-				$sonsira = guvenlik($row['sira']);
+				$sonsira = guvenlik($row['sort_order']);
 
 			}
 
@@ -98,7 +92,7 @@
 
 				$fiyatadi = "fiyat".($k+1); $fiyat = $_POST[$fiyatadi];
 				
-				$query = $db->prepare("INSERT INTO fiyatlar SET urunno = ?, kod = ?, model = ?, adetmetre = ?, fiyat = ?, resim1 = ?, resim2 = ?, aciklama = ?, saniye = ?, silik = ?, sira = ?");
+				$query = $db->prepare("INSERT INTO catalog SET product = ?, code = ?, model = ?, quantity = ?, price = ?, image_1 = ?, image_2 = ?, description = ?, created_at = ?, is_deleted = ?, sort_order = ?");
 
 				$insert = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$upload_file1,$upload_file2,$aciklama,time(),'0',$yenisira));
 
@@ -151,19 +145,19 @@
 
 			if ($urun_eski_sira < $urun_yeni_sira) {
 
-				$kaycaklaricek = $db->query("SELECT * FROM fiyatlar WHERE sira <= '{$urun_yeni_sira}' AND sira > '{$urun_eski_sira}'", PDO::FETCH_ASSOC);
+				$kaycaklaricek = $db->query("SELECT * FROM catalog WHERE sort_order <= '{$urun_yeni_sira}' AND sort_order > '{$urun_eski_sira}'", PDO::FETCH_ASSOC);
 
 				if ( $kaycaklaricek->rowCount() ){
 
 					foreach( $kaycaklaricek as $kuc ){
 
-						$kayan_urun_id = $kuc['fiyatid'];
+						$kayan_urun_id = $kuc['id'];
 
-						$kayan_urun_sira = $kuc['sira'];
+						$kayan_urun_sira = $kuc['sort_order'];
 
 						$kayan_urun_sira--;
 
-						$sira_guncelle = $db->prepare("UPDATE fiyatlar SET sira = ? WHERE fiyatid = ?"); 
+						$sira_guncelle = $db->prepare("UPDATE catalog SET sort_order = ? WHERE id = ?");
 
 						$kaymaguncelle = $sira_guncelle->execute(array($kayan_urun_sira,$kayan_urun_id));
 
@@ -173,19 +167,19 @@
 
 			}elseif ($urun_eski_sira > $urun_yeni_sira) {
 
-				$kaycaklaricek = $db->query("SELECT * FROM fiyatlar WHERE sira >= '{$urun_yeni_sira}' AND sira < '{$urun_eski_sira}'", PDO::FETCH_ASSOC);
+				$kaycaklaricek = $db->query("SELECT * FROM catalog WHERE sort_order >= '{$urun_yeni_sira}' AND sort_order < '{$urun_eski_sira}'", PDO::FETCH_ASSOC);
 
 				if ( $kaycaklaricek->rowCount() ){
 
 					foreach( $kaycaklaricek as $kuc ){
 
-						$kayan_urun_id = $kuc['fiyatid'];
+						$kayan_urun_id = $kuc['id'];
 
-						$kayan_urun_sira = $kuc['sira'];
+						$kayan_urun_sira = $kuc['sort_order'];
 
 						$kayan_urun_sira++;
 
-						$sira_guncelle = $db->prepare("UPDATE fiyatlar SET sira = ? WHERE fiyatid = ?"); 
+						$sira_guncelle = $db->prepare("UPDATE catalog SET sort_order = ? WHERE id = ?");
 
 						$kaymaguncelle = $sira_guncelle->execute(array($kayan_urun_sira,$kayan_urun_id));
 
@@ -211,7 +205,7 @@
 
 				if(!empty($kod) && !empty($model) && !empty($adetmetre) && !empty($fiyat)){
 
-					$query = $db->prepare("UPDATE fiyatlar SET urunno = ?, kod = ?, model = ?, adetmetre = ?, fiyat = ?, resim1 = ?, resim2 = ?, aciklama = ?, saniye = ?, sira = ? WHERE fiyatid = ?"); 
+					$query = $db->prepare("UPDATE catalog SET product = ?, code = ?, model = ?, quantity = ?, price = ?, image_1 = ?, image_2 = ?, description = ?, created_at = ?, sort_order = ? WHERE id = ?");
 
 					$guncelle = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$upload_file1,$upload_file2,$aciklama,time(),$urun_yeni_sira,$fiyatid));
 
@@ -231,19 +225,19 @@
 
 			$urun_eski_sira = guvenlik($_POST['urun_eski_sira']);
 
-			$kaycaklaricek = $db->query("SELECT * FROM fiyatlar WHERE sira > '{$urun_eski_sira}' AND silik = '0'", PDO::FETCH_ASSOC);
+			$kaycaklaricek = $db->query("SELECT * FROM catalog WHERE sort_order > '{$urun_eski_sira}' AND is_deleted = '0'", PDO::FETCH_ASSOC);
 
 			if ( $kaycaklaricek->rowCount() ){
 
 				foreach( $kaycaklaricek as $kuc ){
 
-					$kayan_urun_id = $kuc['fiyatid'];
+					$kayan_urun_id = $kuc['id'];
 
-					$kayan_urun_sira = $kuc['sira'];
+					$kayan_urun_sira = $kuc['sort_order'];
 
 					$kayan_urun_sira--;
 
-					$sira_guncelle = $db->prepare("UPDATE fiyatlar SET sira = ? WHERE fiyatid = ?"); 
+					$sira_guncelle = $db->prepare("UPDATE catalog SET sort_order = ? WHERE id = ?");
 
 					$kaymaguncelle = $sira_guncelle->execute(array($kayan_urun_sira,$kayan_urun_id));
 
@@ -251,7 +245,7 @@
 
 			}
 
-			$query = $db->prepare("UPDATE fiyatlar SET silik = ? WHERE urunno = ?"); 
+			$query = $db->prepare("UPDATE catalog SET is_deleted = ? WHERE product = ?");
 
 			$guncelle = $query->execute(array('1',$urunno));
 
@@ -285,8 +279,7 @@
 
 			echo "Ürün no : ".$urunno."<br/>Kod : ".$kod."<br/>Model : ".$model."<br/>Adetmetre : ".$adetmetre."<br/>Fiyat : ".$fiyat."<br/>Resim 1 : ".$resim1."<br/>Resim 2 : ".$resim2."<br/>Açıklama : ".$aciklama."<br/>Sıra : ".$sira; 
 
-			$query = $db->prepare("INSERT INTO fiyatlar SET urunno = ?, kod = ?, model = ?, adetmetre = ?, fiyat = ?, resim1 = ?, resim2 = ?, aciklama = ?, saniye = ?, silik = ?, sira = ?");
-
+            $query = $db->prepare("INSERT INTO catalog SET product = ?, code = ?, model = ?, quantity = ?, price = ?, image_1 = ?, image_2 = ?, description = ?, created_at = ?, is_deleted = ?, sort_order = ?");
 			$insert = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$resim1,$resim2,$aciklama,time(),'0',$sira));	
 
 			header("Location:fiyatlar.php");
@@ -299,7 +292,7 @@
 			
 			$fiyatid = guvenlik($_POST['fiyatid']);
 
-			$query = $db->prepare("UPDATE fiyatlar SET silik = ? WHERE fiyatid = ?"); 
+			$query = $db->prepare("UPDATE catalog SET is_deleted = ? WHERE id = ?");
 
 			$guncelle = $query->execute(array('1',$fiyatid));
 
@@ -310,14 +303,14 @@
 		}
 
 		if (isset($_POST['fiyatgoster'])) {
-			$query = $db->prepare("UPDATE companies SET fiyatlistesi = ? WHERE sirketid = ?"); 
+			$query = $db->prepare("UPDATE companies SET price_list = ? WHERE id = ?");
 			$guncelle = $query->execute(array(0,$user->company_id));
 			header("Location:fiyatlar.php");
 			exit();
 		}
 
 		if (isset($_POST['fiyatgizle'])) {
-			$query = $db->prepare("UPDATE companies SET fiyatlistesi = ? WHERE sirketid = ?"); 
+			$query = $db->prepare("UPDATE companies SET price_list = ? WHERE id = ?");
 			$guncelle = $query->execute(array(1,$user->company_id));
 			header("Location:fiyatlar.php");
 			exit();
@@ -520,17 +513,17 @@
 
 				$hafizaurunno = "";
 
-	    	$query = $db->query("SELECT * FROM fiyatlar WHERE silik = '0' ORDER BY sira ASC", PDO::FETCH_ASSOC);
+	    	    $query = $db->query("SELECT * FROM catalog WHERE is_deleted = '0' ORDER BY sort_order ASC", PDO::FETCH_ASSOC);
 
 				if ( $query->rowCount() ){
 
 					foreach( $query as $row ){
 
-						$urunno = guvenlik($row['urunno']);
-						$resim1 = guvenlik($row['resim1']);
-						$resim2 = guvenlik($row['resim2']);
-						$aciklama = guvenlik($row['aciklama']);
-						$sira = guvenlik($row['sira']);
+						$urunno = guvenlik($row['product']);
+						$resim1 = guvenlik($row['image_1']);
+						$resim2 = guvenlik($row['image_2']);
+						$aciklama = guvenlik($row['description']);
+						$sira = guvenlik($row['sort_order']);
 
 			?>
 
@@ -590,19 +583,19 @@
 
 					    			$satir = 0;
 
-					    			$icsorgu = $db->query("SELECT * FROM fiyatlar WHERE urunno = '{$urunno}' AND silik = '0' ORDER BY fiyatid ASC", PDO::FETCH_ASSOC);
+					    			$icsorgu = $db->query("SELECT * FROM catalog WHERE product = '{$urunno}' AND is_deleted = '0'", PDO::FETCH_ASSOC);
 
 									if ( $icsorgu->rowCount() ){
 
 										foreach( $icsorgu as $orw ){
 
 											$satir++;
-											$fiyatid = guvenlik($orw['fiyatid']);
-											$kod = guvenlik($orw['kod']);
+											$fiyatid = guvenlik($orw['id']);
+											$kod = guvenlik($orw['code']);
 											$model = guvenlik($orw['model']);
-											$adetmetre = guvenlik($orw['adetmetre']);
-											$fiyat = guvenlik($orw['fiyat']);
-											$sira = guvenlik($orw['sira']);
+											$adetmetre = guvenlik($orw['quantity']);
+											$fiyat = guvenlik($orw['price']);
+											$sira = guvenlik($orw['sort_order']);
 
 					    		?>
 

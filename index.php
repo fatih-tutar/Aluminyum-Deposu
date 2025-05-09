@@ -107,37 +107,6 @@
 					font-weight: normal;
 				}
 			}
-            .modal {
-                display: none;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 30%;
-                height: auto;
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-                z-index: 1000;
-            }
-            .overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 999;
-            }
-            .close {
-                position: absolute;
-                top: 10px;
-                right: 15px;
-                font-size: 24px;
-                cursor: pointer;
-            }
 		</style>
 	</head>
 	<body>
@@ -150,6 +119,12 @@
 			</div>
 			<div class="row">
 				<div class="col-md-2 col-12">
+                    <a href="#" onclick="openModal('form-div')">
+                        <button class="btn btn-primary btn-block mb-2 mt-2" style="background-color: #003566; border-color: #003566;">
+                            <i class="fas fa-file mr-2"></i>
+                            Sipariş Formu
+                        </button>
+                    </a>
 					<?php include 'template/sidebar.php'; ?>
 				</div>
 				<div class="col-md-10">
@@ -165,24 +140,6 @@
 		<br/><br/><br/><br/><br/><br/>
 
 		<?php include 'template/script.php'; ?>
-
-        <script>
-            function openModal(divId) {
-                document.getElementById(divId).style.display = "block";
-                document.getElementById("overlay").style.display = "block";
-                var id = divId.replace("edit-div-", "");
-                calculateDayDifferenceWithId(id);
-            }
-
-            function closeModal() {
-                document.querySelectorAll(".modal").forEach(modal => {
-                    if (modal.style.display === "block") {
-                        modal.style.display = "none";
-                    }
-                });
-                document.getElementById("overlay").style.display = "none";
-            }
-        </script>
 
 	</body>
 
