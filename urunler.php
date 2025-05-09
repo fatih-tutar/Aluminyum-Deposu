@@ -470,6 +470,40 @@
 
 			}
 
+            if (isset($_POST['paletsiparisalindi'])) {
+
+                $siparis_id = guvenlik($_POST['siparis_id']);
+
+                $urun_id = guvenlik($_POST['urun_id']);
+
+                $eklenenadet = guvenlik($_POST['eklenenadet']);
+
+                $eskiadet = guvenlik($_POST['urun_palet']);
+
+                $urun_palet = $eskiadet + $eklenenadet;
+
+                if ($urun_palet != $eskiadet) {
+
+                    $islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
+
+                    $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_palet,time(),'2',$user->company_id));
+
+                }
+
+                $query = $db->prepare("UPDATE urun SET urun_palet = ? WHERE urun_id = ?");
+
+                $guncelle = $query->execute(array($urun_palet,$urun_id));
+
+                $query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?");
+
+                $guncelle = $query->execute(array('0',$siparis_id));
+
+                header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
+
+                exit();
+
+            }
+
 			if (isset($_POST['add_inventory'])) {
 
 				$code = guvenlik($_POST['code']);
@@ -1488,7 +1522,7 @@
 
 															<div class="col-md-1 col-8"><?= $termintarih; ?></div>
 
-															<div class="col-md-1 col-6">
+															<div class="col-md-1 col-4">
 																
 																<input type="hidden" name="siparis_id" value="<?= $siparis_id; ?>">
 
@@ -1496,19 +1530,25 @@
 
 																<input type="hidden" name="urun_adet" value="<?= $urun_adet; ?>">
 																
-																<button type="submit" name="siparisalindi" class="btn btn-danger btn-sm">Mağazaya Gönderildi</button>
+																<button type="submit" name="siparisalindi" class="btn btn-primary btn-sm">Mağazaya Gönderildi</button>
 
 															</div>
 
-															<div class="col-md-1 col-6">
+															<div class="col-md-1 col-4">
 
 																<input type="hidden" name="urun_depo_adet" value="<?= $urun_depo_adet; ?>">
-
-																<input type="hidden" name="urun_palet" value="<?= $urun_palet; ?>">
 																
-																<button type="submit" name="deposiparisalindi" class="btn btn-danger btn-sm">Depoya Gönderildi</button>
+																<button type="submit" name="deposiparisalindi" class="btn btn-secondary btn-sm">Depoya Gönderildi</button>
 
 															</div>
+
+                                                            <div class="col-md-1 col-4">
+
+                                                                <input type="hidden" name="urun_palet" value="<?= $urun_palet; ?>">
+
+                                                                <button type="submit" name="paletsiparisalindi" class="btn btn-success btn-sm">Palete Çekildi</button>
+
+                                                            </div>
 
 														</div>
 

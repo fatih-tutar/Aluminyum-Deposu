@@ -117,7 +117,13 @@
 
 				$islem_tipi = $row['islem_tipi'];
 
-				$islem_yeri = $islem_tipi == 0 ? '<button class="btn btn-warning btn-sm">Mağaza</button>' : '<button class="btn btn-info btn-sm">Depo</button>';
+                if($islem_tipi == 0){
+                    $islem_yeri = '<button class="btn btn-warning btn-sm">Mağaza</button>';
+                }else if($islem_tipi == 1){
+                    $islem_yeri = '<button class="btn btn-info btn-sm">Depo</button>';
+                }else{
+                    $islem_yeri = '<button class="btn btn-success btn-sm">Palet</button>';
+                }
 
 				$saniye = $row['saniye'];
 
