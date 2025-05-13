@@ -1252,7 +1252,7 @@
 
 											$tekliflersiralamasi = 0;
 
-											$tklfcek = $db->query("SELECT * FROM teklif WHERE turunid = '{$urun_id}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY teklifid DESC", PDO::FETCH_ASSOC);
+											$tklfcek = $db->query("SELECT * FROM teklif WHERE turunid = '{$urun_id}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY teklifid DESC LIMIT 10", PDO::FETCH_ASSOC);
 
 											if ( $tklfcek->rowCount() ){
 
@@ -1464,7 +1464,7 @@
 									
 										<?php
 
-											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '1' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
+											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '1' AND sirketid = '{$user->company_id}' AND silik = '0' LIMIT 10", PDO::FETCH_ASSOC);
 
 											if ( $sipariscek->rowCount() ){
 
@@ -1590,7 +1590,7 @@
 									
 										<?php
 
-											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '0' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY siparissaniye DESC", PDO::FETCH_ASSOC);
+											$sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '0' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY siparissaniye DESC LIMIT 10", PDO::FETCH_ASSOC);
 
 											if ( $sipariscek->rowCount() ){
 
