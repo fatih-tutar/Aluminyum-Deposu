@@ -4,8 +4,6 @@ if (!isLoggedIn()) {
     header("Location:login.php");
     exit();
 }else{
-    $dolar = getDolar();
-    $lme = getLME();
 }
 ?>
 <!DOCTYPE html>
@@ -42,7 +40,7 @@ if (!isLoggedIn()) {
 
                             $fabrikaiscilik = guvenlik($row['labor_cost']);
 
-                            $fiyat = ($lme + $fabrikaiscilik) * $dolar / 1000;
+                            $fiyat = ($companyLme + $fabrikaiscilik) * $companyDolar / 1000;
 
                             $fiyat2=floor($fiyat*100/100*102)/100;
 

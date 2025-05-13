@@ -16,8 +16,10 @@
     $dbInstance = new Database();
     $db = $dbInstance->getConnection();
 
-	$getCompanyPriceList = $db->query("SELECT * FROM companies WHERE id = '2'")->fetch(PDO::FETCH_ASSOC);
-	$companyPriceList = guvenlik($getCompanyPriceList['price_list']);
+	$company = $db->query("SELECT * FROM companies WHERE id = '2'")->fetch(PDO::FETCH_ASSOC);
+	$companyPriceList = guvenlik($company['price_list']);
+    $companyDolar = guvenlik($company['dolar']);
+    $companyLme = guvenlik($company['lme']);
 
     if(isLoggedIn() === true){
 		$userSessionId = $_SESSION['user_id'];

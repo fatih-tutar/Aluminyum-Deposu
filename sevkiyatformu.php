@@ -83,19 +83,19 @@
                 
                 <b>Firma :</b>
                 
-                <?= $firmaInfos['firmaadi']."<br/>"?>
+                <?= $firmaInfos['name']."<br/>"?>
 
             </div>
 
             <div class="col-md-3">
                 
-                <b>Tel : </b><?= $firmaInfos['firmatel']."<br/>"?>
+                <b>Tel : </b><?= $firmaInfos['phone']."<br/>"?>
 
             </div>
 
             <div class="col-md-3">
                 
-                <b>E-posta : </b><?= $firmaInfos['firmaeposta']."<br/>"?>
+                <b>E-posta : </b><?= $firmaInfos['email']."<br/>"?>
 
             </div>
 
@@ -107,7 +107,7 @@
 
         <div class="row m-3">
             <div class="col-md-10">
-                <b>Adres : </b><?= $firmaInfos['firmaadres'] ?>
+                <b>Adres : </b><?= $firmaInfos['address'] ?>
             </div>
             <div class="col-md-2">
                 <b>Saat &nbsp;: </b><?= $saat ?>
