@@ -209,7 +209,7 @@ if (!isLoggedIn()) {
                                     </tr>
                                 <?php } ?>
                                 <tr <?= $leave->return_date < $date ? 'style="background-color:#f8f8f8;"' : ''; ?>>
-                                    <th scope="row"><?= $leaveUser->name.' '.$leaveUser->surname ?></th>
+                                    <th scope="row"><?= $leaveUser->name ?></th>
                                     <td><?= $startDate ?></td>
                                     <td><?= $returnDate ?></td>
                                     <td><?= $leave->leave_days ?></td>

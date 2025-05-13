@@ -7,6 +7,10 @@ if (!isLoggedIn()) {
 
     if (isset($_POST['hesapla'])) {
 
+        $lmePost = 1;
+        $dolarPost = 1;
+        $iscilik = 1;
+
         $dolarPost = guvenlik($_POST['dolarkuru']);
 
         if($dolarPost != $companyDolar){

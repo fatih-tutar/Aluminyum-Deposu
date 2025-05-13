@@ -179,9 +179,9 @@
                             </td>
                             <td>
                                 <div class="d-flex">
-                                    <input type="date" id="tarih<?= $id; ?>" name="due_date" <?= $client->due_date == 0 ? 'placeholder="Tarih seçiniz"' : 'value="'.$client->due_date.'"' ?> class="form-control form-control-sm">
+                                    <input type="date" id="tarih<?= $client->id; ?>" name="due_date" <?= $client->due_date == 0 ? 'placeholder="Tarih seçiniz"' : 'value="'.$client->due_date.'"' ?> class="form-control form-control-sm">
                                     <input type="hidden" id="tarih-db" name="due_date">
-                                    <input type="hidden" name="order_id" value="<?= $id; ?>">
+                                    <input type="hidden" name="order_id" value="<?= $client->id; ?>">
                                     <input type="hidden" name="id" value="<?= $client->id; ?>">
                                     <button class="btn btn-dark btn-sm" type="submit" name="called"><i class="fas fa-phone"></i></button>
                                 </div>

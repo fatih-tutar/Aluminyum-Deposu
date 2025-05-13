@@ -18,8 +18,9 @@
 <?php if (isset($sevkiyatlar)): ?>
     <?php
     foreach ($sevkiyatlar as $key => $sevkiyat):
-        $firma = reset(array_filter($firmalar, fn($firma) => $firma->id == $sevkiyat->firma_id));
-        $firmaAdi = $firma->name;
+        $filtered = array_filter($firmalar, fn($firma) => $firma->id == $sevkiyat->firma_id);
+        $firma = reset($filtered);
+        $firmaAdi = $firma->name ?? null;
         $firmaAdres = $firma->address;
         $kilolar = $sevkiyat->kilolar;
         $toplamkg = 0;

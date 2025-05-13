@@ -152,7 +152,9 @@
                                                 <div class="col-4 d-block d-sm-none">Adet : </div>
                                                 <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
                                                 <div class="col-4 d-block d-sm-none">Kilo : </div>
-                                                <div class="col-md-2 col-8"><?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?></div>
+                                                <div class="col-md-2 col-8">
+                                                    <?= strpos($kilolar, ",") && isset($kiloArray[$key]) ? $kiloArray[$key] : '' ?>
+                                                </div>
                                                 <div class="col-4 d-block d-sm-none">Fiyat : </div>
                                                 <div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
                                             </div>
