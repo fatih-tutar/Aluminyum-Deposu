@@ -12,7 +12,7 @@ if ( $query->rowCount() ){
 
 	foreach( $query as $row ){
 
-		$firmaid = $row[ 'id']; 
+		$clientId = $row[ 'id'];
 
 	}
 

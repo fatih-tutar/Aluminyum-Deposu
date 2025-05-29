@@ -12,8 +12,8 @@
         }
         // ARAÇLAR
         $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0' AND is_transport = '1'")->fetchAll(PDO::FETCH_OBJ);
-        // FİRMALAR
-        $firmalar = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
+        // CLIENTS
+        $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
 
         if(isset($_POST['manuelSevkiyatKaydet'])){
             $firma = guvenlik($_POST['firma']);
@@ -126,7 +126,7 @@
                     <?php if (isset($sevkiyatGruplari[$arac->id])): ?>
                         <?php
                         foreach ($sevkiyatGruplari[$arac->id] as $sevkiyat):
-                            $filtered = array_filter($firmalar, fn($firma) => $firma->id == $sevkiyat->firma_id);
+                            $filtered = array_filter($clients, fn($firma) => $firma->id == $sevkiyat->firma_id);
                             $firma = reset($filtered);
                             $firmaAdi = $firma->name ?? null;
                             $firmaAdres = $firma->address;

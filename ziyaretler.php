@@ -353,12 +353,12 @@
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>İlçe</b></div>
                             <div class="col-md-1 col-8 px-1 pt-2" style="border-right:1px solid black; text-align:left;">
-                                <a href="http://aluminyumdeposu.com/ziyaretler.php?ilce=<?= $ilce; ?>"><?= $ilce; ?></a>
+                                <a href="ziyaretler.php?ilce=<?= $ilce; ?>"><?= $ilce; ?></a>
                             </div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>İş Kolu</b></div>
                             <div class="col-md-1 col-8 px-1 pt-1" style="border-right:1px solid black; text-align:left;">
-                                <a href="http://aluminyumdeposu.com/ziyaretler.php?iskolu=<?= $iskolu; ?>"><?= $iskoluadi; ?></a>
+                                <a href="ziyaretler.php?iskolu=<?= $iskolu; ?>"><?= $iskoluadi; ?></a>
                             </div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Müşteri İsmi</b></div>
@@ -1917,9 +1917,9 @@
             $("#IlFiltre").change(function(){
                 var url = $(this).val(); // get selected value
                 if (url != 0) { // require a URL
-                    window.location = "http://aluminyumdeposu.com/ziyaretler.php?il=" + url; // redirect
+                    window.location = "ziyaretler.php?il=" + url; // redirect
                 }else{
-                    window.location = "http://aluminyumdeposu.com/ziyaretler.php"; // redirect
+                    window.location = "ziyaretler.php"; // redirect
                 }
                 return false;
             });
@@ -1932,9 +1932,9 @@
             $("#mobilIlFiltre").change(function(){
                 var url = $(this).val(); // get selected value
                 if (url != 0) { // require a URL
-                    window.location = "http://aluminyumdeposu.com/ziyaretler.php?il=" + url; // redirect
+                    window.location = "ziyaretler.php?il=" + url; // redirect
                 }else{
-                    window.location = "http://aluminyumdeposu.com/ziyaretler.php"; // redirect
+                    window.location = "ziyaretler.php"; // redirect
                 }
                 return false;
             });

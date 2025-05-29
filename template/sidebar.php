@@ -143,7 +143,7 @@
         <a href="client.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/firmalar.png" alt="" width="35" height="35">
+                    <img src="img/sidebar/clients.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     FİRMALAR

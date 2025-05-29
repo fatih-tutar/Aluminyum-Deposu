@@ -3,8 +3,8 @@
     $aracId = guvenlik($_GET['id']);
     // SEVKİYATLAR
     $sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE arac_id = '{$aracId}' AND silik = '0' AND nakliye_durumu = '0'")->fetchAll(PDO::FETCH_OBJ);
-    // FİRMALAR
-    $firmalar = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
+    // CLIENTS
+    $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
     // ARAÇLAR
     $arac = $db->query("SELECT * FROM vehicles WHERE id = '{$aracId}'")->fetch(PDO::FETCH_ASSOC);
 ?>
@@ -18,7 +18,7 @@
 <?php if (isset($sevkiyatlar)): ?>
     <?php
     foreach ($sevkiyatlar as $key => $sevkiyat):
-        $filtered = array_filter($firmalar, fn($firma) => $firma->id == $sevkiyat->firma_id);
+        $filtered = array_filter($clients, fn($firma) => $firma->id == $sevkiyat->firma_id);
         $firma = reset($filtered);
         $firmaAdi = $firma->name ?? null;
         $firmaAdres = $firma->address;

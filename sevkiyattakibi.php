@@ -169,8 +169,8 @@ foreach ($sevkiyatlar as $sevkiyat) {
 // ARAÇLAR
 $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
 
-// FİRMALAR
-$firmalar = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
+// CLIENTS
+$clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
 ?>
 <div id="form-div" class="modal">
     <span class="close" onclick="closeModal()">&times;</span>
@@ -234,7 +234,7 @@ $firmalar = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll
             $urunler = guvenlik($alinanSiparis->urunler);
             $urunArray = explode(",",$urunler);
             $firmaId = guvenlik($alinanSiparis->firma_id);
-            $filtered = array_filter($firmalar, fn($firma) => $firma->id == $firmaId);
+            $filtered = array_filter($clients, fn($firma) => $firma->id == $firmaId);
             $firma = reset($filtered);
             $firmaAdi = $firma->name ?? null;
             $adetler = guvenlik($alinanSiparis->adetler);
@@ -362,7 +362,7 @@ $firmalar = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll
             $urunler = guvenlik($hazirlananSiparis->urunler);
             $urunArray = explode(",",$urunler);
             $firmaId = guvenlik($hazirlananSiparis->firma_id);
-            $filtered = array_filter($firmalar, fn($firma) => $firma->id == $firmaId);
+            $filtered = array_filter($clients, fn($firma) => $firma->id == $firmaId);
             $firma = reset($filtered);
             $firmaAdi = $firma->name ?? null;
             $adetler = guvenlik($hazirlananSiparis->adetler);
@@ -483,7 +483,7 @@ $firmalar = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll
             $urunler = guvenlik($faturasiKesilen->urunler);
             $urunArray = explode(",",$urunler);
             $firmaId = guvenlik($faturasiKesilen->firma_id);
-            $filtered = array_filter($firmalar, fn($firma) => $firma->id == $firmaId);
+            $filtered = array_filter($clients, fn($firma) => $firma->id == $firmaId);
             $firma = reset($filtered);
             $firmaAdi = $firma->name ?? null;
             $adetler = guvenlik($faturasiKesilen->adetler);
