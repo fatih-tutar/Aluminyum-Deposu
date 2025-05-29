@@ -98,7 +98,7 @@
 
 			}    
 
-			header("Location:fiyatlar.php");
+			header("Location:catalog.php");
 
 			exit();
 
@@ -213,7 +213,7 @@
 
 			}
 
-			header("Location:fiyatlar.php");
+			header("Location:catalog.php");
 
 			exit();
 
@@ -249,7 +249,7 @@
 
 			$guncelle = $query->execute(array('1',$urunno));
 
-			header("Location:fiyatlar.php");
+			header("Location:catalog.php");
 
 			exit();
 
@@ -282,7 +282,7 @@
             $query = $db->prepare("INSERT INTO catalog SET product = ?, code = ?, model = ?, quantity = ?, price = ?, image_1 = ?, image_2 = ?, description = ?, created_at = ?, is_deleted = ?, sort_order = ?");
 			$insert = $query->execute(array($urunno,$kod,$model,$adetmetre,$fiyat,$resim1,$resim2,$aciklama,time(),'0',$sira));	
 
-			header("Location:fiyatlar.php");
+			header("Location:catalog.php");
 
       exit();
 
@@ -296,7 +296,7 @@
 
 			$guncelle = $query->execute(array('1',$fiyatid));
 
-			header("Location:fiyatlar.php");
+			header("Location:catalog.php");
 
 			exit();
 
@@ -305,14 +305,14 @@
 		if (isset($_POST['fiyatgoster'])) {
 			$query = $db->prepare("UPDATE companies SET price_list = ? WHERE id = ?");
 			$guncelle = $query->execute(array(0,$user->company_id));
-			header("Location:fiyatlar.php");
+			header("Location:catalog.php");
 			exit();
 		}
 
 		if (isset($_POST['fiyatgizle'])) {
 			$query = $db->prepare("UPDATE companies SET price_list = ? WHERE id = ?");
 			$guncelle = $query->execute(array(1,$user->company_id));
-			header("Location:fiyatlar.php");
+			header("Location:catalog.php");
 			exit();
 		}
 

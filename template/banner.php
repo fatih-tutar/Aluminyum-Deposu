@@ -32,7 +32,7 @@
 
 								<hr class="m-1"/>
 
-								<a class="dropdown-item" href="fiyatlar.php"><b>FİYATLAR</b></a>
+								<a class="dropdown-item" href="catalog.php"><b>FİYATLAR</b></a>
 
 								<a class="dropdown-item" href="plan.php"><b>PLAN</b></a>
 
