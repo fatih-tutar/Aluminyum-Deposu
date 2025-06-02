@@ -88,6 +88,12 @@ a{text-decoration: none;color:black;}
 .br-grey {
     border-right: 1px solid #f4f4f4;
 }
+.fs-23 {
+    font-size:23px;
+}
+.fw-bold {
+    font-weight: bold;
+}
 @media screen and (max-width: 768px) {
     .modal {
         width: 96%;

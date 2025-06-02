@@ -525,6 +525,16 @@ function tarihvarmi($tarih){
     return ($say == '0') ? '0' : '1';
 }
 
+function movementDateExists(string $date): bool
+{
+    global $db;
+
+    $query = $db->prepare("SELECT 1 FROM movements WHERE date = :date LIMIT 1");
+    $query->execute(['date' => $date]);
+
+    return (bool) $query->fetchColumn();
+}
+
 function checkUserById($userId){
 
     global $db;
