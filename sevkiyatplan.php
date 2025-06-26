@@ -20,7 +20,7 @@
             $kilolar = guvenlik($_POST['kilolar']);
             $arac_id = guvenlik($_POST['arac_id']);
             $aciklama = guvenlik($_POST['aciklama']);
-            $firmaId = getFirmaID($firma);
+            $firmaId = getClientId($firma);
             if(empty($firma)){
                 $error = '<br/><div class="alert alert-danger" role="alert">Firma seçmediniz.</div>';
             }else if(empty($kilolar)){
@@ -96,7 +96,7 @@
         }
         $column = 12 / count($araclar);
         ?>
-        <div class="row cerceve" style="padding-top: 10px; padding-bottom:10px;">
+        <div class="row div4" style="padding-top: 10px; padding-bottom:10px;">
             <?php
             foreach ($araclar as $key => $arac) {
                 ?>

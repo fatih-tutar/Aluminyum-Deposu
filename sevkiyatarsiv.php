@@ -64,7 +64,7 @@
                     $urunler = guvenlik($sevkiyat['urunler']);
                     $urunArray = explode(",",$urunler);
                     $firmaId = guvenlik($sevkiyat['firma_id']);
-                    $firmaAdi = getFirmaAdi($firmaId);
+                    $firmaAdi = getClientName($firmaId);
                     $adetler = guvenlik($sevkiyat['adetler']);
                     $adetArray = explode(",",$adetler);
                     $kilolar = guvenlik($sevkiyat['kilolar']);

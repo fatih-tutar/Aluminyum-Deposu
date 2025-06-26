@@ -14,7 +14,7 @@
 
 <link href="fontawesome/css/all.css" rel="stylesheet">
 
-<link rel="stylesheet" type="text/css" href="css/style10.css">
+<link rel="stylesheet" type="text/css" href="css/style8.css">
 
 <link rel="stylesheet" type="text/css" href="css/datepicker.css">
 

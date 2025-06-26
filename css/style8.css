@@ -1,0 +1,198 @@
+/* ======================================
+   Global Base Styles
+   ====================================== */
+
+body {
+    background-color: #e6ecf0;
+    margin: 0;
+    font-family: Trebuchet MS, serif;
+}
+
+p {
+    line-height: 25px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+/* ======================================
+   Utility Classes
+   ====================================== */
+
+.body-white {
+    background-color: white;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.fs-23 {
+    font-size: 23px;
+}
+
+.display-flex {
+    display: flex;
+}
+
+.bb-grey {
+    border-bottom: 1px solid #f4f4f4;
+}
+
+.br-grey {
+    border-right: 1px solid #f4f4f4;
+}
+
+.icon-button {
+    background-color: white;
+    border-style: none;
+}
+
+.break-word {
+    display: block;       /* blok seviyesinde */
+    word-wrap: break-word; /* uzun kelimelerde satır kır */
+    white-space: normal;  /* satır taşıma aktif */
+    max-width: 100%;      /* konteynır genişliğini aşma */
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* ======================================
+   Layout & Box Styles
+   ====================================== */
+
+.div2 {
+    border-width: 2px;
+    border-style: solid;
+    border-color: #d1d1d1;
+    background-color: #F0F0F0;
+    margin: 7px;
+    padding: 10px;
+    box-shadow: 7px 7px 7px 0;
+}
+
+.div4 {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d1d1d1;
+    background-color: #FFFFFF;
+    margin-top: 10px;
+    padding: 5px;
+    box-shadow: 7px 7px 7px 0;
+}
+
+.div5 {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #17a2b8;
+    padding: 5px;
+    margin: 5px;
+}
+
+/* ======================================
+   Media & Image Containers
+   ====================================== */
+
+.gorsel-container {
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+    height: 100px;
+}
+
+.gorsel-container img {
+    display: block;
+    width: 100%;
+    margin: -10px 0;
+}
+
+/* ======================================
+   Modals & Overlays
+   ====================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 9;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 4;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* ======================================
+   Buttons
+   ====================================== */
+
+.add-button {
+    background-color: #1b9bee;
+    border-radius: 32px;
+    bottom: 20px;
+    color: white;
+    height: 64px;
+    padding: 15px;
+    position: fixed;
+    right: 20px;
+    text-align: center;
+    width: 64px;
+    z-index: 2;
+}
+
+/* ======================================
+   Tables
+   ====================================== */
+
+.table-responsive {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.table thead th, .table tbody td {
+    white-space: nowrap;
+}
+
+.td-vertical-align-middle td {
+    vertical-align: middle;
+}
+
+/* ======================================
+   Responsive / Mobile Styles
+   ====================================== */
+
+@media screen and (max-width: 768px) {
+    .modal {
+        width: 96%;
+        left: 2%;
+        transform: translate(0, -50%);
+        border-radius: 0; /* Köşeleri kaldır */
+        height: auto; /* İçeriğe göre yükseklik */
+    }
+}

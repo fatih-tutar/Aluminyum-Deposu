@@ -128,7 +128,7 @@ if (isset($_POST['sevkiyatkaydet'])) {
         $kategori_iki = trim($urunArray[1]);
         $kategori_bir = trim($urunArray[2]);
         $urunId = getUrunID($urun,$kategori_iki,$kategori_bir);
-        $firmaId = getFirmaID($firma);
+        $firmaId = getClientId($firma);
         $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND silik = '0' AND manuel = '0' AND sirket_id = '{$user->company_id}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
         if($sevkiyatList){
             $urunler = guvenlik($sevkiyatList['urunler']);

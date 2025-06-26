@@ -39,7 +39,7 @@ if (!isLoggedIn()) {
     <title>Teklif Formları</title>
     <?php include 'template/head.php'; ?>
 </head>
-<body class="body2">
+<body class="body-white">
 <?php include 'template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">

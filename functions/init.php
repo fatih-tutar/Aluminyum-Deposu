@@ -2,6 +2,7 @@
 	session_start();
 	ob_start();
     setlocale(LC_TIME, 'tr_TR.UTF-8');
+    date_default_timezone_set('Europe/Istanbul');
 
     $tarihf2 = date("d-m-Y",time());
     $date = date("Y-m-d",time());

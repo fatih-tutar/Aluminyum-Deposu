@@ -1,5 +1,11 @@
 <?php
 
+function formatDate($datetime) {
+    return date("d/m/Y", strtotime($datetime));
+}
+function formatDateAndTime($datetime) {
+    return date("d/m/Y H:i", strtotime($datetime));
+}
 function getProduct($productId)
 {
     global $db;
@@ -37,6 +43,16 @@ function controlProductById($productId){
         return false;
     }
 }
+
+function getFactoryNameById($factories, $id) {
+    foreach ($factories as $factory) {
+        if ($factory->id == $id) {
+            return $factory->name;
+        }
+    }
+    return 'Bilinmeyen Fabrika'; // ID bulunamazsa
+}
+
 function getFactoryInfos($factoryId) {
     global $db;
     $factory = $db->query("SELECT * FROM factories WHERE id = '{$factoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
@@ -358,15 +374,15 @@ function getFirmaInfos($firmaId){
     $firmaInfos = $db->query("SELECT * FROM clients WHERE id = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
     return $firmaInfos;
 }
-function getFirmaID($firmaAdi){
+function getClientId($name){
     global $db;
-    $query = $db->query("SELECT id FROM clients WHERE name = '{$firmaAdi}'")->fetch(PDO::FETCH_ASSOC);
-    $firmaid = $query[ 'id']; 
-    return $firmaid;
+    $query = $db->query("SELECT id FROM clients WHERE name = '{$name}'")->fetch(PDO::FETCH_ASSOC);
+    $id = $query[ 'id'];
+    return $id;
 }
-function getFirmaAdi($firmaId){
+function getClientName($id){
     global $db;
-    $query = $db->query("SELECT name FROM clients WHERE id = '{$firmaId}'")->fetch(PDO::FETCH_ASSOC);
+    $query = $db->query("SELECT name FROM clients WHERE id = '{$id}'")->fetch(PDO::FETCH_ASSOC);
     if ($query && isset($query['name'])) {
         return $query['name']; 
     }

@@ -122,7 +122,7 @@ if (!isLoggedIn()) {
         }
     </style>
 </head>
-<body class="body2">
+<body class="body-white">
 <?php include 'template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">

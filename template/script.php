@@ -208,13 +208,23 @@
         calculateDayDifferenceWithId(id);
     }
 
-    function closeModal() {
-        document.querySelectorAll(".modal").forEach(modal => {
-            if (modal.style.display === "block") {
+    function closeModal(divId = null) {
+        if (divId) {
+            const modal = document.getElementById(divId);
+            if (modal && modal.style.display === "block") {
                 modal.style.display = "none";
             }
-        });
-        document.getElementById("overlay").style.display = "none";
+        } else {
+            document.querySelectorAll(".modal").forEach(modal => {
+                if (modal.style.display === "block") {
+                    modal.style.display = "none";
+                }
+            });
+            const overlay = document.getElementById("overlay");
+            if (overlay) {
+                overlay.style.display = "none";
+            }
+        }
     }
 
 </script>

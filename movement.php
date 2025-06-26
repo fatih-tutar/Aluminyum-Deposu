@@ -82,11 +82,11 @@
 				</div>
     			<div class="div4">
                     <div class="row">
-                        <div class="col-md-2 d-none d-sm-block fs-23 fw-bold">Tarih</div>
-                        <div class="col-md-2 d-none d-sm-block fs-23 fw-bold">Çağlayan Giden</div>
-                        <div class="col-md-2 d-none d-sm-block fs-23 fw-bold">Çağlayan Gelen</div>
-                        <div class="col-md-2 d-none d-sm-block fs-23 fw-bold">Alkop Giden</div>
-                        <div class="col-md-2 d-none d-sm-block fs-23 fw-bold">Alkop Gelen</div>
+                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Tarih</div>
+                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Çağlayan Giden</div>
+                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Çağlayan Gelen</div>
+                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Alkop Giden</div>
+                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Alkop Gelen</div>
                         <div class="col-md-2 col-6">
                             <div class="row">
                                 <div class="col-md-6 col-6 p-0">
