@@ -577,7 +577,7 @@ function kategoridolumu($kategori_id){
 
     global $db;
 
-    $sorgu = $db->prepare("SELECT COUNT(*) FROM urun WHERE kategori_bir = '{$kategori_id}' || kategori_iki = '{$kategori_id}'");
+    $sorgu = $db->prepare("SELECT COUNT(*) FROM urun WHERE (kategori_bir = '{$kategori_id}' OR kategori_iki = '{$kategori_id}') AND silik = '0'");
     $sorgu->execute();
     $say = $sorgu->fetchColumn();
 

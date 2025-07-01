@@ -7,7 +7,7 @@
 <div id="accordion" class="mt-2 mb-2">
     <?php
         $i = 0;
-        $query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}'", PDO::FETCH_ASSOC);
+        $query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
         if ( $query->rowCount() ){
             foreach( $query as $row ){
                 $kategori_id = $row['kategori_id'];
@@ -28,7 +28,7 @@
                 </div>
                 <div id="collapse<?= $i; ?>" class="collapse px-2" style="border-top:1px solid grey; font-size:11px;" aria-labelledby="heading<?= $i; ?>" data-parent="#accordion">
         <?php
-            $cek = $db->query("SELECT * FROM kategori WHERE kategori_ust = '{$kategori_id}' AND kategori_tipi = '1' AND sirketid = '{$user->company_id}'", PDO::FETCH_ASSOC);
+            $cek = $db->query("SELECT * FROM kategori WHERE kategori_ust = '{$kategori_id}' AND kategori_tipi = '1' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
             if ( $cek->rowCount() ){
                 foreach( $cek as $wor ){
                     $alt_kategori_id = $wor['kategori_id'];
@@ -54,7 +54,19 @@
     <?php
             }
         }
-    ?>	
+    ?>
+    <div class="card p-1">
+        <a href="customorder.php" target="_blank" class="sidebar-font">
+            <div class="row pl-1">
+                <div class="col-md-3 col-2 offset-md-0 ">
+                    <img src="img/kategoriler/unnamed39509908.jpg" alt="" width="35" height="35">
+                </div>
+                <div class="col-md-9 col-9 d-flex align-items-center">
+                    ÖZEL SİPARİŞLER
+                </div>
+            </div>
+        </a>
+    </div>
     <div class="card p-1">
         <a href="fiyatlistesi.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">

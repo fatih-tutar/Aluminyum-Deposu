@@ -321,7 +321,7 @@
 										
 										<?php
 
-											$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '1' AND sirketid = '{$user->company_id}' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+											$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '1' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 											if ( $query->rowCount() ){
 
@@ -333,7 +333,7 @@
 
 													$kategori_ust = $row['kategori_ust'];
 
-													$ustadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_ust}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+													$ustadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_ust}' AND sirketid = '{$user->company_id}'  AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
 
                                                     if ($ustadcek && is_array($ustadcek)) {
                                                         $ustkategoriadi = $ustadcek['kategori_adi'] ?? null;
@@ -703,7 +703,7 @@
 
 						<?php
 
-							$query = $db->query("SELECT * FROM kategori WHERE sirketid = '{$user->company_id}' AND kategori_tipi = '0' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+							$query = $db->query("SELECT * FROM kategori WHERE sirketid = '{$user->company_id}' AND kategori_tipi = '0' AND silik = '0' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 							if ( $query->rowCount() ){
 								foreach( $query as $row ){
@@ -807,7 +807,7 @@
 
 																<?php
 
-																	$ustkatcek = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+																	$ustkatcek = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 																	if ( $ustkatcek->rowCount() ){
 
@@ -1122,7 +1122,7 @@
 
 						<?php
 
-							$query = $db->query("SELECT * FROM kategori WHERE sirketid = '{$user->company_id}' AND kategori_tipi = '1' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+							$query = $db->query("SELECT * FROM kategori WHERE sirketid = '{$user->company_id}' AND kategori_tipi = '1' AND silik = '0' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 							if ( $query->rowCount() ){
 
@@ -1254,7 +1254,7 @@
 
 																<?php
 
-																	$ustkatcek = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
+																	$ustkatcek = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
 
 																	if ( $ustkatcek->rowCount() ){
 
