@@ -46,7 +46,7 @@ a {
 }
 
 .icon-button {
-    background-color: white;
+    background-color: transparent;
     border-style: none;
 }
 
@@ -148,6 +148,44 @@ a {
     cursor: pointer;
 }
 
+.pdf-preview-wrapper {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 720px;
+    max-width: 90%;
+}
+
+.pdf-preview {
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.pdf-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pdf-preview-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.pdf-preview-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #cc0000;
+    cursor: pointer;
+}
+
 /* ======================================
    Buttons
    ====================================== */
@@ -181,6 +219,27 @@ a {
 
 .td-vertical-align-middle td {
     vertical-align: middle;
+}
+
+td.truncate-cell-400 {
+    max-width: 400px;       /* istediğin genişlik */
+    white-space: nowrap;    /* metni tek satır yap */
+    overflow: hidden;       /* taşanı gizle */
+    text-overflow: ellipsis; /* taşan metnin sonuna ... koy */
+}
+
+td.truncate-cell-250 {
+    max-width: 250px;       /* istediğin genişlik */
+    white-space: nowrap;    /* metni tek satır yap */
+    overflow: hidden;       /* taşanı gizle */
+    text-overflow: ellipsis; /* taşan metnin sonuna ... koy */
+}
+
+td.truncate-cell-150 {
+    max-width: 150px;       /* istediğin genişlik */
+    white-space: nowrap;    /* metni tek satır yap */
+    overflow: hidden;       /* taşanı gizle */
+    text-overflow: ellipsis; /* taşan metnin sonuna ... koy */
 }
 
 /* ======================================

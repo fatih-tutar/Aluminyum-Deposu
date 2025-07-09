@@ -9,6 +9,11 @@
     }
 </style>
 <div id="accordion" class="mt-2">
+    <div class="d-flex justify-content-end pr-2">
+        <button id="closeSidebarBtn" class="btn btn-sm btn-light" style="font-size: 1.5rem; line-height: 1; padding: 0 8px;">
+            &times;
+        </button>
+    </div>
     <?php
         $i = 0;
         $query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
@@ -94,19 +99,7 @@
                 </div>
             </div>	
         </a>
-    </div>	
-    <div class="card sidebar-item ">
-        <a href="kaliplistesi.php" target="_blank" class="sidebar-font">
-            <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/kalip_sorgulama.png" alt="" width="35" height="35">
-                </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
-                    KALIP SORGULAMA
-                </div>
-            </div>	
-        </a>
-    </div>	
+    </div>
     <div class="card sidebar-item ">
         <a href="anlikfiyatlama.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
@@ -168,7 +161,7 @@
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="kaliplar.php" target="_blank" class="sidebar-font">
+        <a href="mold.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/kaliplar.png" alt="" width="35" height="35">

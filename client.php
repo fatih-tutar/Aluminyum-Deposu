@@ -18,7 +18,7 @@
                 $phone = guvenlik($_POST['phone']);
                 $email = guvenlik($_POST['email']);
                 $address = guvenlik($_POST['address']);
-                $query = $db->prepare("UPDATE clients SET name = ?, phone = ?, email = ?, addresss = ? WHERE id = ?");
+                $query = $db->prepare("UPDATE clients SET name = ?, phone = ?, email = ?, address = ? WHERE id = ?");
                 $update = $query->execute(array($name, $phone, $email, $address, $id));
                 header("Location:client.php#".($orderId - 2));
                 exit();
@@ -165,7 +165,7 @@
                         foreach ($clients as $clientKey => $client):
                     ?>
                         <tr>
-                            <td>
+                            <td class="truncate-cell-400">
                                 <?= $client->name;?>
                             </td>
                             <td style="white-space: nowrap;">
@@ -193,12 +193,25 @@
                                         <button class="btn btn-info btn-sm mr-1">Formlar</button>
                                     </a>
                                     <button class="btn btn-success btn-sm mr-1" type="submit" name="payment_completed">Temizle</button>
-                                    <a href="#" class="mr-1" onclick="return false" onmousedown="javascript:ackapa('<?= $client->id; ?>');">
+                                    <a onclick="openModal('edit-div-<?= $client->id ?>')">
                                         <button class="btn btn-warning btn-sm">Düzenle</button>
                                     </a>
                                     <a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $client->id; ?>');">
                                         <button class="btn btn-secondary btn-sm">Sil</button>
                                     </a>
+                                    <div id="edit-div-<?= $client->id ?>" class="modal">
+                                        <span class="close" onclick="closeModal()">&times;</span>
+                                        <h4><b>Firma Düzenleme Formu</b></h4>
+                                        <form action="" method="POST" class="mt-3">
+                                            <input type="text" name="name" class="form-control mb-2" placeholder="Firma adını giriniz" value="<?= $client->name ?>">
+                                            <input type="text" name="phone" class="form-control mb-2" placeholder="Telefon numarasını giriniz" value="<?= $client->phone ?>">
+                                            <input type="text" name="email" class="form-control mb-2" placeholder="E-posta adresini yazınız." value="<?= $client->email ?>">
+                                            <textarea name="address" class="form-control mb-2" rows="3" placeholder="Firma adresini yazınız."><?= $client->address ?></textarea>
+                                            <input type="hidden" name="id" value="<?= $client->id ?>"/>
+                                            <input type="hidden" name="order_id" value="<?= $clientKey ?>"/>
+                                            <button type="submit" class="btn btn-primary btn-block" name="update_client">Güncelle</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div id="orders-div-<?= $client->id ?>" class="modal" style="width: 80%;">
                                     <span class="close" onclick="closeModal()">&times;</span>

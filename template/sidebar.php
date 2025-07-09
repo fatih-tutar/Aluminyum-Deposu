@@ -90,19 +90,7 @@
                 </div>
             </div>	
         </a>
-    </div>	
-    <div class="card p-1">
-        <a href="kaliplistesi.php" target="_blank" class="sidebar-font">
-            <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/kalip_sorgulama.png" alt="" width="35" height="35">
-                </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
-                    KALIP SORGULAMA
-                </div>
-            </div>	
-        </a>
-    </div>	
+    </div>
     <div class="card p-1">
         <a href="anlikfiyatlama.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
@@ -164,7 +152,7 @@
         </a>
     </div>
     <div class="card p-1">
-        <a href="kaliplar.php" target="_blank" class="sidebar-font">
+        <a href="mold.php" target="_blank" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/kaliplar.png" alt="" width="35" height="35">
