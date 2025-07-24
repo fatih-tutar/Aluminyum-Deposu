@@ -6,9 +6,9 @@ if (!isLoggedIn()) {
 }else{
     //CUSTOM ORDERS AND ITEMS START
     // Sorguyu çalıştır
-    $stmt = $db->query("
+    $stmt = $db->prepare("
         SELECT 
-            co.id, co.client_id, co.delivery_type, co.description, co.datetime, co.created_by,
+            co.id, co.client_id, co.delivery_type, co.description, co.datetime, co.created_by, co.company_id,
             coi.id AS item_id, coi.product, coi.length, coi.factory_id, coi.quantity, coi.price, coi.due_date
         FROM 
             custom_orders co
@@ -16,10 +16,11 @@ if (!isLoggedIn()) {
             custom_order_items coi 
             ON co.id = coi.custom_order_id AND coi.is_deleted = 0
         WHERE 
-            co.status = 0 AND co.is_deleted = 0
+            co.status = 0 AND co.is_deleted = 0 AND co.company_id = ?
         ORDER BY 
             co.datetime ASC, coi.id ASC
     ");
+    $stmt->execute([$authUser->company_id]);
 
     // Tüm sonuçları obje olarak al
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -112,14 +113,14 @@ if (!isLoggedIn()) {
                     $db->beginTransaction();
 
                     // custom_orders tablosuna ekle
-                    $stmt = $db->prepare("INSERT INTO custom_orders (client_id, delivery_type, description, status, is_deleted, datetime, created_by) VALUES (?, ?, ?, 0, 0, NOW(), ?)");
-                    $stmt->execute([$clientId, $deliveryType, $description, $authUser->id]);
+                    $stmt = $db->prepare("INSERT INTO custom_orders (client_id, delivery_type, description, status, is_deleted, datetime, created_by, company_id) VALUES (?, ?, ?, 0, 0, NOW(), ?, ?)");
+                    $stmt->execute([$clientId, $deliveryType, $description, $authUser->id, $authUser->company_id]);
 
                     $customOrderId = $db->lastInsertId();
 
                     // custom_order_items tablosuna ekle
-                    $stmt = $db->prepare("INSERT INTO custom_order_items (custom_order_id, product, length, factory_id, quantity, price, due_date, is_deleted, datetime) VALUES (?, ?, ?, ?, ?, ?, ?, 0, NOW())");
-                    $stmt->execute([$customOrderId, $product, $length, $factoryId, $quantity, $price, $dueDate]);
+                    $stmt = $db->prepare("INSERT INTO custom_order_items (custom_order_id, product, length, factory_id, quantity, price, due_date, is_deleted, datetime, company_id) VALUES (?, ?, ?, ?, ?, ?, ?, 0, NOW(), ?)");
+                    $stmt->execute([$customOrderId, $product, $length, $factoryId, $quantity, $price, $dueDate, $authUser->company_id]);
 
                     $db->commit();
                     header("Location: customorder.php");
@@ -228,8 +229,8 @@ if (!isLoggedIn()) {
                 $db->beginTransaction();
 
                 // custom_order_items tablosuna ekle
-                $stmt = $db->prepare("INSERT INTO custom_order_items (custom_order_id, product, length, factory_id, quantity, price, due_date, is_deleted, datetime) VALUES (?, ?, ?, ?, ?, ?, 0, NOW())");
-                $stmt->execute([$customOrderId, $product, $length, $factoryId, $quantity, $price, $dueDate]);
+                $stmt = $db->prepare("INSERT INTO custom_order_items (custom_order_id, product, length, factory_id, quantity, price, due_date, is_deleted, datetime, company_id) VALUES (?, ?, ?, ?, ?, ?, ?, 0, NOW(), ?)");
+                $stmt->execute([$customOrderId, $product, $length, $factoryId, $quantity, $price, $dueDate, $authUser->company_id]);
 
                 $db->commit();
                 header("Location: customorder.php");

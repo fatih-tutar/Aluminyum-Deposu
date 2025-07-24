@@ -131,7 +131,56 @@
             }
         });
 
-    }); 
+    });
+
+    $(document).ready(function(){
+
+        var p = 0;
+
+        $('.client-search-box input[type="text"]').on("keyup input", function(){
+
+            /* Input Box'da değişiklik olursa aşağıdaki durumu çalıştırıyoruz. */
+
+            var inputVal = $(this).val();
+
+            var resultDropdown = $(this).siblings(".clientliveresult");
+
+            if(inputVal.length < 10){
+
+                $.get('client-live-search.php', {term: inputVal}).done(function(data){
+
+                    /* Gelen sonucu ekrana yazdırıyoruz. */
+
+                    resultDropdown.html(data);
+
+                });
+
+            }//else{
+
+            // resultDropdown.empty();
+
+            //}
+
+        });
+
+        /* Sonuç listesinden üzerinde tıklanıp bir öğe seçilirse input box'a yazdırıyoruz. */
+
+        $(document).on("click", ".clientliveresult li", function(){
+
+            $(this).parents(".client-search-box").find('input[type="text"]').val($(this).text());
+
+            $(this).parent(".clientliveresult").empty();
+
+        });
+
+        $(document).on("click", function(e){
+            var container = $(".client-search-box");
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                container.find(".clientliveresult").empty();
+            }
+        });
+
+    });
 
     function yuzdeinputuac(){
 
@@ -226,5 +275,28 @@
             }
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('menuToggleBtn');
+        const closeBtn = document.getElementById('closeSidebarBtn');
+        const mainCol = document.getElementById('mainCol');
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('d-none');
+                mainCol.classList.toggle('col-md-12');
+                mainCol.classList.toggle('col-md-9');
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                sidebar.classList.add('d-none');
+                mainCol.classList.remove('col-md-9');
+                mainCol.classList.add('col-md-12');
+            });
+        }
+    });
 
 </script>

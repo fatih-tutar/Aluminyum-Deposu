@@ -59,6 +59,11 @@ if(!isLoggedIn()){
                 goto end;
             }
 
+            if (empty($_FILES['contract_pdf_file']['name'])) {
+                $error = '<div class="alert alert-danger" role="alert">Sözleşme PDF dosyası yüklenmelidir.</div>';
+                goto end;
+            }
+
             $uploadDir = 'files/molds/';
             if (!is_dir($uploadDir) && !mkdir($uploadDir, 0777, true)) {
                 $error = '<div class="alert alert-danger" role="alert">Dosya yükleme klasörü oluşturulamadı.</div>';
@@ -71,6 +76,9 @@ if(!isLoggedIn()){
             $clientPdfFileName = uniqid() . '-' . basename($_FILES['client_pdf_file']['name']);
             $clientPdfTargetFile = $uploadDir . $clientPdfFileName;
 
+            $contractPdfFileName = uniqid() . '-' . basename($_FILES['contract_pdf_file']['name']);
+            $contractPdfTargetFile = $uploadDir . $contractPdfFileName;
+
             if (!move_uploaded_file($_FILES['factory_pdf_file']['tmp_name'], $factoryPdfTargetFile)) {
                 $error = '<div class="alert alert-danger" role="alert">Fabrika PDF dosyası yüklenemedi.</div>';
                 goto end;
@@ -81,8 +89,14 @@ if(!isLoggedIn()){
                 goto end;
             }
 
+            if (!move_uploaded_file($_FILES['contract_pdf_file']['tmp_name'], $contractPdfTargetFile)) {
+                $error = '<div class="alert alert-danger" role="alert">Sözleşme PDF dosyası yüklenemedi.</div>';
+                goto end;
+            }
+
             $factoryPdfPath = $factoryPdfTargetFile;
             $clientPdfPath = $clientPdfTargetFile;
+            $contractPdfPath = $contractPdfTargetFile;
 
             // client_id alma
             $client_id = getClientId($client);
@@ -102,12 +116,12 @@ if(!isLoggedIn()){
                 INSERT INTO molds (
                     client_id, number, factory_id,
                     client_offer_price, factory_offer_price, due_date,
-                    factory_pdf, client_pdf, contact_person, description,
+                    factory_pdf, client_pdf, contract_pdf, contact_person, description,
                     company_id, is_archived, is_deleted, created_by
                 ) VALUES (
                     :client_id, :number, :factory_id,
                     :client_offer_price, :factory_offer_price, :due_date,
-                    :factory_pdf, :client_pdf, :contact_person, :description,
+                    :factory_pdf, :client_pdf, :contract_pdf, :contact_person, :description,
                     :company_id, :is_archived, :is_deleted, :created_by
                 )
             ");
@@ -121,6 +135,7 @@ if(!isLoggedIn()){
                 ':due_date' => $dueDate,
                 ':factory_pdf' => $factoryPdfPath,
                 ':client_pdf' => $clientPdfPath,
+                ':contract_pdf' => $contractPdfPath,
                 ':contact_person' => $contactPerson,
                 ':description' => $description,
                 ':company_id' => $companyId,
@@ -177,7 +192,7 @@ if(!isLoggedIn()){
             }
 
             // Mevcut kalıp verisini al (PDF yollarını korumak için)
-            $stmt = $db->prepare("SELECT factory_pdf, client_pdf FROM molds WHERE id = :id");
+            $stmt = $db->prepare("SELECT factory_pdf, client_pdf, contract_pdf FROM molds WHERE id = :id");
             $stmt->execute([':id' => $id]);
             $existing = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$existing) {
@@ -217,6 +232,19 @@ if(!isLoggedIn()){
                 }
             }
 
+            $contractPdfPath = $existing['contract_pdf'];
+            if (!empty($_FILES['contract_pdf_file']['name'])) {
+                $contractPdfFileName = uniqid() . '-' . basename($_FILES['contract_pdf_file']['name']);
+                $contractPdfTargetFile = $uploadDir . $contractPdfFileName;
+
+                if (move_uploaded_file($_FILES['contract_pdf_file']['tmp_name'], $contractPdfTargetFile)) {
+                    $contractPdfPath = $contractPdfTargetFile;
+                } else {
+                    $error = '<div class="alert alert-danger" role="alert">Sözleşme PDF dosyası yüklenemedi.</div>';
+                    goto updateEnd;
+                }
+            }
+
             // Güncelleme sorgusu
             $stmt = $db->prepare("
                 UPDATE molds SET
@@ -228,6 +256,7 @@ if(!isLoggedIn()){
                     due_date = :due_date,
                     factory_pdf = :factory_pdf,
                     client_pdf = :client_pdf,
+                    contract_pdf = :contract_pdf,
                     contact_person = :contact_person,
                     description = :description
                 WHERE id = :id
@@ -242,6 +271,7 @@ if(!isLoggedIn()){
                 ':due_date' => $dueDate,
                 ':factory_pdf' => $factoryPdfPath,
                 ':client_pdf' => $clientPdfPath,
+                ':contract_pdf' => $contractPdfPath,
                 ':contact_person' => $contactPerson,
                 ':description' => $description,
                 ':id' => $id,
@@ -261,7 +291,7 @@ if(!isLoggedIn()){
             $id = $_POST['id'];
 
             // Kalıp kaydını bul
-            $stmt = $db->prepare("SELECT factory_pdf, client_pdf FROM molds WHERE id = :id AND is_deleted = 0");
+            $stmt = $db->prepare("SELECT factory_pdf, client_pdf, contract_pdf FROM molds WHERE id = :id AND is_deleted = 0");
             $stmt->execute([':id' => $id]);
             $mold = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -277,6 +307,10 @@ if(!isLoggedIn()){
 
             if (!empty($mold['client_pdf']) && file_exists($mold['client_pdf'])) {
                 unlink($mold['client_pdf']);
+            }
+
+            if (!empty($mold['contract_pdf']) && file_exists($mold['contract_pdf'])) {
+                unlink($mold['contract_pdf']);
             }
 
             // Veritabanında is_deleted = 1 yap
@@ -402,6 +436,10 @@ if(!isLoggedIn()){
                                 <b>Firma Onay Pdf</b><br/>
                                 <input type="file" name="client_pdf_file" style="margin-bottom: 10px; margin-right: 10px; max-width: 150px;"><br/>
                             </div>
+                            <div>
+                                <b>Sözleşme</b><br/>
+                                <input type="file" name="contract_pdf_file" style="margin-bottom: 10px; margin-right: 10px; max-width: 150px;"><br/>
+                            </div>
                         </div>
                         <b>İlgili Kişi</b>
                         <input type="text" name="contact_person" class="form-control form-control-sm mb-2" placeholder="İlgili firma yetkilisini yazınız." value="<?= htmlspecialchars($_POST['contact_person'] ?? '') ?>"/>
@@ -441,6 +479,7 @@ if(!isLoggedIn()){
                         <th>Termin Tarihi</th>
                         <th>Fabrika Pdf</th>
                         <th>Firma Pdf</th>
+                        <th>Sözleşme Pdf</th>
                         <th>İlgili Kişi</th>
                         <th>Kaydeden</th>
                         <th>İşlemler</th>
@@ -458,6 +497,7 @@ if(!isLoggedIn()){
                         // PDF dosya yolu
                         $factoryPdfPath = $item->factory_pdf;
                         $clientPdfPath = $item->client_pdf;
+                        $contractPdfPath = $item->contract_pdf;
 
                         // Kaydeden kullanıcı adı
                         $creatorName = getUsername($item->created_by);
@@ -479,6 +519,13 @@ if(!isLoggedIn()){
                             <td>
                                 <?php if ($clientPdfPath && file_exists($clientPdfPath)): ?>
                                     <a href="<?= htmlspecialchars($clientPdfPath) ?>" target="_blank">Firma PDF</a>
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($contractPdfPath && file_exists($contractPdfPath)): ?>
+                                    <a href="<?= htmlspecialchars($contractPdfPath) ?>" target="_blank">Sözleşme PDF</a>
                                 <?php else: ?>
                                     -
                                 <?php endif; ?>
@@ -508,6 +555,9 @@ if(!isLoggedIn()){
                                 </a>
                                 <a href="#" onclick="return false" onmousedown="javascript:ackapa('client_pdfdivi<?= $item->id; ?>');">
                                     <i class="fas fa-building"></i>
+                                </a>
+                                <a href="#" onclick="return false" onmousedown="javascript:ackapa('contract_pdfdivi<?= $item->id; ?>');">
+                                    <i class="fas fa-paper"></i>
                                 </a>
                                 <div id="edit-div-<?= $item->id ?>" class="modal">
                                     <span class="close" onclick="closeModal()">&times;</span>
@@ -547,6 +597,10 @@ if(!isLoggedIn()){
                                             <div>
                                                 <b>Firma Onay Pdf</b><br/>
                                                 <input type="file" name="client_pdf_file" style="margin-bottom: 10px; margin-right: 10px; max-width: 150px;"><br/>
+                                            </div>
+                                            <div>
+                                                <b>Sözleşme</b><br/>
+                                                <input type="file" name="contract_pdf_file" style="margin-bottom: 10px; margin-right: 10px; max-width: 150px;"><br/>
                                             </div>
                                         </div>
                                         <b>İlgili Kişi</b>
@@ -595,6 +649,25 @@ if(!isLoggedIn()){
                                         <?php endif; ?>
                                     </div>
                                 </div>
+                                <div id="contract_pdfdivi<?= $item->id; ?>" class="pdf-preview-wrapper" style="display: none;">
+                                    <div class="pdf-preview">
+                                        <div class="pdf-preview-header">
+                                            <h5 class="pdf-preview-title">Kalıp Sözleşmesi</h5>
+                                            <button onclick="ackapa('contract_pdfdivi<?= $item->id; ?>')" class="pdf-preview-close">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <?php if (!empty($item->contract_pdf)): ?>
+                                            <object width="100%" height="500" type="application/pdf" data="<?= $item->contract_pdf; ?>">
+                                                <p>Kalıp sözleşmesi yüklenemedi.</p>
+                                            </object>
+                                        <?php else: ?>
+                                            <div style="padding: 20px; text-align: center; color: #666;">
+                                                Sözleşme PDF dokümanı yüklenmemiş.
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -607,29 +680,5 @@ if(!isLoggedIn()){
 
     <?php include 'template/script.php'; ?>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('menuToggleBtn');
-            const closeBtn = document.getElementById('closeSidebarBtn');
-            const mainCol = document.getElementById('mainCol');
-
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    sidebar.classList.toggle('d-none');
-                    mainCol.classList.toggle('col-md-12');
-                    mainCol.classList.toggle('col-md-9');
-                });
-            }
-
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    sidebar.classList.add('d-none');
-                    mainCol.classList.remove('col-md-9');
-                    mainCol.classList.add('col-md-12');
-                });
-            }
-        });
-    </script>
   </body>
 </html>

@@ -6,9 +6,9 @@ if (!isLoggedIn()) {
 }else{
     //CUSTOM ORDERS AND ITEMS START
     // Sorguyu çalıştır
-    $stmt = $db->query("
+    $stmt = $db->prepare("
         SELECT 
-            co.id, co.client_id, co.delivery_type, co.description, co.datetime, co.created_by,
+            co.id, co.client_id, co.delivery_type, co.description, co.datetime, co.created_by, co.company_id,
             coi.id AS item_id, coi.product, coi.length, coi.factory_id, coi.quantity, coi.price, coi.due_date
         FROM 
             custom_orders co
@@ -16,10 +16,11 @@ if (!isLoggedIn()) {
             custom_order_items coi 
             ON co.id = coi.custom_order_id AND coi.is_deleted = 0
         WHERE 
-            co.status = 1 AND co.is_deleted = 0
+            co.status = 1 AND co.is_deleted = 0 AND co.company_id = ?
         ORDER BY 
             co.datetime ASC, coi.id ASC
     ");
+    $stmt->execute([$authUser->company_id]);
 
     // Tüm sonuçları obje olarak al
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);

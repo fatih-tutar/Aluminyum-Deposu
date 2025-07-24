@@ -120,7 +120,6 @@ if(!isLoggedIn()){
                         <tr>
                             <th>Firma Adı</th>
                             <th>Kalıp Sayısı</th>
-                            <th>İşlemler</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -133,7 +132,6 @@ if(!isLoggedIn()){
                             <tr class="client-row" style="cursor:pointer; background-color: white" onclick="toggleMolds('<?= $toggleId ?>')">
                                 <td><strong><?= htmlspecialchars($clientName) ?></strong></td>
                                 <td><?= $moldCount ?></td>
-                                <td><small>(Kalıpları tek tek geri yükleyebilirsiniz.)</small></td>
                             </tr>
                             <tr id="<?= $toggleId ?>" class="mold-details" style="display:none;">
                                 <td colspan="3" style="padding:0;">
@@ -147,6 +145,7 @@ if(!isLoggedIn()){
                                             <th>Termin Tarihi</th>
                                             <th>Fabrika Pdf</th>
                                             <th>Firma Pdf</th>
+                                            <th>Sözleşme Pdf</th>
                                             <th>İlgili Kişi</th>
                                             <th>Kaydeden</th>
                                             <th>İşlemler</th>
@@ -158,6 +157,7 @@ if(!isLoggedIn()){
                                             $factoryName = getFactoryNameById($factories, $item->factory_id);
                                             $factoryPdfPath = $item->factory_pdf;
                                             $clientPdfPath = $item->client_pdf;
+                                            $contractPdfPath = $item->contract_pdf;
                                             $creatorName = getUsername($item->created_by);
                                             ?>
                                             <tr>
@@ -180,17 +180,90 @@ if(!isLoggedIn()){
                                                         -
                                                     <?php endif; ?>
                                                 </td>
+                                                <td>
+                                                    <?php if ($contractPdfPath && file_exists($contractPdfPath)): ?>
+                                                        <a href="<?= htmlspecialchars($contractPdfPath) ?>" target="_blank">Sözleşme PDF</a>
+                                                    <?php else: ?>
+                                                        -
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td><?= htmlspecialchars($item->contact_person) ?></td>
                                                 <td>
                                                     <a href="profil.php?id=<?= urlencode($item->created_by) ?>"><b><?= htmlspecialchars($creatorName) ?></b></a>
                                                 </td>
-                                                <td>
+                                                <td class="display-flex">
+                                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('factory_pdfdivi<?= $item->id; ?>');">
+                                                        <i class="fas fa-industry mr-3"></i>
+                                                    </a>
+                                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('client_pdfdivi<?= $item->id; ?>');">
+                                                        <i class="fas fa-building mr-3"></i>
+                                                    </a>
+                                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('contract_pdfdivi<?= $item->id; ?>');">
+                                                        <i class="fas fa-paper mr-3"></i>
+                                                    </a>
                                                     <form action="" method="POST">
                                                         <input type="hidden" name="id" value="<?= $item->id ?>">
-                                                        <button type="submit" class="btn btn-secondary btn-sm" name="unarchive_mold" onclick="return confirmForm('<?= $item->number ?> kodlu kalıbı arşivden geri gönderiyorsunuz, emin misiniz?')">
-                                                            Geri Yükle
+                                                        <button type="submit" class="icon-button"name="unarchive_mold" onclick="return confirmForm('<?= $item->number ?> kodlu kalıbı arşivden geri gönderiyorsunuz, emin misiniz?')">
+                                                            <i class="fas fa-undo"></i>
                                                         </button>
                                                     </form>
+                                                    <div id="factory_pdfdivi<?= $item->id; ?>" class="pdf-preview-wrapper" style="display: none;">
+                                                        <div class="pdf-preview">
+                                                            <div class="pdf-preview-header">
+                                                                <h5 class="pdf-preview-title">Fabrika Onay Belgesi</h5>
+                                                                <button onclick="ackapa('factory_pdfdivi<?= $item->id; ?>')" class="pdf-preview-close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <?php if (!empty($item->factory_pdf)): ?>
+                                                                <object width="100%" height="500" type="application/pdf" data="<?= $item->factory_pdf; ?>">
+                                                                    <p>Fabrika PDF dokümanı yüklenemedi.</p>
+                                                                </object>
+                                                            <?php else: ?>
+                                                                <div style="padding: 20px; text-align: center; color: #666;">
+                                                                    Fabrika PDF dokümanı yüklenmemiş.
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                    <div id="client_pdfdivi<?= $item->id; ?>" class="pdf-preview-wrapper" style="display: none;">
+                                                        <div class="pdf-preview">
+                                                            <div class="pdf-preview-header">
+                                                                <h5 class="pdf-preview-title">Firma Onay Belgesi</h5>
+                                                                <button onclick="ackapa('client_pdfdivi<?= $item->id; ?>')" class="pdf-preview-close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <?php if (!empty($item->client_pdf)): ?>
+                                                                <object width="100%" height="500" type="application/pdf" data="<?= $item->client_pdf; ?>">
+                                                                    <p>Firma PDF dokümanı yüklenemedi.</p>
+                                                                </object>
+                                                            <?php else: ?>
+                                                                <div style="padding: 20px; text-align: center; color: #666;">
+                                                                    Firma PDF dokümanı yüklenmemiş.
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                    <div id="contract_pdfdivi<?= $item->id; ?>" class="pdf-preview-wrapper" style="display: none;">
+                                                        <div class="pdf-preview">
+                                                            <div class="pdf-preview-header">
+                                                                <h5 class="pdf-preview-title">Firma Onay Belgesi</h5>
+                                                                <button onclick="ackapa('contract_pdfdivi<?= $item->id; ?>')" class="pdf-preview-close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <?php if (!empty($item->contract_pdf)): ?>
+                                                                <object width="100%" height="500" type="application/pdf" data="<?= $item->contract_pdf; ?>">
+                                                                    <p>Sözleşme PDF dokümanı yüklenemedi.</p>
+                                                                </object>
+                                                            <?php else: ?>
+                                                                <div style="padding: 20px; text-align: center; color: #666;">
+                                                                    Sözleşme PDF dokümanı yüklenmemiş.
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

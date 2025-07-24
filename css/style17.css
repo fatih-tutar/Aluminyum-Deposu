@@ -120,7 +120,7 @@ a {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 30%;
+    width: 33%;
     height: auto;
     background: white;
     padding: 20px;
@@ -219,6 +219,13 @@ a {
 
 .td-vertical-align-middle td {
     vertical-align: middle;
+}
+
+td.truncate-cell-500 {
+    max-width: 500px;       /* istediğin genişlik */
+    white-space: nowrap;    /* metni tek satır yap */
+    overflow: hidden;       /* taşanı gizle */
+    text-overflow: ellipsis; /* taşan metnin sonuna ... koy */
 }
 
 td.truncate-cell-400 {
