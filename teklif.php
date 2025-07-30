@@ -6,6 +6,7 @@
 	}else{
         $clientId = guvenlik($_GET['id']);
         $withholding = isset($_GET['withholding']) ? guvenlik($_GET['withholding']) : false;
+        $print = isset($_GET['print']) ? guvenlik($_GET['print']) : false;
         if (isset($_POST['save'])) {
             $offerList = guvenlik($_POST['offer_list']);
             $offerListArray = explode(",", $offerList);
@@ -17,7 +18,7 @@
             $withholding = $withholding ? 1 : 0;
             $query = $db->prepare("INSERT INTO teklifformlari SET tekliflistesi = ?, withholding = ?, explanation = ?, firmaid = ?, saniye = ?, sirketid = ?, silik = ?");
             $insert = $query->execute(array($offerList, $withholding, $explanation, $clientId, time(), $authUser->company_id, '0'));
-            header("Location:client.php");
+            header("Location:client.php?id=".$clientId);
             exit();
         }
         if (isset($_POST['update_unit_weight'])) {
@@ -28,6 +29,10 @@
         }
         $client = $db->query("SELECT * FROM clients WHERE id = '{$clientId}'")->fetch(PDO::FETCH_OBJ);
         $offers = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$clientId}' AND formda = '0' AND silik = '0'")->fetchAll(PDO::FETCH_OBJ);
+        if(!$offers){
+            header("Location:client.php?id=".$clientId);
+            exit();
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -59,7 +64,7 @@
                     <td><b>Firma E-Posta:</b></td>
                     <td><?= $client->email ?></td>
                     <td><b>Teklif No:</b></td>
-                    <td><?= $offers[0]->teklifid ?></td>
+                    <td><?= $offers[0]->teklifid ? $offers[0]->teklifid : $offerF ?></td>
                 </tr>
                 <tr>
                     <td><b>Firma Telefon:</b></td>
@@ -111,16 +116,13 @@
                         <td><?= $offer->tadet." Boy "; ?></td>
                         <td><?= $mainCategory->kategori_adi; ?></td>
                         <td>
-                            <!-- Bu her zaman yüklenir -->
-                            <form id="unitWeightForm" action="" method="POST">
+                            <form action="" method="POST">
                                 <input type="hidden" name="id" value="<?= $offer->teklifid ?>" />
                                 <input type="text" name="unit_weight" value="<?= $unitWeight ?>" style="width:80px; border-style: none" /> Kg
                                 <button type="submit" name="update_unit_weight" style="margin-left:5px; border-style: none; background-color: white">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </form>
-                            <!-- Bu sadece yazdırma görünümünde JS ile gösterilecek -->
-                            <span id="unitWeightText" style="display: none;"><?= $unitWeight . " Kg" ?></span>
                         </td>
                         <td><?= $weight." Kg"; ?></td>
                         <td><?= $offer->tsatisfiyati." TL"; ?></td>
@@ -189,31 +191,15 @@
                 </div>
             </div>
         </div>
-        <div id="bottomFormContainer" class="container p-0 d-flex justify-content-end">
+        <div class="container p-0 d-flex justify-content-end">
             <form action="" method="POST" onsubmit="syncExplanation()">
                 <input type="hidden" name="offer_list" value="<?= $offerList; ?>">
                 <input type="hidden" name="explanation" id="hiddenExplanation">
-                <button type="submit" name="save" class="btn btn-warning btn-lg mt-3 mr-3">Formu Kaydet</button>
+                <button type="submit" name="save" class="btn btn-primary btn-lg mt-3 mr-3">Formu Kaydet</button>
             </form>
-            <button type="button" onclick="goToPrintPage()" class="btn btn-danger btn-lg mt-3">
-                Yazdırma Sayfasına Git
-            </button>
         </div>
         <?php include 'template/script.php'; ?>
         <script>
-            function goToPrintPage() {
-                const unitWeightForm = document.getElementById('unitWeightForm');
-                const unitWeightText = document.getElementById('unitWeightText');
-                if (unitWeightForm && unitWeightText) {
-                    unitWeightForm.style.display = 'none';
-                    unitWeightText.style.display = 'inline';
-                }
-                const bottomFormContainer = document.getElementById('bottomFormContainer');
-                if (bottomFormContainer) {
-                    bottomFormContainer.classList.remove('d-flex'); // kaldır!
-                    bottomFormContainer.style.display = 'none'; // artık etkili olur
-                }
-            }
             function syncExplanation() {
                 const visibleInput = document.getElementById('explanationInput');
                 const hiddenInput = document.getElementById('hiddenExplanation');

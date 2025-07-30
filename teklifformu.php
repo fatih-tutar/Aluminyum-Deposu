@@ -5,8 +5,8 @@ if($user->type == '0'){
     exit();
 }else{
     $offerFormId = guvenlik($_GET['id']);
-    $withholding = isset($_GET['withholding']) ? guvenlik($_GET['withholding']) : false;
     $offerForm = $db->query("SELECT * FROM teklifformlari WHERE tformid = '{$offerFormId}'")->fetch(PDO::FETCH_OBJ);
+    $withholding = $offerForm->withholding;
     $client = $db->query("SELECT * FROM clients WHERE id = '{$offerForm->firmaid}'")->fetch(PDO::FETCH_OBJ);
     $offerList = $offerForm->tekliflistesi;
     $offers = $db->query("SELECT * FROM teklif WHERE teklifid IN ($offerList) AND tverilenfirma = '{$client->id}' AND formda = '1' AND silik = '0'")->fetchAll(PDO::FETCH_OBJ);
@@ -15,16 +15,16 @@ if($user->type == '0'){
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Teklif Formu</title>
+    <title><?= str_replace(' ', '_', mb_strtolower($client->name, 'UTF-8'))."_".date('d_m_Y', time()) ?></title>
     <?php include 'template/head.php'; ?>
     </script>
 </head>
 <body>
-<div class="container mt-5" style="background: white;">
+<div class="container mt-5 p-4" style="background: white;">
     <div class="row">
-        <div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $company->photo; ?>" style="width: 370px; height: auto;"></div>
+        <div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $company->photo; ?>" style="width: 350px; height: auto;"></div>
         <div class="col-md-8" style="text-align: center; padding: 10px 30px 0px 30px;">
-            <p style="font-size: 15px;">
+            <p style="font-size: 14px;">
                 <?= str_replace("\n", "<br/>", $company->description); ?>
             </p>
         </div>
@@ -47,7 +47,7 @@ if($user->type == '0'){
             <td><b>Firma Telefon:</b></td>
             <td><?= $client->phone ?></td>
             <td><b>Teklif Tipi:</b></td>
-            <td><?= $offerForm->withholding ? 'Tevkifatlı' : 'Tevkifatsız' ?></td>
+            <td><?= $offerForm->withholding ? 'Tevkifatlı' : '%20 KDVli' ?></td>
         </tr>
         <tr>
             <td><b>Teklifi Oluşturan:</b></td>
@@ -87,7 +87,7 @@ if($user->type == '0'){
             $totalAmountWithKDV = $totalAmount + $kdv;
             ?>
             <tr>
-                <td><?= ($key + 1).". ".$product->urun_adi." ".$subCategory->kategori_adi; ?></td>
+                <td style="word-wrap: break-word; white-space: normal; max-width: 400px;"><?= ($key + 1).". ".$product->urun_adi." ".$subCategory->kategori_adi; ?></td>
                 <td><?= $offer->tadet." Boy "; ?></td>
                 <td><?= $mainCategory->kategori_adi; ?></td>
                 <td><?= $unitWeight." Kg"  ?></td>
@@ -137,14 +137,14 @@ if($user->type == '0'){
         <div class="d-flex justify-content-end">
             <div class="text-center">
                 Müşteri Onay (Kaşe İmza Tarih)
-                <div style="border: 2px dashed black; width: 400px; height: 80px;"></div>
+                <div style="border: 2px dashed black; width: 350px; height: 80px;"></div>
             </div>
         </div>
     </div>
-    <p><?= $offerForm->explanation ?></p>
+    <p class="mb-1" style="font-size: 14px;"><?= $offerForm->explanation ?></p>
     <div class="row">
         <div class="col-md-12">
-            <p>
+            <p style="font-size:12px; line-height: 17px;">
                 *   Ürün mt/gr biriminde yaklaşık gramaj alınmış olup, kg' lar +/- tolerans dâhilindedir.<br/>
                 *   Yeni düzenlenen kanuna göre 10.000 TL üzeri alımlarımızda tevkifatlı fatura kesilecektir.<br/>
                 *   Özel  siparişlerinizde  % 20 ön ödeme alınır ( boyalı ürünlerde )<br/>

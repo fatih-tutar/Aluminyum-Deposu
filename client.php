@@ -181,12 +181,12 @@
                     <?= isset($error) ? $error : ''; ?>
 
                     <div class="row">
-                        <div class="<?= $isProfile ? 'col-md-12' : 'col-md-8' ?> col-12 d-flex align-items-start">
+                        <div class="<?= $isProfile ? 'col-md-12' : 'col-md-8' ?> col-12 d-flex align-items-start pt-3">
                             <button id="menuToggleBtn" class="btn btn-outline-primary mr-2">
                                 <i class="fas fa-bars"></i> Menü
                             </button>
                             <div class="client-search-box flex-grow-1 position-relative mr-2">
-                                <input name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="Firma Ara..."/>
+                                <input name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="🔍  Firma Ara...">
                                 <ul class="list-group clientliveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
                             </div>
                             <?php if(!$isProfile){ ?>
@@ -396,7 +396,6 @@
                                                                         <th>Satış Fiyatı</th>
                                                                         <th>Toplam</th>
                                                                         <th>Tarih</th>
-                                                                        <th>İşlemler</th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -429,14 +428,6 @@
                                                                                 <td><?= $offerItemObj->tsatisfiyati ?></td>
                                                                                 <td><?= ($offerItemObj->tadet * $offerItemObj->tsatisfiyati) ?></td>
                                                                                 <td><?= date('d/m/Y',$offerItemObj->tsaniye) ?></td>
-                                                                                <td>
-                                                                                    <form action="" method="POST">
-                                                                                        <input type="hidden" name="id" value="<?= $offerItemObj->teklifid ?>">
-                                                                                        <button type="submit" class="icon-button" name="delete_offer" onclick="return confirmForm('Silmek istediğinize emin misiniz?');">
-                                                                                            <i class="fas fa-trash"></i>
-                                                                                        </button>
-                                                                                    </form>
-                                                                                </td>
                                                                             </tr>
                                                                         <?php endforeach; } ?>
                                                                     </tbody>

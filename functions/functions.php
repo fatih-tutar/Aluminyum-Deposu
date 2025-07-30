@@ -16,7 +16,7 @@ function getProduct($productId)
 function getCategory($categoryId)
 {
     global $db;
-    $category = $db->query("SELECT * FROM kategori WHERE kategori_id = {$categoryId} AND silik = '0'");
+    $category = $db->query("SELECT * FROM kategori WHERE kategori_id = {$categoryId} AND silik = 0");
     return $category->fetch(PDO::FETCH_OBJ);
 }
 
