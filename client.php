@@ -10,6 +10,31 @@
 		}else{
             $isProfile = isset($_GET['id']) && is_numeric($_GET['id']);
             if($isProfile){
+                $clientId = guvenlik($_GET['id']);
+
+                if (isset($_POST['delete_offer'])) {
+                    $orderId = guvenlik($_POST['order_id']);
+                    $id = guvenlik($_POST['id']);
+                    $query = $db->prepare("UPDATE teklif SET silik = ? WHERE teklifid = ?");
+                    $delete = $query->execute(array('1', $id));
+                    header("Location:client.php?id=".$clientId);
+                    exit();
+                }
+
+                if (isset($_POST['delete_offer_form'])) {
+                    $id = guvenlik($_POST['id']);
+                    $offerList = guvenlik($_POST['offer_list']);
+                    $offerListArray = explode(",", $offerList);
+                    foreach ($offerListArray as $key => $value) {
+                        $query = $db->prepare("UPDATE teklif SET silik = ? WHERE teklifid = ?");
+                        $delete = $query->execute(array('1',$value));
+                    }
+                    $query = $db->prepare("UPDATE teklifformlari SET silik = ? WHERE tformid = ?");
+                    $delete = $query->execute(array('1',$id));
+                    header("Location:client.php?id=".$clientId);
+                    exit();
+                }
+
                 $stmt = $db->prepare("SELECT * FROM clients WHERE id = ? AND is_deleted = ? LIMIT 1");
                 $stmt->execute([$_GET['id'],0]);
                 $client = $stmt->fetch(PDO::FETCH_OBJ);
@@ -122,15 +147,6 @@
                     }
                 }
 
-                if (isset($_POST['delete_offer'])) {
-                    $orderId = guvenlik($_POST['order_id']);
-                    $id = guvenlik($_POST['id']);
-                    $query = $db->prepare("UPDATE teklif SET silik = ? WHERE teklifid = ?");
-                    $delete = $query->execute(array('1', $id));
-                    header("Location:client.php?s=" . $s . "#" . ($orderId - 2));
-                    exit();
-                }
-
                 if (isset($_POST['add_client'])) {
                     $name = guvenlik($_POST['name']);
                     $phone = guvenlik($_POST['phone']);
@@ -219,10 +235,6 @@
                                         </td>
                                         <td>
                                             <div class="d-flex">
-                                                <button class="btn btn-primary btn-sm mr-1" onclick="openModal('offers-div-<?= $client->id ?>')">Teklifler</button>
-                                                <a href="offer-form-archive.php?id=<?= $client->id ?>" target="_blank">
-                                                    <button class="btn btn-info btn-sm mr-1">Formlar</button>
-                                                </a>
                                                 <a onclick="openModal('edit-div-<?= $client->id ?>')">
                                                     <button class="btn btn-warning btn-sm mr-1">Düzenle</button>
                                                 </a>
@@ -244,64 +256,6 @@
                                                         <button type="submit" class="btn btn-primary btn-block" name="update_client">Güncelle</button>
                                                     </form>
                                                 </div>
-                                            </div>
-                                            <div id="offers-div-<?= $client->id ?>" class="modal" style="width: 80%;">
-                                                <span class="close" onclick="closeModal()">&times;</span>
-                                                <h5><?= $client->name ?> TEKLİF LİSTESİ</h5>
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>Ürün</th>
-                                                            <th>Adet</th>
-                                                            <th>Satış Fiyatı</th>
-                                                            <th>Toplam</th>
-                                                            <th>Tarih</th>
-                                                            <th>İşlemler</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        <?php
-                                                            $offers = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$client->id}' AND formda = '0' AND sirketid = '{$authUser->company_id}' AND silik = '0' ORDER BY teklifid DESC")->fetchAll(PDO::FETCH_OBJ);
-                                                            if (!$offers) { ?>
-                                                                <tr>
-                                                                    <td colspan="6" style="text-align: center; color: #003566; font-weight: bold;">
-                                                                        Hiç teklif yoktur.
-                                                                    </td>
-                                                                </tr>
-                                                            <?php }
-                                                            foreach ($offers as $offerKey => $offer):
-                                                                $product = getProduct($offer->turunid);
-                                                                $productName = $product->urun_adi;
-                                                                $mainCategory = getCategory($product->kategori_bir)->kategori_adi;
-                                                                $subCategory = getCategory($product->kategori_iki)->kategori_adi;
-                                                        ?>
-                                                            <tr>
-                                                                <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>
-                                                                <td><?= $offer->tadet ?></td>
-                                                                <td><?= $offer->tsatisfiyati ?></td>
-                                                                <td><?= ($offer->tadet * $offer->tsatisfiyati) ?></td>
-                                                                <td><?= date('d/m/Y',$offer->tsaniye) ?></td>
-                                                                <td>
-                                                                    <form action="" method="POST">
-                                                                        <input type="hidden" name="id" value="<?= $offer->teklifid ?>">
-                                                                        <input type="hidden" name="order_id" value="<?= $offerKey + 1 ?>">
-                                                                        <button type="submit" class="icon-button" name="delete_offer">
-                                                                            <i class="fas fa-trash"></i>
-                                                                        </button>
-                                                                    </form>
-                                                                </td>
-                                                            </tr>
-                                                        <?php endforeach; ?>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <a href="teklif.php?id=<?= $client->id; ?>" target="_blank">
-                                                    <button class="btn btn-primary btn-sm">%20 KDV'li Teklif Formuna Git</button>
-                                                </a>
-                                                <a href="teklif.php?id=<?= $client->id; ?>&withholding=true" target="_blank">
-                                                    <button class="btn btn-secondary btn-sm">Tevkifatlı Teklif Formuna Git</button>
-                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -336,12 +290,12 @@
                             <!-- Sekmeler -->
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="custom-order-tab" data-toggle="tab" href="#custom-order" role="tab"
-                                       aria-controls="custom-order" aria-selected="false">Özel Siparişler</a>
+                                    <a class="nav-link active" id="offer-tab" data-toggle="tab" href="#offer" role="tab"
+                                       aria-controls="offer" aria-selected="false">Teklifler</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="offer-tab" data-toggle="tab" href="#offer" role="tab"
-                                       aria-controls="offer" aria-selected="false">Teklifler</a>
+                                    <a class="nav-link" id="custom-order-tab" data-toggle="tab" href="#custom-order" role="tab"
+                                       aria-controls="custom-order" aria-selected="false">Özel Siparişler</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="mold-tab" data-toggle="tab" href="#mold" role="tab"
@@ -351,7 +305,167 @@
 
                             <!-- İçerik -->
                             <div class="tab-content border p-3" id="myTabContent">
-                                <div class="tab-pane fade show active" id="custom-order" role="tabpanel" aria-labelledby="custom-order-tab">
+                                <div class="tab-pane fade show active" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+                                    <div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th class="text-center" colspan="5">Bekleyen Teklifler</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Ürün</th>
+                                                    <th>Adet</th>
+                                                    <th>Satış Fiyatı</th>
+                                                    <th>Toplam</th>
+                                                    <th>Tarih</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php
+                                                $offers = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$client->id}' AND formda = '0' AND sirketid = '{$authUser->company_id}' AND silik = '0' ORDER BY teklifid DESC")->fetchAll(PDO::FETCH_OBJ);
+                                                if (!$offers) { ?>
+                                                    <tr>
+                                                        <td colspan="6" style="text-align: center; color: #003566; font-weight: bold;">
+                                                            Hiç teklif yoktur.
+                                                        </td>
+                                                    </tr>
+                                                <?php }
+                                                foreach ($offers as $offerKey => $offer):
+                                                    $product = getProduct($offer->turunid);
+                                                    $productName = $product->urun_adi;
+                                                    $mainCategory = getCategory($product->kategori_bir)->kategori_adi;
+                                                    $subCategory = getCategory($product->kategori_iki)->kategori_adi;
+                                                    ?>
+                                                    <tr>
+                                                        <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>
+                                                        <td><?= $offer->tadet ?></td>
+                                                        <td><?= $offer->tsatisfiyati ?></td>
+                                                        <td><?= ($offer->tadet * $offer->tsatisfiyati) ?></td>
+                                                        <td><?= date('d/m/Y',$offer->tsaniye) ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <?php if($offers){ ?>
+                                        <a href="teklif.php?id=<?= $client->id; ?>" target="_blank">
+                                            <button class="btn btn-primary btn-sm mb-3">%20 KDV'li Teklif Formuna Git</button>
+                                        </a>
+                                        <a href="teklif.php?id=<?= $client->id; ?>&withholding=true" target="_blank">
+                                            <button class="btn btn-secondary btn-sm mb-3">Tevkifatlı Teklif Formuna Git</button>
+                                        </a>
+                                        <?php } ?>
+                                    </div>
+                                    <?php if (!$offerForms) { ?>
+                                        <table class="table table-bordered">
+                                            <tr>
+                                                <td style="text-align: center; color: #003566; font-weight: bold;">
+                                                    Kaydedilmiş teklif formu yoktur.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    <?php }else{ ?>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Kaydedilmiş Teklif Formları</th>
+                                                <th>Ürünler</th>
+                                                <th>Form</th>
+                                                <th>İşlemler</th>
+                                            </tr>
+                                            </thead>
+                                            <?php
+                                            foreach ($offerForms as $offerForm):
+                                                ?>
+                                                <tr>
+                                                    <td><?= date('d/m/Y H:i:s', $offerForm->saniye) ?> Tarihli Teklif Formu</td>
+                                                    <td>
+                                                        <button class="icon-button" onclick="openModal('product-div-<?= $offerForm->tformid ?>')">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
+                                                        <div id="product-div-<?= $offerForm->tformid ?>" class="modal" style="width: 70%;">
+                                                            <span class="close" onclick="closeModal()">&times;</span>
+                                                            <h5>Ürünler</h5>
+                                                            <div class="table-responsive mt-2">
+                                                                <table class="table table-bordered">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Ürün Adı</th>
+                                                                        <th>Adet</th>
+                                                                        <th>Satış Fiyatı</th>
+                                                                        <th>Toplam</th>
+                                                                        <th>Tarih</th>
+                                                                        <th>İşlemler</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <?php
+                                                                    $offerList = explode(",", $offerForm->tekliflistesi);
+                                                                    if (!$offerForm->tekliflistesi) { ?>
+                                                                        <tr>
+                                                                            <td colspan="6" style="text-align: center; color: #003566; font-weight: bold;">
+                                                                                Bu form içerisinde hiç ürün yoktur.
+                                                                            </td>
+                                                                        </tr>
+                                                                    <?php }
+                                                                    if($offerList){
+                                                                        foreach ($offerList as $offerItem):
+                                                                            $offerItemObj = getOffer($offerItem);
+                                                                            if (!$offerItemObj) {
+                                                                                continue;
+                                                                            }
+                                                                            $offerItemProduct = getProduct($offerItemObj->turunid);
+                                                                            if (!$offerItemProduct) {
+                                                                                continue;
+                                                                            }
+                                                                            $productName = $offerItemProduct->urun_adi;
+                                                                            $mainCategory = getCategory($offerItemProduct->kategori_bir)->kategori_adi;
+                                                                            $subCategory = getCategory($offerItemProduct->kategori_iki)->kategori_adi;
+                                                                            ?>
+                                                                            <tr>
+                                                                                <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>
+                                                                                <td><?= $offerItemObj->tadet ?></td>
+                                                                                <td><?= $offerItemObj->tsatisfiyati ?></td>
+                                                                                <td><?= ($offerItemObj->tadet * $offerItemObj->tsatisfiyati) ?></td>
+                                                                                <td><?= date('d/m/Y',$offerItemObj->tsaniye) ?></td>
+                                                                                <td>
+                                                                                    <form action="" method="POST">
+                                                                                        <input type="hidden" name="id" value="<?= $offerItemObj->teklifid ?>">
+                                                                                        <button type="submit" class="icon-button" name="delete_offer" onclick="return confirmForm('Silmek istediğinize emin misiniz?');">
+                                                                                            <i class="fas fa-trash"></i>
+                                                                                        </button>
+                                                                                    </form>
+                                                                                </td>
+                                                                            </tr>
+                                                                        <?php endforeach; } ?>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <a href="teklifformu.php?id=<?= $offerForm->tformid ?>" target="_blank">
+                                                            <button class="icon-button">
+                                                                <i class="fa fa-file"></i>
+                                                            </button>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <form action="" method="POST">
+                                                            <input type="hidden" name="id" value="<?= $offerForm->tformid ?>" />
+                                                            <input type="hidden" name="offer_list" value="<?= $offerForm->tekliflistesi ?>" />
+                                                            <button type="submit" name="delete_offer_form" class="icon-button" onclick="return confirmForm('Silmek istediğinize emin misiniz?');">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </table>
+                                    <?php } ?>
+                                </div>
+                                <div class="tab-pane fade" id="custom-order" role="tabpanel" aria-labelledby="custom-order-tab">
                                     <table class="table table-bordered">
                                         <tbody>
                                         <?php
@@ -412,151 +526,6 @@
                                         <?php } ?>
                                         </tbody>
                                     </table>
-                                </div>
-                                <div class="tab-pane fade" id="offer" role="tabpanel" aria-labelledby="offer-tab">
-                                    <div>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                <tr>
-                                                    <th>Ürün</th>
-                                                    <th>Adet</th>
-                                                    <th>Satış Fiyatı</th>
-                                                    <th>Toplam</th>
-                                                    <th>Tarih</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <?php
-                                                $offers = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$client->id}' AND formda = '0' AND sirketid = '{$authUser->company_id}' AND silik = '0' ORDER BY teklifid DESC")->fetchAll(PDO::FETCH_OBJ);
-                                                if (!$offers) { ?>
-                                                    <tr>
-                                                        <td colspan="6" style="text-align: center; color: #003566; font-weight: bold;">
-                                                            Hiç teklif yoktur.
-                                                        </td>
-                                                    </tr>
-                                                <?php }
-                                                foreach ($offers as $offerKey => $offer):
-                                                    $product = getProduct($offer->turunid);
-                                                    $productName = $product->urun_adi;
-                                                    $mainCategory = getCategory($product->kategori_bir)->kategori_adi;
-                                                    $subCategory = getCategory($product->kategori_iki)->kategori_adi;
-                                                    ?>
-                                                    <tr>
-                                                        <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>
-                                                        <td><?= $offer->tadet ?></td>
-                                                        <td><?= $offer->tsatisfiyati ?></td>
-                                                        <td><?= ($offer->tadet * $offer->tsatisfiyati) ?></td>
-                                                        <td><?= date('d/m/Y',$offer->tsaniye) ?></td>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <a href="teklif.php?id=<?= $client->id; ?>" target="_blank">
-                                            <button class="btn btn-primary btn-sm mb-3">%20 KDV'li Teklif Formuna Git</button>
-                                        </a>
-                                        <a href="teklif.php?id=<?= $client->id; ?>&withholding=true" target="_blank">
-                                            <button class="btn btn-secondary btn-sm mb-3">Tevkifatlı Teklif Formuna Git</button>
-                                        </a>
-                                    </div>
-                                    <?php if (!$offerForms) { ?>
-                                    <table class="table table-bordered">
-                                        <tr>
-                                            <td style="text-align: center; color: #003566; font-weight: bold;">
-                                                Kaydedilmiş teklif formu yoktur.
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <?php }else{ ?>
-                                        <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>Kaydedilmiş Teklif Formları</th>
-                                            <th>Ürünler</th>
-                                            <th>Form</th>
-                                        </tr>
-                                        </thead>
-                                        <?php
-                                        foreach ($offerForms as $offerForm):
-                                            ?>
-                                            <tr>
-                                                <td><?= date('d/m/Y H:i:s', $offerForm->saniye) ?> Tarihli Teklif Formu</td>
-                                                <td>
-                                                    <button class="icon-button" onclick="openModal('product-div-<?= $offerForm->tformid ?>')">
-                                                        <i class="fa fa-eye"></i>
-                                                    </button>
-                                                    <div id="product-div-<?= $offerForm->tformid ?>" class="modal" style="width: 70%;">
-                                                        <span class="close" onclick="closeModal()">&times;</span>
-                                                        <h5>Ürünler</h5>
-                                                        <div class="table-responsive mt-2">
-                                                            <table class="table table-bordered">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>Ürün Adı</th>
-                                                                    <th>Adet</th>
-                                                                    <th>Satış Fiyatı</th>
-                                                                    <th>Toplam</th>
-                                                                    <th>Tarih</th>
-                                                                    <th>İşlemler</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                <?php
-                                                                $offerList = explode(",", $offerForm->tekliflistesi);
-                                                                if (!$offerForm->tekliflistesi) { ?>
-                                                                    <tr>
-                                                                        <td colspan="6" style="text-align: center; color: #003566; font-weight: bold;">
-                                                                            Bu form içerisinde hiç ürün yoktur.
-                                                                        </td>
-                                                                    </tr>
-                                                                <?php }
-                                                                if($offerList){
-                                                                    foreach ($offerList as $offerItem):
-                                                                        $offerItemObj = getOffer($offerItem);
-                                                                        if (!$offerItemObj) {
-                                                                            continue;
-                                                                        }
-                                                                        $offerItemProduct = getProduct($offerItemObj->turunid);
-                                                                        if (!$offerItemProduct) {
-                                                                            continue;
-                                                                        }
-                                                                        $productName = $offerItemProduct->urun_adi;
-                                                                        $mainCategory = getCategory($offerItemProduct->kategori_bir)->kategori_adi;
-                                                                        $subCategory = getCategory($offerItemProduct->kategori_iki)->kategori_adi;
-                                                                        ?>
-                                                                        <tr>
-                                                                            <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>
-                                                                            <td><?= $offerItemObj->tadet ?></td>
-                                                                            <td><?= $offerItemObj->tsatisfiyati ?></td>
-                                                                            <td><?= ($offerItemObj->tadet * $offerItemObj->tsatisfiyati) ?></td>
-                                                                            <td><?= date('d/m/Y',$offerItemObj->tsaniye) ?></td>
-                                                                            <td>
-                                                                                <form action="" method="POST">
-                                                                                    <input type="hidden" name="id" value="<?= $offerItemObj->teklifid ?>">
-                                                                                    <button type="submit" class="icon-button" name="delete_offer" onclick="return confirmForm('Silmek istediğinize emin misiniz?');">
-                                                                                        <i class="fas fa-trash"></i>
-                                                                                    </button>
-                                                                                </form>
-                                                                            </td>
-                                                                        </tr>
-                                                                    <?php endforeach; } ?>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a href="teklifformu.php?id=<?= $offerForm->tformid ?>" target="_blank">
-                                                        <button class="icon-button">
-                                                            <i class="fa fa-file"></i>
-                                                        </button>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </table>
-                                    <?php } ?>
                                 </div>
                                 <div class="tab-pane fade" id="mold" role="tabpanel" aria-labelledby="mold-tab">
                                     <table class="table table-sm table-bordered m-0">

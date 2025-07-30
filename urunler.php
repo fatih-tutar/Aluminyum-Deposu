@@ -149,7 +149,7 @@
 
 				$insert = $query->execute(array($turunid,$tekliffirma,$teklifadet,$teklifsatisfiyat,time(),'0',$user->company_id,'0'));
 
-				header("Location:urunler.php?id=".$categoryId."&u=".$turunid."&teklifeklendi#".$turunid);
+				header("Location:urunler.php?id=".$categoryId."&u=".$turunid."&c_id=".$tekliffirma."&teklifeklendi#".$turunid);
 
 				exit();
 
@@ -571,12 +571,6 @@
 			if (isset($_GET['sipariseklendi'])) {
 				
 				$error = '<br/><div class="alert alert-success" role="alert"><a href="factory.php" target="m_blank">Siparişin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından sipariş formlarına ulaşabilirsin.</a></div>';
-
-			}
-
-			if (isset($_GET['teklifeklendi'])) {
-				
-				$error = '<br/><div class="alert alert-success" role="alert"><a href="client.php" target="m_blank">Teklifin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından teklif formlarına ulaşabilirsin.</a></div>';
 
 			}
 
@@ -1288,7 +1282,7 @@
 														
 														<div class="col-4 d-block d-sm-none">Firma Adı : </div>
 
-														<div class="col-md-3 col-8"><?= $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></div>
+														<div class="col-md-3 col-8"><a href="client.php?id=<?= $tverilenfirmaid ?>"><?= $tekliflersiralamasi.". ".$tverilenfirmaadi; ?></a></div>
 
 														<div class="col-4 d-block d-sm-none">Adet : </div>
 														
