@@ -171,19 +171,25 @@
 
 				$termin = guvenlik($_POST['termin']);
 
+                $palet = guvenlik($_POST['palet']);
+
 				$terminsaniye = strtotime($termin);
 
-				$uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+                if(empty($hazirlayankisi) || empty($ilgilikisi)) {
+                    $error = '<div class="alert alert-danger">Lütfen sipariş formunda boş alan bırakmayınız.</div>';
+                }else{
+                    $uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-				$urun_adi = $uruninfo['urun_adi'];
+                    $urun_adi = $uruninfo['urun_adi'];
 
-				$query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?");
+                    $query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?, palet = ?");
 
-				$insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',time(),'0',$user->company_id,'0'));
+                    $insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',time(),'0',$user->company_id,'0',$palet));
 
-				header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&sipariseklendi#".$urun_id);
+                    header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&sipariseklendi#".$urun_id);
 
-				exit();
+                    exit();
+                }
 
 			}
 
@@ -1419,16 +1425,16 @@
 												<div class="col-md-1 col-12"><b>Boy</b><br/><input type="text" name="siparisboy" value="6 metre" class="form-control"></div>
 
 												<div class="col-md-4 col-12">
-													
-													<div class="row">
-														
-														<div class="col-md-5 col-12"><b>Termin</b><br/><input type="text" name="termin" value="<?= $tarihf2; ?>" id="tarih<?= $urunlistesira; ?>" class="form-control"></div>
 
-														<div class="col-md-7 col-12" style="padding-top: 25px;"><button type="submit" class="btn btn-info btn-sm" name="siparisformu">Sipariş Listesine Ekle</button></div>
+													<div class="row">
+
+														<div class="col-md-4 col-12"><b>Termin</b><br/><input type="text" name="termin" value="<?= $tarihf2; ?>" id="tarih<?= $urunlistesira; ?>" class="form-control"></div>
+                                                        <div class="col-md-3 col-12"><b>Palet</b><br/><input type="text" name="palet" class="form-control" placeholder="Adet"></div>
+														<div class="col-md-5 col-12" style="padding-top: 25px;"><button type="submit" class="btn btn-info btn-sm" name="siparisformu">Sipariş Listesine Ekle</button></div>
 
 													</div>
 
-												</div>									
+												</div>
 
 											</div>
 

@@ -32,7 +32,7 @@
 
 			$fabrikaid = $formbilgileri['fabrikaid'];
 
-			$fabrika = getFactoryInfos($fabrikaid);
+			$factory = getFactory($fabrikaid);
 
 			$saniye = $formbilgileri['saniye'];
 
@@ -127,7 +127,7 @@
 
 			<div class="col-md-4">
 				
-				<?= $fabrika['name'] ?>
+				<?= $factory->name ?>
 
 			</div>
 

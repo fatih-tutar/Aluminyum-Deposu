@@ -26,7 +26,7 @@
                         custom_order_items coi 
                         ON co.id = coi.custom_order_id AND coi.is_deleted = 0
                     WHERE 
-                        co.status = 0 AND co.is_deleted = 0 AND co.company_id = ? AND co.client_id = ?
+                        co.is_deleted = 0 AND co.company_id = ? AND co.client_id = ?
                     ORDER BY 
                         co.datetime ASC, coi.id ASC
                 ");
@@ -85,6 +85,12 @@
 
                 //FACTORIES
                 $factories = $db->query("SELECT * FROM factories ORDER BY name ASC")->fetchAll(PDO::FETCH_OBJ);
+
+                //ORDER FORMS
+                $offerForms = $db->query("SELECT * FROM teklifformlari WHERE firmaid = '{$client->id}' AND sirketid = '{$authUser->company_id}' AND silik = '0' ORDER BY tformid DESC")->fetchAll(PDO::FETCH_OBJ);
+
+                //MOLDS
+                $molds = $db->query("SELECT * FROM molds WHERE client_id = '{$client->id}' AND company_id = '{$authUser->company_id}' AND is_deleted = 0")->fetchAll(PDO::FETCH_OBJ);
             }else {
 
                 $s = isset($_GET['s']) ? guvenlik($_GET['s']) : null;
@@ -116,7 +122,7 @@
                     }
                 }
 
-                if (isset($_POST['delete_order'])) {
+                if (isset($_POST['delete_offer'])) {
                     $orderId = guvenlik($_POST['order_id']);
                     $id = guvenlik($_POST['id']);
                     $query = $db->prepare("UPDATE teklif SET silik = ? WHERE teklifid = ?");
@@ -193,6 +199,7 @@
                                     <tr style="color:#003566">
                                         <th>Firma</th>
                                         <th>Telefon</th>
+                                        <th>E-posta</th>
                                         <th>İşlemler</th>
                                     </tr>
                                 </thead>
@@ -207,18 +214,23 @@
                                         <td style="white-space: nowrap;">
                                             <?= $client->phone ?>
                                         </td>
+                                        <td style="white-space: nowrap;">
+                                            <?= $client->email ?>
+                                        </td>
                                         <td>
                                             <div class="d-flex">
-                                                <button class="btn btn-primary btn-sm mr-1" onclick="openModal('orders-div-<?= $client->id ?>')">Teklifler</button>
-                                                <a href="order-form-archive.php?id=<?= $client->id ?>" target="_blank">
+                                                <button class="btn btn-primary btn-sm mr-1" onclick="openModal('offers-div-<?= $client->id ?>')">Teklifler</button>
+                                                <a href="offer-form-archive.php?id=<?= $client->id ?>" target="_blank">
                                                     <button class="btn btn-info btn-sm mr-1">Formlar</button>
                                                 </a>
                                                 <a onclick="openModal('edit-div-<?= $client->id ?>')">
                                                     <button class="btn btn-warning btn-sm mr-1">Düzenle</button>
                                                 </a>
-                                                <a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $client->id; ?>');">
-                                                    <button class="btn btn-secondary btn-sm">Sil</button>
-                                                </a>
+                                                <form action="" method="POST">
+                                                    <input type="hidden" name="id" value="<?= $client->id ?>"/>
+                                                    <input type="hidden" name="order_id" value="<?= $clientKey ?>"/>
+                                                    <button class="btn btn-secondary btn-sm" name="delete_client" onclick="return confirmForm('<?= $client->name ?> adlı firmayı silmek istediğinize emin misiniz?')">Sil</button>
+                                                </form>
                                                 <div id="edit-div-<?= $client->id ?>" class="modal">
                                                     <span class="close" onclick="closeModal()">&times;</span>
                                                     <h4><b>Firma Düzenleme Formu</b></h4>
@@ -233,7 +245,7 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                            <div id="orders-div-<?= $client->id ?>" class="modal" style="width: 80%;">
+                                            <div id="offers-div-<?= $client->id ?>" class="modal" style="width: 80%;">
                                                 <span class="close" onclick="closeModal()">&times;</span>
                                                 <h5><?= $client->name ?> TEKLİF LİSTESİ</h5>
                                                 <div class="table-responsive">
@@ -250,31 +262,31 @@
                                                         </thead>
                                                         <tbody>
                                                         <?php
-                                                            $orders = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$client->id}' AND formda = '0' AND sirketid = '{$authUser->company_id}' AND silik = '0' ORDER BY teklifid DESC")->fetchAll(PDO::FETCH_OBJ);
-                                                            if (!$orders) { ?>
+                                                            $offers = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$client->id}' AND formda = '0' AND sirketid = '{$authUser->company_id}' AND silik = '0' ORDER BY teklifid DESC")->fetchAll(PDO::FETCH_OBJ);
+                                                            if (!$offers) { ?>
                                                                 <tr>
                                                                     <td colspan="6" style="text-align: center; color: #003566; font-weight: bold;">
                                                                         Hiç teklif yoktur.
                                                                     </td>
                                                                 </tr>
                                                             <?php }
-                                                            foreach ($orders as $orderKey => $order):
-                                                                $product = getProduct($order->turunid);
+                                                            foreach ($offers as $offerKey => $offer):
+                                                                $product = getProduct($offer->turunid);
                                                                 $productName = $product->urun_adi;
                                                                 $mainCategory = getCategory($product->kategori_bir)->kategori_adi;
                                                                 $subCategory = getCategory($product->kategori_iki)->kategori_adi;
                                                         ?>
                                                             <tr>
                                                                 <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>
-                                                                <td><?= $order->tadet ?></td>
-                                                                <td><?= $order->tsatisfiyati ?></td>
-                                                                <td><?= ($order->tadet * $order->tsatisfiyati) ?></td>
-                                                                <td><?= date('d/m/Y',$order->tsaniye) ?></td>
+                                                                <td><?= $offer->tadet ?></td>
+                                                                <td><?= $offer->tsatisfiyati ?></td>
+                                                                <td><?= ($offer->tadet * $offer->tsatisfiyati) ?></td>
+                                                                <td><?= date('d/m/Y',$offer->tsaniye) ?></td>
                                                                 <td>
                                                                     <form action="" method="POST">
-                                                                        <input type="hidden" name="id" value="<?= $order->teklifid ?>">
-                                                                        <input type="hidden" name="order_id" value="<?= $orderKey + 1 ?>">
-                                                                        <button type="submit" class="icon-button" name="delete_order">
+                                                                        <input type="hidden" name="id" value="<?= $offer->teklifid ?>">
+                                                                        <input type="hidden" name="order_id" value="<?= $offerKey + 1 ?>">
+                                                                        <button type="submit" class="icon-button" name="delete_offer">
                                                                             <i class="fas fa-trash"></i>
                                                                         </button>
                                                                     </form>
@@ -285,7 +297,10 @@
                                                     </table>
                                                 </div>
                                                 <a href="teklif.php?id=<?= $client->id; ?>" target="_blank">
-                                                    <button class="btn btn-primary btn-sm">Teklif Formuna Git</button>
+                                                    <button class="btn btn-primary btn-sm">%20 KDV'li Teklif Formuna Git</button>
+                                                </a>
+                                                <a href="teklif.php?id=<?= $client->id; ?>&withholding=true" target="_blank">
+                                                    <button class="btn btn-secondary btn-sm">Tevkifatlı Teklif Formuna Git</button>
                                                 </a>
                                             </div>
                                         </td>
@@ -312,9 +327,9 @@
                         </h5>
 
                         <p>
-                            <i class="fa fa-phone mr-2"></i><?= $client->phone ?><br/>
-                            <i class="fa fa-envelope mr-2"></i><?= $client->email ?><br/>
-                            <i class="fa fa-map-marker mr-2"></i><?= $client->address ?><br/>
+                            <i class="fa fa-phone mr-2 mt-2"></i><?= $client->phone ?><br/>
+                            <i class="fa fa-envelope mr-2 mt-2"></i><?= $client->email ?><br/>
+                            <i class="fa fa-map-marker mr-2 mt-2"></i><?= $client->address ?><br/>
                         </p>
 
                         <div class="mt-4">
@@ -399,10 +414,279 @@
                                     </table>
                                 </div>
                                 <div class="tab-pane fade" id="offer" role="tabpanel" aria-labelledby="offer-tab">
-                                    Teklifler
+                                    <div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th>Ürün</th>
+                                                    <th>Adet</th>
+                                                    <th>Satış Fiyatı</th>
+                                                    <th>Toplam</th>
+                                                    <th>Tarih</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php
+                                                $offers = $db->query("SELECT * FROM teklif WHERE tverilenfirma = '{$client->id}' AND formda = '0' AND sirketid = '{$authUser->company_id}' AND silik = '0' ORDER BY teklifid DESC")->fetchAll(PDO::FETCH_OBJ);
+                                                if (!$offers) { ?>
+                                                    <tr>
+                                                        <td colspan="6" style="text-align: center; color: #003566; font-weight: bold;">
+                                                            Hiç teklif yoktur.
+                                                        </td>
+                                                    </tr>
+                                                <?php }
+                                                foreach ($offers as $offerKey => $offer):
+                                                    $product = getProduct($offer->turunid);
+                                                    $productName = $product->urun_adi;
+                                                    $mainCategory = getCategory($product->kategori_bir)->kategori_adi;
+                                                    $subCategory = getCategory($product->kategori_iki)->kategori_adi;
+                                                    ?>
+                                                    <tr>
+                                                        <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>
+                                                        <td><?= $offer->tadet ?></td>
+                                                        <td><?= $offer->tsatisfiyati ?></td>
+                                                        <td><?= ($offer->tadet * $offer->tsatisfiyati) ?></td>
+                                                        <td><?= date('d/m/Y',$offer->tsaniye) ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <a href="teklif.php?id=<?= $client->id; ?>" target="_blank">
+                                            <button class="btn btn-primary btn-sm mb-3">%20 KDV'li Teklif Formuna Git</button>
+                                        </a>
+                                        <a href="teklif.php?id=<?= $client->id; ?>&withholding=true" target="_blank">
+                                            <button class="btn btn-secondary btn-sm mb-3">Tevkifatlı Teklif Formuna Git</button>
+                                        </a>
+                                    </div>
+                                    <?php if (!$offerForms) { ?>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td style="text-align: center; color: #003566; font-weight: bold;">
+                                                Kaydedilmiş teklif formu yoktur.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <?php }else{ ?>
+                                        <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Kaydedilmiş Teklif Formları</th>
+                                            <th>Ürünler</th>
+                                            <th>Form</th>
+                                        </tr>
+                                        </thead>
+                                        <?php
+                                        foreach ($offerForms as $offerForm):
+                                            ?>
+                                            <tr>
+                                                <td><?= date('d/m/Y H:i:s', $offerForm->saniye) ?> Tarihli Teklif Formu</td>
+                                                <td>
+                                                    <button class="icon-button" onclick="openModal('product-div-<?= $offerForm->tformid ?>')">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                    <div id="product-div-<?= $offerForm->tformid ?>" class="modal" style="width: 70%;">
+                                                        <span class="close" onclick="closeModal()">&times;</span>
+                                                        <h5>Ürünler</h5>
+                                                        <div class="table-responsive mt-2">
+                                                            <table class="table table-bordered">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Ürün Adı</th>
+                                                                    <th>Adet</th>
+                                                                    <th>Satış Fiyatı</th>
+                                                                    <th>Toplam</th>
+                                                                    <th>Tarih</th>
+                                                                    <th>İşlemler</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <?php
+                                                                $offerList = explode(",", $offerForm->tekliflistesi);
+                                                                if (!$offerForm->tekliflistesi) { ?>
+                                                                    <tr>
+                                                                        <td colspan="6" style="text-align: center; color: #003566; font-weight: bold;">
+                                                                            Bu form içerisinde hiç ürün yoktur.
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php }
+                                                                if($offerList){
+                                                                    foreach ($offerList as $offerItem):
+                                                                        $offerItemObj = getOffer($offerItem);
+                                                                        if (!$offerItemObj) {
+                                                                            continue;
+                                                                        }
+                                                                        $offerItemProduct = getProduct($offerItemObj->turunid);
+                                                                        if (!$offerItemProduct) {
+                                                                            continue;
+                                                                        }
+                                                                        $productName = $offerItemProduct->urun_adi;
+                                                                        $mainCategory = getCategory($offerItemProduct->kategori_bir)->kategori_adi;
+                                                                        $subCategory = getCategory($offerItemProduct->kategori_iki)->kategori_adi;
+                                                                        ?>
+                                                                        <tr>
+                                                                            <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>
+                                                                            <td><?= $offerItemObj->tadet ?></td>
+                                                                            <td><?= $offerItemObj->tsatisfiyati ?></td>
+                                                                            <td><?= ($offerItemObj->tadet * $offerItemObj->tsatisfiyati) ?></td>
+                                                                            <td><?= date('d/m/Y',$offerItemObj->tsaniye) ?></td>
+                                                                            <td>
+                                                                                <form action="" method="POST">
+                                                                                    <input type="hidden" name="id" value="<?= $offerItemObj->teklifid ?>">
+                                                                                    <button type="submit" class="icon-button" name="delete_offer" onclick="return confirmForm('Silmek istediğinize emin misiniz?');">
+                                                                                        <i class="fas fa-trash"></i>
+                                                                                    </button>
+                                                                                </form>
+                                                                            </td>
+                                                                        </tr>
+                                                                    <?php endforeach; } ?>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <a href="teklifformu.php?id=<?= $offerForm->tformid ?>" target="_blank">
+                                                        <button class="icon-button">
+                                                            <i class="fa fa-file"></i>
+                                                        </button>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </table>
+                                    <?php } ?>
                                 </div>
                                 <div class="tab-pane fade" id="mold" role="tabpanel" aria-labelledby="mold-tab">
-                                    Kalıplar
+                                    <table class="table table-sm table-bordered m-0">
+                                        <thead>
+                                        <tr>
+                                            <th>Kalıp No</th>
+                                            <th>Fabrika</th>
+                                            <th>Firma T.</th>
+                                            <th>Fabrika T.</th>
+                                            <th>Termin Tarihi</th>
+                                            <th>Fabrika Pdf</th>
+                                            <th>Firma Pdf</th>
+                                            <th>Sözleşme Pdf</th>
+                                            <th>İlgili Kişi</th>
+                                            <th>Kaydeden</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php foreach ($molds as $item): ?>
+                                            <?php
+                                            $factoryName = getFactoryNameById($factories, $item->factory_id);
+                                            $factoryPdfPath = $item->factory_pdf;
+                                            $clientPdfPath = $item->client_pdf;
+                                            $contractPdfPath = $item->contract_pdf;
+                                            $creatorName = getUsername($item->created_by);
+                                            ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($item->number) ?></td>
+                                                <td class="truncate-cell-150"><?= htmlspecialchars($factoryName) ?></td>
+                                                <td><?= htmlspecialchars($item->client_offer_price) ?></td>
+                                                <td><?= htmlspecialchars($item->factory_offer_price) ?></td>
+                                                <td><?= htmlspecialchars($item->due_date) ?></td>
+                                                <td>
+                                                    <?php if ($factoryPdfPath && file_exists($factoryPdfPath)): ?>
+                                                        <a href="<?= htmlspecialchars($factoryPdfPath) ?>" target="_blank">Fabrika PDF</a>
+                                                    <?php else: ?>
+                                                        -
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ($clientPdfPath && file_exists($clientPdfPath)): ?>
+                                                        <a href="<?= htmlspecialchars($clientPdfPath) ?>" target="_blank">Firma PDF</a>
+                                                    <?php else: ?>
+                                                        -
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ($contractPdfPath && file_exists($contractPdfPath)): ?>
+                                                        <a href="<?= htmlspecialchars($contractPdfPath) ?>" target="_blank">Sözleşme PDF</a>
+                                                    <?php else: ?>
+                                                        -
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?= htmlspecialchars($item->contact_person) ?></td>
+                                                <td>
+                                                    <a href="profil.php?id=<?= urlencode($item->created_by) ?>"><b><?= htmlspecialchars($creatorName) ?></b></a>
+                                                </td>
+                                                <td class="display-flex">
+                                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('factory_pdfdivi<?= $item->id; ?>');">
+                                                        <i class="fas fa-industry mr-3"></i>
+                                                    </a>
+                                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('client_pdfdivi<?= $item->id; ?>');">
+                                                        <i class="fas fa-building mr-3"></i>
+                                                    </a>
+                                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('contract_pdfdivi<?= $item->id; ?>');">
+                                                        <i class="fas fa-paper mr-3"></i>
+                                                    </a>
+                                                    <div id="factory_pdfdivi<?= $item->id; ?>" class="pdf-preview-wrapper" style="display: none;">
+                                                        <div class="pdf-preview">
+                                                            <div class="pdf-preview-header">
+                                                                <h5 class="pdf-preview-title">Fabrika Onay Belgesi</h5>
+                                                                <button onclick="ackapa('factory_pdfdivi<?= $item->id; ?>')" class="pdf-preview-close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <?php if (!empty($item->factory_pdf)): ?>
+                                                                <object width="100%" height="500" type="application/pdf" data="<?= $item->factory_pdf; ?>">
+                                                                    <p>Fabrika PDF dokümanı yüklenemedi.</p>
+                                                                </object>
+                                                            <?php else: ?>
+                                                                <div style="padding: 20px; text-align: center; color: #666;">
+                                                                    Fabrika PDF dokümanı yüklenmemiş.
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                    <div id="client_pdfdivi<?= $item->id; ?>" class="pdf-preview-wrapper" style="display: none;">
+                                                        <div class="pdf-preview">
+                                                            <div class="pdf-preview-header">
+                                                                <h5 class="pdf-preview-title">Firma Onay Belgesi</h5>
+                                                                <button onclick="ackapa('client_pdfdivi<?= $item->id; ?>')" class="pdf-preview-close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <?php if (!empty($item->client_pdf)): ?>
+                                                                <object width="100%" height="500" type="application/pdf" data="<?= $item->client_pdf; ?>">
+                                                                    <p>Firma PDF dokümanı yüklenemedi.</p>
+                                                                </object>
+                                                            <?php else: ?>
+                                                                <div style="padding: 20px; text-align: center; color: #666;">
+                                                                    Firma PDF dokümanı yüklenmemiş.
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                    <div id="contract_pdfdivi<?= $item->id; ?>" class="pdf-preview-wrapper" style="display: none;">
+                                                        <div class="pdf-preview">
+                                                            <div class="pdf-preview-header">
+                                                                <h5 class="pdf-preview-title">Firma Onay Belgesi</h5>
+                                                                <button onclick="ackapa('contract_pdfdivi<?= $item->id; ?>')" class="pdf-preview-close">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <?php if (!empty($item->contract_pdf)): ?>
+                                                                <object width="100%" height="500" type="application/pdf" data="<?= $item->contract_pdf; ?>">
+                                                                    <p>Sözleşme PDF dokümanı yüklenemedi.</p>
+                                                                </object>
+                                                            <?php else: ?>
+                                                                <div style="padding: 20px; text-align: center; color: #666;">
+                                                                    Sözleşme PDF dokümanı yüklenmemiş.
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

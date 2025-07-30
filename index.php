@@ -128,9 +128,6 @@
 					<?php include 'template/sidebar.php'; ?>
 				</div>
 				<div class="col-md-10">
-					<div class="row mx-1">
-						<?php include 'agirlikhesaplama.php'; ?>
-					</div>
 					<?php include 'isplani.php'; ?>
 					<?php include 'sevkiyattakibi.php'; ?>
 				</div>

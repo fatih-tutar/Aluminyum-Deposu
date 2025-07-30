@@ -5,12 +5,12 @@
     }
     .sidebar-item {
         border-style: none;
-        padding: 12px;
+        padding: 5px;
     }
 </style>
 <div id="accordion" class="mt-2">
     <div class="d-flex justify-content-end pr-2">
-        <button id="closeSidebarBtn" class="btn btn-sm btn-light" style="font-size: 1.5rem; line-height: 1; padding: 0 8px;">
+        <button id="closeSidebarBtn" class="btn btn-sm" style="font-size: 1.5rem; line-height: 1; padding: 0 8px;">
             &times;
         </button>
     </div>
@@ -65,7 +65,7 @@
         }
     ?>
     <div class="card sidebar-item ">
-        <a href="customorder.php" target="_blank" class="sidebar-font">
+        <a href="customorder.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/kategoriler/unnamed39509908.jpg" alt="" width="35" height="35">
@@ -77,7 +77,7 @@
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="fiyatlistesi.php" target="_blank" class="sidebar-font">
+        <a href="fiyatlistesi.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/aydinlatma_fiyat.png" alt="" width="35" height="35">
@@ -85,11 +85,11 @@
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     AYDINLATMA FİYAT
                 </div>
-            </div>	
+            </div>
         </a>
-    </div>		
+    </div>
     <div class="card sidebar-item ">
-        <a href="tekliflistesi.php" target="_blank" class="sidebar-font">
+        <a href="tekliflistesi.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/urun_sorgulama.png" alt="" width="35" height="35">
@@ -97,35 +97,23 @@
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     ÜRÜN SORGULAMA
                 </div>
-            </div>	
+            </div>
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="anlikfiyatlama.php" target="_blank" class="sidebar-font">
+        <a href="pricetable.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/anlik_fiyatlama.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
-                    ANLIK FİYATLAMA
+                    FİYAT TABLOSU
                 </div>
             </div>
         </a>
-    </div>	
+    </div>
     <div class="card sidebar-item ">
-        <a href="fiyathesaplama.php" target="_blank" class="sidebar-font">
-            <div class="row pl-1">
-                <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/fiyat_hesaplama.png" alt="" width="35" height="35">
-                </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
-                    FİYAT HESAPLAMA
-                </div>
-            </div>
-        </a>
-    </div>	
-    <div class="card sidebar-item ">
-        <a href="#" onclick="return false" onmousedown="javascript:ackapa4('agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi','isplanidivi');" class="sidebar-font">
+        <a href="agirlikhesaplama.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/agirlik_hesaplama.png" alt="" width="35" height="35">
@@ -135,9 +123,9 @@
                 </div>
             </div>
         </a>
-    </div>		
+    </div>
     <div class="card sidebar-item ">
-        <a href="factory.php" target="_blank" class="sidebar-font">
+        <a href="factory.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/fabrikalar.png" alt="" width="35" height="35">
@@ -149,7 +137,7 @@
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="client.php" target="_blank" class="sidebar-font">
+        <a href="client.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/clients.png" alt="" width="35" height="35">
@@ -161,7 +149,7 @@
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="mold.php" target="_blank" class="sidebar-font">
+        <a href="mold.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/kaliplar.png" alt="" width="35" height="35">
@@ -171,7 +159,7 @@
                 </div>
             </div>
         </a>
-    </div>	
+    </div>
     <div class="card sidebar-item ">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('isplanidivi','agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi');" class="sidebar-font">
             <div class="row pl-1">
@@ -185,7 +173,7 @@
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="izin.php" target="_blank" class="sidebar-font">
+        <a href="leave.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/izin.png" alt="" width="35" height="35">
@@ -197,7 +185,7 @@
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="organizasyon.php" target="_blank" class="sidebar-font">
+        <a href="organizasyon.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/organizasyon.png" alt="" width="35" height="35">
@@ -209,7 +197,7 @@
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="sevkiyatplan.php" target="_blank" class="sidebar-font">
+        <a href="sevkiyatplan.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/sevkiyat_plani.png" alt="" width="35" height="35">
@@ -221,7 +209,7 @@
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="sevkiyatarsiv.php" target="_blank" class="sidebar-font">
+        <a href="sevkiyatarsiv.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/sevkiyat_arsivi.png" alt="" width="35" height="35">

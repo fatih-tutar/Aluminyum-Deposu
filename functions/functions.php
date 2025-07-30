@@ -20,10 +20,17 @@ function getCategory($categoryId)
     return $category->fetch(PDO::FETCH_OBJ);
 }
 
+function getOffer($offerId)
+{
+    global $db;
+    $order = $db->query("SELECT * FROM teklif WHERE teklifid = {$offerId} AND silik = '0'");
+    return $order->fetch(PDO::FETCH_OBJ);
+}
+
 function getOrder($orderId)
 {
     global $db;
-    $order = $db->query("SELECT * FROM teklif WHERE teklifid = {$orderId} AND silik = '0'");
+    $order = $db->query("SELECT * FROM siparis WHERE siparis_id = {$orderId} AND silik = '0'");
     return $order->fetch(PDO::FETCH_OBJ);
 }
 
@@ -53,9 +60,9 @@ function getFactoryNameById($factories, $id) {
     return 'Bilinmeyen Fabrika'; // ID bulunamazsa
 }
 
-function getFactoryInfos($factoryId) {
+function getFactory($factoryId) {
     global $db;
-    $factory = $db->query("SELECT * FROM factories WHERE id = '{$factoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    $factory = $db->query("SELECT * FROM factories WHERE id = '{$factoryId}' LIMIT 1")->fetch(PDO::FETCH_OBJ);
     return $factory;
 }
 

@@ -5,35 +5,7 @@ if (!isLoggedIn()) {
     exit();
 }else{
 
-    if (isset($_POST['hesapla'])) {
 
-        $lmePost = 1;
-        $dolarPost = 1;
-        $iscilik = 1;
-
-        $dolarPost = guvenlik($_POST['dolarkuru']);
-
-        if($dolarPost != $companyDolar){
-            $query = $db->prepare("UPDATE companies SET dolar = ? WHERE id = ?");
-            $guncelle = $query->execute(array($dolarPost,$authUser->company_id));
-        }
-
-        $lmePost = guvenlik($_POST['lme']);
-
-        if($lmePost != $companyLme){
-            $query = $db->prepare("UPDATE companies SET lme = ? WHERE id = ?");
-            $guncelle = $query->execute(array($lmePost,$authUser->company_id));
-        }
-
-        $iscilik = guvenlik($_POST['iscilik']);
-
-        $toplam = ($lmePost + $iscilik) * $dolarPost;
-
-        header("Location:fiyathesaplama.php?fiyat=".$toplam);
-
-        exit();
-
-    }
 }
 ?>
 <!DOCTYPE html>
@@ -42,26 +14,22 @@ if (!isLoggedIn()) {
     <title>Fiyat Hesaplama</title>
     <?php include 'template/head.php'; ?>
 </head>
-<body>
+<body class="body-white">
 <?php include 'template/banner.php' ?>
 
-<div class="row">
-    <div class="col-md-2 col-12">
-        <?php include 'template/sidebar.php'; ?>
-    </div>
-    <div class="col-md-10">
-        <div class="row mx-1">
-            <div id="fiyathesaplamadivi" class="div4 col-md-4 col-12 mt-2 mb-4">
+<div class="container-fluid">
+    <div class="row">
+        <div id="sidebar" class="col-md-3">
+            <?php include 'template/sidebar2.php'; ?>
+        </div>
+        <div id="mainCol" class="col-md-9 col-12">
+            <div id="fiyathesaplamadivi" class="div4 col-md-4 col-12 mt-2 mb-4 p-3">
 
-                <h5 style="text-align: center;"><b>Fiyat Hesaplama</b></h5>
+                <h4 style="text-align: center;"><b>Fiyat Hesaplama</b></h4>
 
-                <div class="div5">
+                <form action="" method="POST">
 
-                    <h5><b>Hesaplama</b></h5>
-
-                    <form action="" method="POST">
-
-                        <div class="row" style="margin-bottom: 5px;">
+                        <div class="row mt-3">
 
                             <div class="col-3">Dolar</div>
 
@@ -69,7 +37,7 @@ if (!isLoggedIn()) {
 
                         </div>
 
-                        <div class="row" style="margin-bottom: 5px;">
+                        <div class="row mt-3">
 
                             <div class="col-3">LME</div>
 
@@ -77,7 +45,7 @@ if (!isLoggedIn()) {
 
                         </div>
 
-                        <div class="row" style="margin-bottom: 5px;">
+                        <div class="row mt-3">
 
                             <div class="col-3">İşçilik</div>
 
@@ -85,31 +53,15 @@ if (!isLoggedIn()) {
 
                         </div>
 
-                        <button type="submit" name="hesapla" class="btn btn-primary btn-block btn-sm" style="background-color:black;">Hesapla</button>
+                        <button type="submit" name="hesapla" class="btn btn-primary btn-block btn-sm mt-3" style="background-color:black;">Hesapla</button>
 
                     </form>
 
-                </div>
+                <?php if (isset($_GET['fiyat']) === true && empty($_GET['fiyat']) === false) { ?>
 
-                <?php
+                    <h5 class="mt-3"><b>Fiyat : </b><?= $_GET['fiyat']." TL"; ?></h5>
 
-                if (isset($_GET['fiyat']) === true && empty($_GET['fiyat']) === false) {
-
-                    ?>
-
-                    <div class="div5">
-
-                        <h5><b>Fiyat</b></h5>
-
-                        <?= $_GET['fiyat']." TL"; ?>
-
-                    </div>
-
-                    <?php
-
-                }
-
-                ?>
+                <?php } ?>
 
             </div>
         </div>

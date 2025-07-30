@@ -309,10 +309,10 @@ if (!isLoggedIn()) {
 <?php include 'template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2 d-none d-md-block br-grey">
+        <div id="sidebar" class="col-md-3 d-none">
             <?php include 'template/sidebar2.php'; ?>
         </div>
-        <div class="col-md-10 col-12">
+        <div id="mainCol" class="col-md-12 col-12">
             <?= isset($error) ? $error : ''; ?>
             <div id="form-div" class="modal">
                 <span class="close" onclick="closeModal()">&times;</span>
@@ -361,7 +361,11 @@ if (!isLoggedIn()) {
                 </form>
             </div>
             <div class="row pl-3 pb-4 pr-3 bb-grey">
-                <div style="text-align: right; display: block; width: 100%;">
+                <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-bars"></i> Menü
+                    </button>
+                    <div style="text-align: right; display: block;">
                     <a href="custom_order_archive.php" target="_blank">
                         <button class="btn btn-primary btn-sm mb-2" style="background-color: #6c757d; border-color: #545b62;">
                             <i class="fas fa-archive mr-2"></i>
@@ -380,6 +384,7 @@ if (!isLoggedIn()) {
                             Yeni Sipariş Girişi
                         </button>
                     </a>
+                </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-bordered">

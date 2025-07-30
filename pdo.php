@@ -28,7 +28,7 @@ $insert = $query->execute(array($siparisboy,'1',time()));
 
 $query = $db->prepare("UPDATE urun SET urun_adet = ? WHERE urun_id = ?"); 
 
-$guncelle = $query->execute(array($urun_adet,$urun_id));
+$update = $query->execute(array($urun_adet,$urun_id));
 
 //DELETE
 

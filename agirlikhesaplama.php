@@ -1,4 +1,9 @@
 <?php
+include 'functions/init.php';
+if (!isLoggedIn()) {
+    header("Location:login.php");
+    exit();
+}else{
     if(isset($_GET['mt']) === true && empty($_GET['mt']) === false){
         $mt = guvenlik($_GET['mt']);
         if ($mt == '1') {
@@ -49,7 +54,7 @@
             $agirlikHata = '<br/><div class="alert alert-danger" role="alert">Boş bırakılan alanlar var.</div>';
         }else{
             $toplam = $kalinlik * $en * $boy * $adet * 0.000001 * 2.81;
-            header("Location:index.php?mt=".$malzemetipi."&k=".$kalinlik."&en=".$en."&b=".$boy."&a=".$adet."&toplam=".$toplam);
+            header("Location:agirlikhesaplama.php?mt=".$malzemetipi."&k=".$kalinlik."&en=".$en."&b=".$boy."&a=".$adet."&toplam=".$toplam);
             exit();
         }
     }
@@ -64,7 +69,7 @@
             $agirlikHata = '<br/><div class="alert alert-danger" role="alert">Boş bırakılan alanlar var.</div>';
         }else{
             $toplam = $adet * 2.71 * $etkalinligi * $boy * ($amm + $bmm - $etkalinligi) * 0.000001;
-            header("Location:index.php?mt=".$malzemetipi."&amm=".$amm."&bmm=".$bmm."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
+            header("Location:agirlikhesaplama.php?mt=".$malzemetipi."&amm=".$amm."&bmm=".$bmm."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
             exit();
         }
     }
@@ -77,7 +82,7 @@
             $agirlikHata = '<br/><div class="alert alert-danger" role="alert">Boş bırakılan alanlar var.</div>';
         }else{
             $toplam = 3.14 * (($cap / 2) * ($cap / 2) * $uzunluk * $adet * (0.000001) * 2.71);
-            header("Location:index.php?mt=".$malzemetipi."&c=".$cap."&u=".$uzunluk."&a=".$adet."&toplam=".$toplam);
+            header("Location:agirlikhesaplama.php?mt=".$malzemetipi."&c=".$cap."&u=".$uzunluk."&a=".$adet."&toplam=".$toplam);
             exit();
         }
     }
@@ -92,7 +97,7 @@
             $agirlikHata = '<br/><div class="alert alert-danger" role="alert">Boş bırakılan alanlar var.</div>';
         }else{
             $toplam = (2 * $etkalinligi * ($a + $b) - (4 * $etkalinligi * $etkalinligi)) * $boy * $adet * 2.71 * 0.000001;
-            header("Location:index.php?mt=".$malzemetipi."&a=".$a."&b=".$b."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
+            header("Location:agirlikhesaplama.php?mt=".$malzemetipi."&a=".$a."&b=".$b."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
             exit();
         }
     }
@@ -110,170 +115,193 @@
             $agirlikHata = '<br/><div class="alert alert-danger" role="alert">Boş bırakılan alanlar var.</div>';
         }else{
             $toplam = 3.14 * ((($discap / 2) * ($discap / 2)) - (($iccap / 2) * ($iccap / 2))) * $boy * $adet * 2.71 * 0.000001;
-            header("Location:index.php?mt=".$malzemetipi."&iccap=".$iccap."&discap=".$discap."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
+            header("Location:agirlikhesaplama.php?mt=".$malzemetipi."&iccap=".$iccap."&discap=".$discap."&e=".$etkalinligi."&boy=".$boy."&adet=".$adet."&toplam=".$toplam);
             exit();
         }
     }
+}
 ?>
-<?php if(isset($agirlikHata) === true){ ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fiyat Hesaplama</title>
+    <?php include 'template/head.php'; ?>
+</head>
+<body class="body-white">
+<?php include 'template/banner.php' ?>
+
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
-            <?= $agirlikHata; ?>
+        <div id="sidebar" class="col-md-3">
+            <?php include 'template/sidebar2.php'; ?>
         </div>
-    </div><br/>
-<?php } ?>
-<div id="agirlikhesaplamadivi" class="div4 col-md-4 col-12 mt-2 mb-4" style="<?= isset($_GET['mt']) ? '' : 'display:none;' ?>" >
-						
-    <h5 style="text-align: center;"><b>Ağırlık Hesaplama</b></h5>
+        <div id="mainCol" class="col-md-9 col-12">
+            <?php if(isset($agirlikHata) === true){ ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <?= $agirlikHata; ?>
+                    </div>
+                </div><br/>
+            <?php } ?>
+                <div id="agirlikhesaplamadivi" class="div4 col-md-4 col-12 mt-2 mb-4">
 
-    <select name="malzemetipi" id="selectkutuID" class="form-control" onchange="degergoster();" style="margin-bottom: 5px;">
+                    <h5 style="text-align: center;"><b>Ağırlık Hesaplama</b></h5>
 
-        <option value="0">Malzeme Tipini Seçiniz</option>
-        
-        <option value="1">Alüminyum Levha</option>
+                    <select name="malzemetipi" id="selectkutuID" class="form-control" onchange="degergoster();" style="margin-bottom: 5px;">
 
-        <option value="2">Alüminyum Köşebent</option>
+                        <option value="0">Malzeme Tipini Seçiniz</option>
 
-        <option value="3">Alüminyum Çubuk</option>
+                        <option value="1">Alüminyum Levha</option>
 
-        <option value="4">Alüminyum Kutu</option>
+                        <option value="2">Alüminyum Köşebent</option>
 
-        <option value="5">Alüminyum Boru</option>
+                        <option value="3">Alüminyum Çubuk</option>
 
-    </select>
+                        <option value="4">Alüminyum Kutu</option>
 
-    <?php if(isset($mt) && $mt == '1'){ ?><div id="malzeme1"><?php }else{ ?><div id="malzeme1" style="display: none;"><?php } ?>
-        
-        <hr/>
-        
-        <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Levha Bilgilerini Doldurunuz</b></h6>
+                        <option value="5">Alüminyum Boru</option>
 
-        <form action="" method="POST">
+                    </select>
 
-            <input type="hidden" name="malzemetipi" value="1">
+                    <?php if(isset($mt) && $mt == '1'){ ?><div id="malzeme1"><?php }else{ ?><div id="malzeme1" style="display: none;"><?php } ?>
 
-            <div class="row"><div class="col-3"><b>Kalınlık</b></div><div class="col-9"><?php if(isset($_GET['k'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="kalinlik" value="<?= $kalinlik ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="kalinlik" placeholder="KALINLIK"><?php } ?></div></div>
+                            <hr/>
 
-            <div class="row"><div class="col-3"><b>En</b></div><div class="col-9"><?php if(isset($_GET['en'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" value="<?= $en; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" placeholder="EN"><?php } ?></div></div>
+                            <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Levha Bilgilerini Doldurunuz</b></h6>
 
-            <div class="row"><div class="col-3"><b>Boy</b></div><div class="col-9"><?php if(isset($_GET['b'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?= $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
+                            <form action="" method="POST">
 
-            <div class="row"><div class="col-3"><b>Adet</b></div><div class="col-9"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-            
-            <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px; background-color: black;" name="levhahesapla">Hesapla</button>
+                                <input type="hidden" name="malzemetipi" value="1">
 
-        </form>
+                                <div class="row"><div class="col-3"><b>Kalınlık</b></div><div class="col-9"><?php if(isset($_GET['k'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="kalinlik" value="<?= $kalinlik ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="kalinlik" placeholder="KALINLIK"><?php } ?></div></div>
 
-        <?php if(isset($toplam1)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam1." KG"; ?></ins></b></h5><?php } ?>
+                                <div class="row"><div class="col-3"><b>En</b></div><div class="col-9"><?php if(isset($_GET['en'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" value="<?= $en; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="en" placeholder="EN"><?php } ?></div></div>
 
-    </div>
+                                <div class="row"><div class="col-3"><b>Boy</b></div><div class="col-9"><?php if(isset($_GET['b'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?= $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
 
-    <?php if(isset($mt) && $mt == '2'){ ?><div id="malzeme2"><?php }else{ ?><div id="malzeme2" style="display: none;"><?php } ?>
-        
-        <hr/>
-        
-        <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Köşebent Bilgilerini Doldurunuz</b></h6>
+                                <div class="row"><div class="col-3"><b>Adet</b></div><div class="col-9"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
 
-        <form action="" method="POST">
+                                <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px; background-color: black;" name="levhahesapla">Hesapla</button>
 
-            <input type="hidden" name="malzemetipi" value="2">
+                            </form>
 
-            <div class="row"><div class="col-4"><b>A (mm)</b></div><div class="col-8"><?php if(isset($_GET['amm'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="amm" value="<?= $amm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="amm" placeholder="A (mm)"><?php } ?></div></div>
+                            <?php if(isset($toplam1)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam1." KG"; ?></ins></b></h5><?php } ?>
 
-            <div class="row"><div class="col-4"><b>B (mm)</b></div><div class="col-8"><?php if(isset($_GET['bmm'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="bmm" value="<?= $bmm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="bmm" placeholder="B (mm)"><?php } ?></div></div>
+                        </div>
 
-            <div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?= $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
+                    <?php if(isset($mt) && $mt == '2'){ ?><div id="malzeme2"><?php }else{ ?><div id="malzeme2" style="display: none;"><?php } ?>
 
-            <div class="row"><div class="col-4"><b>Boy</b></div><div class="col-8"><?php if(isset($_GET['boy'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?= $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
+                            <hr/>
 
-            <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-            
-            <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="kosebenthesapla">Hesapla</button>
+                            <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Köşebent Bilgilerini Doldurunuz</b></h6>
 
-        </form>
+                            <form action="" method="POST">
 
-        <?php if(isset($toplam2)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam2." KG"; ?></ins></b></h5><?php } ?>
+                                <input type="hidden" name="malzemetipi" value="2">
 
-    </div>
+                                <div class="row"><div class="col-4"><b>A (mm)</b></div><div class="col-8"><?php if(isset($_GET['amm'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="amm" value="<?= $amm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="amm" placeholder="A (mm)"><?php } ?></div></div>
 
-    <?php if(isset($mt) && $mt == '3'){ ?><div id="malzeme3"><?php }else{ ?><div id="malzeme3" style="display: none;"><?php } ?>
-        
-        <hr/>
-        
-        <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Çubuk Bilgilerini Doldurunuz</b></h6>
+                                <div class="row"><div class="col-4"><b>B (mm)</b></div><div class="col-8"><?php if(isset($_GET['bmm'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="bmm" value="<?= $bmm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="bmm" placeholder="B (mm)"><?php } ?></div></div>
 
-        <form action="" method="POST">
+                                <div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?= $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
 
-            <input type="hidden" name="malzemetipi" value="3">
+                                <div class="row"><div class="col-4"><b>Boy</b></div><div class="col-8"><?php if(isset($_GET['boy'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?= $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
 
-            <div class="row"><div class="col-4"><b>Çap</b></div><div class="col-8"><?php if(isset($_GET['c'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="cap" value="<?= $cap ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="cap" placeholder="ÇAP"><?php } ?></div></div>
+                                <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
 
-            <div class="row"><div class="col-4"><b>Uzunluk</b></div><div class="col-8"><?php if(isset($_GET['u'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="uzunluk" value="<?= $uzunluk; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="uzunluk" placeholder="UZUNLUK"><?php } ?></div></div>
+                                <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="kosebenthesapla">Hesapla</button>
 
-            <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-            
-            <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="cubukhesapla">Hesapla</button>
+                            </form>
 
-        </form>
+                            <?php if(isset($toplam2)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam2." KG"; ?></ins></b></h5><?php } ?>
 
-        <?php if(isset($toplam3)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam3." KG"; ?></ins></b></h5><?php } ?>
+                        </div>
 
-    </div>
+                    <?php if(isset($mt) && $mt == '3'){ ?><div id="malzeme3"><?php }else{ ?><div id="malzeme3" style="display: none;"><?php } ?>
 
-    <?php if(isset($mt) && $mt == '4'){ ?><div id="malzeme4"><?php }else{ ?><div id="malzeme4" style="display: none;"><?php } ?>
-        
-        <hr/>
-        
-        <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Kutu Bilgilerini Doldurunuz</b></h6>
+                            <hr/>
 
-        <form action="" method="POST">
+                            <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Çubuk Bilgilerini Doldurunuz</b></h6>
 
-            <input type="hidden" name="malzemetipi" value="4">
+                            <form action="" method="POST">
 
-            <div class="row"><div class="col-4"><b>A (mm)</b></div><div class="col-8"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" value="<?= $amm ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" placeholder="A (mm)"><?php } ?></div></div>
+                                <input type="hidden" name="malzemetipi" value="3">
 
-            <div class="row"><div class="col-4"><b>B (mm)</b></div><div class="col-8"><?php if(isset($_GET['b'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" value="<?= $bmm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" placeholder="B (mm)"><?php } ?></div></div>
+                                <div class="row"><div class="col-4"><b>Çap</b></div><div class="col-8"><?php if(isset($_GET['c'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="cap" value="<?= $cap ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="cap" placeholder="ÇAP"><?php } ?></div></div>
 
-            <div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?= $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
+                                <div class="row"><div class="col-4"><b>Uzunluk</b></div><div class="col-8"><?php if(isset($_GET['u'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="uzunluk" value="<?= $uzunluk; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="uzunluk" placeholder="UZUNLUK"><?php } ?></div></div>
 
-            <div class="row"><div class="col-4"><b>Boy</b></div><div class="col-8"><?php if(isset($_GET['boy'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?= $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
+                                <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
 
-            <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-            
-            <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="kutuhesapla">Hesapla</button>
+                                <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="cubukhesapla">Hesapla</button>
 
-        </form>
+                            </form>
 
-        <?php if(isset($toplam4)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam4." KG"; ?></ins></b></h5><?php } ?>
+                            <?php if(isset($toplam3)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam3." KG"; ?></ins></b></h5><?php } ?>
 
-    </div>
+                        </div>
 
-    <?php if(isset($mt) && $mt == '5'){ ?><div id="malzeme5"><?php }else{ ?><div id="malzeme5" style="display: none;"><?php } ?>
-        
-        <hr/>
-        
-        <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Boru Bilgilerini Doldurunuz</b></h6>
+                    <?php if(isset($mt) && $mt == '4'){ ?><div id="malzeme4"><?php }else{ ?><div id="malzeme4" style="display: none;"><?php } ?>
 
-        <form action="" method="POST">
+                            <hr/>
 
-            <input type="hidden" name="malzemetipi" value="5">
+                            <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Kutu Bilgilerini Doldurunuz</b></h6>
 
-            <div class="row"><div class="col-4"><b>İç Çap</b></div><div class="col-8"><?php if(isset($_GET['iccap'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="iccap" value="<?= $iccap ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="iccap" placeholder="İç Çap"><?php } ?></div></div>
+                            <form action="" method="POST">
 
-            <div class="row"><div class="col-4"><b>Dış Çap</b></div><div class="col-8"><?php if(isset($_GET['discap'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="discap" value="<?= $discap; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="discap" placeholder="Dış Çap"><?php } ?></div></div>
+                                <input type="hidden" name="malzemetipi" value="4">
 
-            <div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?= $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
+                                <div class="row"><div class="col-4"><b>A (mm)</b></div><div class="col-8"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" value="<?= $amm ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="a" placeholder="A (mm)"><?php } ?></div></div>
 
-            <div class="row"><div class="col-4"><b>Boy</b></div><div class="col-8"><?php if(isset($_GET['boy'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?= $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
+                                <div class="row"><div class="col-4"><b>B (mm)</b></div><div class="col-8"><?php if(isset($_GET['b'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" value="<?= $bmm; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="b" placeholder="B (mm)"><?php } ?></div></div>
 
-            <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
-            
-            <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="boruhesapla">Hesapla</button>
+                                <div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?= $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
 
-        </form>
+                                <div class="row"><div class="col-4"><b>Boy</b></div><div class="col-8"><?php if(isset($_GET['boy'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?= $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
 
-        <?php if(isset($toplam5)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam5." KG"; ?></ins></b></h5><?php } ?>
+                                <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
 
-    </div>
+                                <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="kutuhesapla">Hesapla</button>
 
-</div>
+                            </form>
+
+                            <?php if(isset($toplam4)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam4." KG"; ?></ins></b></h5><?php } ?>
+
+                        </div>
+
+                                <?php if(isset($mt) && $mt == '5'){ ?><div id="malzeme5"><?php }else{ ?><div id="malzeme5" style="display: none;"><?php } ?>
+
+                                        <hr/>
+
+                                        <h6 style="margin-top: 5px; text-align: center;"><b>Alüminyum Boru Bilgilerini Doldurunuz</b></h6>
+
+                                        <form action="" method="POST">
+
+                                            <input type="hidden" name="malzemetipi" value="5">
+
+                                            <div class="row"><div class="col-4"><b>İç Çap</b></div><div class="col-8"><?php if(isset($_GET['iccap'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="iccap" value="<?= $iccap ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="iccap" placeholder="İç Çap"><?php } ?></div></div>
+
+                                            <div class="row"><div class="col-4"><b>Dış Çap</b></div><div class="col-8"><?php if(isset($_GET['discap'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="discap" value="<?= $discap; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="discap" placeholder="Dış Çap"><?php } ?></div></div>
+
+                                            <div class="row"><div class="col-4"><b>Et Kalınlığı</b></div><div class="col-8"><?php if(isset($_GET['e'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" value="<?= $etkalinligi; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="etkalinligi" placeholder="ET KALINLIĞI"><?php } ?></div></div>
+
+                                            <div class="row"><div class="col-4"><b>Boy</b></div><div class="col-8"><?php if(isset($_GET['boy'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" value="<?= $boy; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="boy" placeholder="BOY"><?php } ?></div></div>
+
+                                            <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
+
+                                            <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="boruhesapla">Hesapla</button>
+
+                                        </form>
+
+                                        <?php if(isset($toplam5)){?><h5 style="text-align: center; margin-top: 20px;"><b>Sonuç : <ins><?= $toplam5." KG"; ?></ins></b></h5><?php } ?>
+
+                                    </div>
+
+                                </div>
+                </div>
+            </div>
+        </div>
+
+        <?php include 'template/script.php'; ?>
+    </body>
+</html>

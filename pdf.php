@@ -155,7 +155,9 @@
 
 			<div class="col-md-2"><b>Boy</b></div>
 
-			<div class="col-md-2"><b>Miktar Adet</b></div>			
+			<div class="col-md-2"><b>Miktar Adet</b></div>
+
+			<div class="col-md-2"><b>Palet Adet</b></div>
 
 		</div>
 
@@ -213,6 +215,8 @@
 
 					$kategori_iki_adi = $katadcek['kategori_adi'];
 
+                    $palet = $row['palet'];
+
 			?>
 
 						<hr style="border:1px black solid;" />
@@ -226,6 +230,8 @@
 							<div class="col-2"><?= $siparisboy." boyunda "; ?></div>
 
 							<div class="col-2"><?= $urun_siparis_aded." adet "; ?></div>
+
+							<div class="col-2"><?= $palet == 0 ? '-------' : $palet." palet "; ?></div>
 
 							<div class="col-2"><?= $kategori_bir_adi; ?></div>
 
