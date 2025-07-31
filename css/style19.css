@@ -217,6 +217,10 @@ a {
     white-space: nowrap;
 }
 
+.th-vertical-align-middle th {
+    vertical-align: middle!important;
+}
+
 .td-vertical-align-middle td {
     vertical-align: middle;
 }

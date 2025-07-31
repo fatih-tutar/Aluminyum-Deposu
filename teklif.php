@@ -56,7 +56,7 @@
             <table class="table table-bordered">
                 <tr>
                     <td><b>Firma Adı:</b></td>
-                    <td><?= $client->name ?></td>
+                    <td style="word-wrap: break-word; white-space: normal; max-width: 600px;"><?= $client->name ?></td>
                     <td><b>Tarih:</b></td>
                     <td><?= date("d/m/Y",time()) ?></td>
                 </tr>
@@ -112,7 +112,7 @@
                     $totalAmountWithKDV = $totalAmount + $kdv;
                     ?>
                     <tr>
-                        <td><?= ($key + 1).". ".$product->urun_adi." ".$subCategory->kategori_adi; ?></td>
+                        <td style="word-wrap: break-word; white-space: normal; max-width: 400px;"><?= ($key + 1).". ".$product->urun_adi." ".$subCategory->kategori_adi; ?></td>
                         <td><?= $offer->tadet." Boy "; ?></td>
                         <td><?= $mainCategory->kategori_adi; ?></td>
                         <td>

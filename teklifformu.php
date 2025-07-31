@@ -33,7 +33,7 @@ if($user->type == '0'){
     <table class="table table-bordered">
         <tr>
             <td><b>Firma Adı:</b></td>
-            <td><?= $client->name ?></td>
+            <td style="word-wrap: break-word; white-space: normal; max-width: 600px;"><?= $client->name ?></td>
             <td><b>Tarih:</b></td>
             <td><?= date("d/m/Y",time()) ?></td>
         </tr>

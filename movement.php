@@ -1,368 +1,252 @@
 <?php
-	include 'functions/init.php';
-	if (!isLoggedIn()) {
-		header("Location:login.php");
-		exit();
-	}else{
-		if($user->permissions->stock_flow != '1'){
-			header("Location:index.php");
-			exit();
-		}else{
-			$weekly = 0;
-			if(isset($_GET['weekly']) && $_GET['weekly'] == 1 && empty($_GET['weekly']) === false){
-				$weekly = 1;
-			}
-			//Bugünün kaydı var mı anlayabilmek için son kaydı çekiyoruz.
-            $movements = $db->query("SELECT * FROM movements ORDER BY date DESC")->fetchAll(PDO::FETCH_OBJ);
-            $lastMovement = $movements[0];
-            $lastDate = $lastMovement->date;
-            $dateObj = new DateTime($lastDate);
-            $tempWeek = $dateObj->format("W");
-            $tempMonth = $dateObj->format("m");
-            $tempYear = $dateObj->format("Y");
-            if(isset($_POST['save_movement'])){
-                $incoming = str_replace(",",".", guvenlik($_POST['incoming']));
-                $outgoing = str_replace(",",".", guvenlik($_POST['outgoing']));
-                $warehouseIncoming = str_replace(",",".", guvenlik($_POST['warehouse_incoming']));
-                $warehouseOutgoing = str_replace(",",".", guvenlik($_POST['warehouse_outgoing']));
-                $date = guvenlik($_POST['date']);
-                if(movementDateExists($date) != true){
-                    $query = $db->prepare("INSERT INTO movements SET incoming = ?, outgoing = ?, warehouse_incoming = ?, warehouse_outgoing = ?, date = ?, is_deleted = ?");
-                    $insert = $query->execute(array($incoming,$outgoing,$warehouseIncoming,$warehouseOutgoing,$date,'0'));
-                    header("Location:movement.php");
-                    exit();
-                }else{
-                    $error = '<br/><div class="alert alert-danger" role="alert">Bu tarihle zaten bir kayıt var onu düzenleyebilirsiniz.</div>';
-                }
-            }
-            if (isset($_POST['update_movement'])) {
-                $id = guvenlik($_POST['id']);
-                $incoming = str_replace(",",".", guvenlik($_POST['incoming']));
-                $outgoing = str_replace(",",".", guvenlik($_POST['outgoing']));
-                $warehouseIncoming = str_replace(",",".", guvenlik($_POST['warehouse_incoming']));
-                $warehouseOutgoing = str_replace(",",".", guvenlik($_POST['warehouse_outgoing']));
-                $query = $db->prepare("UPDATE movements SET incoming = ?, outgoing = ?, warehouse_incoming = ?, warehouse_outgoing = ? WHERE id = ?");
-                $update = $query->execute(array($incoming,$outgoing,$warehouseIncoming,$warehouseOutgoing,$id));
+include 'functions/init.php';
+if (!isLoggedIn()) {
+    header("Location:login.php");
+    exit();
+}else{
+    if($authUser->permissions->stock_flow != '1'){
+        header("Location:index.php");
+        exit();
+    }else{
+        if(isset($_POST['save_movement'])){
+            $incoming = guvenlik($_POST['incoming']);
+            $incoming = str_replace(",",".",$incoming);
+            $outgoing = guvenlik($_POST['outgoing']);
+            $outgoing = str_replace(",",".",$outgoing);
+            $warehouseIncoming = guvenlik($_POST['warehouse_incoming']);
+            $warehouseIncoming = str_replace(",",".",$warehouseIncoming);
+            $warehouseOutgoing = guvenlik($_POST['warehouse_outgoing']);
+            $warehouseOutgoing = str_replace(",",".",$warehouseOutgoing);
+            $date = guvenlik($_POST['date']);
+
+            if(!movementDateExists($date)){
+                $query = $db->prepare("INSERT INTO movements SET incoming = ?, outgoing = ?, warehouse_incoming = ?, warehouse_outgoing = ?, date = ?, is_deleted = ?");
+                $insert = $query->execute(array($incoming,$outgoing,$warehouseIncoming,$warehouseOutgoing,$date,0));
                 header("Location:movement.php");
                 exit();
+            }else{
+                $error = '<br/><div class="alert alert-danger" role="alert">Bu tarihle zaten bir kayıt var onu düzenleyebilirsiniz.</div>';
             }
         }
-	}
+
+        if (isset($_POST['update_movement'])) {
+            $id = guvenlik($_POST['id']);
+            $incoming = guvenlik($_POST['incoming']);
+            $incoming = str_replace(",",".",$incoming);
+            $outgoing = guvenlik($_POST['outgoing']);
+            $outgoing = str_replace(",",".",$outgoing);
+            $warehouseIncoming = guvenlik($_POST['warehouse_incoming']);
+            $warehouseIncoming = str_replace(",",".",$warehouseIncoming);
+            $warehouseOutgoing = guvenlik($_POST['warehouse_outgoing']);
+            $warehouseOutgoing = str_replace(",",".",$warehouseOutgoing);
+            $query = $db->prepare("UPDATE movements SET incoming = ?, outgoing = ?, warehouse_incoming = ?, warehouse_outgoing = ? WHERE id = ?");
+            $guncelle = $query->execute(array($incoming,$outgoing,$warehouseIncoming,$warehouseOutgoing,$id));
+            header("Location:movement.php");
+            exit();
+        }
+
+        //PAGE MODE
+        $weeklyMode = 0;
+        if(isset($_GET['weekly_mode']) && $_GET['weekly_mode'] == 1 && empty($_GET['weekly_mode']) === false){
+            $weeklyMode = 1;
+        }
+
+        //MOVEMENTS
+        $movements = $db->query("SELECT * FROM movements WHERE is_deleted = 0 AND company_id = '{$authUser->company_id}' ORDER BY date DESC")->fetchAll(PDO::FETCH_OBJ);
+        $lastMovement = $movements[0];
+        $dateObj = new DateTime($lastMovement->date);
+        $prevWeek = $dateObj->format('W');
+        $prevMonth = $dateObj->format('m');
+        $prevYear = $dateObj->format('Y');
+
+        //PRODUCTS for TOTAL WEIGHTS
+        $products = $db->query("SELECT * FROM urun WHERE silik = '0' AND sirketid = '{$authUser->company_id}'")->fetchAll(PDO::FETCH_OBJ);
+        $storeTonage = 0;
+        $warehouseTonage = 0;
+        foreach ($products as $product) {
+            $productStoreWeight = $product->urun_adet * $product->urun_birimkg;
+            $productWarehouseWeight = ($product->urun_depo_adet + $product->urun_palet) * $product->urun_birimkg;
+            $storeTonage += $productStoreWeight;
+            $warehouseTonage += $productWarehouseWeight;
+        }
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Gelen Giden</title>
-    <?php include 'template/head.php'; ?>
-  </head>
-  <body>
-    <?php include 'template/banner.php' ?>
-    <?= $error; ?>
-    <div class="container-fluid">
-    	<div class="row">
-    		<div class="col-12">
-				<div class="div4">
-					<?php
-						$totalStoreTonnage = 0;
-                        $totalWarehouseTonnage = 0;
-                        $products = $db->query("SELECT urun_adet, urun_palet, urun_depo_adet, urun_birimkg FROM urun")->fetchAll(PDO::FETCH_OBJ);
-						foreach ($products as $product) {
-                            $quantity = $product->urun_adet;
-                            $paletQuantity = $product->urun_palet;
-                            $warehouseQuantity = $product->urun_depo_adet;
-                            $unitKg = $product->urun_birimkg;
-                            $storeTonnage = $quantity * $unitKg;
-                            $warehouseTonnage = ($warehouseQuantity * $paletQuantity) * $unitKg;
-                            $totalStoreTonnage += $storeTonnage;
-                            $totalWarehouseTonnage += $warehouseTonnage;
-                        }
-					?>
-					<h1><b>Çağlayan Toplam Tonaj : <span style="color:red;"><?= $totalStoreTonnage." KG"; ?></span></b></h1>
-					<h1><b>Alkop Toplam Tonaj : <span style="color:red;"><?= $totalWarehouseTonnage." KG"; ?><span></b></h1>
-				</div>
-    			<div class="div4">
-                    <div class="row">
-                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Tarih</div>
-                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Çağlayan Giden</div>
-                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Çağlayan Gelen</div>
-                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Alkop Giden</div>
-                        <div class="col-md-2 d-none d-sm-block fs-23 bold">Alkop Gelen</div>
-                        <div class="col-md-2 col-6">
-                            <div class="row">
-                                <div class="col-md-6 col-6 p-0">
-                                <?php if($weekly == 0){ ?>
-                                    <a href="movement.php?weekly=1"><button class="btn btn-info btn-block btn-sm">Özet Göster</button></a>
-                                <?php }else{ ?>
-                                    <a href="movement.php?weekly=0"><button class="btn btn-info btn-block btn-sm">Özeti Kapat</button></a>
-                                <?php } ?>
-                                </div>
-                                <div class="col-md-6 col-6">
-                                    <a href="ggrapor.php" target="_blank"><button class="btn btn-secondary btn-sm btn-block">Rapor</button></a>
-                                </div>
-                            </div>
-                        </div>
+    <head>
+        <title>Gelen Giden</title>
+        <?php include 'template/head.php'; ?>
+    </head>
+    <body class="body-white">
+        <?php include 'template/banner.php' ?>
+        <div class="container-fluid">
+            <div class="row">
+                <div id="sidebar" class="col-md-3">
+                    <?php include 'template/sidebar2.php'; ?>
+                </div>
+                <div id="mainCol" class="col-md-9 col-12">
+                    <?= isset($error) ? $error : ''; ?>
+                    <div class="table-wrapper" style="max-height: 3000px; overflow-y: auto;">
+                        <table class="table table-bordered th-vertical-align-middle td-vertical-align-middle">
+                        <thead>
+                            <tr>
+                                <th colspan="2"><h5><b>Çağlayan Toplam Tonaj : </b></h5></th>
+                                <th><h5><?= $storeTonage." Kg" ?></h5></th>
+                                <th colspan="2"><h5><b>Alkop Toplam Tonaj : </b></h5></th>
+                                <th><h5><?= $warehouseTonage." Kg" ?></h5></th>
+                            </tr>
+                            <tr>
+                                <th><b>Tarih</b></th>
+                                <th><b>Çağlayan Giden</b></th>
+                                <th><b>Çağlayan Gelen</b></th>
+                                <th><b>Alkop Giden</b></th>
+                                <th><b>Alkop Gelen</b></th>
+                                <th>
+                                    <div class="d-flex justify-content-around">
+                                        <?php if($weeklyMode == 0){ ?>
+                                            <a href="movement.php?weekly_mode=1"><button class="btn btn-info btn-block btn-sm">Haftalık Mod</button></a>
+                                        <?php }else{ ?>
+                                            <a href="movement.php?weekly_mode=0"><button class="btn btn-info btn-block btn-sm">Günlük Mod</button></a>
+                                        <?php } ?>
+                                        <a href="ggrapor.php" target="_blank"><button class="btn btn-secondary btn-sm btn-block ml-2">Rapor</button></a>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                                // Variable initialization with consistent naming start
+                                $periods = ['weekly', 'monthly', 'yearly'];
+                                $directions = ['In', 'Out'];
+                                $types = ['', 'Alkop'];
+
+                                foreach ($periods as $period) {
+                                    foreach ($types as $type) {
+                                        foreach ($directions as $dir) {
+                                            ${$period . $type . $dir . 'Total'} = 0;
+                                        }
+                                    }
+                                }
+                                // Variable initialization with consistent naming end
+
+                                foreach ($movements as $movement) {
+                                    $movementDate = new DateTime($movement->date);
+                                    $formattedMovementDate = $movementDate->format('d/m/Y');
+                                    $week = $movementDate->format("W");
+                                    $month = $movementDate->format("m");
+                                    $year = $movementDate->format("Y");
+                                    if($week != $prevWeek){
+                            ?>
+                                        <tr>
+                                            <td><?= $week.". Hafta Toplam"; ?></td>
+                                            <td><?= $weeklyOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                            <td><?= $weeklyInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                                            <td><?= $weeklyAlkopOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                            <td><?= $weeklyAlkopInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                                        </tr>
+                            <?php
+                                        // Reset weekly totals
+                                        $weeklyTotals = ['OutTotal', 'InTotal', 'AlkopOutTotal', 'AlkopInTotal'];
+                                        foreach ($weeklyTotals as $var) {
+                                            ${'weekly' . $var} = 0;
+                                        }
+                                        $prevWeek = $week;
+                                    }
+
+                                    if($month != $prevMonth){
+                            ?>
+                                        <tr>
+                                            <td><?= getTurkishMonthName($month+1)." Ayı Toplamı"; ?></td>
+                                            <td><?= $monthlyOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                            <td><?= $monthlyInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                                            <td><?= $monthlyAlkopOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                            <td><?= $monthlyAlkopInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                                        </tr>
+                            <?php
+                                        // Reset monthly totals
+                                        $monthlyTotals = ['OutTotal', 'InTotal', 'AlkopOutTotal', 'AlkopInTotal'];
+                                        foreach ($monthlyTotals as $var) {
+                                            ${'monthly' . $var} = 0;
+                                        }
+                                        $prevMonth = $month;
+                                    }
+
+                                    if($year != $prevYear) {
+                            ?>
+                                        <tr>
+                                            <td><?= $year." Yılı Toplamı"; ?></td>
+                                            <td><?= $yearlyOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                            <td><?= $yearlyInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                                            <td><?= $yearlyAlkopOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                            <td><?= $yearlyAlkopInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                                        </tr>
+                            <?php
+                                        // Reset monthly totals
+                                        $yearlyTotals = ['OutTotal', 'InTotal', 'AlkopOutTotal', 'AlkopInTotal'];
+                                        foreach ($yearlyTotals as $var) {
+                                            ${'yearly' . $var} = 0;
+                                        }
+                                        $prevYear = $year;
+                                    }
+
+                                    // Add current movement values to weekly, monthly, and yearly totals
+                                    $values = [
+                                        'InTotal'        => $movement->incoming,
+                                        'OutTotal'       => $movement->outgoing,
+                                        'AlkopInTotal'   => $movement->warehouse_incoming,
+                                        'AlkopOutTotal'  => $movement->warehouse_outgoing,
+                                    ];
+
+                                    foreach ($periods as $period) {
+                                        foreach ($values as $suffix => $value) {
+                                            ${$period . $suffix} += $value;
+                                        }
+                                    }
+                                    // End of total accumulation
+                            ?>
+                                    <tr>
+                                        <td><?= $formattedMovementDate ?> Kg</td>
+                                        <td><?= $movement->outgoing ?> Kg</td>
+                                        <td><?= $movement->incoming ?> Kg</td>
+                                        <td><?= $movement->warehouse_outgoing ?> Kg</td>
+                                        <td><?= $movement->warehouse_incoming ?> Kg</td>
+                                        <td></td>
+                                    </tr>
+                            <?php
+                                }
+                            ?>
+                            <tr>
+                                <td><?= ($week - 1).". Hafta Toplam"; ?></td>
+                                <td><?= $weeklyOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                <td><?= $weeklyInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                                <td><?= $weeklyAlkopOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                <td><?= $weeklyAlkopInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                            </tr>
+                            <tr>
+                                <td><?= getTurkishMonthName($month)." Ayı Toplamı"; ?></td>
+                                <td><?= $monthlyOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                <td><?= $monthlyInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                                <td><?= $monthlyAlkopOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                <td><?= $monthlyAlkopInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                            </tr>
+                            <tr>
+                                <td><?= $year." Yılı Toplamı"; ?></td>
+                                <td><?= $yearlyOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                <td><?= $yearlyInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                                <td><?= $yearlyAlkopOutTotal." Kg <small>(Giden)</small>"; ?></td>
+                                <td><?= $yearlyAlkopInTotal." Kg <small>(Gelen)</small>"; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
                     </div>
-                    <hr/>
-	    			<form action="" method="POST">
-	    				<div class="row">
-	    					<div class="col-md-2 col-12" style="font-weight: bold;">
-                                <input type="date" name="date" class="form-control form-control-lg" value="<?= date('Y-m-d') ?>"/>
-	    					</div>
-	    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="outgoing" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
-	    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="incoming" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
-							<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="warehouse_outgoing" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
-	    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="warehouse_incoming" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
-	    					<div class="col-md-2 col-12"><button type="submit" name="save_movement" class="btn btn-success btn-block btn-sm">Bugünü Kaydet</button></div>
-	    				</div>
-	    			</form>
-                    <hr style="margin:5px 0px 1px 0px;" />
-	    			<?php
-	    				$haftalikGidenToplam = 0; 
-						$aylikGidenToplam = 0; 
-						$yillikGidenToplam = 0; 
-						$haftalikGelenToplam = 0; 
-						$aylikGelenToplam = 0; 
-						$yillikGelenToplam = 0;
-						$haftalikAlkopGidenToplam = 0; 
-						$aylikAlkopGidenToplam = 0; 
-						$yillikAlkopGidenToplam = 0; 
-						$haftalikAlkopGelenToplam = 0; 
-						$aylikAlkopGelenToplam = 0; 
-						$yillikAlkopGelenToplam = 0;
-	    				$query = $db->query("SELECT * FROM gelengiden WHERE silik = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
-							if ( $query->rowCount() ){
+                </div>
+            </div>
+        </div>
 
-								foreach( $query as $row ){
+        <?php include 'template/script.php'; ?>
 
-									$id = guvenlik($row['id']);
-									$gelen = guvenlik($row['gelen']);
-									$giden = guvenlik($row['giden']);
-									$alkopGelen = guvenlik($row['alkop_gelen']);
-									$alkopGiden = guvenlik($row['alkop_giden']);
-									$tarih = guvenlik($row['tarih']);
-									$saniye = guvenlik($row['saniye']);
-									$date = new DateTime($tarih);
-									$hafta = $date->format("W");
-									$ay = $date->format("m"); 
-									$yil = $date->format("Y");
-
-									if($hafta != $tempWeek){
-
-						?>
-
-										<div class="alert alert-warning" style="margin-left: -10px; margin-right:-10px; color:orange; font-weight:bold; font-size: 22px;">
-
-											<div class="row">
-											
-												<div class="col-md-2 col-12"><?= $hafta.". Hafta Toplam"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $haftalikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $haftalikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-											</div>
-
-										</div>
-
-						<?php
-
-										$haftalikGidenToplam = 0; 
-										$haftalikGelenToplam = 0;
-										$haftalikAlkopGidenToplam = 0; 
-										$haftalikAlkopGelenToplam = 0;
-
-										$tempWeek = $hafta;
-
-									}
-
-									if($ay != $tempMonth){
-
-						?>
-
-										<div class="alert alert-danger" style="margin-left: -10px; margin-right:-10px; color:red; font-weight:bold; font-size: 24px;">
-										
-											<div class="row">
-												
-												<div class="col-md-2 col-12"><?= ayAdi($ay+1)." ayı toplamı"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $aylikGidenToplam." <small>(Giden)</small>"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $aylikGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $aylikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $aylikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-											</div>
-
-										</div>
-
-						<?php
-										$aylikGidenToplam = 0; 
-										$aylikGelenToplam = 0;
-										$aylikAlkopGidenToplam = 0; 
-										$aylikAlkopGelenToplam = 0;
-
-										$tempMonth = $ay;
-
-									}
-
-									if($yil != $tempYear){
-
-						?>
-
-										<div class="alert alert-secondary" style="margin-left: -10px; margin-right:-10px; color:darkbrown; font-weight:bold; font-size: 26px;">
-
-											<div class="row">
-												
-												<div class="col-md-2 col-12">Yıllık Toplam</div>
-
-												<div class="col-md-2 col-6"><?= $yillikGidenToplam." <small>(Giden)</small>"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $yillikGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $yillikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
-
-												<div class="col-md-2 col-6"><?= $yillikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-											</div>
-
-										</div>
-
-						<?php
-
-										$yillikGidenToplam = 0; 
-										$yillikGelenToplam = 0;
-										$yillikAlkopGidenToplam = 0; 
-										$yillikAlkopGelenToplam = 0;
-
-										$tempYear = $yil;
-
-									}
-
-									$haftalikGelenToplam += $gelen; 
-									$aylikGelenToplam += $gelen; 
-									$yillikGelenToplam += $gelen; 
-
-									$haftalikGidenToplam += $giden; 
-									$aylikGidenToplam += $giden; 
-									$yillikGidenToplam += $giden; 
-
-									$haftalikAlkopGelenToplam += $alkopGelen; 
-									$aylikAlkopGelenToplam += $alkopGelen; 
-									$yillikAlkopGelenToplam += $alkopGelen; 
-
-									$haftalikAlkopGidenToplam += $alkopGiden; 
-									$aylikAlkopGidenToplam += $alkopGiden; 
-									$yillikAlkopGidenToplam += $alkopGiden; 
-
-						?>
-
-									<?php if($weekly == 0){ ?><div id="listedivi"><?php }else{ ?><div id="listedivi" style="display: none;"><?php } ?>
-
-										<form action="" method="POST">
-
-					    				<div class="row mb-1">
-				    					
-					    					<div class="col-md-2 col-12" style="font-weight: bold; font-size: 18px; padding: 1px 0px 5px 20px;"><?= $tarih; ?></div>
-
-					    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="outgoing" value="<?= $giden; ?>" class="form-control form-control-lg"></div>
-
-					    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="incoming" value="<?= $gelen; ?>" class="form-control form-control-lg"></div>
-
-											<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="warehouse_outgoing" value="<?= $alkopGiden; ?>" class="form-control form-control-lg"></div>
-
-					    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="warehouse_incoming" value="<?= $alkopGelen; ?>" class="form-control form-control-lg"></div>
-
-					    					<div class="col-md-2 col-12">
-
-					    						<input type="hidden" name="id" value="<?= $id; ?>">
-
-					    						<button type="submit" name="update_movement" class="btn btn-primary btn-block btn-lg">Düzenle</button></div>
-
-					    				</div>
-
-					    				<hr style="margin: 5px 0px 3px 0px;">
-
-					    			</form>
-
-					    		</div>
-
-						<?php
-
-								}
-
-							}
-
-	    			?>
-
-	    				<div class="alert alert-warning" style="margin-left: -10px; margin-right:-10px; color:orange; font-weight:bold; font-size: 22px;">
-
-								<div class="row">
-								
-									<div class="col-md-2 col-12"><?= ($hafta-1).". Hafta Toplam"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $haftalikGidenToplam." <small>(Giden)</small>"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $haftalikGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $haftalikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $haftalikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-								</div>
-
-							</div>
-
-							<div class="alert alert-danger" style="margin-left: -10px; margin-right:-10px; color:red; font-weight:bold; font-size: 24px;">
-										
-								<div class="row">
-									
-									<div class="col-md-2 col-12"><?= ayAdi($ay)." ayı toplamı"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $aylikGidenToplam." <small>(Giden)</small>"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $aylikGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $aylikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $aylikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-								</div>
-
-							</div>
-
-							<div class="alert alert-secondary" style="margin-left: -10px; margin-right:-10px; color:darkbrown; font-weight:bold; font-size: 26px;">
-
-								<div class="row">
-									
-									<div class="col-md-2 col-12"><?= $yil." Yılı Toplamı" ?></div>
-
-									<div class="col-md-2 col-6"><?= $yillikGidenToplam." <small>(Giden)</small>"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $yillikGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $yillikAlkopGidenToplam." <small>(Giden)</small>"; ?></div>
-
-									<div class="col-md-2 col-6"><?= $yillikAlkopGelenToplam." <small>(Gelen)</small>"; ?></div>
-
-								</div>
-
-							</div>
-
-    			</div>
-
-    		</div>
-
-    	</div>
-
-    </div>
-
-    <?php include 'template/script.php'; ?>
-
-</body>
+    </body>
 </html>
