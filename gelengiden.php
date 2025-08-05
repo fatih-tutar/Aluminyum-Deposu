@@ -221,7 +221,7 @@
 									<?php } ?>
 									</div>
 									<div class="col-md-6 col-6">
-										<a href="ggrapor.php" target="_blank"><button class="btn btn-secondary btn-sm btn-block">Rapor</button></a>
+										<a href="movement-report.php" target="_blank"><button class="btn btn-secondary btn-sm btn-block">Rapor</button></a>
 									</div>
 								</div>
 

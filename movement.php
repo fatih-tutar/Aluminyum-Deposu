@@ -146,7 +146,7 @@ if (!isLoggedIn()) {
                                         <?php }else{ ?>
                                             <a href="movement.php?weekly_mode=0"><button class="btn btn-info btn-block btn-sm">Günlük Mod</button></a>
                                         <?php } ?>
-                                        <a href="ggrapor.php" target="_blank"><button class="btn btn-secondary btn-sm btn-block ml-2">Rapor</button></a>
+                                        <a href="movement-report.php" target="_blank"><button class="btn btn-secondary btn-sm btn-block ml-2">Rapor</button></a>
                                     </div>
                                 </th>
                             </tr>
