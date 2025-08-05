@@ -50,7 +50,7 @@
 
 							<?php if($user->permissions->stock_flow == '1'){?>
 
-								<a class="dropdown-item" href="gelengiden.php"><b>GELEN/GİDEN</b></a>
+								<a class="dropdown-item" href="movement.php"><b>GELEN/GİDEN</b></a>
 
 							<?php } ?>
 

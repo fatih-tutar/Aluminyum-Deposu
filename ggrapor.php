@@ -57,7 +57,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Rapor</title>
 	<?php include 'template/head.php'; ?>
 
 	</script>
@@ -115,12 +115,10 @@
 				if ( $query->rowCount() ){
 
 					foreach( $query as $row ){
-
-						$haftasayac++;
 						$id = guvenlik($row['id']);
 						$gelen = guvenlik($row['gelen']);
 						$giden = guvenlik($row['giden']);
-						$alkoGelen = guvenlik($row['alkop_gelen']);
+						$alkopGelen = guvenlik($row['alkop_gelen']);
 						$alkopGiden = guvenlik($row['alkop_giden']);
 						$tarih = guvenlik($row['tarih']);
 						$saniye = guvenlik($row['saniye']);
