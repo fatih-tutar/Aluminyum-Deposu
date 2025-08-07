@@ -376,17 +376,17 @@
 
 				if ($urun_adet != $eskiadet) {
 					
-					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
+					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,time(),'0',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,now(),'0',$user->company_id));
 
 				}
 				
 				if ($urun_depo_adet != $eskidepoadet || $urun_palet != $eskipalet) {
 					
-					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
+					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),time(),'1',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),now(),'1',$user->company_id));
 
 				}
 
@@ -422,9 +422,9 @@
 
 				if ($urun_adet != $eskiadet) {
 					
-					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
+					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,time(),'0',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,now(),'0',$user->company_id));
 
 				}
 
@@ -456,9 +456,9 @@
 
 				if ($urun_depo_adet != $eskiadet) {
 					
-					$islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
+					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,time(),'1',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,now(),'1',$user->company_id));
 
 				}
 
@@ -490,9 +490,9 @@
 
                 if ($urun_palet != $eskiadet) {
 
-                    $islem = $db->prepare("INSERT INTO islemler SET yapanid = ?, urunid = ?, eskiadet = ?, yeniadet = ?, saniye = ?, islem_tipi = ?, sirketid = ?");
+                    $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-                    $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_palet,time(),'2',$user->company_id));
+                    $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_palet,now(),'2',$user->company_id));
 
                 }
 
@@ -966,7 +966,7 @@
 
 								<div class="col-md-2 col-8">
 
-									<a id="<?= $urun_id; ?>" href="islemler.php?id=<?= $urun_id; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
+									<a id="<?= $urun_id; ?>" href="stock-activity.php?id=<?= $urun_id; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
 
 								</div>
 
@@ -976,7 +976,7 @@
 
 								<div class="col-md-2 col-8">
 
-									<a id="<?= $urun_id; ?>" href="islemler.php?id=<?= $urun_id; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
+									<a id="<?= $urun_id; ?>" href="stock-activity.php?id=<?= $urun_id; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
 
 								</div>
 
@@ -986,7 +986,7 @@
 
 								<div class="col-md-2 col-8">
 
-									<a id="<?= $urun_id; ?>" href="islemler.php?id=<?= $urun_id; ?>" target="_blank"><b><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
+									<a id="<?= $urun_id; ?>" href="stock-activity.php?id=<?= $urun_id; ?>" target="_blank"><b><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
 
 								</div>
 

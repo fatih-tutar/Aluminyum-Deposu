@@ -5,7 +5,7 @@
 		exit();
 	}else{
 
-	}
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,7 +15,6 @@
   </head>
   <body class="body-white">
     <?php include 'template/banner.php' ?>
-
     <div class="container-fluid">
         <div class="row">
             <div id="sidebar" class="col-md-3 d-none">

@@ -92,10 +92,10 @@ if (!isLoggedIn()) {
         <?php include 'template/banner.php' ?>
         <div class="container-fluid">
             <div class="row">
-                <div id="sidebar" class="col-md-3">
+                <div id="sidebar" class="col-md-3 d-none">
                     <?php include 'template/sidebar2.php'; ?>
                 </div>
-                <div id="mainCol" class="col-md-9 col-12">
+                <div id="mainCol" class="col-md-12 col-12">
                     <?= isset($error) ? $error : ''; ?>
                     <div class="d-flex justify-content-between">
                         <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm mr-2 mb-2">
@@ -128,10 +128,8 @@ if (!isLoggedIn()) {
                         <table class="table table-bordered th-vertical-align-middle td-vertical-align-middle">
                         <thead>
                             <tr>
-                                <th colspan="2"><h5><b>Çağlayan Toplam Tonaj : </b></h5></th>
-                                <th><h5><?= $storeTonage." Kg" ?></h5></th>
-                                <th colspan="2"><h5><b>Alkop Toplam Tonaj : </b></h5></th>
-                                <th><h5><?= $warehouseTonage." Kg" ?></h5></th>
+                                <th colspan="3"><h5><b>Çağlayan Toplam Tonaj : </b><?= number_format($storeTonage, 2, ',', '.')." Kg" ?></h5></th>
+                                <th colspan="3"><h5><b>Alkop Toplam Tonaj : </b><?= number_format($warehouseTonage, 2, ',', '.')." Kg" ?></h5></th>
                             </tr>
                             <tr>
                                 <th><b>Tarih</b></th>

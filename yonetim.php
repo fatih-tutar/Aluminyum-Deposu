@@ -249,7 +249,7 @@
 
 						</form>
 
-						<a href="islemler.php">
+						<a href="stock-activity.php">
 							
 							<button class="btn btn-secondary btn-block" style="margin-bottom: 7px;">İşlem Kayıtlarına Bak</button>
 

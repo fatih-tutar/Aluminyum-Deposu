@@ -56,7 +56,7 @@
 
 							<?php if($user->permissions->transaction == '1'){?>
 
-								<a class="dropdown-item" href="islemler.php"><b>İŞLEMLER</b></a>
+								<a class="dropdown-item" href="stock-activity.php"><b>İŞLEMLER</b></a>
 
 							<?php } ?>
 

@@ -36,7 +36,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Rapor</title>
+        <title>Gelen Giden Raporu</title>
         <?php include 'template/head.php'; ?>
     </head>
     <body>

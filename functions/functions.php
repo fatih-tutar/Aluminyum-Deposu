@@ -66,15 +66,6 @@ function getFactory($factoryId) {
     return $factory;
 }
 
-function izinTarihKontrol($izinBaslangicTarihi, $iseBaslamaTarihi, $ofis) {
-    global $db;
-    $izin = $db->query("SELECT * FROM izinler WHERE ofis = '{$ofis}' AND silik = '0' AND durum != '2' AND (
-		('{$izinBaslangicTarihi}' >= izin_baslangic_tarihi AND '{$izinBaslangicTarihi}' < ise_baslama_tarihi) 
-		OR 
-		('{$iseBaslamaTarihi}' >= izin_baslangic_tarihi AND '{$iseBaslamaTarihi}' < ise_baslama_tarihi))");
-    return $izin->rowCount();
-}
-
 function hasOverlappingLeave($startDate, $returnDate, $office, $excludeId = null) {
     global $db;
 
@@ -114,13 +105,6 @@ function iseGirisTarihiGetir($uyeId) {
     global $db;
     $uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
     return $uye['hire_date'];
-}
-
-function kullanilanIzinHesapla($uyeId) {
-    global $db;
-    $yil = date("Y");
-    $kullanilanIzin = $db->query("SELECT SUM(gun_sayisi) as toplam_kullanilan FROM izinler WHERE izinli = '{$uyeId}' AND YEAR(izin_baslangic_tarihi) = '{$yil}' AND durum = '1' AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
-    return !$kullanilanIzin['toplam_kullanilan'] ? 0 : $kullanilanIzin['toplam_kullanilan'];
 }
 
 function calculateUsedLeave($uyeId, $leaveId = null) {
