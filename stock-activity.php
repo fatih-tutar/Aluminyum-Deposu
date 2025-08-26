@@ -51,7 +51,8 @@
                           <i class="fas fa-bars"></i> Menü
                       </button>
                   </div>
-                  <table class="table table-responsive table-bordered">
+                  <div class="table-wrapper" style="overflow-y: auto;">
+                    <table class="table table-bordered">
                       <thead>
                           <tr>
                               <th>Personel</th>
@@ -71,7 +72,7 @@
                             $category = getCategory($product->kategori_bir);
                             $subCategory = getCategory($product->kategori_iki);
                             $datetime = new DateTime($stockActivity->datetime);
-                            $diff = $stockActivity->prev_quantity - $stockActivity->new_quantity;
+                            $diff = $stockActivity->new_quantity - $stockActivity->prev_quantity;
                       ?>
                         <tr>
                             <td><a href="profil.php?id=<?= $stockActivity->created_by ?>"><?= $createdByName ?></a></td>
@@ -92,6 +93,7 @@
                       <?php endforeach; ?>
                       </tbody>
                   </table>
+                  </div>
               </div>
           </div>
       </div>

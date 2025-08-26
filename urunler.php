@@ -378,7 +378,7 @@
 					
 					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,now(),'0',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
 
 				}
 				
@@ -386,7 +386,7 @@
 					
 					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),now(),'1',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),date('Y-m-d H:i:s'),'1',$user->company_id));
 
 				}
 
@@ -424,7 +424,7 @@
 					
 					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,now(),'0',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
 
 				}
 
@@ -458,7 +458,7 @@
 					
 					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,now(),'1',$user->company_id));
+					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,date('Y-m-d H:i:s'),'1',$user->company_id));
 
 				}
 
@@ -492,7 +492,7 @@
 
                     $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-                    $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_palet,now(),'2',$user->company_id));
+                    $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_palet,date('Y-m-d H:i:s'),'2',$user->company_id));
 
                 }
 

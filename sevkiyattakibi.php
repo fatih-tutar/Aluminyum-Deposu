@@ -149,7 +149,7 @@ if (isset($_POST['sevkiyatkaydet'])) {
 }
 
 // SEVKİYATLAR
-$sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND manuel = '0' AND durum != '3' ORDER BY saniye DESC")->fetchAll(PDO::FETCH_OBJ);
+$sevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE silik = '0' AND manuel = '0' AND durum != '3' ORDER BY id DESC")->fetchAll(PDO::FETCH_OBJ);
 $alinanSiparisler = [];
 $hazirlananSiparisler = [];
 $faturasiKesilenler = [];
