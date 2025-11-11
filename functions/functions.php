@@ -20,6 +20,13 @@ function getCategory($categoryId)
     return $category->fetch(PDO::FETCH_OBJ);
 }
 
+function getCategoryNew($categoryId)
+{
+    global $db;
+    $category = $db->query("SELECT * FROM categories WHERE id = {$categoryId} AND is_deleted = 0");
+    return $category->fetch(PDO::FETCH_OBJ);
+}
+
 function getOffer($offerId)
 {
     global $db;
