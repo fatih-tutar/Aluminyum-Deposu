@@ -18,8 +18,6 @@
 
 		}
 
-	if($user->type != '3'){
-
 		if (isset($_POST['kategorisil'])) {
 			
 			$kategori_id = guvenlik($_POST['kategori_id']);
@@ -269,7 +267,7 @@
 
 		}
 
-	}}
+	}
 
 ?>
 
