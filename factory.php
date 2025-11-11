@@ -12,12 +12,14 @@
                 $name = guvenlik($_POST['name']);
                 $phone = guvenlik($_POST['phone']);
                 $email = guvenlik($_POST['email']);
+                $laborCost = guvenlik($_POST['labor_cost']);
+                $fineLaborCost = guvenlik($_POST['fine_labor_cost']);
                 $address = guvenlik($_POST['address']);
                 if (empty($name) || empty($phone) || empty($email) || empty($address)) {
                     $error = '<div class="alert alert-danger mb-1" role="alert">Boş bıraktığınız alanlar var, lütfen tüm alanları doldurunuz.</div>';
                 } else {
-                    $query = $db->prepare("INSERT INTO factories SET name = ?, phone = ?, email = ?, address = ?, company_id = ?, is_deleted = ?");
-                    $insert = $query->execute(array($name, $phone, $email, $address, $authUser->company_id, 0));
+                    $query = $db->prepare("INSERT INTO factories SET name = ?, phone = ?, email = ?, labor_cost = ?, fine_labor_cost = ?, address = ?, company_id = ?, is_deleted = ?");
+                    $insert = $query->execute(array($name, $phone, $email, $laborCost, $fineLaborCost, $address, $authUser->company_id, 0));
                     header("Location:factory.php");
                     exit();
                 }
@@ -28,9 +30,10 @@
                 $phone = guvenlik($_POST['phone']);
                 $email = guvenlik($_POST['email']);
                 $laborCost = guvenlik($_POST['labor_cost']);
+                $fineLaborCost = guvenlik($_POST['fine_labor_cost']);
                 $address = guvenlik($_POST['address']);
-                $query = $db->prepare("UPDATE factories SET name = ?, phone = ?, email = ?, labor_cost = ?, address = ? WHERE id = ?");
-                $guncelle = $query->execute(array($name,$phone,$email,$laborCost,$address,$id));
+                $query = $db->prepare("UPDATE factories SET name = ?, phone = ?, email = ?, labor_cost = ?, fine_labor_cost = ?, address = ? WHERE id = ?");
+                $guncelle = $query->execute(array($name, $phone, $email, $laborCost, $fineLaborCost, $address, $id));
                 $orderId = guvenlik($_POST['order_id']);
                 header("Location:factory.php#".($orderId - 2));
                 exit();
@@ -100,9 +103,17 @@
                             <span class="close" onclick="closeModal()">&times;</span>
                             <h4><b>Fabrika Kayıt Formu</b></h4>
                             <form action="" method="POST" class="mt-3">
-                                <input type="text" name="name" class="form-control mb-2" placeholder="Fabrika adını giriniz" value="<?= $_POST['name'] ?? '' ?>">
-                                <input type="text" name="phone" class="form-control mb-2" placeholder="Telefon numarasını giriniz" value="<?= $_POST['phone'] ?? '' ?>">
+                                <b>Fabrika Adı</b>
+                                <input type="text" name="name" class="form-control mb-2" placeholder="Fabrika adını yazınız" value="<?= $_POST['name'] ?? '' ?>">
+                                <b>Telefon</b>
+                                <input type="text" name="phone" class="form-control mb-2" placeholder="Telefon numarasını yazınız" value="<?= $_POST['phone'] ?? '' ?>">
+                                <b>E-posta</b>
                                 <input type="text" name="email" class="form-control mb-2" placeholder="E-posta adresini yazınız." value="<?= $_POST['email'] ?? '' ?>">
+                                <b>İşçilik Ücreti</b>
+                                <input type="text" name="labor_cost" class="form-control mb-2" placeholder="İşçilik ücretini yazınız." value="<?= $_POST['labor_cost'] ?? '' ?>">
+                                <b>İnce İşçilik Ücreti</b>
+                                <input type="text" name="fine_labor_cost" class="form-control mb-2" placeholder="İnce işçilik ücretini yazınız." value="<?= $_POST['fine_labor_cost'] ?? '' ?>">
+                                <b>Adres</b>
                                 <textarea name="address" class="form-control mb-2" rows="3" placeholder="Fabrika adresini yazınız."><?= $_POST['address'] ?? '' ?></textarea>
                                 <button type="submit" class="btn btn-primary btn-block" name="add_factory">Kaydet</button>
                             </form>
@@ -113,6 +124,8 @@
                             <thead>
                                 <tr style="color:#003566">
                                     <th>Fabrika</th>
+                                    <th>İşçilik</th>
+                                    <th>İnce İşçilik</th>
                                     <th>Telefon</th>
                                     <th>E-posta</th>
                                     <th>İşlemler</th>
@@ -122,6 +135,8 @@
                             <?php foreach ($factories as $factoryKey => $factory): ?>
                                 <tr>
                                     <td><?= $factory->name ?></td>
+                                    <td><?= $factory->labor_cost == 0 ? '' : $factory->labor_cost ?></td>
+                                    <td><?= $factory->fine_labor_cost == 0 ? '' : $factory->fine_labor_cost ?></td>
                                     <td><?= $factory->phone ?></td>
                                     <td><?= $factory->email ?></td>
                                     <td>
@@ -145,9 +160,17 @@
                                                 <span class="close" onclick="closeModal()">&times;</span>
                                                 <h4><b>Fabrika Düzenleme Formu</b></h4>
                                                 <form action="" method="POST" class="mt-3">
-                                                    <input type="text" name="name" class="form-control mb-2" placeholder="Fabrika adını giriniz" value="<?= $factory->name ?>">
-                                                    <input type="text" name="phone" class="form-control mb-2" placeholder="Telefon numarasını giriniz" value="<?= $factory->phone ?>">
+                                                    <b>Fabrika Adı</b>
+                                                    <input type="text" name="name" class="form-control mb-2" placeholder="Fabrika adını yazınız" value="<?= $factory->name ?>">
+                                                    <b>Telefon</b>
+                                                    <input type="text" name="phone" class="form-control mb-2" placeholder="Telefon numarasını yazınız" value="<?= $factory->phone ?>">
+                                                    <b>E-posta</b>
                                                     <input type="text" name="email" class="form-control mb-2" placeholder="E-posta adresini yazınız." value="<?= $factory->email ?>">
+                                                    <b>İşçilik Ücreti</b>
+                                                    <input type="text" name="labor_cost" class="form-control mb-2" placeholder="İşçilik ücretini yazınız." value="<?= $factory->labor_cost ?>">
+                                                    <b>İnce İşçilik Ücreti</b>
+                                                    <input type="text" name="fine_labor_cost" class="form-control mb-2" placeholder="İnce işçilik ücretini yazınız." value="<?= $factory->fine_labor_cost ?>">
+                                                    <b>Adres</b>
                                                     <textarea name="address" class="form-control mb-2" rows="3" placeholder="Fabrika adresini yazınız."><?= $factory->address ?></textarea>
                                                     <input type="hidden" name="id" value="<?= $factory->id ?>"/>
                                                     <input type="hidden" name="order_id" value="<?= $factoryKey ?>"/>
