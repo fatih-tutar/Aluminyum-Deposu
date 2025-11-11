@@ -57,7 +57,7 @@
 
     <div class="div4">
         <?php
-            $yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '3' AND sirket_id = '{$user->company_id}' AND silik = '0' AND manuel = '0' ORDER BY saniye DESC", PDO::FETCH_ASSOC);
+            $yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '3' AND sirket_id = '{$user->company_id}' AND silik = '0' AND manuel = '0' ORDER BY saniye DESC LIMIT 200", PDO::FETCH_ASSOC);
             if($yeniSevkiyatlar->rowCount()){
                 foreach($yeniSevkiyatlar as $sevkiyat){
                     $sevkiyatID = guvenlik($sevkiyat['id']);
