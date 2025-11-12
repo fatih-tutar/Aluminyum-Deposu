@@ -309,7 +309,7 @@ if (!isLoggedIn()) {
 <?php include 'template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="col-md-3 d-none">
+        <div id="sidebar" class="col-md-2 d-none">
             <?php include 'template/sidebar2.php'; ?>
         </div>
         <div id="mainCol" class="col-md-12 col-12">

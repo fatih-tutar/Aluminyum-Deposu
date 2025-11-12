@@ -19,10 +19,10 @@ if (!isLoggedIn()) {
 
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="col-md-3">
+        <div id="sidebar" class="col-md-2">
             <?php include 'template/sidebar2.php'; ?>
         </div>
-        <div id="mainCol" class="col-md-9 col-12">
+        <div id="mainCol" class="col-md-10 col-12">
             <div id="fiyathesaplamadivi" class="div4 col-md-4 col-12 mt-2 mb-4 p-3">
 
                 <h4 style="text-align: center;"><b>Fiyat Hesaplama</b></h4>

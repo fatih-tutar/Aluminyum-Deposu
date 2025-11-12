@@ -182,20 +182,15 @@
 
     });
 
-    function yuzdeinputuac(){
+    function yuzdeinputuac(elementId) {
+        var elem = document.getElementById(elementId);
+        if (!elem) return; // Eğer element bulunamazsa fonksiyon çıkıyor
 
-        $durum = document.getElementById('yuzdeinputu').style.display;
-
-        if ($durum == "none") {
-
-            document.getElementById('yuzdeinputu').style.display="block";
-
-        }else{
-
-            document.getElementById('yuzdeinputu').style.display="none";
-
-        }        
-
+        if (elem.style.display === "none" || elem.style.display === "") {
+            elem.style.display = "block";
+        } else {
+            elem.style.display = "none";
+        }
     }
 
     function degergoster() {
@@ -286,14 +281,14 @@
             toggleBtn.addEventListener('click', () => {
                 sidebar.classList.toggle('d-none');
                 mainCol.classList.toggle('col-md-12');
-                mainCol.classList.toggle('col-md-9');
+                mainCol.classList.toggle('col-md-10');
             });
         }
 
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
                 sidebar.classList.add('d-none');
-                mainCol.classList.remove('col-md-9');
+                mainCol.classList.remove('col-md-10');
                 mainCol.classList.add('col-md-12');
             });
         }

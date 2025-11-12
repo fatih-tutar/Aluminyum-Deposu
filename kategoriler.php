@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 	include 'functions/init.php';
 
 	if (!isLoggedIn()) {
-		
+
 		header("Location:login.php");
 
 		exit();
@@ -19,11 +19,11 @@
 		}
 
 		if (isset($_POST['kategorisil'])) {
-			
+
 			$kategori_id = guvenlik($_POST['kategori_id']);
 
 			if (kategoridolumu($kategori_id) == '1') {
-				
+
 				$error = '<br/><div class="alert alert-danger" role="alert">Silmek istediğiniz kategoride kayıtlı ürünler var. O ürünleri silmeden kategoriyi silemezsiniz.</a></div>';
 
 			}else{
@@ -42,10 +42,10 @@
 
 		if (isset($_POST['kategoriekle'])) {
 
-			$sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
+			$sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
 
 			$sutunlararray = explode(",",$sutunlar);
-			
+
 			$kategori_adi = guvenlik($_POST['kategori_adi']);
 
 			$kategori_tipi = guvenlik($_POST['kategori_tipi']);
@@ -131,7 +131,7 @@
 		}
 
 		if (isset($_POST['urunekle'])) {
-			
+
 			$kategori_iki = guvenlik($_POST['kategori_iki']);
 
 			$katbircek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
@@ -165,7 +165,7 @@
 		}
 
 		if (isset($_POST['kategoriduzenle'])) {
-			
+
 			$kategori_id = guvenlik($_POST['kategori_id']);
 
 			$kategori_adi = guvenlik($_POST['kategori_adi']);
@@ -177,12 +177,12 @@
 			$eskiresim = guvenlik($_POST['eskiresim']);
 
 			if ($kategori_tipi == 0) {
-				
+
 				$kategori_ust = 0;
 
 			}
 
-			$sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
+			$sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
 
 			$sutunlararray = explode(",",$sutunlar);
 
@@ -245,7 +245,7 @@
             $randomsayi = rand(0,10000);
 
             if (empty($dosyaadi)) {
-            	
+
             	$upload_file = $eskiresim;
 
             }else{
@@ -256,7 +256,7 @@
 
             move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/kategoriler/".$upload_file);
 
-			$query = $db->prepare("UPDATE kategori SET kategori_adi = ?, kategori_tipi = ?, kategori_ust = ?, resim = ?, sutunlar = ? WHERE kategori_id = ?"); 
+			$query = $db->prepare("UPDATE kategori SET kategori_adi = ?, kategori_tipi = ?, kategori_ust = ?, resim = ?, sutunlar = ? WHERE kategori_id = ?");
 
 			$guncelle = $query->execute(array($kategori_adi,$kategori_tipi,$kategori_ust,$upload_file,$sutunlar,$kategori_id));
 
@@ -290,9 +290,9 @@
 		<div class="container-fluid">
 
 			<div class="row">
-				
+
 				<div class="col-md-12">
-					
+
 					<?= $error; ?>
 
 				</div>
@@ -310,13 +310,13 @@
 							<h4>Ürün Ekleme</h4>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
-									
+
 									<select class="form-control" name="kategori_iki">
 
 										<option selected>Lütfen Bir Kategori Seçiniz</option>
-										
+
 										<?php
 
 											$query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '1' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY kategori_adi ASC", PDO::FETCH_ASSOC);
@@ -358,9 +358,9 @@
 							</div>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
-									
+
 									<input type="text" name="urun_adi" placeholder="Lütfen Ürün Adını Giriniz" class="form-control">
 
 								</div>
@@ -368,9 +368,9 @@
 							</div>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
-									
+
 									<button type="submit" class="btn btn-warning btn-block" name="urunekle">Ürün Ekle</button>
 
 								</div>
@@ -380,7 +380,7 @@
 						</form>
 
 					</div>
-					
+
 					<div class="div4">
 
 						<form action="" method="POST" enctype="multipart/form-data">
@@ -388,9 +388,9 @@
 							<h4>Alt Kategori Ekleme</h4>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
-									
+
 									<input type="text" name="kategori_adi" placeholder="Lütfen Kategori Adını Giriniz" class="form-control">
 
 								</div>
@@ -398,9 +398,9 @@
 							</div>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
-									
+
 									<input type="file" name="uploadfile" style="margin-bottom: 10px;">
 
 								</div>
@@ -408,11 +408,11 @@
 							</div>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
 
 									<input type="hidden" name="kategori_tipi" value="1"/>
-									
+
 									<button type="submit" class="btn btn-success btn-block" name="kategoriekle">Kategori Ekle</button>
 
 								</div>
@@ -430,9 +430,9 @@
 							<h4>Üst Kategori Ekleme</h4>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
-									
+
 									<input type="text" name="kategori_adi" placeholder="Lütfen Kategori Adını Giriniz" class="form-control">
 
 								</div>
@@ -440,9 +440,9 @@
 							</div>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
-									
+
 									<input type="file" name="uploadfile" style="margin-bottom: 10px;">
 
 								</div>
@@ -460,81 +460,81 @@
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck0" name="sutunurunkodu" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck0">Ürün Kodu<small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutunAdetCheck" name="sutunadet" checked>
-								
+
 								<label class="form-check-label" for="sutunAdetCheck">Adet <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutunPaletCheck" name="sutunpalet" checked>
-								
+
 								<label class="form-check-label" for="sutunPaletCheck">Palet <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutunDepoAdetCheck" name="sutundepoadet" checked>
-								
+
 								<label class="form-check-label" for="sutunDepoAdetCheck">Depo Adet <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutunrafCheck" name="sutunraf" checked>
-								
+
 								<label class="form-check-label" for="sutunrafCheck">Raf <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck2" name="sutunbirimkg" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck2">Birim Kg <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck3" name="sutuntoplam" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck3">Toplam <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck4" name="sutunalis" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck4">Alış <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck5" name="sutunsatis" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck5">Satış <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck6" name="sutunfabrika" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck6">Fabrika <small>(2 birim)</small></label>
-							
+
 							</div>
 
 							<hr/>
@@ -544,81 +544,81 @@
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck10" name="sutunsiparisadedi" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck10">Sipariş Adedi<small>(1 birim)</small></label>
-							
-							</div>	
+
+							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutunuyariadedi" name="sutunuyariadedi" checked>
-								
+
 								<label class="form-check-label" for="sutunuyariadedi">Uyarı Adedi<small>(1 birim)</small></label>
-							
+
 							</div>
-							
+
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutundepouyariadet" name="sutundepouyariadet" checked>
-								
+
 								<label class="form-check-label" for="sutundepouyariadet">Depo Uyarı Adedi<small>(1 birim)</small></label>
-							
+
 							</div>
-							
+
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutunsipariskilo" name="sutunsipariskilo" checked>
-								
+
 								<label class="form-check-label" for="sutunsipariskilo">Sipariş Kilo<small>(1 birim)</small></label>
-							
-							</div>	
+
+							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutunboyolcusu" name="sutunboyolcusu" checked>
-								
+
 								<label class="form-check-label" for="sutunboyolcusu">Boy Ölçüsü<small>(1 birim)</small></label>
-							
-							</div>	
+
+							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutunmusteriismi" name="sutunmusteriismi" checked>
-								
+
 								<label class="form-check-label" for="sutunmusteriismi">Müşteri İsmi<small>(1 birim)</small></label>
-							
-							</div>	
+
+							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutuntarih" name="sutuntarih" checked>
-								
+
 								<label class="form-check-label" for="sutuntarih">Tarih<small>(1 birim)</small></label>
-							
-							</div>	
+
+							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutuntermin" name="sutuntermin" checked>
-								
+
 								<label class="form-check-label" for="sutuntermin">Termin<small>(1 birim)</small></label>
-							
-							</div>	
+
+							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sutunmanuelsatis" name="sutunmanuelsatis" onchange="yuzdeinputuac('yuzdeinputu');" checked >
-								
+
 								<label class="form-check-label" for="sutunmanuelsatis">Manuel Satış<small>(1 birim)</small></label>
-							
-							</div>	
+
+							</div>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
 
 									<div id="yuzdeinputu" style="display: none;">
-									
+
 										<input type="text" name="karyuzdesi" class="form-control" placeholder="Kâr yüzdenizi sadece sayı ile yazınız.">
 
 									</div>
@@ -634,43 +634,43 @@
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck7" name="sutunteklifbutonu" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck7">Teklif Butonu <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck8" name="sutunsiparisbutonu" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck8">Sipariş Butonu <small>(1 birim)</small></label>
-							
+
 							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="sevkiyatButonuCheckCreate" name="sutunsevkiyatbutonu" checked>
-								
+
 								<label class="form-check-label" for="sevkiyatButonuCheckCreate">Sevkiyat Butonu <small>(1 birim)</small></label>
-							
-							</div>	
+
+							</div>
 
 							<div class="form-check">
 
 								<input type="checkbox" class="form-check-input" id="exampleCheck9" name="sutunduzenlebutonu" checked>
-								
+
 								<label class="form-check-label" for="exampleCheck9">Düzenle Butonu <small>(1 birim)</small></label>
-							
-							</div>	
-							
+
+							</div>
+
 							<br/>
 
 							<div class="row form-group">
-								
+
 								<div class="col-12">
 
 									<input type="hidden" name="kategori_tipi" value="0"/>
-									
+
 									<button type="submit" class="btn btn-info btn-block" name="kategoriekle">Kategori Ekle</button>
 
 								</div>
@@ -682,19 +682,19 @@
 					</div>
 
 				</div>
-				
+
 				<div class="col-md-9 col-12">
-					
+
 					<div class="div4">
-				
+
 						<h4>Kategorileri Düzenleme</h4>
 
 						<hr style="margin: 5px;" />
 
 						<div class="row" style="margin-top:15px;">
-							
+
 							<div class="col-md-6">
-								
+
 								<h5><b>Üst Kategoriler</b></h5>
 
 								<hr style="margin: 5px;" />
@@ -737,16 +737,16 @@
 									$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
 									$sutunpaletizni = $sutunlaripatlat[22];
 
-						?>			
+						?>
 
 									<div class="row" style="padding: 10px;">
-										
+
 										<div class="col-12">
-											
+
 											<div class="row" style="margin-bottom: 3px;">
-												
+
 												<div class="col-12">
-													
+
 													<a href="#" onclick="return false" onmousedown="javascript:ackapa('kategoriduzenlemeformu<?= $kategori_id; ?>');">
 
 														<div><?= $kategori_adi; ?></div>
@@ -758,11 +758,11 @@
 											</div>
 
 											<div id="kategoriduzenlemeformu<?= $kategori_id; ?>" style="display:none; background-color: #e6ecf0; padding: 10px;">
-												
+
 												<form action="" method="POST" enctype="multipart/form-data">
 
 													<div class="row" style="margin-bottom: 3px;">
-														
+
 														<div class="col-12"><input type="text" name="kategori_adi" value="<?= $kategori_adi; ?>" class="form-control"></div>
 
 													</div>
@@ -770,7 +770,7 @@
 													<div class="row" style="margin-bottom: 3px;">
 
 														<div class="col-12">
-																
+
 															<select class="form-control" name="kategori_tipi">
 
 																<?php if($kategori_tipi == '0'){?>
@@ -785,7 +785,7 @@
 
 																	<option selected value="1">Alt Kategori</option>
 
-																<?php } ?>									
+																<?php } ?>
 
 															</select>
 
@@ -798,7 +798,7 @@
 														<div class="col-12">
 
 															<?php if($kategori_tipi == 1){ ?>
-															
+
 															<select class="form-control" name="kategori_ust">
 
 																<option value="0">Kategori Seçiniz</option>
@@ -822,7 +822,7 @@
 
 																	}
 
-																?>								
+																?>
 
 															</select>
 
@@ -843,7 +843,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck0ug" name="sutunurunkodu" <?= $sutunurunkoduizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck0ug">Ürün Kodu<small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -851,7 +851,7 @@
 															<input type="checkbox" class="form-check-input" id="checkAdet" name="sutunadet" <?= $sutunadetizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="checkAdet">Adet <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -859,7 +859,7 @@
 															<input type="checkbox" class="form-check-input" id="checkPalet" name="sutunpalet" <?= $sutunpaletizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="checkPalet">Palet <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -867,7 +867,7 @@
 															<input type="checkbox" class="form-check-input" id="checkDepoAdet" name="sutundepoadet" <?= $sutundepoadetizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="checkDepoAdet">Depo Adet <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -875,7 +875,7 @@
 															<input type="checkbox" class="form-check-input" id="sutunRafCheckUpdate" name="sutunraf" <?= $sutunrafizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunRafCheckUpdate">Raf <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -883,7 +883,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck2" name="sutunbirimkg" <?= $sutunbirimkgizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck2">Birim Kg <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -891,7 +891,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck3" name="sutuntoplam" <?= $sutuntoplamizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck3">Toplam <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -899,7 +899,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck4" name="sutunalis" <?= $sutunalisizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck4">Alış <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -907,7 +907,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck5" name="sutunsatis" <?= $sutunsatisizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck5">Satış <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -915,7 +915,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck6" name="sutunfabrika" <?= $sutunfabrikaizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck6">Fabrika <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<hr/>
@@ -927,75 +927,75 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck10" name="sutunsiparisadedi" <?= $sutunsiparisadediizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck10">Sipariş Adedi<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutunuyariadedi" name="sutunuyariadedi" <?= $sutunuyariadediizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunuyariadedi">Uyarı Adedi<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutundepouyariadet" name="sutundepouyariadet" <?= $sutundepouyariizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutundepouyariadet">Depo Uyarı Adedi<small>(1 birim)</small></label>
-														
-														</div>	
-														
+
+														</div>
+
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutunsipariskilo" name="sutunsipariskilo" <?= $sutunsipariskiloizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunsipariskilo">Sipariş Kilo<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutunboyolcusu" name="sutunboyolcusu" <?= $sutunboyolcusuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunboyolcusu">Boy Ölçüsü<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutunmusteriismi" name="sutunmusteriismi" <?= $sutunmusteriismiizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunmusteriismi">Müşteri İsmi<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutuntarih" name="sutuntarih" <?= $sutuntarihizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutuntarih">Tarih<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutuntermin" name="sutuntermin" <?= $sutunterminizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutuntermin">Termin<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutunmanuelsatis2" name="sutunmanuelsatis" onchange="yuzdeinputuac('yuzdeinputu<?= $kategori_id; ?>');" c<?= $sutunmanuelsatisizni == 1 ? 'hecked ' : '' ?> >
 
 															<label class="form-check-label" for="sutunmanuelsatis2">Manuel Satış<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="row form-group">
-															
+
 															<div class="col-12">
 
 																<?php if($sutunmanuelsatisizni == 1){ ?>
@@ -1007,7 +1007,7 @@
 																<div id="yuzdeinputu<?= $kategori_id; ?>">
 
 																<?php } ?>
-																
+
 																	<input type="text" name="karyuzdesi" class="form-control" placeholder="Kâr yüzdenizi sadece sayı ile yazınız." value="<?= $karyuzdesi; ?>">
 
 																</div>
@@ -1025,7 +1025,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck7" name="sutunteklifbutonu" <?= $sutunteklifbutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck7">Teklif Butonu <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1033,7 +1033,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck8" name="sutunsiparisbutonu" <?= $sutunsiparisbutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck8">Sipariş Butonu <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1041,7 +1041,7 @@
 															<input type="checkbox" class="form-check-input" id="sevkiyatButonuCheckEdit" name="sutunsevkiyatbutonu" <?= $sutunsevkiyatbutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sevkiyatButonuCheckEdit">Sevkiyat Butonu <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1049,13 +1049,13 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck9" name="sutunduzenlebutonu" <?= $sutunduzenlebutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck9">Düzenle Butonu <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<hr/>
 
 														<div class="form-group">
-															
+
 															<input type="file" name="uploadfile" style="margin-bottom: 10px;">
 
 														</div>
@@ -1072,7 +1072,7 @@
 
 															<button type="submit" name="kategoriduzenle" class="btn btn-warning btn-sm btn-block">Kaydet</button>
 
-														</div>	
+														</div>
 
 													</div>
 
@@ -1085,7 +1085,7 @@
 														<div class="col-12">
 
 															<input type="hidden" name="kategori_id" value="<?= $kategori_id; ?>">
-														
+
 															<button type="submit" name="kategorisil" class="btn btn-danger btn-sm btn-block">Sil</button>
 
 														</div>
@@ -1100,7 +1100,7 @@
 
 									</div>
 
-									<hr style="margin: 5px;" />						
+									<hr style="margin: 5px;" />
 
 						<?php
 
@@ -1113,9 +1113,9 @@
 							</div>
 
 							<div class="col-md-6">
-								
+
 								<h5><b>Alt Kategoriler</b></h5>
-						
+
 								<hr style="margin: 5px;" />
 
 						<?php
@@ -1179,21 +1179,21 @@
 									$sutundepouyariizni = $sutunlaripatlat[19];
 
 									$sutunrafizni = $sutunlaripatlat[20];
-									
+
 									$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
 
 									$sutunpaletizni = $sutunlaripatlat[22];
 
-						?>			
+						?>
 
 									<div class="row" style="padding: 10px;">
-										
+
 										<div class="col-12">
-											
+
 											<div class="row" style="margin-bottom: 3px;">
-												
+
 												<div class="col-12">
-													
+
 													<a href="#" onclick="return false" onmousedown="javascript:ackapa('kategoriduzenlemeformu<?= $kategori_id; ?>');">
 
 														<div><?= $kategori_adi; ?></div>
@@ -1205,11 +1205,11 @@
 											</div>
 
 											<div id="kategoriduzenlemeformu<?= $kategori_id; ?>" style="display:none; background-color: #e6ecf0; padding: 10px;">
-												
+
 												<form action="" method="POST" enctype="multipart/form-data">
 
 													<div class="row" style="margin-bottom: 3px;">
-														
+
 														<div class="col-12"><input type="text" name="kategori_adi" value="<?= $kategori_adi; ?>" class="form-control"></div>
 
 													</div>
@@ -1217,7 +1217,7 @@
 													<div class="row" style="margin-bottom: 3px;">
 
 														<div class="col-12">
-																
+
 															<select class="form-control" name="kategori_tipi">
 
 																<?php if($kategori_tipi == '0'){?>
@@ -1232,7 +1232,7 @@
 
 																	<option selected value="1">Alt Kategori</option>
 
-																<?php } ?>									
+																<?php } ?>
 
 															</select>
 
@@ -1245,7 +1245,7 @@
 														<div class="col-12">
 
 															<?php if($kategori_tipi == 1){ ?>
-															
+
 															<select class="form-control" name="kategori_ust">
 
 																<option value="0">Kategori Seçiniz</option>
@@ -1266,17 +1266,17 @@
 
 																				<option selected value="<?= $ust_kategori_id; ?>"><?= $ust_kategori_adi; ?></option>
 
-																			<?php }else{ ?> 
+																			<?php }else{ ?>
 
 																				<option value="<?= $ust_kategori_id; ?>"><?= $ust_kategori_adi; ?></option>
 
-																			<?php } 
+																			<?php }
 
 																		}
 
 																	}
 
-																?>								
+																?>
 
 															</select>
 
@@ -1297,7 +1297,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck0" name="sutunurunkodu" <?= $sutunurunkoduizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck0">Ürün Kodu<small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1305,7 +1305,7 @@
 															<input type="checkbox" class="form-check-input" id="adetControl" name="sutunadet" <?= $sutunadetizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="adetControl">Adet <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1313,7 +1313,7 @@
 															<input type="checkbox" class="form-check-input" id="paletControl" name="sutunpalet" <?= $sutunpaletizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="paletControl">Palet <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1321,7 +1321,7 @@
 															<input type="checkbox" class="form-check-input" id="depoAdetControl" name="sutundepoadet" <?= $sutundepoadetizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="depoAdetControl">Depo Adet <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1329,7 +1329,7 @@
 															<input type="checkbox" class="form-check-input" id="sutunRafCheckEdit" name="sutunraf" <?= $sutunrafizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunRafCheckEdit">Raf <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1337,7 +1337,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck2" name="sutunbirimkg" <?= $sutunbirimkgizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck2">Birim Kg <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1345,7 +1345,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck3" name="sutuntoplam" <?= $sutuntoplamizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck3">Toplam <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1353,7 +1353,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck4" name="sutunalis" <?= $sutunalisizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck4">Alış <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1361,7 +1361,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck5" name="sutunsatis" <?= $sutunsatisizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck5">Satış <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1369,7 +1369,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck6" name="sutunfabrika" <?= $sutunfabrikaizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck6">Fabrika <small>(2 birim)</small></label>
-														
+
 														</div>
 
 														<hr/>
@@ -1381,81 +1381,81 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck10" name="sutunsiparisadedi" <?= $sutunsiparisadediizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck10">Sipariş Adedi<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutunuyariadedi" name="sutunuyariadedi" <?= $sutunuyariadediizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunuyariadedi">Uyarı Adedi<small>(1 birim)</small></label>
-														
+
 														</div>
-														
+
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutundepouyariadet" name="sutundepouyariadet" <?= $sutundepouyariizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutundepouyariadet">Depo Uyarı Adedi<small>(1 birim)</small></label>
-														
+
 														</div>
-														
+
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutunsipariskilo" name="sutunsipariskilo" <?= $sutunsipariskiloizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunsipariskilo">Sipariş Kilo<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutunboyolcusu" name="sutunboyolcusu" <?= $sutunboyolcusuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunboyolcusu">Boy Ölçüsü<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutunmusteriismi" name="sutunmusteriismi" <?= $sutunmusteriismiizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutunmusteriismi">Müşteri İsmi<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutuntarih" name="sutuntarih" <?= $sutuntarihizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutuntarih">Tarih<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<input type="checkbox" class="form-check-input" id="sutuntermin" name="sutuntermin" <?= $sutunterminizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sutuntermin">Termin<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="form-check">
 
 															<?php if($sutunmanuelsatisizni == 1){ ?><input type="checkbox" class="form-check-input" id="sutunmanuelsatis3" name="sutunmanuelsatis" onchange="yuzdeinputuac('yuzdeinputu3');">
 
 															<?php }else{ ?><input type="checkbox" class="form-check-input" id="sutunmanuelsatis3" name="sutunmanuelsatis" onchange="yuzdeinputuac('yuzdeinputu3');" checked ><?php } ?>
-															
+
 															<label class="form-check-label" for="sutunmanuelsatis3">Manuel Satış<small>(1 birim)</small></label>
-														
-														</div>	
+
+														</div>
 
 														<div class="row form-group">
-															
+
 															<div class="col-12">
 
 																<div id="yuzdeinputu3" style="display: none;">
-																
+
 																	<input type="text" name="karyuzdesi" class="form-control" placeholder="Kâr yüzdenizi sadece sayı ile yazınız.">
 
 																</div>
@@ -1473,7 +1473,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck7" name="sutunteklifbutonu" <?= $sutunteklifbutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck7">Teklif Butonu <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1481,7 +1481,7 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck8" name="sutunsiparisbutonu" <?= $sutunsiparisbutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck8">Sipariş Butonu <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1489,7 +1489,7 @@
 															<input type="checkbox" class="form-check-input" id="sevkiyatButonuCheckUpdate" name="sutunsevkiyatbutonu" <?= $sutunsevkiyatbutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="sevkiyatButonuCheckUpdate">Sevkiyat Butonu <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<div class="form-check">
@@ -1497,13 +1497,13 @@
 															<input type="checkbox" class="form-check-input" id="exampleCheck9" name="sutunduzenlebutonu" <?= $sutunduzenlebutonuizni == 1 ? 'checked' : '' ?> >
 
 															<label class="form-check-label" for="exampleCheck9">Düzenle Butonu <small>(1 birim)</small></label>
-														
+
 														</div>
 
 														<hr/>
 
 														<div class="form-group">
-															
+
 															<input type="file" name="uploadfile" style="margin-bottom: 10px;">
 
 														</div>
@@ -1518,7 +1518,7 @@
 
 															<button type="submit" name="kategoriduzenle" class="btn btn-warning btn-sm btn-block">Kaydet</button>
 
-														</div>	
+														</div>
 
 													</div>
 
@@ -1531,7 +1531,7 @@
 														<div class="col-12">
 
 															<input type="hidden" name="kategori_id" value="<?= $kategori_id; ?>">
-														
+
 															<button type="submit" name="kategorisil" class="btn btn-danger btn-sm btn-block">Sil</button>
 
 														</div>
@@ -1546,7 +1546,7 @@
 
 									</div>
 
-									<hr style="margin: 5px;" />						
+									<hr style="margin: 5px;" />
 
 						<?php
 
@@ -1560,8 +1560,8 @@
 							</div>
 
 						</div>
-						
-						
+
+
 					</div>
 
 				</div>

@@ -132,10 +132,10 @@ if (!isLoggedIn()) {
 
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="col-md-3">
+        <div id="sidebar" class="col-md-2">
             <?php include 'template/sidebar2.php'; ?>
         </div>
-        <div id="mainCol" class="col-md-9 col-12">
+        <div id="mainCol" class="col-md-10 col-12">
             <?php if(isset($agirlikHata) === true){ ?>
                 <div class="row">
                     <div class="col-md-12">

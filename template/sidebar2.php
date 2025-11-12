@@ -1,6 +1,6 @@
 <style>
     .sidebar-font{
-        font-size:14px; 
+        font-size:12px;
         font-weight:bold;
     }
     .sidebar-item {
@@ -9,11 +9,6 @@
     }
 </style>
 <div id="accordion" class="mt-2">
-    <div class="d-flex justify-content-end pr-2">
-        <button id="closeSidebarBtn" class="btn btn-sm" style="font-size: 1.5rem; line-height: 1; padding: 0 8px;">
-            &times;
-        </button>
-    </div>
     <?php
         $i = 0;
         $query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
