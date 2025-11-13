@@ -1,270 +1,180 @@
 <?php
-
 include 'functions/init.php';
-
 if (!isLoggedIn()) {
-
     header("Location:login.php");
-
     exit();
-
 }elseif (isLoggedIn()) {
-
     if($user->type == '0'){
-
         header("Location:index.php");
-
         exit();
-
     }
-
-    if (isset($_POST['kategorisil'])) {
-
-        $kategori_id = guvenlik($_POST['kategori_id']);
-
-        if (kategoridolumu($kategori_id) == '1') {
-
+    
+    if (isset($_POST['delete_category'])) {
+        $id = guvenlik($_POST['id']);
+        if (categoryHasProducts($id) == '1') {
             $error = '<br/><div class="alert alert-danger" role="alert">Silmek istediğiniz kategoride kayıtlı ürünler var. O ürünleri silmeden kategoriyi silemezsiniz.</a></div>';
-
         }else{
-
-            $sil = $db->prepare("UPDATE kategori SET silik = ? WHERE kategori_id = ?");
-
-            $delete = $sil->execute(array('1',$kategori_id));
-
-            header("Location:kategoriler.php");
-
+            $query = $db->prepare("UPDATE categories SET is_deleted = ? WHERE id = ?");
+            $delete = $query->execute(array('1',$id));
+            header("Location:categories.php");
             exit();
-
         }
-
     }
+    
+    if (isset($_POST['add_category'])) {
+        $name = guvenlik($_POST['name']);
+        $type = guvenlik($_POST['type']);
+        $parentId = ($type == '0') ? 0 : guvenlik($_POST['parent_id'] ?? 0);
 
-    if (isset($_POST['kategoriekle'])) {
-
-        $sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
-
-        $sutunlararray = explode(",",$sutunlar);
-
-        $kategori_adi = guvenlik($_POST['kategori_adi']);
-
-        $kategori_tipi = guvenlik($_POST['kategori_tipi']);
-
-        if($kategori_tipi == '0'){
-
-            if(!isset($_POST['sutunadet'])){ $sutunlararray[0] = 0; }
-
-            if(!isset($_POST['sutunbirimkg'])){ $sutunlararray[1] = 0; }
-
-            if(!isset($_POST['sutuntoplam'])){ $sutunlararray[2] = 0; }
-
-            if(!isset($_POST['sutunalis'])){ $sutunlararray[3] = 0; }
-
-            if(!isset($_POST['sutunsatis'])){ $sutunlararray[4] = 0; }
-
-            if(!isset($_POST['sutunfabrika'])){ $sutunlararray[5] = 0; }
-
-            if(!isset($_POST['sutunteklifbutonu'])){ $sutunlararray[6] = 0; }
-
-            if(!isset($_POST['sutunsiparisbutonu'])){ $sutunlararray[7] = 0; }
-
-            if(!isset($_POST['sutunduzenlebutonu'])){ $sutunlararray[8] = 0; }
-
-            if(!isset($_POST['sutunsiparisadedi'])){ $sutunlararray[9] = 0; }
-
-            if(!isset($_POST['sutunuyariadedi'])){ $sutunlararray[10] = 0; }
-
-            if(!isset($_POST['sutunsipariskilo'])){ $sutunlararray[11] = 0; }
-
-            if(!isset($_POST['sutunboyolcusu'])){ $sutunlararray[12] = 0; }
-
-            if(!isset($_POST['sutunmusteriismi'])){ $sutunlararray[13] = 0; }
-
-            if(!isset($_POST['sutuntarih'])){ $sutunlararray[14] = 0; }
-
-            if(!isset($_POST['sutuntermin'])){ $sutunlararray[15] = 0; }
-
-            if(!isset($_POST['sutunmanuelsatis'])){ $sutunlararray[16] = 0; }
-
-            if(!isset($_POST['sutunurunkodu'])){ $sutunlararray[17] = 0; }
-
-            if(!isset($_POST['sutundepoadet'])){ $sutunlararray[18] = 0; }
-
-            if(!isset($_POST['sutundepouyariadet'])){ $sutunlararray[19] = 0; }
-
-            if(!isset($_POST['sutunraf'])){ $sutunlararray[20] = 0; }
-
-            if(!isset($_POST['sutunsevkiyatbutonu'])){ $sutunlararray[21] = 0; }
-
-            if(!isset($_POST['sutunpalet'])){ $sutunlararray[22] = 0; }
-
-            $sutunlar = implode(",",$sutunlararray);
-
-        }else if($kategori_tipi == '1'){
-
-            $sutunlar = '';
-
+        // Görsel işlemi
+        $uploadFile = null;
+        if (!empty($_FILES['uploadfile']['name'])) {
+            $temp = explode(".", $_FILES['uploadfile']['name']);
+            $filename = pathinfo($_FILES['uploadfile']['name'], PATHINFO_FILENAME);
+            $extension = strtolower(end($temp));
+            $randomNum = rand(0, 10000);
+            $uploadFile = $filename . $randomNum . "." . $extension;
+            move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/kategoriler/" . $uploadFile);
         }
 
-        $allow = array('pdf');
+        $manualSalesSelected = false;
+        if (!empty($_POST['columns']) && is_array($_POST['columns'])) {
+            // Burada 'manual_sales_column_id' yerine senin manuel satış column_id değerini kullan
+            $manualSalesColumnId = 19; //manuel satışın category_columns_definitions tablosundaki id'si
+            $manualSalesSelected = in_array($manualSalesColumnId, $_POST['columns']);
+        }
 
-        $temp = explode(".", $_FILES['uploadfile']['name']);
+        // profit_margin sadece manual_sales seçili değilse alınır
+        $profitMargin = (!$manualSalesSelected && !empty($_POST['profit_margin'])) ? guvenlik($_POST['profit_margin']) : null;
 
-        $dosyaadi = $temp[0];
+        $query = $db->prepare("INSERT INTO categories SET name = ?, type = ?, parent_id = ?, image = ?, profit_margin = ?, company_id = ?, is_deleted = ?");
+        $insert = $query->execute(array($name,$type,$parentId,$uploadFile,$profitMargin,$user->company_id,'0'));
 
-        $extension = end($temp);
+        if ($insert) {
+            $categoryId = $db->lastInsertId();
 
-        $randomsayi = rand(0,10000);
+            // Checkboxlardan gelen sütunları al
+            if (!empty($_POST['columns']) && is_array($_POST['columns'])) {
+                $columns = $_POST['columns'];
 
-        $upload_file = $dosyaadi.$randomsayi.".".$extension;
+                $colInsert = $db->prepare("
+                INSERT INTO category_columns (category_id, column_id) VALUES (?, ?)
+            ");
 
-        move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/kategoriler/".$upload_file);
+                foreach ($columns as $colId) {
+                    $colInsert->execute([$categoryId, $colId]);
+                }
+            }
+        }
 
-        $query = $db->prepare("INSERT INTO kategori SET kategori_adi = ?, kategori_tipi = ?, kategori_ust = ?, resim = ?, sutunlar = ?, sirketid = ?, silik = ?");
-
-        $insert = $query->execute(array($kategori_adi,$kategori_tipi,'0',$upload_file,$sutunlar,$user->company_id,'0'));
-
-        header("Location:kategoriler.php");
-
+        header("Location:categories.php");
         exit();
-
     }
 
-    if (isset($_POST['urunekle'])) {
+    if (isset($_POST['add_product'])) {
+        $mainCategory = guvenlik($_POST['main_category']);
+        $subCategory = guvenlik($_POST['sub_category']);
+        $name = guvenlik($_POST['name']);
 
-        $kategori_iki = guvenlik($_POST['kategori_iki']);
+        // son ürün sırasını bul
+        $getLastProduct = $db->query("
+            SELECT * FROM urun 
+            WHERE kategori_iki = '{$subCategory}' 
+              AND kategori_bir = '{$mainCategory}' 
+              AND sirketid = '{$user->company_id}' 
+            ORDER BY urun_sira DESC 
+            LIMIT 1
+        ", PDO::FETCH_ASSOC);
 
-        $katbircek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+        $lastProductNumber = 0;
+        if ($getLastProduct->rowCount()) {
+            $suc = $getLastProduct->fetch();
+            $lastProductNumber = $suc['urun_sira'];
+        }
+        $lastProductNumber++;
 
-        $kategori_bir = $katbircek['kategori_ust'];
+        $query = $db->prepare("INSERT INTO urun SET 
+            kategori_bir = ?, 
+            kategori_iki = ?, 
+            urun_kodu = ?, 
+            urun_adi = ?, 
+            urun_sira = ?, 
+            sirketid = ?, 
+            silik = '0'
+        ");
+        $insert = $query->execute([
+            $mainCategory,
+            $subCategory,
+            '',
+            $name,
+            $lastProductNumber,
+            $user->company_id
+        ]);
 
-        $urun_adi = guvenlik($_POST['urun_adi']);
+        header("Location:categories.php");
+        exit();
+    }
 
-        $sonuruncek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$kategori_iki}' AND kategori_bir = '{$kategori_bir}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira DESC LIMIT 1", PDO::FETCH_ASSOC);
+    if (isset($_POST['edit_category'])) {
+        $id = guvenlik($_POST['id']);
+        $name = guvenlik($_POST['name']);
+        $parentId = guvenlik($_POST['parent_id']) ?? null;
+        $image = guvenlik($_POST['image']);
 
-        if ( $sonuruncek->rowCount() ){
+        // Dosya yükleme
+        if (!empty($_FILES['uploadfile']['name'])) {
+            $temp = explode(".", $_FILES['uploadfile']['name']);
+            $filename = $temp[0];
+            $extension = end($temp);
+            $randomNum = rand(0,10000);
+            $uploadFile = $filename.$randomNum.".".$extension;
+            move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/kategoriler/".$uploadFile);
+        } else {
+            $uploadFile = $image;
+        }
 
-            foreach( $sonuruncek as $suc ){
+        // manual_sales checkbox seçili mi?
+        $manualSalesSelected = isset($_POST['columns'][$id]) && in_array(19, $_POST['columns'][$id]);
 
-                $sonurunsirasi = $suc['urun_sira'];
+        // Kar yüzdesi yalnızca manual_sales seçili değilse kaydedilecek
+        $profitMargin = (!$manualSalesSelected && !empty($_POST['karyuzdesi'])) ? guvenlik($_POST['karyuzdesi']) : null;
 
+        // Kategoriyi güncelle
+        $query = $db->prepare("UPDATE categories SET name = ?, parent_id = ?, image = ?, profit_margin = ? WHERE id = ?");
+        $update = $query->execute([$name, $parentId, $uploadFile, $profitMargin, $id]);
+
+        // Checkbox işlemleri (category_columns tablosu)
+        if (isset($_POST['columns'][$id])) {
+            $selectedColumns = $_POST['columns'][$id]; // Formdan gelen seçili checkboxlar
+            // Önce mevcut seçimleri al
+            $existingQuery = $db->prepare("SELECT column_id FROM category_columns WHERE category_id = ?");
+            $existingQuery->execute([$id]);
+            $existingColumns = $existingQuery->fetchAll(PDO::FETCH_COLUMN, 0);
+
+            // Silinecekler (önceden var ama artık seçili olmayanlar)
+            $toDelete = array_diff($existingColumns, $selectedColumns);
+            if (!empty($toDelete)) {
+                $in  = str_repeat('?,', count($toDelete) - 1) . '?';
+                $deleteQuery = $db->prepare("DELETE FROM category_columns WHERE category_id = ? AND column_id IN ($in)");
+                $deleteQuery->execute(array_merge([$id], $toDelete));
             }
 
+            // Eklenecekler (seçili ama önceden yok)
+            $toAdd = array_diff($selectedColumns, $existingColumns);
+            if (!empty($toAdd)) {
+                $insertQuery = $db->prepare("INSERT INTO category_columns (category_id, column_id) VALUES (?, ?)");
+                foreach ($toAdd as $colId) {
+                    $insertQuery->execute([$id, $colId]);
+                }
+            }
+        } else {
+            // Eğer hiçbir checkbox seçili değilse, tüm kayıtları sil
+            $deleteQuery = $db->prepare("DELETE FROM category_columns WHERE category_id = ?");
+            $deleteQuery->execute([$id]);
         }
 
-        $sonurunsirasi++;
-
-        $query = $db->prepare("INSERT INTO urun SET kategori_bir = ?, kategori_iki = ?, urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, urun_fabrika = ?, urun_stok = ?, urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, musteri_ismi = ?, tarih = ?, termin = ?, satis = ?, sirketid = ?, silik = ?");
-
-        $insert = $query->execute(array($kategori_bir,$kategori_iki,'',$urun_adi,'','','','','','','','','','','',$sonurunsirasi,'','','','',$user->company_id,'0'));
-
-        header("Location:kategoriler.php");
-
+        header("Location:categories.php");
         exit();
-
-    }
-
-    if (isset($_POST['kategoriduzenle'])) {
-
-        $kategori_id = guvenlik($_POST['kategori_id']);
-
-        $kategori_adi = guvenlik($_POST['kategori_adi']);
-
-        $kategori_tipi = guvenlik($_POST['kategori_tipi']);
-
-        $kategori_ust = guvenlik($_POST['kategori_ust']);
-
-        $eskiresim = guvenlik($_POST['eskiresim']);
-
-        if ($kategori_tipi == 0) {
-
-            $kategori_ust = 0;
-
-        }
-
-        $sutunlar = '1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1';
-
-        $sutunlararray = explode(",",$sutunlar);
-
-        if(!isset($_POST['sutunadet'])){ $sutunlararray[0] = 0; }
-
-        if(!isset($_POST['sutunbirimkg'])){ $sutunlararray[1] = 0; }
-
-        if(!isset($_POST['sutuntoplam'])){ $sutunlararray[2] = 0; }
-
-        if(!isset($_POST['sutunalis'])){ $sutunlararray[3] = 0; }
-
-        if(!isset($_POST['sutunsatis'])){ $sutunlararray[4] = 0; }
-
-        if(!isset($_POST['sutunfabrika'])){ $sutunlararray[5] = 0; }
-
-        if(!isset($_POST['sutunteklifbutonu'])){ $sutunlararray[6] = 0; }
-
-        if(!isset($_POST['sutunsiparisbutonu'])){ $sutunlararray[7] = 0; }
-
-        if(!isset($_POST['sutunduzenlebutonu'])){ $sutunlararray[8] = 0; }
-
-        if(!isset($_POST['sutunsiparisadedi'])){ $sutunlararray[9] = 0; }
-
-        if(!isset($_POST['sutunuyariadedi'])){ $sutunlararray[10] = 0; }
-
-        if(!isset($_POST['sutunsipariskilo'])){ $sutunlararray[11] = 0; }
-
-        if(!isset($_POST['sutunboyolcusu'])){ $sutunlararray[12] = 0; }
-
-        if(!isset($_POST['sutunmusteriismi'])){ $sutunlararray[13] = 0; }
-
-        if(!isset($_POST['sutuntarih'])){ $sutunlararray[14] = 0; }
-
-        if(!isset($_POST['sutuntermin'])){ $sutunlararray[15] = 0; }
-
-        if(!isset($_POST['sutunmanuelsatis'])){ $sutunlararray[16] = 0; }
-
-        if(!isset($_POST['sutunurunkodu'])){ $sutunlararray[17] = 0; }
-
-        if(!isset($_POST['sutundepoadet'])){ $sutunlararray[18] = 0; }
-
-        if(!isset($_POST['sutundepouyariadet'])){ $sutunlararray[19] = 0; }
-
-        if(!isset($_POST['sutunraf'])){ $sutunlararray[20] = 0; }
-
-        if(!isset($_POST['sutunsevkiyatbutonu'])){ $sutunlararray[21] = 0; }
-
-        if(!isset($_POST['sutunpalet'])){ $sutunlararray[22] = 0; }
-
-        $sutunlar = implode(",",$sutunlararray);
-
-        $allow = array('pdf');
-
-        $temp = explode(".", $_FILES['uploadfile']['name']);
-
-        $dosyaadi = $temp[0];
-
-        $extension = end($temp);
-
-        $randomsayi = rand(0,10000);
-
-        if (empty($dosyaadi)) {
-
-            $upload_file = $eskiresim;
-
-        }else{
-
-            $upload_file = $dosyaadi.$randomsayi.".".$extension;
-
-        }
-
-        move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/kategoriler/".$upload_file);
-
-        $query = $db->prepare("UPDATE kategori SET kategori_adi = ?, kategori_tipi = ?, kategori_ust = ?, resim = ?, sutunlar = ? WHERE kategori_id = ?");
-
-        $guncelle = $query->execute(array($kategori_adi,$kategori_tipi,$kategori_ust,$upload_file,$sutunlar,$kategori_id));
-
-        header("Location:kategoriler.php");
-
-        exit();
-
-
     }
 
     $categories = $db->query("
@@ -298,7 +208,7 @@ if (!isLoggedIn()) {
         }
     }
 
-    $column_definitions = $db->query("
+    $columnDefinitions = $db->query("
         SELECT * FROM category_columns_definitions ORDER BY group_id, ordering ASC
     ")->fetchAll(PDO::FETCH_OBJ);
 
@@ -317,7 +227,7 @@ if (!isLoggedIn()) {
 
 <head>
 
-    <title>Alüminyum Deposu</title>
+    <title>Kategoriler</title>
 
     <?php include 'template/head.php'; ?>
 
@@ -344,7 +254,7 @@ if (!isLoggedIn()) {
                     <button class="btn btn-primary" onclick="openModal('form-div')">
                         Yeni Ürün Ekle
                     </button>
-                    <button type="button" class="btn btn-success" onclick="openModal('kategoriEkleForm')">
+                    <button type="button" class="btn btn-success" onclick="openModal('addCategoryForm')">
                         Yeni Kategori Ekle
                     </button>
                 </div>
@@ -355,45 +265,40 @@ if (!isLoggedIn()) {
                         <h4>Ürün Ekleme</h4>
 
                         <div class="row form-group">
-
                             <div class="col-12">
-
-                                <select class="form-control" name="kategori_iki">
-
-                                    <option selected>Lütfen Bir Kategori Seçiniz</option>
-
-                                    <?php foreach($subCategories as $category){
-                                        $mainCategory = getCategoryNew($category->parent_id);
-                                        ?>
-                                        <option value="<?= $category->id; ?>" ><?= $category->name." (".$mainCategory->name.")"; ?></option>
-                                    <?php } ?>
-
+                                <label for="mainCategorySelect">Ana Kategori Seçiniz</label>
+                                <select class="form-control" name="main_category" id="mainCategorySelect" required>
+                                    <option value="">Lütfen Ana Kategori Seçiniz</option>
+                                    <?php foreach ($mainCategories as $main): ?>
+                                        <option value="<?= $main->id; ?>">
+                                            <?= htmlspecialchars($main->name); ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
-
                             </div>
-
                         </div>
 
                         <div class="row form-group">
-
                             <div class="col-12">
-
-                                <input type="text" name="urun_adi" placeholder="Lütfen Ürün Adını Giriniz" class="form-control">
-
+                                <label for="subCategorySelect">Alt Kategori Seçiniz</label>
+                                <select class="form-control" name="sub_category" id="subCategorySelect" required disabled>
+                                    <option value="">Önce Ana Kategori Seçiniz</option>
+                                </select>
                             </div>
-
                         </div>
 
                         <div class="row form-group">
-
                             <div class="col-12">
-
-                                <button type="submit" class="btn btn-warning btn-block" name="urunekle">Ürün Ekle</button>
-
+                                <label for="name">Ürün Adı</label>
+                                <input type="text" name="name" placeholder="Lütfen Ürün Adını Giriniz" class="form-control">
                             </div>
-
                         </div>
 
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-warning btn-block" name="add_product">Ürün Ekle</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -436,19 +341,19 @@ if (!isLoggedIn()) {
 
                                     <div class="mb-3">
                                         <label class="form-label">Kategori Adı</label>
-                                        <input type="text" name="kategori_adi" class="form-control" value="<?= $category->name; ?>" required>
+                                        <input type="text" name="name" class="form-control" value="<?= $category->name; ?>" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Görsel Yükle (Opsiyonel)</label>
-                                        <input type="file" name="dosya" class="form-control">
+                                        <input type="file" name="uploadfile" class="form-control">
                                     </div>
 
                                     <?php if($category->type == 1){ ?>
                                         <!-- Alt kategori: Üst kategori seçimi -->
                                         <div class="mb-3">
                                             <label class="form-label">Üst Kategori Seç</label>
-                                            <select name="ust_kategori_id" class="form-control">
+                                            <select name="parent_id" class="form-control">
                                                 <option value="">Seçiniz...</option>
                                                 <?php foreach($mainCategories as $mainCategory){ ?>
                                                     <option value="<?= $mainCategory->id ?>" <?= $mainCategory->id == $category->parent_id ? 'selected' : '' ?> ><?= $mainCategory->name ?></option>
@@ -456,13 +361,13 @@ if (!isLoggedIn()) {
                                             </select>
                                         </div>
                                     <?php } else { ?>
-                                        <div id="sutunSecimi">
+                                        <div id="select_column_<?= $category->id ?>">
                                             <label class="form-label fw-bold">Sütunları Seç:</label>
                                             <div class="row">
                                                 <?php foreach ($groups as $groupId => $groupName): ?>
                                                     <?php
                                                     // Bu gruba ait sütunları filtrele
-                                                    $groupColumns = array_filter($column_definitions, fn($col) => $col->group_id == $groupId);
+                                                    $groupColumns = array_filter($columnDefinitions, fn($col) => $col->group_id == $groupId);
                                                     ?>
                                                     <div class="col-md-4">
                                                         <b><?= htmlspecialchars($groupName) ?></b>
@@ -486,7 +391,7 @@ if (!isLoggedIn()) {
                                                                 </label>
                                                             </div>
                                                             <?php if ($col->name === 'manual_sales'): ?>
-                                                            <div id="newyuzdeinputu_<?= $category->id ?>" style="display: none;">
+                                                            <div id="newyuzdeinputu_<?= $category->id ?>" style="display: block;">
                                                                 <input type="text" name="karyuzdesi" class="form-control form-control-sm" placeholder="Kâr yüzdenizi sadece sayı ile yazınız.">
                                                             </div>
                                                             <?php endif; ?>
@@ -499,9 +404,9 @@ if (!isLoggedIn()) {
                                     <?php } ?>
 
                                     <div class="form-actions mt-2">
-                                        <input type="hidden" name="kategori_id" value="<?= $category->id; ?>">
-                                        <input type="hidden" name="eskiresim" value="<?= $category->image; ?>">
-                                        <button type="submit" name="kategoriduzenle" class="btn btn-warning">Kaydet</button>
+                                        <input type="hidden" name="id" value="<?= $category->id; ?>">
+                                        <input type="hidden" name="image" value="<?= $category->image; ?>">
+                                        <button type="submit" name="edit_category" class="btn btn-warning">Kaydet</button>
                                         <button type="button" class="btn btn-secondary" onclick="closeModal()">Kapat</button>
                                     </div>
                                 </form>
@@ -513,8 +418,8 @@ if (!isLoggedIn()) {
                                 <div class="p-3">
                                     <h5>Silmek istediğinize emin misiniz?</h5>
                                     <form action="" method="POST">
-                                        <input type="hidden" name="kategori_id" value="<?= $kategori_id; ?>">
-                                        <button type="submit" name="kategorisil" class="btn btn-danger">Evet, Sil</button>
+                                        <input type="hidden" name="id" value="<?= $kategori_id; ?>">
+                                        <button type="submit" name="delete_category" class="btn btn-danger">Evet, Sil</button>
                                         <button type="button" class="btn btn-secondary" onclick="closeModal()">İptal</button>
                                     </form>
                                 </div>
@@ -530,7 +435,7 @@ if (!isLoggedIn()) {
     </div>
 </div>
 
-<div id="kategoriEkleForm" class="modal" style="width: 50%;">
+<div id="addCategoryForm" class="modal" style="width: 50%;">
     <span class="close" onclick="closeModal()">&times;</span>
     <form method="POST" enctype="multipart/form-data" class="form-container">
         <h3>Yeni Kategori Ekle</h3>
@@ -538,183 +443,74 @@ if (!isLoggedIn()) {
         <!-- Kategori tipi seçimi -->
         <div class="mb-3">
             <label class="form-label">Kategori Tipi:</label><br>
-            <input type="radio" name="kategori_tipi" value="1" id="ustKategoriRadio" checked>
+            <input type="radio" name="type" value="0" id="ustKategoriRadio" checked>
             <label for="ustKategoriRadio">Üst Kategori</label>
             &nbsp;&nbsp;
-            <input type="radio" name="kategori_tipi" value="0" id="altKategoriRadio">
+            <input type="radio" name="type" value="1" id="altKategoriRadio">
             <label for="altKategoriRadio">Alt Kategori</label>
         </div>
 
         <!-- Ortak Alanlar -->
         <div class="mb-3">
-            <label for="kategoriAdi" class="form-label">Kategori Adı</label>
-            <input type="text" class="form-control" id="kategoriAdi" name="kategori_adi" required>
+            <label for="categoryName" class="form-label">Kategori Adı</label>
+            <input type="text" class="form-control" id="categoryName" name="name" required>
         </div>
 
         <div class="mb-3">
-            <label for="kategoriDosya" class="form-label">Görsel Yükle (Opsiyonel)</label>
-            <input type="file" class="form-control" id="kategoriDosya" name="dosya">
+            <label for="categoryFile" class="form-label">Görsel Yükle (Opsiyonel)</label>
+            <input type="file" class="form-control" id="categoryFile" name="uploadfile">
         </div>
 
         <!-- Alt kategoriye özel alan -->
         <div class="mb-3 d-none" id="ustKategoriSecimi">
             <label for="ustKategori" class="form-label">Üst Kategori Seç</label>
-            <select name="ust_kategori_id" id="ustKategori" class="form-control form-select">
+            <select name="parent_id" id="ustKategori" class="form-control form-select">
                 <option value="">Seçiniz...</option>
-                <?php
-                $ustKategoriler = $db->query("SELECT * FROM categories WHERE type='0' AND is_deleted='0' ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($ustKategoriler as $row) {
-                    echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
-                }
-                ?>
+                <?php foreach ($mainCategories as $mainCategory): ?>
+                    <option value="<?= $mainCategory->id ?>"><?= $mainCategory->name ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
 
-        <div class="d-none" id="sutunSecimi">
+        <div id="sutunSecimi">
             <label class="form-label fw-bold">Sütunları Seç:</label>
 
             <div class="row">
-                <!-- Sütun 1 -->
-                <div class="col-md-4">
-                    <b>Göstergeler</b>
+                <?php foreach ($groups as $groupId => $groupName): ?>
+                    <?php
+                    $groupColumns = array_filter($columnDefinitions, fn($col) => $col->group_id == $groupId);
+                    ?>
+                    <div class="col-md-4">
+                        <b><?= htmlspecialchars($groupName) ?></b>
 
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck0" name="sutunurunkodu" checked>
-                        <label class="form-check-label" for="exampleCheck0">Ürün Kodu<small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutunAdetCheck" name="sutunadet" checked>
-                        <label class="form-check-label" for="sutunAdetCheck">Adet <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutunPaletCheck" name="sutunpalet" checked>
-                        <label class="form-check-label" for="sutunPaletCheck">Palet <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutunDepoAdetCheck" name="sutundepoadet" checked>
-                        <label class="form-check-label" for="sutunDepoAdetCheck">Depo Adet <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutunrafCheck" name="sutunraf" checked>
-                        <label class="form-check-label" for="sutunrafCheck">Raf <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck2" name="sutunbirimkg" checked>
-                        <label class="form-check-label" for="exampleCheck2">Birim Kg <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck3" name="sutuntoplam" checked>
-                        <label class="form-check-label" for="exampleCheck3">Toplam <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck4" name="sutunalis" checked>
-                        <label class="form-check-label" for="exampleCheck4">Alış <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck5" name="sutunsatis" checked>
-                        <label class="form-check-label" for="exampleCheck5">Satış <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck6" name="sutunfabrika" checked>
-                        <label class="form-check-label" for="exampleCheck6">Fabrika <small>(2 birim)</small></label>
-                    </div>
-                </div>
-
-                <!-- Sütun 2 -->
-                <div class="col-md-4">
-                    <b>Düzenleme Formu</b>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck10" name="sutunsiparisadedi" checked>
-                        <label class="form-check-label" for="exampleCheck10">Sipariş Adedi<small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutunuyariadedi" name="sutunuyariadedi" checked>
-                        <label class="form-check-label" for="sutunuyariadedi">Uyarı Adedi<small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutundepouyariadet" name="sutundepouyariadet" checked>
-                        <label class="form-check-label" for="sutundepouyariadet">Depo Uyarı Adedi<small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutunsipariskilo" name="sutunsipariskilo" checked>
-                        <label class="form-check-label" for="sutunsipariskilo">Sipariş Kilo<small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutunboyolcusu" name="sutunboyolcusu" checked>
-                        <label class="form-check-label" for="sutunboyolcusu">Boy Ölçüsü<small>(1 birim)</small></label>
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutunmusteriismi" name="sutunmusteriismi" checked>
-                        <label class="form-check-label" for="sutunmusteriismi">Müşteri İsmi<small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutuntarih" name="sutuntarih" checked>
-                        <label class="form-check-label" for="sutuntarih">Tarih<small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutuntermin" name="sutuntermin" checked>
-                        <label class="form-check-label" for="sutuntermin">Termin<small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sutunmanuelsatis" name="sutunmanuelsatis" onchange="yuzdeinputuac('newyuzdeinputu');" checked >
-                        <label class="form-check-label" for="sutunmanuelsatis">Manuel Satış<small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-12">
-                            <div id="newyuzdeinputu" style="display: none;">
-                                <input type="text" name="karyuzdesi" class="form-control form-control-sm" placeholder="Kâr yüzdenizi sadece sayı ile yazınız.">
+                        <?php foreach ($groupColumns as $col): ?>
+                            <div class="form-check">
+                                <input
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        name="columns[]"
+                                        value="<?= $col->id ?>"
+                                        id="col_<?= $col->id ?>"
+                                    <?= ($col->name === 'manual_sales') ? "onchange=\"yuzdeinputuac('newyuzdeinputu');\"" : "" ?>
+                                >
+                                <label class="form-check-label" for="col_<?= $col->id ?>">
+                                    <?= htmlspecialchars($col->label) ?>
+                                    <small>(<?= htmlspecialchars($col->unit ?? '1 birim') ?>)</small>
+                                </label>
                             </div>
-                        </div>
+                            <?php if ($col->name === 'manual_sales'): ?>
+                                <div id="newyuzdeinputu" style="display:block;">
+                                    <input type="text" name="profit_margin" class="form-control form-control-sm" placeholder="Kâr yüzde (sadece sayı)">
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     </div>
-                </div>
-
-                <!-- Sütun 3 -->
-                <div class="col-md-4">
-                    <b>Butonlar</b>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck7" name="sutunteklifbutonu" checked>
-                        <label class="form-check-label" for="exampleCheck7">Teklif Butonu <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck8" name="sutunsiparisbutonu" checked>
-                        <label class="form-check-label" for="exampleCheck8">Sipariş Butonu <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="sevkiyatButonuCheckCreate" name="sutunsevkiyatbutonu" checked>
-                        <label class="form-check-label" for="sevkiyatButonuCheckCreate">Sevkiyat Butonu <small>(1 birim)</small></label>
-                    </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck9" name="sutunduzenlebutonu" checked>
-                        <label class="form-check-label" for="exampleCheck9">Düzenle Butonu <small>(1 birim)</small></label>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
 
         <div class="form-actions">
-            <button type="submit" name="kategoriekle" class="btn btn-primary mt-2">Kaydet</button>
+            <button type="submit" name="add_category" class="btn btn-primary mt-2">Kaydet</button>
             <button type="button" class="btn btn-danger mt-2" onclick="closeModal()">Kapat</button>
         </div>
     </form>
@@ -741,6 +537,45 @@ if (!isLoggedIn()) {
         altRadio.addEventListener("change", toggleSections);
         toggleSections();
     });
+
+    // Ürün eklerken alt kategori doldurma
+    // PHP'den subCategories verisini JSON olarak al
+    const subCategories = <?= json_encode($subCategories, JSON_UNESCAPED_UNICODE); ?>;
+
+    const mainSelect = document.getElementById('mainCategorySelect');
+    const subSelect = document.getElementById('subCategorySelect');
+
+    mainSelect.addEventListener('change', function() {
+        const mainId = this.value;
+        subSelect.innerHTML = ''; // eski alt kategorileri temizle
+
+        if (!mainId) {
+            subSelect.disabled = true;
+            subSelect.innerHTML = '<option value="">Önce Ana Kategori Seçiniz</option>';
+            return;
+        }
+
+        // Seçilen ana kategoriye bağlı alt kategorileri filtrele
+        const filteredSubs = subCategories.filter(cat => cat.parent_id == mainId);
+
+        if (filteredSubs.length === 0) {
+            subSelect.innerHTML = '<option value="">Bu kategoriye ait alt kategori yok</option>';
+            subSelect.disabled = true;
+            return;
+        }
+
+        // Alt kategorileri doldur
+        subSelect.disabled = false;
+        subSelect.innerHTML = '<option value="">Lütfen Alt Kategori Seçiniz</option>';
+
+        filteredSubs.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat.id;
+            opt.textContent = cat.name;
+            subSelect.appendChild(opt);
+        });
+    });
+
 </script>
 
 <?php include 'template/script.php'; ?>
