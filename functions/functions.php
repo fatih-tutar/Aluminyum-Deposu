@@ -290,15 +290,15 @@ function getCategoryInfo($categoryId){
 
 function getCategoryID($categoryName,$categoryType){
     global $db;
-    $query = $db->query("SELECT kategori_id FROM kategori WHERE kategori_adi = '{$categoryName}' AND kategori_tipi = '{$categoryType}'")->fetch(PDO::FETCH_ASSOC);
-    $categoryID = $query['kategori_id'];
+    $query = $db->query("SELECT id FROM categories WHERE name = '{$categoryName}' AND type = '{$categoryType}'")->fetch(PDO::FETCH_ASSOC);
+    $categoryID = $query['id'];
     return $categoryID;
 }
 
 function getSubCategoryID($categoryName,$mainCategory){
     global $db;
-    $query = $db->query("SELECT kategori_id FROM kategori WHERE kategori_adi = '{$categoryName}' AND kategori_ust = '{$mainCategory}' AND kategori_tipi = '1'")->fetch(PDO::FETCH_ASSOC);
-    $categoryID = $query['kategori_id'];
+    $query = $db->query("SELECT id FROM categories WHERE name = '{$categoryName}' AND parent_id = '{$mainCategory}' AND type = '1'")->fetch(PDO::FETCH_ASSOC);
+    $categoryID = $query['id'];
     return $categoryID;
 }
 

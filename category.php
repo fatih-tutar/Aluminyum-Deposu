@@ -46,17 +46,17 @@
 
 			$renkarrayi = explode(",", $renkstringi);
 
-			$cek = $db->query("SELECT * FROM kategori WHERE kategori_ust = '{$kategori_id}' AND kategori_tipi = '1' AND sirketid = '{$user->company_id}'", PDO::FETCH_ASSOC);
+			$cek = $db->query("SELECT * FROM categories WHERE parent_id = '{$kategori_id}' AND type = '1' AND company_id = '{$user->company_id}'", PDO::FETCH_ASSOC);
 
 			if ( $cek->rowCount() ){
 
 				foreach( $cek as $wor ){
 
-					$alt_kategori_id = $wor['kategori_id'];
+					$alt_kategori_id = $wor['id'];
 
-					$alt_kategori_adi = $wor['kategori_adi'];
+					$alt_kategori_adi = $wor['name'];
 
-					$resim = "img/kategoriler/".$wor['resim'];
+					$resim = "img/kategoriler/".$wor['image'];
 
 		?>
 						

@@ -603,7 +603,7 @@ if (!isLoggedIn()) {
 
                 <div class="col-6">
 
-                    <a href="kategori.php?id=<?= $ust_kategori_id; ?>" style="color: white;">
+                    <a href="category.php?id=<?= $ust_kategori_id; ?>" style="color: white;">
 
                         <button class="btn btn-info btn-sm btn-block">
 
@@ -667,7 +667,7 @@ if (!isLoggedIn()) {
 
                         <div class="col-6">
 
-                            <a href="kategori.php?id=<?= $ust_kategori_id; ?>" style="color: white;">
+                            <a href="category.php?id=<?= $ust_kategori_id; ?>" style="color: white;">
 
                                 <button class="btn btn-info btn-sm btn-block">
 

@@ -11,12 +11,12 @@
 <div id="accordion" class="mt-2">
     <?php
         $i = 0;
-        $query = $db->query("SELECT * FROM kategori WHERE kategori_tipi = '0' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
+        $query = $db->query("SELECT * FROM categories WHERE type = '0' AND company_id = '{$user->company_id}' AND is_deleted = '0'", PDO::FETCH_ASSOC);
         if ( $query->rowCount() ){
             foreach( $query as $row ){
-                $kategori_id = $row['kategori_id'];
-                $kategori_adi = $row['kategori_adi'];
-                $resim = "img/kategoriler/".$row['resim'];
+                $kategori_id = $row['id'];
+                $kategori_adi = $row['name'];
+                $resim = "img/kategoriler/".$row['image'];
                 $i++;
     ?>
             <div class="card sidebar-item">
@@ -32,12 +32,12 @@
                 </div>
                 <div id="collapse<?= $i; ?>" class="collapse px-2" style="border-top:1px solid grey; font-size:11px;" aria-labelledby="heading<?= $i; ?>" data-parent="#accordion">
         <?php
-            $cek = $db->query("SELECT * FROM kategori WHERE kategori_ust = '{$kategori_id}' AND kategori_tipi = '1' AND sirketid = '{$user->company_id}' AND silik = '0'", PDO::FETCH_ASSOC);
+            $cek = $db->query("SELECT * FROM categories WHERE parent_id = '{$kategori_id}' AND type = '1' AND company_id = '{$user->company_id}' AND is_deleted = '0'", PDO::FETCH_ASSOC);
             if ( $cek->rowCount() ){
                 foreach( $cek as $wor ){
-                    $alt_kategori_id = $wor['kategori_id'];
-                    $alt_kategori_adi = $wor['kategori_adi'];
-                    $alt_kategori_resim = "img/kategoriler/".$wor['resim'];
+                    $alt_kategori_id = $wor['id'];
+                    $alt_kategori_adi = $wor['name'];
+                    $alt_kategori_resim = "img/kategoriler/".$wor['image'];
         ?>		
                     <a href="product.php?id=<?= $alt_kategori_id; ?>">
                         <div class="row pl-1">
