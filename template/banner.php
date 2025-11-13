@@ -68,7 +68,7 @@
 
 							<?php if($user->type == '2' || $user->type == '1' || $user->type == '3'){?>
 								
-								<a class="dropdown-item" href="kategoriler.php"><b>KATEGORİLER</b></a>
+								<a class="dropdown-item" href="categories.php"><b>KATEGORİLER</b></a>
 							
 							<?php } ?>
 

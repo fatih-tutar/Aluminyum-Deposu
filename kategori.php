@@ -62,7 +62,7 @@
 						
 					<div class="col-md-3">
 
-						<a href="urunler.php?id=<?= $alt_kategori_id; ?>">
+						<a href="product.php?id=<?= $alt_kategori_id; ?>">
 
 							<img src="<?= $resim; ?>" class="img-thumbnail" style="width: 100%; height: auto; padding: 20px;">
 

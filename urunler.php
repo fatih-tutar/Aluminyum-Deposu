@@ -12,599 +12,554 @@
 
 		$categoryId = guvenlik($_GET['id']);
 
-		$ustkategoriyicek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$categoryId}' AND silik = '0' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+		$ustkategoriyicek = $db->query("SELECT * FROM categories WHERE id = '{$categoryId}' AND is_deleted = '0' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
 		if(!$ustkategoriyicek) {
 			header("Location:index.php");
 			exit();
 		}
 		
-		$ust_kategori_id = guvenlik($ustkategoriyicek['kategori_ust']);
+		$ust_kategori_id = guvenlik($ustkategoriyicek['parent_id']);
 
-		$ustbilgicek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$ust_kategori_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+		$ustbilgicek = $db->query("SELECT * FROM categories WHERE id = '{$ust_kategori_id}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-		$ust_kategori_adi = guvenlik($ustbilgicek['kategori_adi']);
+		$ust_kategori_adi = guvenlik($ustbilgicek['name']);
 
-		$ust_kategori_kar_yuzdesi = guvenlik($ustbilgicek['karyuzdesi']);
+		$ust_kategori_kar_yuzdesi = guvenlik($ustbilgicek['profit_margin']);
 
-		$ust_kategori_sutunlar = guvenlik($ustbilgicek['sutunlar']);
+        $columnsQuery = $db->prepare("
+            SELECT d.name 
+            FROM category_columns c 
+            JOIN category_columns_definitions d ON c.column_id = d.id 
+            WHERE c.category_id = ?
+        ");
+        $columnsQuery->execute([$ust_kategori_id]);
+        $activeColumns = $columnsQuery->fetchAll(PDO::FETCH_COLUMN);
 
-		$sutunlaripatlat = explode(",", $ust_kategori_sutunlar);
+        if (isset($_POST['urunsil'])) {
 
-		$sutunadetizni = $sutunlaripatlat[0];
+            $urun_id = guvenlik($_POST['urun_id']);
 
-		$sutunbirimkgizni = $sutunlaripatlat[1];
+            $urun_adet = guvenlik($_POST['urun_adet']);
 
-		$sutuntoplamizni = $sutunlaripatlat[2];
+            $urun_palet = guvenlik($_POST['urun_palet']);
 
-		$sutunalisizni = $sutunlaripatlat[3];
+            $urun_depo_adet = guvenlik($_POST['urun_depo_adet']);
 
-		$sutunsatisizni = $sutunlaripatlat[4];
+            $urun_sira = guvenlik($_POST['urun_sira']);
 
-		$sutunfabrikaizni = $sutunlaripatlat[5];
+            if ($urun_adet != 0 || $urun_depo_adet != 0 || $urun_palet != 0) {
 
-		$sutunteklifbutonuizni = $sutunlaripatlat[6];
+                header("Location:product.php?id=".$categoryId."&u=".$urun_id."&urunsilinemez");
 
-		$sutunsiparisbutonuizni = $sutunlaripatlat[7];
+                exit();
 
-		$sutunduzenlebutonuizni = $sutunlaripatlat[8];
+            }elseif ($urun_adet == 0 && $urun_depo_adet == 0 && $urun_palet == 0) {
 
-		$sutunsiparisadediizni = $sutunlaripatlat[9];
+                $siralar = $db->query("SELECT * FROM urun WHERE urun_sira > '{$urun_sira}' AND kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
 
-		$sutunuyariadediizni = $sutunlaripatlat[10];
+                if ( $siralar->rowCount() ){
 
-		$sutunsipariskiloizni = $sutunlaripatlat[11];
+                    foreach( $siralar as $sc ){
 
-		$sutunboyolcusuizni = $sutunlaripatlat[12];
+                        $sira_urun_id = $sc['urun_id'];
 
-		$sutunmusteriismiizni = $sutunlaripatlat[13];
+                        $urun_sira = $sc['urun_sira'];
 
-		$sutuntarihizni = $sutunlaripatlat[14];
+                        $yenisira = $urun_sira - 1;
 
-		$sutunterminizni = $sutunlaripatlat[15];
+                        $query = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?");
 
-		$sutunmanuelsatisizni = $sutunlaripatlat[16];
+                        $guncelle = $query->execute(array($yenisira,$sira_urun_id));
 
-		$sutunurunkoduizni = $sutunlaripatlat[17];
-
-		$sutundepoadetizni = $sutunlaripatlat[18];
-
-		$sutundepouyariadediizni = $sutunlaripatlat[19];
-
-		$sutunrafizni = $sutunlaripatlat[20];
-
-		$sutunsevkiyatbutonuizni = $sutunlaripatlat[21];
-
-		$sutunpaletizni = $sutunlaripatlat[22];
-
-		if($user->type != '3'){
-
-			if (isset($_POST['urunsil'])) {
-				
-				$urun_id = guvenlik($_POST['urun_id']);
-
-				$urun_adet = guvenlik($_POST['urun_adet']);
-
-				$urun_palet = guvenlik($_POST['urun_palet']);
-
-				$urun_depo_adet = guvenlik($_POST['urun_depo_adet']);
-
-				$urun_sira = guvenlik($_POST['urun_sira']);
-
-				if ($urun_adet != 0 || $urun_depo_adet != 0 || $urun_palet != 0) {
-
-					header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&urunsilinemez");
-
-					exit();
-
-				}elseif ($urun_adet == 0 && $urun_depo_adet == 0 && $urun_palet == 0) {
-
-					$siralar = $db->query("SELECT * FROM urun WHERE urun_sira > '{$urun_sira}' AND kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC", PDO::FETCH_ASSOC);
-
-					if ( $siralar->rowCount() ){
-
-						foreach( $siralar as $sc ){
-
-							$sira_urun_id = $sc['urun_id'];
-
-							$urun_sira = $sc['urun_sira'];
-
-							$yenisira = $urun_sira - 1;
-
-							$query = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?"); 
-
-							$guncelle = $query->execute(array($yenisira,$sira_urun_id));
-
-						}
-
-					}
-					
-					$sil = $db->prepare("UPDATE urun SET silik = ? WHERE urun_id = ?");
-
-					$delete = $sil->execute(array('1',$urun_id));
-
-					header("Location:urunler.php?id=".$categoryId."&urunsilindi#".$urun_id);
-
-					exit();
-
-				}
-
-			}
-
-			if (isset($_POST['teklifkaydet'])) {
-
-				$turunid = guvenlik($_POST['turunid']);
-				
-				$tekliffirma = guvenlik($_POST['tekliffirma']);
-
-				$firmaidcek = $db->query("SELECT * FROM clients WHERE name = '{$tekliffirma}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
-
-				$tekliffirma = $firmaidcek[ 'id']; 
-
-				$teklifadet =  guvenlik($_POST['teklifadet']);
-
-				$teklifsatisfiyat = guvenlik($_POST['teklifsatisfiyat']);
-
-				$query = $db->prepare("INSERT INTO teklif SET turunid = ?, tverilenfirma = ?, tadet = ?, tsatisfiyati = ?, tsaniye = ?, formda = ?, sirketid = ?, silik = ?");
-
-				$insert = $query->execute(array($turunid,$tekliffirma,$teklifadet,$teklifsatisfiyat,time(),'0',$user->company_id,'0'));
-
-				header("Location:urunler.php?id=".$categoryId."&u=".$turunid."&c_id=".$tekliffirma."&teklifeklendi#".$turunid);
-
-				exit();
-
-			}
-
-			if (isset($_POST['siparisformu'])) {
-
-				$siparisboy = guvenlik($_POST['siparisboy']);
-				
-				$hazirlayankisi = guvenlik($_POST['hazirlayankisi']);
-
-				$urun_fabrika = guvenlik($_POST['urun_fabrika']);
-
-				$ilgilikisi = guvenlik($_POST['ilgilikisi']);
-
-				$urun_stok = guvenlik($_POST['urun_stok']);
-
-				$urun_id = guvenlik($_POST['urun_id']);
-
-				$termin = guvenlik($_POST['termin']);
-
-                $palet = guvenlik($_POST['palet']);
-
-				$terminsaniye = strtotime($termin);
-
-                if(empty($hazirlayankisi) || empty($ilgilikisi)) {
-                    $error = '<div class="alert alert-danger">Lütfen sipariş formunda boş alan bırakmayınız.</div>';
-                }else{
-                    $uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
-
-                    $urun_adi = $uruninfo['urun_adi'];
-
-                    $query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?, palet = ?");
-
-                    $insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',time(),'0',$user->company_id,'0',$palet));
-
-                    header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&sipariseklendi#".$urun_id);
-
-                    exit();
-                }
-
-			}
-
-			if (isset($_POST['sevkiyatkaydet'])) {
-                $urunId = $_POST['urun_id'];
-                $adet = guvenlik($_POST['adet']);
-                $fiyat = guvenlik($_POST['fiyat']);
-                $arac_id =  guvenlik($_POST['arac_id']);
-                $sevkTipi = guvenlik($_POST['sevk_tipi']);
-                $aciklama = guvenlik($_POST['aciklama']);
-                $firma = guvenlik($_POST['firma']);
-                if(empty($firma)){
-                    $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir firma seçiniz.</div>';
-                }else if(empty($adet)){
-                    $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir adet belirtiniz.</div>';
-                }else if(empty($fiyat)){
-                    $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir fiyat yazınız.</div>';
-                }else if($sevkTipi === "null") {
-                    $error = '<br/><div class="alert alert-danger" role="alert">Sevk tipi : '.$sevkTipi.' Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
-                }else {
-                    $firmaId = getClientId($firma);
-                    $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND manuel = '0' AND silik = '0' AND sirket_id = '{$user->company_id}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-                    if ($sevkiyatList) {
-                        $urunler = guvenlik($sevkiyatList['urunler']);
-                        $adetler = guvenlik($sevkiyatList['adetler']);
-                        $fiyatlar = guvenlik($sevkiyatList['fiyatlar']);
-                        $urunler = $urunler . "," . $urunId;
-                        $adetler = $adetler . "," . $adet;
-                        $fiyatlar = $fiyatlar . "-" . $fiyat;
-                        $query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?");
-                        $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $user->company_id));
-                    } else {
-                        $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
-                        $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $arac_id, $aciklama, '0', '0', time(), $user->company_id));
                     }
-                    header("Location:urunler.php?id=" . $categoryId . "&u=" . $urunId . "&sevkiyateklendi#" . $urunId);
-                    exit();
-                }
-			}
-
-			if (isset($_POST['guncellemeformu'])) {
-
-				$urun_id = guvenlik($_POST['urun_id']);
-
-				$urun_kodu = guvenlik($_POST['urun_kodu'] ?? null);
-
-				$urun_adi = guvenlik($_POST['urun_adi']);
-
-				$urun_adet = guvenlik($_POST['urun_adet'] ?? null);
-
-				$urun_palet = guvenlik($_POST['urun_palet'] ?? null);
-
-				$urun_depo_adet = guvenlik($_POST['urun_depo_adet'] ?? null);
-
-				$urun_raf = guvenlik($_POST['urun_raf']);
-
-				$eskiadeticek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC); 
-
-				$eskiadet = $eskiadeticek['urun_adet'];
-
-				$eskipalet = $eskiadeticek['urun_palet'];
-
-				$eskidepoadet = $eskiadeticek['urun_depo_adet'];
-				
-				$eskiurunalis = $eskiadeticek['urun_alis'];
-
-				if(!isset($_POST['urun_adet'])){
-					$urun_adet = $eskiadet;
-				}
-
-				if(!isset($_POST['urun_palet'])){
-					$urun_palet = $eskipalet;
-				}
-
-				if(!isset($_POST['urun_depo_adet'])){
-					$urun_depo_adet = $eskidepoadet;
-				}
-
-				$urun_birimkg = guvenlik($_POST['urun_birimkg']);
-
-				$urun_boy_olcusu = guvenlik($_POST['urun_boy_olcusu'] ?? null);
-
-				$urun_alis = guvenlik($_POST['urun_alis'] ?? null);
-
-				if(!isset($_POST['urun_alis'])){
-					$urun_alis = $eskiurunalis;
-				}
-
-				$satis = guvenlik($_POST['satis'] ?? null);
-
-				$urun_fabrika = guvenlik($_POST['urun_fabrika']);
-
-				$urun_aciklama = guvenlik($_POST['urun_aciklama']);
-
-				$urun_stok = guvenlik($_POST['urun_stok']);
-
-				$musteri_ismi = guvenlik($_POST['musteri_ismi'] ?? null);
-
-				$tarih = guvenlik($_POST['tarih'] ?? null);
-
-				$termin = guvenlik($_POST['termin'] ?? null);
-
-				$urun_uyari_stok_adedi = guvenlik($_POST['urun_uyari_stok_adedi']);
-
-				$urun_depo_uyari_adet = guvenlik($_POST['urun_depo_uyari_adet']);
-
-				$urun_eski_sira = guvenlik($_POST['urun_eski_sira']);
-
-				$urun_yeni_sira = guvenlik($_POST['urun_yeni_sira']);
-
-				// SIRALAMA AYARI BURADA GÜNCELLEME İLE ALAKALI SIRALAMADAN BAŞKA BİR ŞEY YOK
-
-				if ($urun_eski_sira < $urun_yeni_sira) {
-					
-					$kayacakurunsayisi = $urun_yeni_sira - $urun_eski_sira;
-
-					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $urun_eski_sira,$kayacakurunsayisi", PDO::FETCH_ASSOC);
-
-					if ( $kaycaklaricek->rowCount() ){
-
-						foreach( $kaycaklaricek as $kuc ){
-
-							$kayan_urun_id = $kuc['urun_id'];
-
-							$kayan_urun_sira = $kuc['urun_sira'];
-
-							$kayan_urun_sira--;
-
-							$sira_guncelle = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?"); 
-
-							$kaymaguncelle = $sira_guncelle->execute(array($kayan_urun_sira,$kayan_urun_id));
-
-						}
-
-					}
-
-				}elseif ($urun_eski_sira > $urun_yeni_sira) {
-					
-					$kayacakurunsayisi = $urun_eski_sira - $urun_yeni_sira; 
-
-					$bionce = $urun_yeni_sira - 1;
-
-					$kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $bionce,$kayacakurunsayisi", PDO::FETCH_ASSOC);
-
-					if ( $kaycaklaricek->rowCount() ){
-
-						foreach( $kaycaklaricek as $kuc ){
-
-							$kayan_urun_id = $kuc['urun_id'];
-
-							$kayan_urun_sira = $kuc['urun_sira'];
-
-							$kayan_urun_sira++;
-
-							$sadece = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?"); 
-
-							$benzeme = $sadece->execute(array($kayan_urun_sira,$kayan_urun_id));
-
-						}
-
-					}
-
-				}
-
-				// SIRALAMA AYARI BİTİŞ
-
-				$query = $db->query("SELECT * FROM clients WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
-
-				if ( $query->rowCount() ){
-
-					foreach( $query as $row ){
-
-						$firmaid = $row[ 'id']; 
-
-					}
-
-				}
-
-				// BÜTÜN BİLGİLER BURADA GÜNCELLENİYOR
-
-				$query = $db->prepare("UPDATE urun SET urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, satis = ?, urun_fabrika = ?, urun_aciklama = ?, urun_stok = ?, musteri_ismi = ?,urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, tarih = ?, termin = ? WHERE urun_id = ?"); 
-
-				$guncelle = $query->execute(array($urun_kodu,$urun_adi,$urun_adet,$urun_palet,$urun_depo_adet,$urun_raf,$urun_birimkg,$urun_boy_olcusu,$urun_alis,$satis,$urun_fabrika,$urun_aciklama,$urun_stok,$musteri_ismi,$urun_uyari_stok_adedi,$urun_depo_uyari_adet,$urun_yeni_sira,$tarih,$termin,$urun_id));
-
-				if ($urun_adet != $eskiadet) {
-					
-					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
-
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
-
-				}
-				
-				if ($urun_depo_adet != $eskidepoadet || $urun_palet != $eskipalet) {
-					
-					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
-
-					$islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),date('Y-m-d H:i:s'),'1',$user->company_id));
-
-				}
-
-				// ALIŞ FİYATI HEPSİNE UYGULANSIN SEÇİLDİYSE İŞLEYECEK GÜNCELLEME KODLARI
-
-				if(isset($_POST['hepsineuygula'])) { // checkbox seçilmişse "on" değeri gönderiliyor
-
-					//echo "girdi"; echo $urun_alis." / ".$ust_kategori_id." / ".$urun_fabrika; exit();
-					
-					$alisguncelleme = $db->prepare("UPDATE urun SET urun_alis = ? WHERE kategori_bir = ? AND urun_fabrika = ?"); 
-
-					$guncelleme = $alisguncelleme->execute(array($urun_alis,$ust_kategori_id,$urun_fabrika));
-
-				}
-
-				header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&guncellendi#".$urun_id);
-
-				exit();
-
-			}
-
-			if (isset($_POST['siparisalindi'])) {
-				
-				$siparis_id = guvenlik($_POST['siparis_id']);
-
-				$urun_id = guvenlik($_POST['urun_id']);
-
-				$eklenenadet = guvenlik($_POST['eklenenadet']);
-
-				$eskiadet = guvenlik($_POST['urun_adet']);
-
-				$urun_adet = $eskiadet + $eklenenadet;
-
-				if ($urun_adet != $eskiadet) {
-					
-					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
-
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
-
-				}
-
-				$query = $db->prepare("UPDATE urun SET urun_adet = ? WHERE urun_id = ?"); 
-
-				$guncelle = $query->execute(array($urun_adet,$urun_id));
-
-				$query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?"); 
-
-				$guncelle = $query->execute(array('0',$siparis_id));
-
-				header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
-
-				exit();
-
-			}
-
-			if (isset($_POST['deposiparisalindi'])) {
-				
-				$siparis_id = guvenlik($_POST['siparis_id']);
-
-				$urun_id = guvenlik($_POST['urun_id']);
-
-				$eklenenadet = guvenlik($_POST['eklenenadet']);
-
-				$eskiadet = guvenlik($_POST['urun_depo_adet']);
-
-				$urun_depo_adet = $eskiadet + $eklenenadet;
-
-				if ($urun_depo_adet != $eskiadet) {
-					
-					$islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
-
-					$islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,date('Y-m-d H:i:s'),'1',$user->company_id));
-
-				}
-
-				$query = $db->prepare("UPDATE urun SET urun_depo_adet = ? WHERE urun_id = ?"); 
-
-				$guncelle = $query->execute(array($urun_depo_adet,$urun_id));
-
-				$query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?"); 
-
-				$guncelle = $query->execute(array('0',$siparis_id));
-
-				header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
-
-				exit();
-
-			}
-
-            if (isset($_POST['paletsiparisalindi'])) {
-
-                $siparis_id = guvenlik($_POST['siparis_id']);
-
-                $urun_id = guvenlik($_POST['urun_id']);
-
-                $eklenenadet = guvenlik($_POST['eklenenadet']);
-
-                $eskiadet = guvenlik($_POST['urun_palet']);
-
-                $urun_palet = $eskiadet + $eklenenadet;
-
-                if ($urun_palet != $eskiadet) {
-
-                    $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
-
-                    $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_palet,date('Y-m-d H:i:s'),'2',$user->company_id));
 
                 }
 
-                $query = $db->prepare("UPDATE urun SET urun_palet = ? WHERE urun_id = ?");
+                $sil = $db->prepare("UPDATE urun SET silik = ? WHERE urun_id = ?");
 
-                $guncelle = $query->execute(array($urun_palet,$urun_id));
+                $delete = $sil->execute(array('1',$urun_id));
 
-                $query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?");
-
-                $guncelle = $query->execute(array('0',$siparis_id));
-
-                header("Location:urunler.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
+                header("Location:product.php?id=".$categoryId."&urunsilindi#".$urun_id);
 
                 exit();
 
             }
 
-			if (isset($_POST['add_inventory'])) {
+        }
 
-				$code = guvenlik($_POST['code']);
+        if (isset($_POST['teklifkaydet'])) {
 
-                $dimension_1 = guvenlik($_POST['dimension_1']);
+            $turunid = guvenlik($_POST['turunid']);
 
-                $dimension_2 = guvenlik($_POST['dimension_2']);
+            $tekliffirma = guvenlik($_POST['tekliffirma']);
 
-				$dimension_3 = guvenlik($_POST['dimension_3']);
+            $firmaidcek = $db->query("SELECT * FROM clients WHERE name = '{$tekliffirma}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-				$density = guvenlik($_POST['density']);
+            $tekliffirma = $firmaidcek[ 'id'];
 
-                $factory_name = guvenlik($_POST['factory_name']);
+            $teklifadet =  guvenlik($_POST['teklifadet']);
 
-				$query = $db->prepare("INSERT INTO inventory SET category_id = ?, code = ?, dimension_1 = ?, dimension_2 = ?, dimension_3 = ?, density = ?, factory_name = ?, is_deleted = ?, company_id = ?");
+            $teklifsatisfiyat = guvenlik($_POST['teklifsatisfiyat']);
 
-				$insert = $query->execute(array($categoryId,$code,$dimension_1,$dimension_2,$dimension_3,$density,$factory_name,'0',$user->company_id));
+            $query = $db->prepare("INSERT INTO teklif SET turunid = ?, tverilenfirma = ?, tadet = ?, tsatisfiyati = ?, tsaniye = ?, formda = ?, sirketid = ?, silik = ?");
 
-				header("Location:urunler.php?id=".$categoryId."&inventory_added");
+            $insert = $query->execute(array($turunid,$tekliffirma,$teklifadet,$teklifsatisfiyat,time(),'0',$user->company_id,'0'));
 
-				exit();
+            header("Location:product.php?id=".$categoryId."&u=".$turunid."&c_id=".$tekliffirma."&teklifeklendi#".$turunid);
 
-			}
+            exit();
 
-			if (isset($_POST['update_inventory'])) {
-				
-				$id = guvenlik($_POST['id']);
+        }
 
-				$code = guvenlik($_POST['code']);
+        if (isset($_POST['siparisformu'])) {
 
-				$dimension_1 = guvenlik($_POST['dimension_1']);
+            $siparisboy = guvenlik($_POST['siparisboy']);
 
-				$dimension_2 = guvenlik($_POST['dimension_2']);
+            $hazirlayankisi = guvenlik($_POST['hazirlayankisi']);
 
-				$dimension_3 = guvenlik($_POST['dimension_3']);
+            $urun_fabrika = guvenlik($_POST['urun_fabrika']);
 
-				$density = guvenlik($_POST['density']);
+            $ilgilikisi = guvenlik($_POST['ilgilikisi']);
 
-				$factory_name = guvenlik($_POST['factory_name']);
+            $urun_stok = guvenlik($_POST['urun_stok']);
 
-				$query = $db->prepare("UPDATE inventories SET code = ?, dimension_1 = ?, dimension_2 = ?, dimension_3 = ?, density = ?, factory_name = ? WHERE id = ?");
+            $urun_id = guvenlik($_POST['urun_id']);
 
-				$update = $query->execute(array($code,$dimension_1,$dimension_2,$dimension_3,$density,$factory_name,$id));
+            $termin = guvenlik($_POST['termin']);
 
-                if($update) {
-                    header("Location:urunler.php?id=".$categoryId."&inventory_updated");
-                    exit();
-                }else{
-                    $error = '<br/><div class="alert alert-danger" role="alert">Güncelleme işlemi gerçekleştirilemedi.</div>';
+            $palet = guvenlik($_POST['palet']);
+
+            $terminsaniye = strtotime($termin);
+
+            if(empty($hazirlayankisi) || empty($ilgilikisi)) {
+                $error = '<div class="alert alert-danger">Lütfen sipariş formunda boş alan bırakmayınız.</div>';
+            }else{
+                $uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+
+                $urun_adi = $uruninfo['urun_adi'];
+
+                $query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?, palet = ?");
+
+                $insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',time(),'0',$user->company_id,'0',$palet));
+
+                header("Location:product.php?id=".$categoryId."&u=".$urun_id."&sipariseklendi#".$urun_id);
+
+                exit();
+            }
+
+        }
+
+        if (isset($_POST['sevkiyatkaydet'])) {
+            $urunId = $_POST['urun_id'];
+            $adet = guvenlik($_POST['adet']);
+            $fiyat = guvenlik($_POST['fiyat']);
+            $arac_id =  guvenlik($_POST['arac_id']);
+            $sevkTipi = guvenlik($_POST['sevk_tipi']);
+            $aciklama = guvenlik($_POST['aciklama']);
+            $firma = guvenlik($_POST['firma']);
+            if(empty($firma)){
+                $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir firma seçiniz.</div>';
+            }else if(empty($adet)){
+                $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir adet belirtiniz.</div>';
+            }else if(empty($fiyat)){
+                $error = '<br/><div class="alert alert-danger" role="alert">Müşteri sipariş formu için lütfen bir fiyat yazınız.</div>';
+            }else if($sevkTipi === "null") {
+                $error = '<br/><div class="alert alert-danger" role="alert">Sevk tipi : '.$sevkTipi.' Müşteri sipariş formu için lütfen bir sevk tipi seçiniz.</div>';
+            }else {
+                $firmaId = getClientId($firma);
+                $sevkiyatList = $db->query("SELECT * FROM sevkiyat WHERE firma_id = '{$firmaId}' AND durum = '0' AND manuel = '0' AND silik = '0' AND sirket_id = '{$user->company_id}' ORDER BY id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+                if ($sevkiyatList) {
+                    $urunler = guvenlik($sevkiyatList['urunler']);
+                    $adetler = guvenlik($sevkiyatList['adetler']);
+                    $fiyatlar = guvenlik($sevkiyatList['fiyatlar']);
+                    $urunler = $urunler . "," . $urunId;
+                    $adetler = $adetler . "," . $adet;
+                    $fiyatlar = $fiyatlar . "-" . $fiyat;
+                    $query = $db->prepare("UPDATE sevkiyat SET urunler = ?, adetler = ?, fiyatlar = ? WHERE firma_id = ? AND durum = ? AND silik = ? AND sirket_id = ?");
+                    $update = $query->execute(array($urunler, $adetler, $fiyatlar, $firmaId, '0', '0', $user->company_id));
+                } else {
+                    $query = $db->prepare("INSERT INTO sevkiyat SET urunler = ?, firma_id = ?, adetler = ?, kilolar = ?, fiyatlar = ?, olusturan = ?, hazirlayan = ?, sevk_tipi = ?, arac_id = ?, aciklama = ?, durum = ?, silik = ?, saniye = ?, sirket_id = ?");
+                    $insert = $query->execute(array($urunId, $firmaId, $adet, '', $fiyat, $user->id, '', $sevkTipi, $arac_id, $aciklama, '0', '0', time(), $user->company_id));
                 }
-			}
+                header("Location:product.php?id=" . $categoryId . "&u=" . $urunId . "&sevkiyateklendi#" . $urunId);
+                exit();
+            }
+        }
 
-			if (isset($_GET['guncellendi'])) {
-				
-				$error = '<br/><div class="alert alert-success" role="alert">İlgili ürüne ait bilgiler başarıyla güncellendi.</a></div>';
+        if (isset($_POST['guncellemeformu'])) {
 
-			}
+            $urun_id = guvenlik($_POST['urun_id']);
 
-			if (isset($_GET['sipariseklendi'])) {
-				
-				$error = '<br/><div class="alert alert-success" role="alert"><a href="factory.php" target="m_blank">Siparişin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından sipariş formlarına ulaşabilirsin.</a></div>';
+            $urun_kodu = guvenlik($_POST['urun_kodu'] ?? null);
 
-			}
+            $urun_adi = guvenlik($_POST['urun_adi']);
 
-			if (isset($_GET['siparisalindi'])) {
-				
-				$error = '<br/><div class="alert alert-success" role="alert"><a href="factory.php" target="m_blank">Sipariş alındı ve sipariş kaydı geçmiş siparişlere eklendi.</a></div>';
+            $urun_adet = guvenlik($_POST['urun_adet'] ?? null);
 
-			}
+            $urun_palet = guvenlik($_POST['urun_palet'] ?? null);
 
-			if (isset($_GET['urunsilinemez'])) {
-				
-				$error = '<br/><div class="alert alert-danger" role="alert">İlgili ürüne ait stokda malzeme bulunduğudan kaydını silemezsiniz.</a></div>';
+            $urun_depo_adet = guvenlik($_POST['urun_depo_adet'] ?? null);
 
-			}
+            $urun_raf = guvenlik($_POST['urun_raf']);
 
-			if (isset($_GET['urunsilindi'])) {
-				
-				$error = '<br/><div class="alert alert-success" role="alert">Ürünün stokta kaydı olmadığından emin olunmuş ve ürün başarıyla silinmiştir.</div>';
+            $eskiadeticek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
 
-			}
+            $eskiadet = $eskiadeticek['urun_adet'];
 
-			if (isset($_GET['inventory_added'])) {
-				
-				$error = '<br/><div class="alert alert-success" role="alert">Hazır kalıp listesine ekleme yapıldı.</div>';
+            $eskipalet = $eskiadeticek['urun_palet'];
 
-			}
+            $eskidepoadet = $eskiadeticek['urun_depo_adet'];
 
-			if (isset($_GET['inventory_updated'])) {
-				
-				$error = '<br/><div class="alert alert-success" role="alert">İlgili ürünün hazır kalıp bilgisi güncellendi.</div>';
+            $eskiurunalis = $eskiadeticek['urun_alis'];
 
-			}
+            if(!isset($_POST['urun_adet'])){
+                $urun_adet = $eskiadet;
+            }
 
-		}
+            if(!isset($_POST['urun_palet'])){
+                $urun_palet = $eskipalet;
+            }
+
+            if(!isset($_POST['urun_depo_adet'])){
+                $urun_depo_adet = $eskidepoadet;
+            }
+
+            $urun_birimkg = guvenlik($_POST['urun_birimkg']);
+
+            $urun_boy_olcusu = guvenlik($_POST['urun_boy_olcusu'] ?? null);
+
+            $urun_alis = guvenlik($_POST['urun_alis'] ?? null);
+
+            if(!isset($_POST['urun_alis'])){
+                $urun_alis = $eskiurunalis;
+            }
+
+            $satis = guvenlik($_POST['satis'] ?? null);
+
+            $urun_fabrika = guvenlik($_POST['urun_fabrika']);
+
+            $urun_aciklama = guvenlik($_POST['urun_aciklama']);
+
+            $urun_stok = guvenlik($_POST['urun_stok']);
+
+            $musteri_ismi = guvenlik($_POST['musteri_ismi'] ?? null);
+
+            $tarih = guvenlik($_POST['tarih'] ?? null);
+
+            $termin = guvenlik($_POST['termin'] ?? null);
+
+            $urun_uyari_stok_adedi = guvenlik($_POST['urun_uyari_stok_adedi']);
+
+            $urun_depo_uyari_adet = guvenlik($_POST['urun_depo_uyari_adet']);
+
+            $urun_eski_sira = guvenlik($_POST['urun_eski_sira']);
+
+            $urun_yeni_sira = guvenlik($_POST['urun_yeni_sira']);
+
+            // SIRALAMA AYARI BURADA GÜNCELLEME İLE ALAKALI SIRALAMADAN BAŞKA BİR ŞEY YOK
+
+            if ($urun_eski_sira < $urun_yeni_sira) {
+
+                $kayacakurunsayisi = $urun_yeni_sira - $urun_eski_sira;
+
+                $kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $urun_eski_sira,$kayacakurunsayisi", PDO::FETCH_ASSOC);
+
+                if ( $kaycaklaricek->rowCount() ){
+
+                    foreach( $kaycaklaricek as $kuc ){
+
+                        $kayan_urun_id = $kuc['urun_id'];
+
+                        $kayan_urun_sira = $kuc['urun_sira'];
+
+                        $kayan_urun_sira--;
+
+                        $sira_guncelle = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?");
+
+                        $kaymaguncelle = $sira_guncelle->execute(array($kayan_urun_sira,$kayan_urun_id));
+
+                    }
+
+                }
+
+            }elseif ($urun_eski_sira > $urun_yeni_sira) {
+
+                $kayacakurunsayisi = $urun_eski_sira - $urun_yeni_sira;
+
+                $bionce = $urun_yeni_sira - 1;
+
+                $kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $bionce,$kayacakurunsayisi", PDO::FETCH_ASSOC);
+
+                if ( $kaycaklaricek->rowCount() ){
+
+                    foreach( $kaycaklaricek as $kuc ){
+
+                        $kayan_urun_id = $kuc['urun_id'];
+
+                        $kayan_urun_sira = $kuc['urun_sira'];
+
+                        $kayan_urun_sira++;
+
+                        $sadece = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?");
+
+                        $benzeme = $sadece->execute(array($kayan_urun_sira,$kayan_urun_id));
+
+                    }
+
+                }
+
+            }
+
+            // SIRALAMA AYARI BİTİŞ
+
+            $query = $db->query("SELECT * FROM clients WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
+
+            if ( $query->rowCount() ){
+
+                foreach( $query as $row ){
+
+                    $firmaid = $row[ 'id'];
+
+                }
+
+            }
+
+            // BÜTÜN BİLGİLER BURADA GÜNCELLENİYOR
+
+            $query = $db->prepare("UPDATE urun SET urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, satis = ?, urun_fabrika = ?, urun_aciklama = ?, urun_stok = ?, musteri_ismi = ?,urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, tarih = ?, termin = ? WHERE urun_id = ?");
+
+            $guncelle = $query->execute(array($urun_kodu,$urun_adi,$urun_adet,$urun_palet,$urun_depo_adet,$urun_raf,$urun_birimkg,$urun_boy_olcusu,$urun_alis,$satis,$urun_fabrika,$urun_aciklama,$urun_stok,$musteri_ismi,$urun_uyari_stok_adedi,$urun_depo_uyari_adet,$urun_yeni_sira,$tarih,$termin,$urun_id));
+
+            if ($urun_adet != $eskiadet) {
+
+                $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
+
+                $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
+
+            }
+
+            if ($urun_depo_adet != $eskidepoadet || $urun_palet != $eskipalet) {
+
+                $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
+
+                $islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),date('Y-m-d H:i:s'),'1',$user->company_id));
+
+            }
+
+            // ALIŞ FİYATI HEPSİNE UYGULANSIN SEÇİLDİYSE İŞLEYECEK GÜNCELLEME KODLARI
+
+            if(isset($_POST['hepsineuygula'])) { // checkbox seçilmişse "on" değeri gönderiliyor
+
+                //echo "girdi"; echo $urun_alis." / ".$ust_kategori_id." / ".$urun_fabrika; exit();
+
+                $alisguncelleme = $db->prepare("UPDATE urun SET urun_alis = ? WHERE kategori_bir = ? AND urun_fabrika = ?");
+
+                $guncelleme = $alisguncelleme->execute(array($urun_alis,$ust_kategori_id,$urun_fabrika));
+
+            }
+
+            header("Location:product.php?id=".$categoryId."&u=".$urun_id."&guncellendi#".$urun_id);
+
+            exit();
+
+        }
+
+        if (isset($_POST['siparisalindi'])) {
+
+            $siparis_id = guvenlik($_POST['siparis_id']);
+
+            $urun_id = guvenlik($_POST['urun_id']);
+
+            $eklenenadet = guvenlik($_POST['eklenenadet']);
+
+            $eskiadet = guvenlik($_POST['urun_adet']);
+
+            $urun_adet = $eskiadet + $eklenenadet;
+
+            if ($urun_adet != $eskiadet) {
+
+                $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
+
+                $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
+
+            }
+
+            $query = $db->prepare("UPDATE urun SET urun_adet = ? WHERE urun_id = ?");
+
+            $guncelle = $query->execute(array($urun_adet,$urun_id));
+
+            $query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?");
+
+            $guncelle = $query->execute(array('0',$siparis_id));
+
+            header("Location:product.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
+
+            exit();
+
+        }
+
+        if (isset($_POST['deposiparisalindi'])) {
+
+            $siparis_id = guvenlik($_POST['siparis_id']);
+
+            $urun_id = guvenlik($_POST['urun_id']);
+
+            $eklenenadet = guvenlik($_POST['eklenenadet']);
+
+            $eskiadet = guvenlik($_POST['urun_depo_adet']);
+
+            $urun_depo_adet = $eskiadet + $eklenenadet;
+
+            if ($urun_depo_adet != $eskiadet) {
+
+                $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
+
+                $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,date('Y-m-d H:i:s'),'1',$user->company_id));
+
+            }
+
+            $query = $db->prepare("UPDATE urun SET urun_depo_adet = ? WHERE urun_id = ?");
+
+            $guncelle = $query->execute(array($urun_depo_adet,$urun_id));
+
+            $query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?");
+
+            $guncelle = $query->execute(array('0',$siparis_id));
+
+            header("Location:product.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
+
+            exit();
+
+        }
+
+        if (isset($_POST['paletsiparisalindi'])) {
+
+            $siparis_id = guvenlik($_POST['siparis_id']);
+
+            $urun_id = guvenlik($_POST['urun_id']);
+
+            $eklenenadet = guvenlik($_POST['eklenenadet']);
+
+            $eskiadet = guvenlik($_POST['urun_palet']);
+
+            $urun_palet = $eskiadet + $eklenenadet;
+
+            if ($urun_palet != $eskiadet) {
+
+                $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
+
+                $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_palet,date('Y-m-d H:i:s'),'2',$user->company_id));
+
+            }
+
+            $query = $db->prepare("UPDATE urun SET urun_palet = ? WHERE urun_id = ?");
+
+            $guncelle = $query->execute(array($urun_palet,$urun_id));
+
+            $query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?");
+
+            $guncelle = $query->execute(array('0',$siparis_id));
+
+            header("Location:product.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
+
+            exit();
+
+        }
+
+        if (isset($_POST['add_inventory'])) {
+
+            $code = guvenlik($_POST['code']);
+
+            $dimension_1 = guvenlik($_POST['dimension_1']);
+
+            $dimension_2 = guvenlik($_POST['dimension_2']);
+
+            $dimension_3 = guvenlik($_POST['dimension_3']);
+
+            $density = guvenlik($_POST['density']);
+
+            $factory_name = guvenlik($_POST['factory_name']);
+
+            $query = $db->prepare("INSERT INTO inventory SET category_id = ?, code = ?, dimension_1 = ?, dimension_2 = ?, dimension_3 = ?, density = ?, factory_name = ?, is_deleted = ?, company_id = ?");
+
+            $insert = $query->execute(array($categoryId,$code,$dimension_1,$dimension_2,$dimension_3,$density,$factory_name,'0',$user->company_id));
+
+            header("Location:product.php?id=".$categoryId."&inventory_added");
+
+            exit();
+
+        }
+
+        if (isset($_POST['update_inventory'])) {
+
+            $id = guvenlik($_POST['id']);
+
+            $code = guvenlik($_POST['code']);
+
+            $dimension_1 = guvenlik($_POST['dimension_1']);
+
+            $dimension_2 = guvenlik($_POST['dimension_2']);
+
+            $dimension_3 = guvenlik($_POST['dimension_3']);
+
+            $density = guvenlik($_POST['density']);
+
+            $factory_name = guvenlik($_POST['factory_name']);
+
+            $query = $db->prepare("UPDATE inventories SET code = ?, dimension_1 = ?, dimension_2 = ?, dimension_3 = ?, density = ?, factory_name = ? WHERE id = ?");
+
+            $update = $query->execute(array($code,$dimension_1,$dimension_2,$dimension_3,$density,$factory_name,$id));
+
+            if($update) {
+                header("Location:product.php?id=".$categoryId."&inventory_updated");
+                exit();
+            }else{
+                $error = '<br/><div class="alert alert-danger" role="alert">Güncelleme işlemi gerçekleştirilemedi.</div>';
+            }
+        }
+
+        if (isset($_GET['guncellendi'])) {
+
+            $error = '<br/><div class="alert alert-success" role="alert">İlgili ürüne ait bilgiler başarıyla güncellendi.</a></div>';
+
+        }
+
+        if (isset($_GET['sipariseklendi'])) {
+
+            $error = '<br/><div class="alert alert-success" role="alert"><a href="factory.php" target="m_blank">Siparişin başarıyla eklendi. Buraya tıklayarak yönetim sayfasından sipariş formlarına ulaşabilirsin.</a></div>';
+
+        }
+
+        if (isset($_GET['siparisalindi'])) {
+
+            $error = '<br/><div class="alert alert-success" role="alert"><a href="factory.php" target="m_blank">Sipariş alındı ve sipariş kaydı geçmiş siparişlere eklendi.</a></div>';
+
+        }
+
+        if (isset($_GET['urunsilinemez'])) {
+
+            $error = '<br/><div class="alert alert-danger" role="alert">İlgili ürüne ait stokda malzeme bulunduğudan kaydını silemezsiniz.</a></div>';
+
+        }
+
+        if (isset($_GET['urunsilindi'])) {
+
+            $error = '<br/><div class="alert alert-success" role="alert">Ürünün stokta kaydı olmadığından emin olunmuş ve ürün başarıyla silinmiştir.</div>';
+
+        }
+
+        if (isset($_GET['inventory_added'])) {
+
+            $error = '<br/><div class="alert alert-success" role="alert">Hazır kalıp listesine ekleme yapıldı.</div>';
+
+        }
+
+        if (isset($_GET['inventory_updated'])) {
+
+            $error = '<br/><div class="alert alert-success" role="alert">İlgili ürünün hazır kalıp bilgisi güncellendi.</div>';
+
+        }
 
         $araclar = $db->query("SELECT * FROM vehicles WHERE is_deleted = '0'")->fetchAll(PDO::FETCH_OBJ);
 
@@ -682,29 +637,29 @@
 
 				<div class="row">
 
-					<?php if($sutunurunkoduizni == '1'){?><div class="col-md-1 col-1" style="text-align: center;"><b>Ürün Kodu</b></div><?php } ?>
+					<?php if(in_array('product_code', $activeColumns)){?><div class="col-md-1 col-1" style="text-align: center;"><b>Ürün Kodu</b></div><?php } ?>
 					
 					<div class="col-md-2 col-2"><b>Ürün Adı</b></div>
 					<div class="col-md-4 col-4">
 						<div class="row">
-							<?php if($sutunadetizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Adet</b></div><?php } ?>
-							<?php if($sutunpaletizni == '1'){?><div class="col-2" style="text-align: center;"><b>Palet</b></div><?php } ?>
-							<?php if($sutundepoadetizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Alkop</b></div><?php } ?>
-							<?php if($sutunrafizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Raf</b></div><?php } ?>
-							<?php if($sutunbirimkgizni == '1'){?><div class="col-md-2 col-2 px-0" style="text-align: center;"><b>Birim Kg</b></div><?php } ?>
-							<?php if($sutunsipariskiloizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Sipariş Kilo</b></div><?php } ?>
-							<?php if($sutunboyolcusuizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Boy Ölçüsü</b></div><?php } ?>
-							<?php if($sutuntoplamizni == '1'){?><div class="col-md-2 col-2" style="text-align: center;"><b>Toplam</b></div><?php } ?>
+							<?php if(in_array('quantity', $activeColumns)){?><div class="col-md-2 col-2" style="text-align: center;"><b>Adet</b></div><?php } ?>
+							<?php if(in_array('pallet', $activeColumns)){?><div class="col-2" style="text-align: center;"><b>Palet</b></div><?php } ?>
+							<?php if(in_array('warehouse_quantity', $activeColumns)){?><div class="col-md-2 col-2" style="text-align: center;"><b>Alkop</b></div><?php } ?>
+							<?php if(in_array('shelf', $activeColumns)){?><div class="col-md-2 col-2" style="text-align: center;"><b>Raf</b></div><?php } ?>
+							<?php if(in_array('unit_weight', $activeColumns)){?><div class="col-md-2 col-2 px-0" style="text-align: center;"><b>Birim Kg</b></div><?php } ?>
+							<?php if(in_array('order_weight', $activeColumns)){?><div class="col-md-2 col-2" style="text-align: center;"><b>Sipariş Kilo</b></div><?php } ?>
+							<?php if(in_array('size_measure', $activeColumns)){?><div class="col-md-2 col-2" style="text-align: center;"><b>Boy Ölçüsü</b></div><?php } ?>
+							<?php if(in_array('total', $activeColumns)){?><div class="col-md-2 col-2" style="text-align: center;"><b>Toplam</b></div><?php } ?>
 						</div>
 					</div>
 
-					<?php if($sutunalisizni == '1' && $user->permissions->buying_price == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Alış</b></div><?php  } ?>
+					<?php if(in_array('purchase_price', $activeColumns) && $user->permissions->buying_price == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Alış</b></div><?php  } ?>
 
-					<?php if($sutunsatisizni == '1' && $user->permissions->selling_price == '1' || $user->type == '2'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Satış</b></div><?php } ?>
+					<?php if(in_array('sales_price', $activeColumns) && $user->permissions->selling_price == '1' || $user->type == '2'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Satış</b></div><?php } ?>
 
-					<?php if($sutunfabrikaizni == '1' && $user->permissions->factory == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Fabrika</b></div><?php } ?>	
+					<?php if(in_array('factory', $activeColumns) && $user->permissions->factory == '1'){?><div class="col-md-1 col-1" style="text-align:center;"><b>Fabrika</b></div><?php } ?>
 
-					<?php if($sutunmusteriismiizni == '1'){?><div class="col-md-1 col-1"><b>Müşteri</b></div><?php } ?>	
+					<?php if(in_array('customer_name', $activeColumns)){?><div class="col-md-1 col-1"><b>Müşteri</b></div><?php } ?>
 
 					<div class="col-md-3 col-3" style="text-align: right;">
 
@@ -914,7 +869,7 @@
 
 						$satis = $orw['satis'];
 
-						if($sutunmanuelsatisizni == '1'){ $urun_satis = $satis; }
+						if(in_array('manuel_sales', $activeColumns)){ $urun_satis = $satis; }
 
 						$urun_fabrika = $orw['urun_fabrika'];
 
@@ -952,7 +907,7 @@
 
 						<div class="row">
 
-							<?php if($sutunurunkoduizni == '1'){?>								
+							<?php if(in_array('product_code', $activeColumns)){?>
 
 							<div class="col-4 d-block d-sm-none">Ürün Kodu : </div>
 
@@ -960,7 +915,7 @@
 
 							<?php } ?>
 
-							<?php if($sutunterminizni == 1 && $urunterminsaniye < time()){ ?>
+							<?php if(in_array('due_date', $activeColumns) && $urunterminsaniye < time()){ ?>
 
 								<div class="col-4 d-block d-sm-none"><b style="color: red;">Ürün Adı :</b></div>
 
@@ -996,7 +951,7 @@
 
 								<div class="row">
 
-									<?php if($sutunadetizni == '1'){?>								
+									<?php if(in_array('quantity', $activeColumns)){?>
 
 									<div class="col-4 d-block d-sm-none">Adet : </div>
 
@@ -1004,7 +959,7 @@
 
 									<?php } ?>
 
-									<?php if($sutunpaletizni == '1'){?>								
+									<?php if(in_array('pallet', $activeColumns)){?>
 
 									<div class="col-4 d-block d-sm-none">Palet : </div>
 
@@ -1012,7 +967,7 @@
 
 									<?php } ?>
 
-									<?php if($sutundepoadetizni == '1'){?>								
+									<?php if(in_array('warehouse_quantity', $activeColumns)){?>
 
 									<div class="col-4 d-block d-sm-none">Alkop Adet : </div>
 
@@ -1020,7 +975,7 @@
 
 									<?php } ?>
 
-									<?php if($sutunrafizni == '1'){?>								
+									<?php if(in_array('shelf', $activeColumns)){?>
 
 									<div class="col-4 d-block d-sm-none">Raf : </div>
 
@@ -1028,7 +983,7 @@
 
 									<?php } ?>
 
-									<?php if($sutunbirimkgizni == '1'){?>
+									<?php if(in_array('unit_weight', $activeColumns)){?>
 
 									<div class="col-4 d-block d-sm-none">Birim Kg : </div>
 
@@ -1036,7 +991,7 @@
 
 									<?php } ?>
 
-									<?php if($sutunsipariskiloizni == '1'){ ?>
+									<?php if(in_array('order_weight', $activeColumns)){ ?>
 
 									<div class="col-4 d-block d-sm-none">Sipariş Kilo : </div>
 
@@ -1044,7 +999,7 @@
 
 									<?php } ?>
 
-									<?php if($sutunboyolcusuizni == '1'){ ?>
+									<?php if(in_array('size_measure', $activeColumns)){ ?>
 
 									<div class="col-4 d-block d-sm-none">Boy Ölçüsü : </div>
 
@@ -1052,7 +1007,7 @@
 
 									<?php } ?>
 
-									<?php if($sutuntoplamizni == '1'){?>
+									<?php if(in_array('total', $activeColumns)){?>
 
 									<div class="col-4 d-block d-sm-none">Toplam : </div>
 
@@ -1064,7 +1019,7 @@
 							
 							</div>
 
-							<?php if($sutunalisizni == '1' && $user->permissions->buying_price == '1'){ ?>
+							<?php if(in_array('purchase_price', $activeColumns) && $user->permissions->buying_price == '1'){ ?>
 
 								<div class="col-4 d-block d-sm-none">Alış : </div>
 
@@ -1072,7 +1027,7 @@
 
 							<?php } ?>
 
-							<?php if($sutunsatisizni == '1' && $user->permissions->selling_price == '1' || $user->type == '2'){?>
+							<?php if(in_array('sales_price', $activeColumns) && $user->permissions->selling_price == '1' || $user->type == '2'){?>
 
 							<div class="col-4 d-block d-sm-none">Satış : </div>
 
@@ -1080,7 +1035,7 @@
 
 							<?php } ?>
 
-							<?php if($sutunfabrikaizni == '1' && $user->permissions->factory == '1'){?>
+							<?php if(in_array('factory', $activeColumns) && $user->permissions->factory == '1'){?>
 
 								<div class="col-4 d-block d-sm-none">Fabrika : </div>
 
@@ -1088,7 +1043,7 @@
 
 							<?php } ?>
 
-							<?php if($sutunmusteriismiizni == '1'){?>
+							<?php if(in_array('customer_name', $activeColumns)){?>
 
 								<div class="col-4 d-block d-sm-none">Müşteri : </div>
 
@@ -1100,7 +1055,7 @@
 
 								<div class="row">
 
-									<?php if($sutunteklifbutonuizni == '1' && $user->permissions->quote == '1'){ ?>
+									<?php if(in_array('offer_button', $activeColumns) && $user->permissions->quote == '1'){ ?>
 
 										<div class="col-md-3 col-3 p-1">
 
@@ -1110,7 +1065,7 @@
 
 									<?php } ?>
 
-									<?php if($sutunsiparisbutonuizni == '1' && $user->permissions->order == '1'){ ?>
+									<?php if(in_array('order_button', $activeColumns) && $user->permissions->order == '1'){ ?>
 
 										<div class="col-md-3 col-3 p-1">
 											
@@ -1136,7 +1091,7 @@
 
 									<?php } ?>
 
-									<?php if($sutunsevkiyatbutonuizni == '1' && $user->permissions->shipment == '1'){ ?>
+									<?php if(in_array('shipment_button', $activeColumns)  && $user->permissions->shipment == '1'){ ?>
 
 										<div class="col-md-3 col-3 p-1">
 
@@ -1146,7 +1101,7 @@
 
 									<?php } ?> 
 
-									<?php if($sutunduzenlebutonuizni == '1' && $user->permissions->editing == '1'){ ?>
+									<?php if(in_array('edit_button', $activeColumns) && $user->permissions->editing == '1'){ ?>
 
 										<div class="col-md-3 col-3 p-1">
 
@@ -1779,25 +1734,25 @@
 
 												<input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
 
-												<?php if($sutunurunkoduizni == '1'){?><div class="col-md-1 col-12"><b>Ürün Kodu</b><input type="text" class="form-control" name="urun_kodu" value="<?= $urun_kodu; ?>"></div><?php } ?>	
+												<?php if(in_array('product_code', $activeColumns)){?><div class="col-md-1 col-12"><b>Ürün Kodu</b><input type="text" class="form-control" name="urun_kodu" value="<?= $urun_kodu; ?>"></div><?php } ?>
 											
 												<div class="col-md-2 col-12"><b>Ürün Adı</b><input type="text" class="form-control" name="urun_adi" value="<?= $urun_adi; ?>"></div>
-												
-												<?php if($sutunadetizni == '1' && $user->permissions->piece == '1'){?><div class="col-md-1 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?= $urun_adet; ?>"></div><?php } ?>	
 
-												<?php if($sutunpaletizni == '1' && $user->permissions->pallet == '1'){?><div class="col-md-1 col-12 px-1"><b>Palet</b><input type="text" class="form-control" name="urun_palet" value="<?= $urun_palet; ?>"></div><?php } ?>	
+												<?php if(in_array('quantity', $activeColumns) && $user->permissions->piece == '1'){?><div class="col-md-1 col-12 px-1"><b>Adet</b><input type="text" class="form-control" name="urun_adet" value="<?= $urun_adet; ?>"></div><?php } ?>
+
+												<?php if(in_array('pallet', $activeColumns) && $user->permissions->pallet == '1'){?><div class="col-md-1 col-12 px-1"><b>Palet</b><input type="text" class="form-control" name="urun_palet" value="<?= $urun_palet; ?>"></div><?php } ?>
 														
-												<?php if($sutundepoadetizni == '1' && $user->permissions->alkop == '1'){?><div class="col-md-1 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?= $urun_depo_adet; ?>"></div><?php } ?>	
+												<?php if(in_array('warehouse_quantity', $activeColumns) && $user->permissions->alkop == '1'){?><div class="col-md-1 col-12 px-1"><b>Depo</b><input type="text" class="form-control" name="urun_depo_adet" value="<?= $urun_depo_adet; ?>"></div><?php } ?>
 														
-												<?php if($sutunrafizni == '1'){?><div class="col-md-1 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?= $urun_raf; ?>"></div><?php } ?>	
+												<?php if(in_array('shelf', $activeColumns)){?><div class="col-md-1 col-12 px-1"><b>Raf</b><input type="text" class="form-control" name="urun_raf" value="<?= $urun_raf; ?>"></div><?php } ?>
 													
-												<?php if($sutunbirimkgizni == '1'){?><div class="col-md-1 col-12"><b>Birim Kg</b><input type="text" class="form-control" name="urun_birimkg" value="<?= $urun_birimkg; ?>"></div><?php } ?>
+												<?php if(in_array('unit_weight', $activeColumns)){?><div class="col-md-1 col-12"><b>Birim Kg</b><input type="text" class="form-control" name="urun_birimkg" value="<?= $urun_birimkg; ?>"></div><?php } ?>
 
-												<?php if($sutunsipariskiloizni == '1'){?><div class="col-md-1 col-12"><b>Sipariş Kilo</b><input type="text" class="form-control" name="urun_birimkg" value="<?= $urun_birimkg; ?>"></div><?php } ?>
+												<?php if(in_array('order_weight', $activeColumns)){?><div class="col-md-1 col-12"><b>Sipariş Kilo</b><input type="text" class="form-control" name="urun_birimkg" value="<?= $urun_birimkg; ?>"></div><?php } ?>
 
-												<?php if($sutunboyolcusuizni == '1'){?><div class="col-md-1 col-12"><b>Boy Ölçüsü</b><input type="text" class="form-control" name="urun_boy_olcusu" value="<?= $urun_boy_olcusu; ?>"></div><?php } ?>			
+												<?php if(in_array('size_measure', $activeColumns)){?><div class="col-md-1 col-12"><b>Boy Ölçüsü</b><input type="text" class="form-control" name="urun_boy_olcusu" value="<?= $urun_boy_olcusu; ?>"></div><?php } ?>
 
-												<?php if($sutunalisizni == '1' && $user->permissions->buying_price == '1'){ ?>
+												<?php if(in_array('purchase_price', $activeColumns) && $user->permissions->buying_price == '1'){ ?>
 
 													<div class="col-md-1 col-12">
 
@@ -1815,7 +1770,7 @@
 
 												<?php } ?>
 
-												<?php if($sutunmanuelsatisizni == '1' && $user->permissions->selling_price == '1' || $user->type == '2'){?>
+												<?php if(in_array('manuel_sales', $activeColumns) && $user->permissions->selling_price == '1' || $user->type == '2'){?>
 
 													<div class="col-md-1 col-12">
 
@@ -1827,7 +1782,7 @@
 
 												<?php } ?>
 
-												<?php if($sutunfabrikaizni == '1' && $user->permissions->factory == '1'){?>
+												<?php if(in_array('factory', $activeColumns) && $user->permissions->factory == '1'){?>
 
 												<div class="col-md-1 col-12"><b>Fabrika</b>
 													
@@ -1869,11 +1824,11 @@
 
 												<?php } ?>
 
-												<?php if($sutunsiparisadediizni == '1'){?><div class="col-md-1 col-12"><b><small>Sipariş Adedi</small></b><input type="text" class="form-control" name="urun_stok" value="<?= $urun_stok; ?>"></div><?php } ?>
+												<?php if(in_array('order_quantity', $activeColumns)){?><div class="col-md-1 col-12"><b><small>Sipariş Adedi</small></b><input type="text" class="form-control" name="urun_stok" value="<?= $urun_stok; ?>"></div><?php } ?>
 
-												<?php if($sutunuyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Uyarı Adet</b><input type="text" class="form-control" name="urun_uyari_stok_adedi" value="<?= $urun_uyari_stok_adedi; ?>"></div><?php } ?>
+												<?php if(in_array('warning_count', $activeColumns)){?><div class="col-md-1 col-12 p-0"><b>Uyarı Adet</b><input type="text" class="form-control" name="urun_uyari_stok_adedi" value="<?= $urun_uyari_stok_adedi; ?>"></div><?php } ?>
 
-												<?php if($sutundepouyariadediizni == '1'){?><div class="col-md-1 col-12 p-0"><b>Depo Uyarı</b><input type="text" class="form-control" name="urun_depo_uyari_adet" value="<?= $urun_depo_uyari_adet; ?>"></div><?php } ?>
+												<?php if(in_array('warehouse_warning_count', $activeColumns)){?><div class="col-md-1 col-12 p-0"><b>Depo Uyarı</b><input type="text" class="form-control" name="urun_depo_uyari_adet" value="<?= $urun_depo_uyari_adet; ?>"></div><?php } ?>
 
 												<div class="col-md-1 col-12">
 
@@ -1927,11 +1882,11 @@
 
 											<div class="row">
 
-												<?php if($sutunmusteriismiizni == '1'){?><div class="col-md-2 col-12"><b>Müşteri İsmi</b><input type="text" class="form-control" name="musteri_ismi" value="<?= $musteri_ismi; ?>"></div><?php } ?>
+												<?php if(in_array('customer_name', $activeColumns)){?><div class="col-md-2 col-12"><b>Müşteri İsmi</b><input type="text" class="form-control" name="musteri_ismi" value="<?= $musteri_ismi; ?>"></div><?php } ?>
 
-												<?php if($sutuntarihizni == '1'){?><div class="col-md-2 col-12"><b>Tarih</b><input type="text" id="tarih<?= ($urunlistesira+500); ?>" name="tarih" value="<?= $tarih; ?>" class="form-control form-control-sm"></div><?php } ?>
+												<?php if(in_array('date', $activeColumns)){?><div class="col-md-2 col-12"><b>Tarih</b><input type="text" id="tarih<?= ($urunlistesira+500); ?>" name="tarih" value="<?= $tarih; ?>" class="form-control form-control-sm"></div><?php } ?>
 												
-												<?php if($sutunterminizni == '1'){?><div class="col-md-2 col-12"><b>Termin</b><input type="text" id="tarih<?= $urunlistesira; ?>" name="termin" value="<?= $termin; ?>" class="form-control form-control-sm"></div><?php } ?>
+												<?php if(in_array('due_date', $activeColumns)){?><div class="col-md-2 col-12"><b>Termin</b><input type="text" id="tarih<?= $urunlistesira; ?>" name="termin" value="<?= $termin; ?>" class="form-control form-control-sm"></div><?php } ?>
 											
 											</div>
 

@@ -39,7 +39,7 @@
                     $alt_kategori_adi = $wor['kategori_adi'];
                     $alt_kategori_resim = "img/kategoriler/".$wor['resim'];
         ?>		
-                    <a href="urunler.php?id=<?= $alt_kategori_id; ?>">
+                    <a href="product.php?id=<?= $alt_kategori_id; ?>">
                         <div class="row pl-1">
                             <div class="col-md-3 col-2 offset-md-0 ">
                                 <img src="<?= $alt_kategori_resim ?>" alt="<?= $alt_kategori_adi ?>" width="35" height="35">
