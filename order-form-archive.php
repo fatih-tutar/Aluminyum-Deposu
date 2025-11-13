@@ -104,8 +104,8 @@ if (!isLoggedIn()) {
                                                 continue;
                                             }
                                             $productName = $orderItemProduct->urun_adi;
-                                            $mainCategory = getCategory($orderItemProduct->kategori_bir)->kategori_adi;
-                                            $subCategory = getCategory($orderItemProduct->kategori_iki)->kategori_adi;
+                                            $mainCategory = getCategory($orderItemProduct->kategori_bir)->name;
+                                            $subCategory = getCategory($orderItemProduct->kategori_iki)->name;
                                             ?>
                                             <tr>
                                                 <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>

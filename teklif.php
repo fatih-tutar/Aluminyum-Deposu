@@ -112,9 +112,9 @@
                     $totalAmountWithKDV = $totalAmount + $kdv;
                     ?>
                     <tr>
-                        <td style="word-wrap: break-word; white-space: normal; max-width: 400px;"><?= ($key + 1).". ".$product->urun_adi." ".$subCategory->kategori_adi; ?></td>
+                        <td style="word-wrap: break-word; white-space: normal; max-width: 400px;"><?= ($key + 1).". ".$product->urun_adi." ".$subCategory->name; ?></td>
                         <td><?= $offer->tadet." Boy "; ?></td>
-                        <td><?= $mainCategory->kategori_adi; ?></td>
+                        <td><?= $mainCategory->name; ?></td>
                         <td>
                             <form action="" method="POST">
                                 <input type="hidden" name="id" value="<?= $offer->teklifid ?>" />

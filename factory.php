@@ -208,7 +208,7 @@
                                                             $product = getProduct($productId);
                                                             $category = getCategory($product->kategori_bir);
                                                             $subCategory = getCategory($product->kategori_iki);
-                                                            $orderName = $product->urun_adi." ".$category->kategori_adi." ".$subCategory->kategori_adi;
+                                                            $orderName = $product->urun_adi." ".$category->name." ".$subCategory->name;
                                                         ?>
                                                         <tr>
                                                             <td><?= $orderName; ?></td>

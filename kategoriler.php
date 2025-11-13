@@ -134,9 +134,9 @@
 
 			$kategori_iki = guvenlik($_POST['kategori_iki']);
 
-			$katbircek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+			$katbircek = $db->query("SELECT * FROM categories WHERE id = '{$kategori_iki}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-			$kategori_bir = $katbircek['kategori_ust'];
+			$kategori_bir = $katbircek['parent_id'];
 
 			$urun_adi = guvenlik($_POST['urun_adi']);
 
@@ -331,10 +331,10 @@
 
 													$kategori_ust = $row['kategori_ust'];
 
-													$ustadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_ust}' AND sirketid = '{$user->company_id}'  AND silik = '0'")->fetch(PDO::FETCH_ASSOC);
+													$ustadcek = $db->query("SELECT * FROM categories WHERE id = '{$kategori_ust}' AND company_id = '{$user->company_id}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
 
                                                     if ($ustadcek && is_array($ustadcek)) {
-                                                        $ustkategoriadi = $ustadcek['kategori_adi'] ?? null;
+                                                        $ustkategoriadi = $ustadcek['name'] ?? null;
                                                     } else {
                                                         $ustkategoriadi = null;
                                                     }

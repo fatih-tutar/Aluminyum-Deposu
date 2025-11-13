@@ -76,7 +76,7 @@
                       ?>
                         <tr>
                             <td><a href="profil.php?id=<?= $stockActivity->created_by ?>"><?= $createdByName ?></a></td>
-                            <td><?= $product->urun_adi." / ".$subCategory->kategori_adi." / ".$category->kategori_adi ?></td>
+                            <td><?= $product->urun_adi." / ".$subCategory->name." / ".$category->name ?></td>
                             <td><?= $stockActivity->prev_quantity ?></td>
                             <td><?= $stockActivity->new_quantity ?></td>
                             <td>

@@ -334,8 +334,8 @@
                                                 foreach ($offers as $offerKey => $offer):
                                                     $product = getProduct($offer->turunid);
                                                     $productName = $product->urun_adi;
-                                                    $mainCategory = getCategory($product->kategori_bir)->kategori_adi;
-                                                    $subCategory = getCategory($product->kategori_iki)->kategori_adi;
+                                                    $mainCategory = getCategory($product->kategori_bir)->name;
+                                                    $subCategory = getCategory($product->kategori_iki)->name;
                                                     ?>
                                                     <tr>
                                                         <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>
@@ -419,8 +419,8 @@
                                                                                 continue;
                                                                             }
                                                                             $productName = $offerItemProduct->urun_adi;
-                                                                            $mainCategory = getCategory($offerItemProduct->kategori_bir)->kategori_adi;
-                                                                            $subCategory = getCategory($offerItemProduct->kategori_iki)->kategori_adi;
+                                                                            $mainCategory = getCategory($offerItemProduct->kategori_bir)->name;
+                                                                            $subCategory = getCategory($offerItemProduct->kategori_iki)->name;
                                                                             ?>
                                                                             <tr>
                                                                                 <td><?= $productName.' / '.$subCategory.' / '.$mainCategory ?></td>

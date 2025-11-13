@@ -87,9 +87,9 @@ if($user->type == '0'){
             $totalAmountWithKDV = $totalAmount + $kdv;
             ?>
             <tr>
-                <td style="word-wrap: break-word; white-space: normal; max-width: 400px;"><?= ($key + 1).". ".$product->urun_adi." ".$subCategory->kategori_adi; ?></td>
+                <td style="word-wrap: break-word; white-space: normal; max-width: 400px;"><?= ($key + 1).". ".$product->urun_adi." ".$subCategory->name; ?></td>
                 <td><?= $offer->tadet." Boy "; ?></td>
-                <td><?= $mainCategory->kategori_adi; ?></td>
+                <td><?= $mainCategory->name; ?></td>
                 <td><?= $unitWeight." Kg"  ?></td>
                 <td><?= $weight." Kg"; ?></td>
                 <td><?= $offer->tsatisfiyati." TL"; ?></td>

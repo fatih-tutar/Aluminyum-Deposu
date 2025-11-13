@@ -16,7 +16,7 @@ function getProduct($productId)
 function getCategory($categoryId)
 {
     global $db;
-    $category = $db->query("SELECT * FROM kategori WHERE kategori_id = {$categoryId} AND silik = 0");
+    $category = $db->query("SELECT * FROM categories WHERE id = {$categoryId} AND is_deleted = 0");
     return $category->fetch(PDO::FETCH_OBJ);
 }
 
@@ -284,7 +284,7 @@ function getUsername($userId){
 
 function getCategoryInfo($categoryId){
     global $db;
-    $category = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    $category = $db->query("SELECT * FROM categories WHERE id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
     return $category;
 }
 
@@ -311,7 +311,7 @@ function getSatis($urunId){
 
         $categoryId = getUrunInfo($urunId)['kategori_bir'];
 
-        $ust_kategori_kar_yuzdesi = getCategoryInfo($categoryId)['karyuzdesi'];
+        $ust_kategori_kar_yuzdesi = getCategoryInfo($categoryId)['profit_margin'];
 
         $urun_satis = $urun_alis * ($ust_kategori_kar_yuzdesi + 100) / 100;
 
@@ -323,8 +323,8 @@ function getSatis($urunId){
 
 function getCategoryShortName($categoryId){
     global $db;
-    $category = $db->query("SELECT kategori_adi FROM kategori WHERE kategori_id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-    $categoryName = $category['kategori_adi'];
+    $category = $db->query("SELECT name FROM categories WHERE id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    $categoryName = $category['name'];
     $categoryNameArray = explode(" ",$categoryName);
     $categoryShortName = $categoryNameArray[0];
     return $categoryShortName;
@@ -332,9 +332,9 @@ function getCategoryShortName($categoryId){
 
 function getCategoryName($categoryId){
     global $db;
-    $category = $db->query("SELECT kategori_adi FROM kategori WHERE kategori_id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-    if($category && isset($category['kategori_adi'])){
-        return $category['kategori_adi'];
+    $category = $db->query("SELECT name FROM categories WHERE id = '{$categoryId}' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    if($category && isset($category['name'])){
+        return $category['name'];
     }
     return null;
 }
@@ -638,6 +638,18 @@ function kategoridolumu($kategori_id){
     $say = $sorgu->fetchColumn();
 
     return ($say == '0') ? '0' : '1';
+}
+
+function categoryHasProducts($categoryId) {
+    global $db;
+    $stmt = $db->prepare("
+        SELECT COUNT(*) 
+        FROM urun 
+        WHERE (kategori_bir = :id OR kategori_iki = :id) 
+          AND silik = 0
+    ");
+    $stmt->execute(['id' => $categoryId]);
+    return $stmt->fetchColumn() > 0 ? '1' : '0';
 }
 
 function siparisvarmi($factoryId){
