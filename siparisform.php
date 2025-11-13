@@ -197,13 +197,13 @@
 
 				$urun_birimkg = $urunbilcek['urun_birimkg'];
 
-				$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
+				$katadcek = $db->query("SELECT * FROM categories WHERE id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
 
-				$kategori_bir_adi = $katadcek['kategori_adi'];
+				$kategori_bir_adi = $katadcek['name'];
 
-				$katadcek = $db->query("SELECT * FROM kategori WHERE kategori_id = '{$kategori_iki}'")->fetch(PDO::FETCH_ASSOC);
+				$katadcek = $db->query("SELECT * FROM categories WHERE id = '{$kategori_iki}'")->fetch(PDO::FETCH_ASSOC);
 
-				$kategori_iki_adi = $katadcek['kategori_adi'];
+				$kategori_iki_adi = $katadcek['name'];
 
 				$kilo = $urun_siparis_aded * $urun_birimkg;
 
