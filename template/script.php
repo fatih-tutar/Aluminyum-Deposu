@@ -19,19 +19,19 @@
                 dateFormat: "dd-mm-yy",
 
                 altFormat: "yy-mm-dd",
-     
+
                 altField:"#tarih-db",
-                
+
                 monthNames: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],
-                
+
                 dayNamesMin: [ "Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct" ],
-                
+
                 firstDay:1
-            
+
             });
 
         }
-     
+
     } );
 
 	
@@ -271,6 +271,7 @@
         }
     }
 
+    /**
     document.addEventListener('DOMContentLoaded', function () {
         const sidebar = document.getElementById('sidebar');
         const toggleBtn = document.getElementById('menuToggleBtn');
@@ -293,5 +294,55 @@
             });
         }
     });
+     **/
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menuToggleBtn');
+        const closeBtn = document.getElementById('closeSidebar');
+
+        // Menü butonuna tıklanınca sidebar açılır
+        if (menuBtn) {
+            menuBtn.addEventListener('click', function (e) {
+                e.preventDefault(); // olası form davranışını engelle
+                sidebar.classList.add('active');
+            });
+        }
+
+        // Çarpıya tıklanınca sidebar kapanır
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                sidebar.classList.remove('active');
+            });
+        }
+
+        // Sidebar dışına tıklanırsa da kapanır (isteğe bağlı)
+        document.addEventListener('click', function (event) {
+            if (
+                sidebar.classList.contains('active') &&
+                !sidebar.contains(event.target) &&
+                event.target !== menuBtn
+            ) {
+                sidebar.classList.remove('active');
+            }
+        });
+    });
+
+    function toggleAccordion(header) {
+        const content = header.nextElementSibling;
+        const isActive = header.classList.contains('active');
+
+        // Kapat
+        document.querySelectorAll('.accordion-header').forEach(h => {
+            h.classList.remove('active');
+            if (window.innerWidth <= 768) h.nextElementSibling.style.display = 'none';
+        });
+
+        // Eğer kapalıysa aç
+        if (!isActive && window.innerWidth <= 768) {
+            header.classList.add('active');
+            content.style.display = 'block';
+        }
+    }
 </script>

@@ -84,18 +84,17 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div id="sidebar" class="col-md-2 d-none">
+                <div id="sidebar" class="sidebar col-md-2 pr-0">
+                    <button id="closeSidebar" class="close-btn">&times;</button>
                     <?php include 'template/sidebar2.php'; ?>
                 </div>
-                <div id="mainCol" class="col-md-12 col-12">
+                <div id="mainCol" class="col-md-10 col-12">
                     <div class="d-flex justify-content-between">
                         <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm mr-2 mb-2">
                             <i class="fas fa-bars"></i> Menü
                         </button>
-                        <div>
-                            <?= isset($error) ? $error : ''; ?>
-                        </div>
-                        <button class="btn btn-primary mb-2" onclick="openModal('form-div')">
+                        <h3 class="d-none d-md-block"><b>Fabrikalar</b></h3>
+                        <button class="btn btn-primary mb-2 btn-sm" onclick="openModal('form-div')">
                             <i class="fas fa-plus me-2"></i>
                             Yeni Fabrika
                         </button>

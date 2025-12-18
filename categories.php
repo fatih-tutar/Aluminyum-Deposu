@@ -239,23 +239,26 @@ if (!isLoggedIn()) {
 
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="col-md-2">
+        <div id="sidebar" class="sidebar col-md-2 pr-0">
+            <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include 'template/sidebar2.php'; ?>
         </div>
+
         <div id="mainCol" class="col-md-10 col-12">
-            <div class="d-flex justify-content-between">
-                <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm mr-2 mb-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm d-md-none">
                     <i class="fas fa-bars"></i> Menü
                 </button>
+                <h3 class="d-none d-md-block" style="margin-top:.3rem; margin-bottom:0; font-weight: bold;">Kategoriler</h3>
                 <div>
                     <?= isset($error) ? $error : ''; ?>
                 </div>
                 <div>
-                    <button class="btn btn-primary" onclick="openModal('form-div')">
-                        Yeni Ürün Ekle
+                    <button class="btn btn-primary btn-sm" onclick="openModal('form-div')">
+                        Ürün Ekle
                     </button>
-                    <button type="button" class="btn btn-success" onclick="openModal('addCategoryForm')">
-                        Yeni Kategori Ekle
+                    <button type="button" class="btn btn-success btn-sm" onclick="openModal('addCategoryForm')">
+                        Kategori Ekle
                     </button>
                 </div>
                 <div id="form-div" class="modal">
@@ -334,7 +337,7 @@ if (!isLoggedIn()) {
                             </tr>
 
                             <!-- Edit Modal -->
-                            <div id="editModal<?= $category->id; ?>" class="modal" style="<?= $category->type == 0 ? 'width:50%;' : '' ?>">
+                            <div id="editModal<?= $category->id; ?>" class="modal <?= $category->type == 0 ? 'modal-50' : '' ?>">
                                 <span class="close" onclick="closeModal()">&times;</span>
                                 <form action="" method="POST" enctype="multipart/form-data" class="form-container">
                                     <h4>Kategori Düzenle</h4>
@@ -369,9 +372,14 @@ if (!isLoggedIn()) {
                                                     // Bu gruba ait sütunları filtrele
                                                     $groupColumns = array_filter($columnDefinitions, fn($col) => $col->group_id == $groupId);
                                                     ?>
-                                                    <div class="col-md-4">
-                                                        <b><?= htmlspecialchars($groupName) ?></b>
-
+                                                    <div class="col-md-4 accordion-group">
+                                                        <!-- Grup başlığı -->
+                                                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                                                            <?= htmlspecialchars($groupName) ?>
+                                                            <i class="fa fa-chevron-down"></i>
+                                                        </div>
+                                                        <!-- Checkbox içeriği -->
+                                                        <div class="accordion-content">
                                                         <?php foreach ($groupColumns as $col):
                                                             $checked = in_array($col->id, $columns_ids) ? 'checked' : '';
                                                             ?>
@@ -397,6 +405,7 @@ if (!isLoggedIn()) {
                                                             <?php endif; ?>
 
                                                         <?php endforeach; ?>
+                                                        </div>
                                                     </div>
                                                 <?php endforeach; ?>
                                             </div>
@@ -435,7 +444,7 @@ if (!isLoggedIn()) {
     </div>
 </div>
 
-<div id="addCategoryForm" class="modal" style="width: 50%;">
+<div id="addCategoryForm" class="modal modal-50">
     <span class="close" onclick="closeModal()">&times;</span>
     <form method="POST" enctype="multipart/form-data" class="form-container">
         <h3>Yeni Kategori Ekle</h3>
@@ -480,9 +489,14 @@ if (!isLoggedIn()) {
                     <?php
                     $groupColumns = array_filter($columnDefinitions, fn($col) => $col->group_id == $groupId);
                     ?>
-                    <div class="col-md-4">
-                        <b><?= htmlspecialchars($groupName) ?></b>
-
+                    <div class="col-md-4 accordion-group">
+                        <!-- Grup başlığı -->
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <?= htmlspecialchars($groupName) ?>
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <!-- Checkbox içeriği -->
+                        <div class="accordion-content">
                         <?php foreach ($groupColumns as $col): ?>
                             <div class="form-check">
                                 <input
@@ -504,6 +518,7 @@ if (!isLoggedIn()) {
                                 </div>
                             <?php endif; ?>
                         <?php endforeach; ?>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>

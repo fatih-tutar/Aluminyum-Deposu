@@ -309,10 +309,11 @@ if (!isLoggedIn()) {
 <?php include 'template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="col-md-2 d-none">
+        <div id="sidebar" class="sidebar col-md-2 pr-0">
+            <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include 'template/sidebar2.php'; ?>
         </div>
-        <div id="mainCol" class="col-md-12 col-12">
+        <div id="mainCol" class="col-md-10 col-12">
             <?= isset($error) ? $error : ''; ?>
             <div id="form-div" class="modal">
                 <span class="close" onclick="closeModal()">&times;</span>
@@ -360,33 +361,18 @@ if (!isLoggedIn()) {
                     <button type="submit" class="btn btn-primary btn-block" name="add_custom_order">Kaydet</button>
                 </form>
             </div>
-            <div class="row pl-3 pb-4 pr-3 bb-grey">
-                <div style="display: flex; width: 100%; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                    <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm mr-2">
                         <i class="fas fa-bars"></i> Menü
                     </button>
-                    <div style="text-align: right; display: block;">
-                    <a href="custom_order_archive.php" target="_blank">
-                        <button class="btn btn-primary btn-sm mb-2" style="background-color: #6c757d; border-color: #545b62;">
-                            <i class="fas fa-archive mr-2"></i>
-                            Arşiv
-                        </button>
-                    </a>
-                    <a href="custom_orders_report.php" target="_blank">
-                        <button class="btn btn-primary btn-sm mb-2" style="background-color: #17a2b8; border-color: #117a8b;">
-                            <i class="fas fa-file-alt mr-2"></i>
-                            Rapor
-                        </button>
-                    </a>
-                    <a onclick="openModal('form-div')">
-                        <button class="btn btn-primary btn-sm mb-2" style="background-color: #003566; border-color: #003566;">
-                            <i class="fas fa-pen mr-2"></i>
-                            Yeni Sipariş Girişi
-                        </button>
-                    </a>
+                    <h3 class="d-none d-md-block" style="margin-top:.3rem; margin-bottom:0; font-weight: bold;">Özel Siparişler</h3>
+                    <div>
+                        <a href="custom_order_archive.php" target="_blank" class="btn btn-secondary btn-sm mr-2">Arşiv</a>
+                        <a href="custom_orders_report.php" target="_blank" class="btn btn-info btn-sm text-white mr-2">Rapor</a>
+                        <a onclick="openModal('form-div')" class="btn btn-primary btn-sm text-white" style="background-color: #003566; border-color: #003566;">Sipariş Girişi</a>
+                    </div>
                 </div>
-                </div>
-                <div class="table-responsive">
+                <div class="table-responsive mt-2">
                     <table class="table table-bordered">
                         <tbody>
                         <?php
@@ -572,10 +558,8 @@ if (!isLoggedIn()) {
                         </tbody>
                     </table>
                 </div>
-            </div>
         </div>
     </div>
-</div>
 <?php include 'template/script.php'; ?>
 </body>
 </html>

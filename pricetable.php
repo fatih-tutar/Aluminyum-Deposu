@@ -40,15 +40,15 @@ if (!isLoggedIn()) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Anlık Fiyatlama</title>
+    <title>Fiyat Tablosu</title>
     <?php include 'template/head.php'; ?>
 </head>
 <body class="body-white">
 <?php include 'template/banner.php' ?>
-
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="col-md-2">
+        <div id="sidebar" class="sidebar col-md-2 pr-0">
+            <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include 'template/sidebar2.php'; ?>
         </div>
         <div id="mainCol" class="col-md-10 col-12">

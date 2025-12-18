@@ -81,14 +81,16 @@
         }
     </style>
 </head>
-<body>
+<body class="body-white">
 <?php include 'template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-    <div class="col-md-2 col-12">
-        <?php include 'template/sidebar.php'; ?>
-    </div>
-    <div class="col-md-9">
+        <div id="sidebar" class="sidebar col-md-2 pr-0">
+            <button id="closeSidebar" class="close-btn">&times;</button>
+            <?php include 'template/sidebar2.php'; ?>
+        </div>
+        <div id="mainCol" class="col-md-10 col-12">
+            <?= isset($error) ? $error : ''; ?>
         <?php
         $ids = [];
         foreach ($araclar as $arac) {
@@ -96,6 +98,9 @@
         }
         $column = 12 / count($araclar);
         ?>
+            <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm mr-2">
+                <i class="fas fa-bars"></i> Menü
+            </button>
         <div class="row div4" style="padding-top: 10px; padding-bottom:10px;">
             <?php
             foreach ($araclar as $key => $arac) {

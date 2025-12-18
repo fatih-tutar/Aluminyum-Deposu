@@ -43,10 +43,11 @@ if (!isLoggedIn()) {
 <?php include 'template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3 d-none d-md-block br-grey">
+        <div id="sidebar" class="sidebar col-md-2 pr-0">
+            <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include 'template/sidebar2.php'; ?>
         </div>
-        <div class="col-md-9 col-12">
+        <div class="col-md-10 col-12">
             <table class="table table-bordered">
                 <thead>
                     <tr>

@@ -124,15 +124,15 @@ if (!isLoggedIn()) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Fiyat Hesaplama</title>
+    <title>Ağırlık Hesaplama</title>
     <?php include 'template/head.php'; ?>
 </head>
 <body class="body-white">
 <?php include 'template/banner.php' ?>
-
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="col-md-2">
+        <div id="sidebar" class="sidebar col-md-2 pr-0">
+            <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include 'template/sidebar2.php'; ?>
         </div>
         <div id="mainCol" class="col-md-10 col-12">
@@ -143,9 +143,12 @@ if (!isLoggedIn()) {
                     </div>
                 </div><br/>
             <?php } ?>
-                <div id="agirlikhesaplamadivi" class="div4 col-md-4 col-12 mt-2 mb-4">
+                <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm mr-2">
+                    <i class="fas fa-bars"></i> Menü
+                </button>
+                <div id="agirlikhesaplamadivi" class="col-md-4 col-12 mt-2 mb-4">
 
-                    <h5 style="text-align: center;"><b>Ağırlık Hesaplama</b></h5>
+                    <h3><b>Ağırlık Hesaplama</b></h3>
 
                     <select name="malzemetipi" id="selectkutuID" class="form-control" onchange="degergoster();" style="margin-bottom: 5px;">
 

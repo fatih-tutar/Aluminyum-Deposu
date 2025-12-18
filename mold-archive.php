@@ -95,10 +95,11 @@ if(!isLoggedIn()){
 
     <div class="container-fluid">
         <div class="row">
-            <div id="sidebar" class="col-md-2 d-none">
+            <div id="sidebar" class="sidebar col-md-2 pr-0">
+                <button id="closeSidebar" class="close-btn">&times;</button>
                 <?php include 'template/sidebar2.php'; ?>
             </div>
-            <div id="mainCol" class="col-md-12 col-12">
+            <div id="mainCol" class="col-md-10 col-12">
                 <?= isset($error) ? $error : ''; ?>
                 <div class="d-flex justify-content-between align-items-center p-2">
                     <div>

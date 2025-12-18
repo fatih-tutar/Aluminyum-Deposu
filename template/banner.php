@@ -34,7 +34,7 @@
 
 								<a class="dropdown-item" href="catalog.php"><b>FİYATLAR</b></a>
 
-								<a class="dropdown-item" href="plan.php"><b>PLAN</b></a>
+								<a class="dropdown-item" href="job.php"><b>PLAN</b></a>
 
 								<a class="dropdown-item" href="yonetim.php"><b>YÖNETİM</b></a>
 

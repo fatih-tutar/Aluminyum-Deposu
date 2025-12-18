@@ -21,7 +21,7 @@
                         <div class="col-md-3 col-2">
                             <img src="<?= $resim ?>" alt="<?= $kategori_adi ?>" width="40" height="40">
                         </div>
-                        <div class="col-md-9 col-10 d-flex align-items-center">
+                        <div class="col-md-9 col-10 d-flex align-items-center pl-0">
                             <?= $kategori_adi; ?>
                         </div>
                     </div>							
@@ -176,7 +176,7 @@
         </a>
     </div>
     <div class="card p-1">
-        <a href="organizasyon.php" class="sidebar-font">
+        <a href="organization.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/organizasyon.png" alt="" width="35" height="35">

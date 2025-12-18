@@ -129,6 +129,10 @@ a {
     z-index: 9;
 }
 
+.modal-50 {
+    width: 50%;
+}
+
 .overlay {
     display: none;
     position: fixed;
@@ -184,6 +188,37 @@ a {
     font-size: 1.5rem;
     color: #cc0000;
     cursor: pointer;
+}
+
+/* --- Mobil görünüm (varsayılan) --- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px; /* kapalı konum */
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    transition: left 0.3s ease;
+    z-index: 1050;
+    overflow-y: auto;
+}
+
+/* Açıldığında ekrana gelsin */
+.sidebar.active {
+    left: 0;
+}
+
+/* Kapatma (çarpı) butonu */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
 }
 
 /* ======================================
@@ -264,5 +299,57 @@ td.truncate-cell-150 {
         transform: translate(0, -50%);
         border-radius: 0; /* Köşeleri kaldır */
         height: auto; /* İçeriğe göre yükseklik */
+    }
+    .modal-50{
+        width: 96%;
+    }
+    .accordion-group {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+
+    .accordion-header {
+        padding: 10px 15px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .accordion-content {
+        display: none;
+        padding: 10px 15px;
+    }
+
+    .accordion-header i {
+        transition: transform 0.2s ease;
+    }
+
+    .accordion-header.active i {
+        transform: rotate(180deg);
+    }
+}
+
+/* --- Desktop görünümünde sidebar hep açık olsun --- */
+@media (min-width: 768px) {
+    .sidebar {
+        position: static;
+        left: 0;
+        width: 100%;
+        height: auto;
+        border: none;
+        transition: none;
+        z-index: 1;
+    }
+
+    .close-btn {
+        display: none;
+    }
+
+    #menuToggleBtn {
+        display: none !important;
     }
 }

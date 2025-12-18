@@ -38,7 +38,6 @@
 
 		}
 
-	if($user->type != '3'){
 		if (isset($_POST['bilgilerimiguncelle'])) {
 			$name = guvenlik($_POST['name']);
 			$title = guvenlik($_POST['title']);
@@ -203,7 +202,31 @@
 
 		}
 
-	}}
+        if (isset($_POST['kullanicisil'])) {
+
+            $query = $db->prepare("UPDATE users SET is_deleted = ? WHERE id = ?");
+
+            $update = $query->execute(array('1',$profil_id));
+
+            header("Location:yonetim.php");
+
+            exit();
+
+        }
+
+        if (isset($_POST['pasiflestir'])) {
+
+            $query = $db->prepare("UPDATE users SET is_passive = ? WHERE id = ?");
+
+            $update = $query->execute(array('1',$profil_id));
+
+            header("Location:yonetim.php");
+
+            exit();
+
+        }
+
+	}
 
 ?>
 

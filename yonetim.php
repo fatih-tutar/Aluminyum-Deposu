@@ -60,20 +60,6 @@
 
             }
 
-            if (isset($_POST['kullanicisil'])) {
-
-                $kullanici_id = guvenlik($_POST['kullanici_id']);
-
-                $query = $db->prepare("UPDATE users SET is_deleted = ? WHERE id = ?");
-
-                $guncelle = $query->execute(array('1',$kullanici_id));
-
-                header("Location:yonetim.php");
-
-                exit();
-
-            }
-
             if (isset($_POST['uye_ekle'])) {
 
                 $name = guvenlik($_POST['name']);

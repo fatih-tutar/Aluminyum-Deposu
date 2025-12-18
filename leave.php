@@ -126,10 +126,11 @@ if (!isLoggedIn()) {
 <?php include 'template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3 d-none d-md-block br-grey">
+        <div id="sidebar" class="sidebar col-md-2 pr-0">
+            <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include 'template/sidebar2.php'; ?>
         </div>
-        <div class="col-md-9 col-12">
+        <div id="mainCol" class="col-md-10 col-12">
             <?= isset($error) ? $error : ''; ?>
             <a href="#" onclick="openModal('form-div')">
                 <div class="add-button d-block d-md-none">
@@ -178,7 +179,10 @@ if (!isLoggedIn()) {
                         </button>
                     </a>
                 </div>
-                <div class="table-responsive">
+                <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm mr-2">
+                    <i class="fas fa-bars"></i> Menü
+                </button>
+                <div class="table-responsive mt-2">
                     <table class="table table-bordered">
                         <thead>
                             <tr style="color:#003566">

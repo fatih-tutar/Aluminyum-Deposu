@@ -28,7 +28,7 @@
 
             $guncelle = $query->execute(array($plan,$plan_tarihi,$plan_tekrar,$plan_durum,$plan_id));
 
-            header("Location: plan.php");
+            header("Location: job.php");
 
             exit();
 
@@ -42,7 +42,7 @@
 
             $guncelle = $query->execute(array('1',$plan_id));
 
-            header("Location: plan.php");
+            header("Location: job.php");
 
             exit();
 
@@ -109,7 +109,7 @@
 			}
 		</style>
 	</head>
-	<body>
+    <body class="body-white">
 		<?php include 'template/banner.php' ?>
 		<div class="container-fluid">
 			<div class="row">
@@ -118,17 +118,27 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-2 col-12">
+                <div id="sidebar" class="sidebar col-md-2 pr-0">
                     <a href="#" onclick="openModal('form-div')">
                         <button class="btn btn-primary btn-block mb-2 mt-2" style="background-color: #003566; border-color: #003566;">
                             <i class="fas fa-file mr-2"></i>
                             Sipariş Formu
                         </button>
                     </a>
-					<?php include 'template/sidebar.php'; ?>
-				</div>
+                    <button id="closeSidebar" class="close-btn">&times;</button>
+                    <?php include 'template/sidebar2.php'; ?>
+                </div>
 				<div class="col-md-10">
-					<?php include 'isplani.php'; ?>
+                    <div class="d-block d-md-none">
+                        <a href="#" onclick="openModal('form-div')">
+                            <button class="btn btn-primary btn-block mb-2 mt-2" style="background-color: #003566; border-color: #003566;">
+                                <i class="fas fa-file mr-2"></i>
+                                Sipariş Formu
+                            </button>
+                        </a>
+                        <?php include 'template/sidebar2.php'; ?>
+                    </div>
+					<?php include 'jobplan.php'; ?>
 					<?php include 'sevkiyattakibi.php'; ?>
 				</div>
 			</div>	

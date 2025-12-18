@@ -1,6 +1,6 @@
 <style>
     .sidebar-font{
-        font-size:12px;
+        font-size:14px;
         font-weight:bold;
     }
     .sidebar-item {
@@ -25,7 +25,7 @@
                         <div class="col-md-3 col-2">
                             <img src="<?= $resim ?>" alt="<?= $kategori_adi ?>" width="40" height="40">
                         </div>
-                        <div class="col-md-9 col-10 d-flex align-items-center">
+                        <div class="col-md-9 col-10 d-flex align-items-center pl-4 pl-md-0">
                             <?= $kategori_adi; ?>
                         </div>
                     </div>							
@@ -44,10 +44,10 @@
                             <div class="col-md-3 col-2 offset-md-0 ">
                                 <img src="<?= $alt_kategori_resim ?>" alt="<?= $alt_kategori_adi ?>" width="35" height="35">
                             </div>
-                            <div class="col-md-9 col-9 d-flex align-items-center">
+                            <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                                 <?= $alt_kategori_adi; ?>
                             </div>
-                        </div>		
+                        </div>
                     </a>
         <?php
                 }
@@ -65,7 +65,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/kategoriler/unnamed39509908.jpg" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     ÖZEL SİPARİŞLER
                 </div>
             </div>
@@ -77,7 +77,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/aydinlatma_fiyat.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     AYDINLATMA FİYAT
                 </div>
             </div>
@@ -89,7 +89,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/urun_sorgulama.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     ÜRÜN SORGULAMA
                 </div>
             </div>
@@ -101,7 +101,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/anlik_fiyatlama.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     FİYAT TABLOSU
                 </div>
             </div>
@@ -113,7 +113,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/agirlik_hesaplama.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     AĞIRLIK HESAPLAMA
                 </div>
             </div>
@@ -125,7 +125,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/fabrikalar.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     FABRİKALAR
                 </div>
             </div>
@@ -137,7 +137,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/clients.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     FİRMALAR
                 </div>
             </div>
@@ -149,7 +149,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/kaliplar.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     KALIPLAR
                 </div>
             </div>
@@ -161,7 +161,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/is_plani.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     İŞ PLANI
                 </div>
             </div>
@@ -173,19 +173,19 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/izin.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     İZİNLER
                 </div>
             </div>
         </a>
     </div>
     <div class="card sidebar-item ">
-        <a href="organizasyon.php" class="sidebar-font">
+        <a href="organization.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/organizasyon.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     ORGANİZASYON
                 </div>
             </div>
@@ -197,7 +197,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/sevkiyat_plani.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     SEVKİYAT PLANI
                 </div>
             </div>
@@ -209,7 +209,7 @@
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="img/sidebar/sevkiyat_arsivi.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center">
+                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
                     SEVKİYAT ARŞİVİ
                 </div>
             </div>
