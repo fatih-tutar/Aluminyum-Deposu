@@ -38,7 +38,7 @@ if (!isLoggedIn()) {
 
     if (isset($_POST['urunsil'])) {
 
-        $urun_id = guvenlik($_POST['urun_id']);
+        $productId = guvenlik($_POST['urun_id']);
 
         $urun_adet = guvenlik($_POST['urun_adet']);
 
@@ -50,7 +50,7 @@ if (!isLoggedIn()) {
 
         if ($urun_adet != 0 || $urun_depo_adet != 0 || $urun_palet != 0) {
 
-            header("Location:product.php?id=".$categoryId."&u=".$urun_id."&urunsilinemez");
+            header("Location:product.php?id=".$categoryId."&u=".$productId."&urunsilinemez");
 
             exit();
 
@@ -78,9 +78,9 @@ if (!isLoggedIn()) {
 
             $sil = $db->prepare("UPDATE urun SET silik = ? WHERE urun_id = ?");
 
-            $delete = $sil->execute(array('1',$urun_id));
+            $delete = $sil->execute(array('1',$productId));
 
-            header("Location:product.php?id=".$categoryId."&urunsilindi#".$urun_id);
+            header("Location:product.php?id=".$categoryId."&urunsilindi#".$productId);
 
             exit();
 
@@ -112,38 +112,28 @@ if (!isLoggedIn()) {
 
     }
 
-    if (isset($_POST['siparisformu'])) {
-
-        $siparisboy = guvenlik($_POST['siparisboy']);
-
-        $hazirlayankisi = guvenlik($_POST['hazirlayankisi']);
-
-        $urun_fabrika = guvenlik($_POST['urun_fabrika']);
-
-        $ilgilikisi = guvenlik($_POST['ilgilikisi']);
-
-        $urun_stok = guvenlik($_POST['urun_stok']);
-
-        $urun_id = guvenlik($_POST['urun_id']);
-
-        $termin = guvenlik($_POST['termin']);
-
-        $palet = guvenlik($_POST['palet']);
-
-        $terminsaniye = strtotime($termin);
-
-        if(empty($hazirlayankisi) || empty($ilgilikisi)) {
+    if (isset($_POST['add_purchase_orders'])) {
+        $length = guvenlik($_POST['length']);
+        $preparedBy = guvenlik($_POST['prepared_by']);
+        $factory = guvenlik($_POST['factory']);
+        $contactPerson = guvenlik($_POST['contact_person']);
+        $defaultOrderQuantity = guvenlik($_POST['default_order_quantity']);
+        $productId = guvenlik($_POST['product_id']);
+        $dueDate = guvenlik($_POST['due_date']);
+        $palletQuantity = guvenlik($_POST['pallet_quantity']);
+        $terminsaniye = strtotime($dueDate);
+        if(empty($preparedBy) || empty($contactPerson)) {
             $error = '<div class="alert alert-danger">Lütfen sipariş formunda boş alan bırakmayınız.</div>';
         }else{
-            $uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+            $uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$productId}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
             $urun_adi = $uruninfo['urun_adi'];
 
             $query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?, palet = ?");
 
-            $insert = $query->execute(array($terminsaniye,$siparisboy,$hazirlayankisi,$urun_fabrika,$ilgilikisi,$urun_id,$urun_adi,$urun_stok,'1',time(),'0',$user->company_id,'0',$palet));
+            $insert = $query->execute(array($terminsaniye,$length,$preparedBy,$factory,$contactPerson,$productId,$urun_adi,$defaultOrderQuantity,'1',time(),'0',$user->company_id,'0',$palletQuantity));
 
-            header("Location:product.php?id=".$categoryId."&u=".$urun_id."&sipariseklendi#".$urun_id);
+            header("Location:product.php?id=".$categoryId."&u=".$productId."&sipariseklendi#".$productId);
 
             exit();
         }
@@ -189,7 +179,7 @@ if (!isLoggedIn()) {
 
     if (isset($_POST['guncellemeformu'])) {
 
-        $urun_id = guvenlik($_POST['urun_id']);
+        $productId = guvenlik($_POST['urun_id']);
 
         $urun_kodu = guvenlik($_POST['urun_kodu'] ?? null);
 
@@ -203,7 +193,7 @@ if (!isLoggedIn()) {
 
         $urun_raf = guvenlik($_POST['urun_raf']);
 
-        $eskiadeticek = $db->query("SELECT * FROM urun WHERE urun_id = '{$urun_id}'")->fetch(PDO::FETCH_ASSOC);
+        $eskiadeticek = $db->query("SELECT * FROM urun WHERE urun_id = '{$productId}'")->fetch(PDO::FETCH_ASSOC);
 
         $eskiadet = $eskiadeticek['urun_adet'];
 
@@ -237,11 +227,11 @@ if (!isLoggedIn()) {
 
         $satis = guvenlik($_POST['satis'] ?? null);
 
-        $urun_fabrika = guvenlik($_POST['urun_fabrika']);
+        $factory = guvenlik($_POST['urun_fabrika']);
 
         $urun_aciklama = guvenlik($_POST['urun_aciklama']);
 
-        $urun_stok = guvenlik($_POST['urun_stok']);
+        $defaultOrderQuantity = guvenlik($_POST['urun_stok']);
 
         $musteri_ismi = guvenlik($_POST['musteri_ismi'] ?? null);
 
@@ -329,13 +319,13 @@ if (!isLoggedIn()) {
 
         $query = $db->prepare("UPDATE urun SET urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, satis = ?, urun_fabrika = ?, urun_aciklama = ?, urun_stok = ?, musteri_ismi = ?,urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, tarih = ?, termin = ? WHERE urun_id = ?");
 
-        $guncelle = $query->execute(array($urun_kodu,$urun_adi,$urun_adet,$urun_palet,$urun_depo_adet,$urun_raf,$urun_birimkg,$urun_boy_olcusu,$urun_alis,$satis,$urun_fabrika,$urun_aciklama,$urun_stok,$musteri_ismi,$urun_uyari_stok_adedi,$urun_depo_uyari_adet,$urun_yeni_sira,$tarih,$termin,$urun_id));
+        $guncelle = $query->execute(array($urun_kodu,$urun_adi,$urun_adet,$urun_palet,$urun_depo_adet,$urun_raf,$urun_birimkg,$urun_boy_olcusu,$urun_alis,$satis,$factory,$urun_aciklama,$defaultOrderQuantity,$musteri_ismi,$urun_uyari_stok_adedi,$urun_depo_uyari_adet,$urun_yeni_sira,$tarih,$termin,$productId));
 
         if ($urun_adet != $eskiadet) {
 
             $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-            $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
+            $islemiekle = $islem->execute(array($user->id,$productId,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
 
         }
 
@@ -343,7 +333,7 @@ if (!isLoggedIn()) {
 
             $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-            $islemiekle = $islem->execute(array($user->id,$urun_id,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),date('Y-m-d H:i:s'),'1',$user->company_id));
+            $islemiekle = $islem->execute(array($user->id,$productId,(floatval($eskidepoadet) + floatval($eskipalet)),(floatval($urun_depo_adet) + floatval($urun_palet)),date('Y-m-d H:i:s'),'1',$user->company_id));
 
         }
 
@@ -351,15 +341,15 @@ if (!isLoggedIn()) {
 
         if(isset($_POST['hepsineuygula'])) { // checkbox seçilmişse "on" değeri gönderiliyor
 
-            //echo "girdi"; echo $urun_alis." / ".$ust_kategori_id." / ".$urun_fabrika; exit();
+            //echo "girdi"; echo $urun_alis." / ".$ust_kategori_id." / ".$factory; exit();
 
             $alisguncelleme = $db->prepare("UPDATE urun SET urun_alis = ? WHERE kategori_bir = ? AND urun_fabrika = ?");
 
-            $guncelleme = $alisguncelleme->execute(array($urun_alis,$ust_kategori_id,$urun_fabrika));
+            $guncelleme = $alisguncelleme->execute(array($urun_alis,$ust_kategori_id,$factory));
 
         }
 
-        header("Location:product.php?id=".$categoryId."&u=".$urun_id."&guncellendi#".$urun_id);
+        header("Location:product.php?id=".$categoryId."&u=".$productId."&guncellendi#".$productId);
 
         exit();
 
@@ -369,7 +359,7 @@ if (!isLoggedIn()) {
 
         $siparis_id = guvenlik($_POST['siparis_id']);
 
-        $urun_id = guvenlik($_POST['urun_id']);
+        $productId = guvenlik($_POST['urun_id']);
 
         $eklenenadet = guvenlik($_POST['eklenenadet']);
 
@@ -381,19 +371,19 @@ if (!isLoggedIn()) {
 
             $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-            $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
+            $islemiekle = $islem->execute(array($user->id,$productId,$eskiadet,$urun_adet,date('Y-m-d H:i:s'),'0',$user->company_id));
 
         }
 
         $query = $db->prepare("UPDATE urun SET urun_adet = ? WHERE urun_id = ?");
 
-        $guncelle = $query->execute(array($urun_adet,$urun_id));
+        $guncelle = $query->execute(array($urun_adet,$productId));
 
         $query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?");
 
         $guncelle = $query->execute(array('0',$siparis_id));
 
-        header("Location:product.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
+        header("Location:product.php?id=".$categoryId."&u=".$productId."&siparisalindi#".$productId);
 
         exit();
 
@@ -403,7 +393,7 @@ if (!isLoggedIn()) {
 
         $siparis_id = guvenlik($_POST['siparis_id']);
 
-        $urun_id = guvenlik($_POST['urun_id']);
+        $productId = guvenlik($_POST['urun_id']);
 
         $eklenenadet = guvenlik($_POST['eklenenadet']);
 
@@ -415,19 +405,19 @@ if (!isLoggedIn()) {
 
             $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-            $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_depo_adet,date('Y-m-d H:i:s'),'1',$user->company_id));
+            $islemiekle = $islem->execute(array($user->id,$productId,$eskiadet,$urun_depo_adet,date('Y-m-d H:i:s'),'1',$user->company_id));
 
         }
 
         $query = $db->prepare("UPDATE urun SET urun_depo_adet = ? WHERE urun_id = ?");
 
-        $guncelle = $query->execute(array($urun_depo_adet,$urun_id));
+        $guncelle = $query->execute(array($urun_depo_adet,$productId));
 
         $query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?");
 
         $guncelle = $query->execute(array('0',$siparis_id));
 
-        header("Location:product.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
+        header("Location:product.php?id=".$categoryId."&u=".$productId."&siparisalindi#".$productId);
 
         exit();
 
@@ -437,7 +427,7 @@ if (!isLoggedIn()) {
 
         $siparis_id = guvenlik($_POST['siparis_id']);
 
-        $urun_id = guvenlik($_POST['urun_id']);
+        $productId = guvenlik($_POST['urun_id']);
 
         $eklenenadet = guvenlik($_POST['eklenenadet']);
 
@@ -449,19 +439,19 @@ if (!isLoggedIn()) {
 
             $islem = $db->prepare("INSERT INTO stock_activities SET created_by = ?, product_id = ?, prev_quantity = ?, new_quantity = ?, datetime = ?, type = ?, company_id = ?");
 
-            $islemiekle = $islem->execute(array($user->id,$urun_id,$eskiadet,$urun_palet,date('Y-m-d H:i:s'),'2',$user->company_id));
+            $islemiekle = $islem->execute(array($user->id,$productId,$eskiadet,$urun_palet,date('Y-m-d H:i:s'),'2',$user->company_id));
 
         }
 
         $query = $db->prepare("UPDATE urun SET urun_palet = ? WHERE urun_id = ?");
 
-        $guncelle = $query->execute(array($urun_palet,$urun_id));
+        $guncelle = $query->execute(array($urun_palet,$productId));
 
         $query = $db->prepare("UPDATE siparis SET taslak = ? WHERE siparis_id = ?");
 
         $guncelle = $query->execute(array('0',$siparis_id));
 
-        header("Location:product.php?id=".$categoryId."&u=".$urun_id."&siparisalindi#".$urun_id);
+        header("Location:product.php?id=".$categoryId."&u=".$productId."&siparisalindi#".$productId);
 
         exit();
 
@@ -479,11 +469,11 @@ if (!isLoggedIn()) {
 
         $density = guvenlik($_POST['density']);
 
-        $factory_name = guvenlik($_POST['factory_name']);
+        $factoryName = guvenlik($_POST['factory_name']);
 
         $query = $db->prepare("INSERT INTO inventory SET category_id = ?, code = ?, dimension_1 = ?, dimension_2 = ?, dimension_3 = ?, density = ?, factory_name = ?, is_deleted = ?, company_id = ?");
 
-        $insert = $query->execute(array($categoryId,$code,$dimension_1,$dimension_2,$dimension_3,$density,$factory_name,'0',$user->company_id));
+        $insert = $query->execute(array($categoryId,$code,$dimension_1,$dimension_2,$dimension_3,$density,$factoryName,'0',$user->company_id));
 
         header("Location:product.php?id=".$categoryId."&inventory_added");
 
@@ -505,11 +495,11 @@ if (!isLoggedIn()) {
 
         $density = guvenlik($_POST['density']);
 
-        $factory_name = guvenlik($_POST['factory_name']);
+        $factoryName = guvenlik($_POST['factory_name']);
 
         $query = $db->prepare("UPDATE inventories SET code = ?, dimension_1 = ?, dimension_2 = ?, dimension_3 = ?, density = ?, factory_name = ? WHERE id = ?");
 
-        $update = $query->execute(array($code,$dimension_1,$dimension_2,$dimension_3,$density,$factory_name,$id));
+        $update = $query->execute(array($code,$dimension_1,$dimension_2,$dimension_3,$density,$factoryName,$id));
 
         if($update) {
             header("Location:product.php?id=".$categoryId."&inventory_updated");
@@ -821,11 +811,15 @@ if (!isLoggedIn()) {
 
             $urunlistesira++;
 
-            $terminigecikmismi = 0;
+            $isDeadlineOverdue = 0;
 
-            $urun_id = $orw['urun_id'];
+            $productId = $orw['urun_id'];
 
-            $terminlericekme = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '1' AND silik = '0'", PDO::FETCH_ASSOC);
+            $siraguncelle = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?");
+
+            $siraguncelle->execute([$urunlistesira, $productId]);
+
+            $terminlericekme = $db->query("SELECT * FROM siparis WHERE urun_id = '{$productId}' AND taslak = '1' AND silik = '0'", PDO::FETCH_ASSOC);
 
             if ( $terminlericekme->rowCount() ){
 
@@ -835,7 +829,7 @@ if (!isLoggedIn()) {
 
                     if($bugununsaniyesi > $terminsaniye && $terminsaniye != 0){
 
-                        $terminigecikmismi = 1;
+                        $isDeadlineOverdue = 1;
 
                     }
 
@@ -871,11 +865,11 @@ if (!isLoggedIn()) {
 
             if(in_array('manuel_sales', $activeColumns)){ $urun_satis = $satis; }
 
-            $urun_fabrika = $orw['urun_fabrika'];
+            $factory = $orw['urun_fabrika'];
 
-            $u_fabrika = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+            $u_fabrika = $db->query("SELECT * FROM factories WHERE id = '{$factory}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-            $urun_fabrika_adi = $u_fabrika['name'] ?? null;
+            $factoryName = $u_fabrika['name'] ?? null;
 
             $urun_aciklama = $orw['urun_aciklama'];
 
@@ -883,7 +877,7 @@ if (!isLoggedIn()) {
 
             $toplam_urun_kg = $toplam_urun_kg + $carpim;
 
-            $urun_stok = $orw['urun_stok'];
+            $defaultOrderQuantity = $orw['urun_stok'];
 
             $urun_uyari_stok_adedi = $orw['urun_uyari_stok_adedi'];
 
@@ -921,7 +915,7 @@ if (!isLoggedIn()) {
 
                     <div class="col-md-2 col-8">
 
-                        <a id="<?= $urun_id; ?>" href="stock-activity.php?id=<?= $urun_id; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
+                        <a id="<?= $productId; ?>" href="stock-activity.php?id=<?= $productId; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small>".$urun_adi; ?></b></a>
 
                     </div>
 
@@ -931,7 +925,7 @@ if (!isLoggedIn()) {
 
                     <div class="col-md-2 col-8">
 
-                        <a id="<?= $urun_id; ?>" href="stock-activity.php?id=<?= $urun_id; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
+                        <a id="<?= $productId; ?>" href="stock-activity.php?id=<?= $productId; ?>" target="_blank"><b style="color: red;"><?= "<small>".$urunlistesira.".</small>".$urun_adi; ?></b></a>
 
                     </div>
 
@@ -941,7 +935,7 @@ if (!isLoggedIn()) {
 
                     <div class="col-md-2 col-8">
 
-                        <a id="<?= $urun_id; ?>" href="stock-activity.php?id=<?= $urun_id; ?>" target="_blank"><b><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
+                        <a id="<?= $productId; ?>" href="stock-activity.php?id=<?= $productId; ?>" target="_blank"><b><?= "<small>".$urunlistesira.".</small> ".$urun_adi; ?></b></a>
 
                     </div>
 
@@ -1039,7 +1033,7 @@ if (!isLoggedIn()) {
 
                     <div class="col-4 d-block d-sm-none">Fabrika : </div>
 
-                    <div class="col-md-1 col-8" style="text-align:center;"><b><?= $urun_fabrika_adi; ?></b></div>
+                    <div class="col-md-1 col-8" style="text-align:center;"><b><?= $factoryName; ?></b></div>
 
                 <?php } ?>
 
@@ -1059,7 +1053,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-md-3 col-3 p-1">
 
-                                <a href="#" onclick="return false" onmousedown="javascript:ackapa4('teklifdivi<?= $urun_id; ?>','siparisdiv<?= $urun_id; ?>','editdiv<?= $urun_id; ?>','sevkiyatdiv<?= $urun_id; ?>');"><button class="btn btn-warning btn-sm btn-block">Teklif</button></a>
+                                <a href="#" onclick="return false" onmousedown="javascript:ackapa4('teklifdivi<?= $productId; ?>','siparisdiv<?= $productId; ?>','editdiv<?= $productId; ?>','sevkiyatdiv<?= $productId; ?>');"><button class="btn btn-warning btn-sm btn-block">Teklif</button></a>
 
                             </div>
 
@@ -1069,22 +1063,10 @@ if (!isLoggedIn()) {
 
                             <div class="col-md-3 col-3 p-1">
 
-                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('siparisdiv<?= $urun_id; ?>','teklifdivi<?= $urun_id; ?>','editdiv<?= $urun_id; ?>','sevkiyatdiv<?= $urun_id; ?>');">
-
-                                    <?php if($terminigecikmismi == 0){ ?>
-
-                                        <button class="btn btn-info btn-sm btn-block">
-
-                                            <b>Sipariş</b></button>
-
-                                    <?php }else{ ?>
-
-                                        <button class="btn btn-danger btn-sm btn-block">
-
-                                            <b>Sipariş</b></button>
-
-                                    <?php } ?>
-
+                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('siparisdiv<?= $productId; ?>','teklifdivi<?= $productId; ?>','editdiv<?= $productId; ?>','sevkiyatdiv<?= $productId; ?>');">
+                                    <button class="btn btn-<?= $isDeadlineOverdue == 0 ? 'info' : 'danger' ?> btn-sm btn-block">
+                                        <b>Sipariş</b>
+                                    </button>
                                 </a>
 
                             </div>
@@ -1095,7 +1077,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-md-3 col-3 p-1">
 
-                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('sevkiyatdiv<?= $urun_id; ?>','editdiv<?= $urun_id; ?>','siparisdiv<?= $urun_id; ?>','teklifdivi<?= $urun_id; ?>');"><button class="btn btn-dark btn-sm btn-block"><b>Sevkiyat</b></button></a>
+                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('sevkiyatdiv<?= $productId; ?>','editdiv<?= $productId; ?>','siparisdiv<?= $productId; ?>','teklifdivi<?= $productId; ?>');"><button class="btn btn-dark btn-sm btn-block"><b>Sevkiyat</b></button></a>
 
                             </div>
 
@@ -1105,7 +1087,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-md-3 col-3 p-1">
 
-                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('editdiv<?= $urun_id; ?>','siparisdiv<?= $urun_id; ?>','teklifdivi<?= $urun_id; ?>','sevkiyatdiv<?= $urun_id; ?>');"><button class="btn btn-success btn-sm btn-block"><b>Düzenle</b></button></a>
+                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('editdiv<?= $productId; ?>','siparisdiv<?= $productId; ?>','teklifdivi<?= $productId; ?>','sevkiyatdiv<?= $productId; ?>');"><button class="btn btn-success btn-sm btn-block"><b>Düzenle</b></button></a>
 
                             </div>
 
@@ -1119,13 +1101,13 @@ if (!isLoggedIn()) {
 
             <?php if($user->permissions->quote == '1'){?>
 
-            <?php if (isset($_GET['teklifeklendi']) && $_GET['u'] == $urun_id) { ?>
+            <?php if (isset($_GET['teklifeklendi']) && isset($_GET['u']) && $_GET['u'] == $productId) { ?>
 
-            <div id="teklifdivi<?= $urun_id; ?>" class="div2">
+            <div id="teklifdivi<?= $productId; ?>" class="div2">
 
                 <?php }else{ ?>
 
-                <div id="teklifdivi<?= $urun_id; ?>" style="display: none;" class="div2">
+                <div id="teklifdivi<?= $productId; ?>" style="display: none;" class="div2">
 
                     <?php } ?>
 
@@ -1167,7 +1149,7 @@ if (!isLoggedIn()) {
 
                                     <br/>
 
-                                    <input type="hidden" name="turunid" value="<?= $urun_id; ?>">
+                                    <input type="hidden" name="turunid" value="<?= $productId; ?>">
 
                                     <button class="btn btn-warning" name="teklifkaydet">Teklif Formuna Ekle</button>
 
@@ -1207,7 +1189,7 @@ if (!isLoggedIn()) {
 
                         $tekliflersiralamasi = 0;
 
-                        $tklfcek = $db->query("SELECT * FROM teklif WHERE turunid = '{$urun_id}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY teklifid DESC LIMIT 10", PDO::FETCH_ASSOC);
+                        $tklfcek = $db->query("SELECT * FROM teklif WHERE turunid = '{$productId}' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY teklifid DESC LIMIT 10", PDO::FETCH_ASSOC);
 
                         if ( $tklfcek->rowCount() ){
 
@@ -1273,125 +1255,58 @@ if (!isLoggedIn()) {
 
                 <?php if($user->permissions->order == '1'){ ?>
 
-                <?php if ((isset($_GET['siparisalindi']) || isset($_GET['sipariseklendi'])) && $_GET['u'] == $urun_id) { ?>
+                <?php if ((isset($_GET['siparisalindi']) || isset($_GET['sipariseklendi'])) && $_GET['u'] == $productId) { ?>
 
-                <div id="siparisdiv<?= $urun_id; ?>" class="div2">
+                <div id="siparisdiv<?= $productId; ?>" class="div2">
 
                     <?php }else{ ?>
 
-                    <div style="display: none;" id="siparisdiv<?= $urun_id; ?>" class="div2">
+                    <div style="display: none;" id="siparisdiv<?= $productId; ?>" class="div2">
 
                         <?php } ?>
-
-                        <form action="" method="POST">
-
-                            <div class="alert alert-info">
-
-                                <h5><b style="line-height: 40px;">Sipariş Formu</b></h5>
-
-                                <div class="row">
-
-                                    <input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
-
-                                    <div class="col-md-2 col-12">
-
-                                        <b>Hazırlayan Kişi</b><br/>
-
-                                        <select name="hazirlayankisi" class="form-control">
-
-                                            <option selected>Hazırlayan Kişiyi Seçiniz</option>
-
-                                            <?php
-
-                                            $calisanlaricek = $db->query("SELECT * FROM users WHERE company_id = '{$user->company_id}' ORDER BY name ASC", PDO::FETCH_ASSOC);
-
-                                            if ( $calisanlaricek->rowCount() ){
-
-                                                foreach( $calisanlaricek as $cc ){
-
-                                                    $hazirlayanadi = $cc['name'];
-
-                                                    ?>
-
-                                                    <option value="<?= $hazirlayanadi; ?>"><?= $hazirlayanadi; ?></option>
-
-                                                    <?php
-
-                                                }
-
-                                            }
-
-                                            ?>
-
-                                        </select>
-
-                                    </div>
-
-                                    <div class="col-md-2 col-12">
-
-                                        <b>Talep Edilen Fabrika</b><br/>
-
-                                        <select class="form-control" id="exampleFormControlSelect1" name="urun_fabrika">
-
-                                            <?php
-
-                                            if ($urun_fabrika == 0) {
-
-                                                echo "<option selected value='0'>Fabrika Seçiniz</option>";
-
-                                            }else{
-
-                                                echo "<option selected value='".$urun_fabrika."'>".$urun_fabrika_adi."</option>";
-
-                                            }
-
-                                            $fabrika = $db->query("SELECT * FROM factories WHERE company_id = '{$user->company_id}'", PDO::FETCH_ASSOC);
-
-                                            if ( $fabrika->rowCount() ){
-
-                                                foreach( $fabrika as $fbrk ){
-
-                                                    $fabrika_id = $fbrk['id'];
-
-                                                    $fabrika_adi = $fbrk['name'];
-
-                                                    echo "<option value='".$fabrika_id."'>".$fabrika_adi."</option>";
-
-                                                }
-
-                                            }
-
-                                            ?>
-
-                                        </select>
-
-                                    </div>
-
-                                    <div class="col-md-2 col-12"><b>İlgili Kişi</b><br/><input type="text" class="form-control" name="ilgilikisi" placeholder="İlgili Kişinin İsmini Yazınız"></div>
-
-                                    <div class="col-md-1 col-12"><b>Miktar</b><br/><input type="text" class="form-control" name="urun_stok" value="<?= $urun_stok; ?>"></div>
-
-                                    <div class="col-md-1 col-12"><b>Boy</b><br/><input type="text" name="siparisboy" value="6 metre" class="form-control"></div>
-
-                                    <div class="col-md-4 col-12">
-
-                                        <div class="row">
-
-                                            <div class="col-md-4 col-12"><b>Termin</b><br/><input type="text" name="termin" value="<?= $tarihf2; ?>" id="tarih<?= $urunlistesira; ?>" class="form-control"></div>
-                                            <div class="col-md-3 col-12"><b>Palet</b><br/><input type="text" name="palet" class="form-control" placeholder="Adet"></div>
-                                            <div class="col-md-5 col-12" style="padding-top: 25px;"><button type="submit" class="btn btn-info btn-sm" name="siparisformu">Sipariş Listesine Ekle</button></div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </form>
-
-                        <hr/>
+                        <div style="text-align: right">
+                            <button class="btn btn-primary mb-2 btn-sm" onclick="openModal('add-form-<?= $productId ?>')">
+                                <i class="fas fa-plus me-2"></i>
+                                Yeni Sipariş
+                            </button>
+                        </div>
+                        <div id="add-form-<?= $productId ?>" class="modal">
+                            <span class="close" onclick="closeModal()">&times;</span>
+                            <h4><b>Sipariş Formu</b></h4>
+                            <form action="" method="POST" class="mt-3">
+                                <b>Hazırlayan Kişi</b>
+                                <select name="prepared_by" class="form-control mb-2">
+                                    <option selected>Hazırlayan Kişiyi Seçiniz</option>
+                                    <?php $employees = getEmployees($authUser->company_id);
+                                    foreach( $employees as $employee ){ ?>
+                                        <option value="<?= $employee->name; ?>"><?= $employee->name; ?></option>
+                                    <?php } ?>
+                                </select>
+                                <b>Talep Edilen Fabrika</b>
+                                <select name="factory" class="form-control mb-2">
+                                    <option selected value="<?= $factory == 0 ? 0 : $factory ?>" >
+                                        <?= $factory == 0 ? 'Fabrika Seçiniz' : $factoryName ?>
+                                    </option>
+                                    <?php $factories = getFactories($authUser->company_id);
+                                    foreach ( $factories as $factoryObj ){
+                                        echo "<option value='".$factoryObj->id."'>".$factoryObj->name."</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <b>İlgili Kişi</b>
+                                <input type="text" name="contact_person" class="form-control mb-2" placeholder="Fabrikadaki ilgili kişinin ismini yazınız">
+                                <b>Miktar</b>
+                                <input type="text" name="default_order_quantity" class="form-control mb-2" placeholder="Miktar giriniz." value="<?= $defaultOrderQuantity ?>">
+                                <b>Boy</b>
+                                <input type="text" name="length" class="form-control mb-2" value="6 metre">
+                                <b>Termin</b>
+                                <input type="date" name="due_date" class="form-control mb-2">
+                                <b>Palet Adedi</b>
+                                <input type="text" name="pallet_quantity" class="form-control mb-2" placeholder="Palet adedini giriniz.">
+                                <input type="hidden" name="product_id" value="<?= $productId; ?>">
+                                <button type="submit" class="btn btn-primary btn-block" name="add_purchase_orders">Sipariş Listesine Ekle</button>
+                            </form>
+                        </div>
 
                         <div class="alert alert-danger">
 
@@ -1419,7 +1334,7 @@ if (!isLoggedIn()) {
 
                             <?php
 
-                            $sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '1' AND sirketid = '{$user->company_id}' AND silik = '0' LIMIT 10", PDO::FETCH_ASSOC);
+                            $sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$productId}' AND taslak = '1' AND sirketid = '{$user->company_id}' AND silik = '0' LIMIT 10", PDO::FETCH_ASSOC);
 
                             if ( $sipariscek->rowCount() ){
 
@@ -1427,11 +1342,11 @@ if (!isLoggedIn()) {
 
                                     $siparis_id = $row['siparis_id'];
 
-                                    $hazirlayankisi = $row['hazirlayankisi'];
+                                    $preparedBy = $row['hazirlayankisi'];
 
                                     $urun_siparis_aded = $row['urun_siparis_aded'];
 
-                                    $urun_fabrika_id = $row['urun_fabrika_id'];
+                                    $factoryId = $row['urun_fabrika_id'];
 
                                     $ilgilikisi = $row['ilgilikisi'];
 
@@ -1443,9 +1358,9 @@ if (!isLoggedIn()) {
 
                                     $termintarih = date("d-m-Y", $terminsaniye);
 
-                                    $fabrikaadcek = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+                                    $fabrikaadcek = $db->query("SELECT * FROM factories WHERE id = '{$factoryId}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-                                    $urun_fabrika_adi = $fabrikaadcek['name'];
+                                    $factoryName = $fabrikaadcek['name'];
 
                                     ?>
 
@@ -1455,11 +1370,11 @@ if (!isLoggedIn()) {
 
                                             <div class="col-4 d-block d-sm-none">Hazırlayan :</div>
 
-                                            <div class="col-md-2 col-8"><?= $hazirlayankisi; ?></div>
+                                            <div class="col-md-2 col-8"><?= $preparedBy; ?></div>
 
                                             <div class="col-4 d-block d-sm-none">Fabrika :</div>
 
-                                            <div class="col-md-2 col-8"><?= $urun_fabrika_adi; ?></div>
+                                            <div class="col-md-2 col-8"><?= $factoryName; ?></div>
 
                                             <div class="col-4 d-block d-sm-none">İlgili Kişi :</div>
 
@@ -1481,7 +1396,7 @@ if (!isLoggedIn()) {
 
                                                 <input type="hidden" name="siparis_id" value="<?= $siparis_id; ?>">
 
-                                                <input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
+                                                <input type="hidden" name="urun_id" value="<?= $productId; ?>">
 
                                                 <input type="hidden" name="urun_adet" value="<?= $urun_adet; ?>">
 
@@ -1545,17 +1460,17 @@ if (!isLoggedIn()) {
 
                             <?php
 
-                            $sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$urun_id}' AND taslak = '0' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY siparissaniye DESC LIMIT 10", PDO::FETCH_ASSOC);
+                            $sipariscek = $db->query("SELECT * FROM siparis WHERE urun_id = '{$productId}' AND taslak = '0' AND sirketid = '{$user->company_id}' AND silik = '0' ORDER BY siparissaniye DESC LIMIT 10", PDO::FETCH_ASSOC);
 
                             if ( $sipariscek->rowCount() ){
 
                                 foreach( $sipariscek as $row ){
 
-                                    $hazirlayankisi = $row['hazirlayankisi'];
+                                    $preparedBy = $row['hazirlayankisi'];
 
                                     $urun_siparis_aded = $row['urun_siparis_aded'];
 
-                                    $urun_fabrika_id = $row['urun_fabrika_id'];
+                                    $factoryId = $row['urun_fabrika_id'];
 
                                     $ilgilikisi = $row['ilgilikisi'];
 
@@ -1563,9 +1478,9 @@ if (!isLoggedIn()) {
 
                                     $siparistarih = date("d-m-Y", $siparissaniye);
 
-                                    $fabrikaadcek = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
+                                    $fabrikaadcek = $db->query("SELECT * FROM factories WHERE id = '{$factoryId}' AND company_id = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
 
-                                    $urun_fabrika_adi = $fabrikaadcek['name'];
+                                    $factoryName = $fabrikaadcek['name'];
 
                                     ?>
 
@@ -1573,11 +1488,11 @@ if (!isLoggedIn()) {
 
                                         <div class="col-4 d-block d-sm-none">Hazırlayan</div>
 
-                                        <div class="col-md-2 col-8"><?= $hazirlayankisi; ?></div>
+                                        <div class="col-md-2 col-8"><?= $preparedBy; ?></div>
 
                                         <div class="col-4 d-block d-sm-none">Fabrika</div>
 
-                                        <div class="col-md-2 col-8"><?= $urun_fabrika_adi; ?></div>
+                                        <div class="col-md-2 col-8"><?= $factoryName; ?></div>
 
                                         <div class="col-4 d-block d-sm-none">İlgili Kişi</div>
 
@@ -1609,13 +1524,13 @@ if (!isLoggedIn()) {
 
                     <?php if($user->permissions->shipment == '1'){?>
 
-                <?php if (isset($_GET['sevkiyateklendi']) && $_GET['u'] == $urun_id) { ?>
+                <?php if (isset($_GET['sevkiyateklendi']) && $_GET['u'] == $productId) { ?>
 
-                    <div id="sevkiyatdiv<?= $urun_id; ?>" class="div2">
+                    <div id="sevkiyatdiv<?= $productId; ?>" class="div2">
 
                         <?php }else{ ?>
 
-                        <div id="sevkiyatdiv<?= $urun_id; ?>" style="display: none;" class="div2">
+                        <div id="sevkiyatdiv<?= $productId; ?>" style="display: none;" class="div2">
 
                             <?php } ?>
 
@@ -1696,7 +1611,7 @@ if (!isLoggedIn()) {
 
                                             <br/>
 
-                                            <input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
+                                            <input type="hidden" name="urun_id" value="<?= $productId; ?>">
 
                                             <button class="btn btn-warning" name="sevkiyatkaydet">Kaydet</button>
 
@@ -1714,13 +1629,13 @@ if (!isLoggedIn()) {
 
                         <?php if($user->permissions->editing == '1'){ ?>
 
-                        <?php if ((isset($_GET['guncellendi']) || isset($_GET['urunsilinemez'])) && $_GET['u'] == $urun_id) { ?>
+                        <?php if ((isset($_GET['guncellendi']) || isset($_GET['urunsilinemez'])) && $_GET['u'] == $productId) { ?>
 
-                        <div class="div2" id="editdiv<?= $urun_id; ?>" >
+                        <div class="div2" id="editdiv<?= $productId; ?>" >
 
                             <?php }else{ ?>
 
-                            <div class="div2" style="display: none;" id="editdiv<?= $urun_id; ?>" >
+                            <div class="div2" style="display: none;" id="editdiv<?= $productId; ?>" >
 
                                 <?php } ?>
 
@@ -1732,7 +1647,7 @@ if (!isLoggedIn()) {
 
                                         <div class="row">
 
-                                            <input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
+                                            <input type="hidden" name="urun_id" value="<?= $productId; ?>">
 
                                             <?php if(in_array('product_code', $activeColumns)){?><div class="col-md-1 col-12"><b>Ürün Kodu</b><input type="text" class="form-control" name="urun_kodu" value="<?= $urun_kodu; ?>"></div><?php } ?>
 
@@ -1790,13 +1705,13 @@ if (!isLoggedIn()) {
 
                                                         <?php
 
-                                                        if ($urun_fabrika == 0) {
+                                                        if ($factory == 0) {
 
                                                             echo "<option selected value='0'>Fabrika Seçiniz</option>";
 
                                                         }else{
 
-                                                            echo "<option selected value='".$urun_fabrika."'>".$urun_fabrika_adi."</option>";
+                                                            echo "<option selected value='".$factory."'>".$factoryName."</option>";
 
                                                         }
 
@@ -1824,7 +1739,7 @@ if (!isLoggedIn()) {
 
                                             <?php } ?>
 
-                                            <?php if(in_array('order_quantity', $activeColumns)){?><div class="col-md-1 col-12"><b><small>Sipariş Adedi</small></b><input type="text" class="form-control" name="urun_stok" value="<?= $urun_stok; ?>"></div><?php } ?>
+                                            <?php if(in_array('order_quantity', $activeColumns)){?><div class="col-md-1 col-12"><b><small>Sipariş Adedi</small></b><input type="text" class="form-control" name="urun_stok" value="<?= $defaultOrderQuantity; ?>"></div><?php } ?>
 
                                             <?php if(in_array('warning_count', $activeColumns)){?><div class="col-md-1 col-12 p-0"><b>Uyarı Adet</b><input type="text" class="form-control" name="urun_uyari_stok_adedi" value="<?= $urun_uyari_stok_adedi; ?>"></div><?php } ?>
 
@@ -1898,7 +1813,7 @@ if (!isLoggedIn()) {
 
                                     <form action="" method="POST">
 
-                                        <input type="hidden" name="urun_id" value="<?= $urun_id; ?>">
+                                        <input type="hidden" name="urun_id" value="<?= $productId; ?>">
 
                                         <input type="hidden" name="urun_adet" value="<?= $urun_adet; ?>">
 

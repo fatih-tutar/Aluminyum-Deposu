@@ -219,7 +219,7 @@
 
 					<div class="col-md-3"><?= $urun_adi." ".$kategori_iki_adi; ?></div>
 
-					<div class="col-md-2"><?= $siparisboy." boyunda "; ?></div>
+					<div class="col-md-2"><?= $siparisboy; ?></div>
 
 					<div class="col-md-2"><?= $urun_siparis_aded." adet "; ?></div>
 

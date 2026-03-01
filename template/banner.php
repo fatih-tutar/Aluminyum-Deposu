@@ -1,64 +1,64 @@
 <?php if(isLoggedIn()){ ?>
 
-	<div class="container-fluid" style="position: fixed; z-index: 5; background-color: black;">
+    <div class="container-fluid" style="position: fixed; z-index: 5; background-color: black;">
 
-		<div class="row">
+        <div class="row">
 
-			<div class="col-xl-2 col-lg-3 col-md-4 col-sm-5 col-7" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5 col-7" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
 
-				<a href="index.php"><img src="img/file/<?= $company->photo; ?>" class="img-responsive" alt="Alüminyum Deposu" width="70%" height="auto"></a>
+                <a href="index.php"><img src="img/file/<?= $company->photo; ?>" class="img-responsive" alt="Alüminyum Deposu" width="70%" height="auto"></a>
 
-			</div>
+            </div>
 
-			<div class="col-xl-10 col-lg-9 col-md-8 col-sm-7 col-5 d-flex align-items-center justify-content-end" style="text-align: right;">
+            <div class="col-xl-10 col-lg-9 col-md-8 col-sm-7 col-5 d-flex align-items-center justify-content-end" style="text-align: right;">
 
-				<div class="dropdown" style="margin: 10px;">
-				
-					<button class="btn btn-primary dropdown-toggle" style="background-color:black; border-style: none;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				
-						<?= $user->name ?>
-				
-					</button>
-				
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-				
-						<a class="dropdown-item" href="index.php"><b>ANA SAYFA</b></a>
-				
-						<a class="dropdown-item" href="profil.php?id=<?= $user->id; ?>"><b>PROFİL</b></a>
-				
-						<?php if($user->type == '2' || $user->type == '1' || $user->type == '3'){?>
-				
-							<?php if($user->type == '2'){?>
+                <div class="dropdown" style="margin: 10px;">
 
-								<hr class="m-1"/>
+                    <button class="btn btn-primary dropdown-toggle" style="background-color:black; border-style: none;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-								<a class="dropdown-item" href="catalog.php"><b>FİYATLAR</b></a>
+                        <?= $user->name ?>
 
-								<a class="dropdown-item" href="job.php"><b>PLAN</b></a>
+                    </button>
 
-								<a class="dropdown-item" href="yonetim.php"><b>YÖNETİM</b></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-								<hr class="m-1"/>
+                        <a class="dropdown-item" href="index.php"><b>ANA SAYFA</b></a>
 
-							<?php } ?>
+                        <a class="dropdown-item" href="profil.php?id=<?= $user->id; ?>"><b>PROFİL</b></a>
 
-							<?php if($user->permissions->visit == '1'){?>
+                        <?php if($user->type == '2' || $user->type == '1' || $user->type == '3'){?>
 
-								<a class="dropdown-item" href="ziyaretler.php"><b>ZİYARETLER</b></a>
+                            <?php if($user->type == '2'){?>
 
-							<?php } ?>
+                                <hr class="m-1"/>
 
-							<?php if($user->permissions->stock_flow == '1'){?>
+                                <a class="dropdown-item" href="catalog.php"><b>FİYATLAR</b></a>
 
-								<a class="dropdown-item" href="movement.php"><b>GELEN/GİDEN</b></a>
+                                <a class="dropdown-item" href="job.php"><b>PLAN</b></a>
 
-							<?php } ?>
+                                <a class="dropdown-item" href="yonetim.php"><b>YÖNETİM</b></a>
 
-							<?php if($user->permissions->transaction == '1'){?>
+                                <hr class="m-1"/>
 
-								<a class="dropdown-item" href="stock-activity.php"><b>İŞLEMLER</b></a>
+                            <?php } ?>
 
-							<?php } ?>
+                            <?php if($user->permissions->visit == '1'){?>
+
+                                <a class="dropdown-item" href="ziyaretler.php"><b>ZİYARETLER</b></a>
+
+                            <?php } ?>
+
+                            <?php if($user->permissions->stock_flow == '1'){?>
+
+                                <a class="dropdown-item" href="movement.php"><b>GELEN/GİDEN</b></a>
+
+                            <?php } ?>
+
+                            <?php if($user->permissions->transaction == '1'){?>
+
+                                <a class="dropdown-item" href="stock-activity.php"><b>İŞLEMLER</b></a>
+
+                            <?php } ?>
 
                             <?php if($user->permissions->vehicle == '1'){?>
 
@@ -66,55 +66,55 @@
 
                             <?php } ?>
 
-							<?php if($user->type == '2' || $user->type == '1' || $user->type == '3'){?>
-								
-								<a class="dropdown-item" href="categories.php"><b>KATEGORİLER</b></a>
-							
-							<?php } ?>
+                            <?php if($user->type == '2' || $user->type == '1' || $user->type == '3'){?>
 
-							<hr class="m-1"/>
+                                <a class="dropdown-item" href="categories.php"><b>KATEGORİLER</b></a>
 
-							<a class="dropdown-item" href="guide.php"><b>YARDIM</b></a>
-					
-						<?php } ?>
+                            <?php } ?>
 
-						<a class="dropdown-item" href="logout.php"><b>ÇIKIŞ</b></a>
-				
-					</div>
-				
-				</div>
+                            <hr class="m-1"/>
 
-			</div>
+                            <a class="dropdown-item" href="guide.php"><b>YARDIM</b></a>
 
-		</div>
+                        <?php } ?>
 
-	</div>
+                        <a class="dropdown-item" href="logout.php"><b>ÇIKIŞ</b></a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 <?php }elseif (!isLoggedIn()) { ?>
 
-	<div class="container-fluid" style="position: fixed; z-index: 2; background-color: white;">
+    <div class="container-fluid" style="position: fixed; z-index: 2; background-color: white;">
 
-		<div class="row">
+        <div class="row">
 
-			<div class="col-xl-10 col-lg-8 col-md-6 col-sm-6 col-6" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+            <div class="col-xl-10 col-lg-8 col-md-6 col-sm-6 col-6" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
 
-				<a href="index.php"><img src="img/defaultlogo.png" class="img-responsive" alt="Alüminyum Deposu" width="236" height="85"></a>
+                <a href="index.php"><img src="img/defaultlogo.png" class="img-responsive" alt="Alüminyum Deposu" width="236" height="85"></a>
 
-			</div>
+            </div>
 
-			<div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-6" style="text-align: right; padding-top: 30px;">
+            <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-6" style="text-align: right; padding-top: 30px;">
 
-				<!--<div class="btn-group" role="group" aria-label="Basic example">
-					
-					<button type="button" class="btn btn-danger" onclick="location.href='uyeol.php'"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;&nbsp;Üye Ol</button>
-				
-				</div>-->
+                <!--<div class="btn-group" role="group" aria-label="Basic example">
 
-			</div>
+                    <button type="button" class="btn btn-danger" onclick="location.href='uyeol.php'"><i class="fa fa-user-plus"></i>&nbsp;&nbsp;&nbsp;Üye Ol</button>
 
-		</div>
+                </div>-->
 
-	</div>
+            </div>
+
+        </div>
+
+    </div>
 
 <?php } ?>
 

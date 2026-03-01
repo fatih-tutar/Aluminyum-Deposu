@@ -1,5 +1,14 @@
 <?php
-
+function getFactories($companyId) {
+    global $db;
+    $factories = $db->query("SELECT * FROM factories WHERE company_id = {$companyId} ORDER BY name ASC");
+    return $factories->fetchAll(PDO::FETCH_OBJ);
+}
+function getEmployees($companyId) {
+    global $db;
+    $employees = $db->query("SELECT * FROM users WHERE company_id = {$companyId} ORDER BY name ASC");
+    return $employees->fetchAll(PDO::FETCH_OBJ);
+}
 function formatDate($datetime) {
     return date("d/m/Y", strtotime($datetime));
 }
@@ -108,12 +117,6 @@ function getOfficeType($uyeId) {
     return $yetkiArray[14];
 }
 
-function iseGirisTarihiGetir($uyeId) {
-    global $db;
-    $uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
-    return $uye['hire_date'];
-}
-
 function calculateUsedLeave($uyeId, $leaveId = null) {
     global $db;
     $year = date("Y");
@@ -144,25 +147,6 @@ function calculateUsedLeave($uyeId, $leaveId = null) {
     $usedLeave = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return !$usedLeave['total_used_leave'] ? 0 : $usedLeave['total_used_leave'];
-}
-
-function yillikIzinHesapla($uyeId) {
-    global $db;
-    $uye = $db->query("SELECT * FROM users WHERE id = '{$uyeId}' AND is_deleted = '0'")->fetch(PDO::FETCH_ASSOC);
-    $iseGirisTarihi = $uye['hire_date'];
-    $bugun = new DateTime();
-    $baslamaTarihi = new DateTime($iseGirisTarihi);
-    $fark = $bugun->diff($baslamaTarihi);
-    $yilFarki = $fark->y;
-    if ($yilFarki < 1) {
-        return 0; // 0-1 yıl arası izin hakkı yok
-    } elseif ($yilFarki >= 1 && $yilFarki < 5) {
-        return 14; // 1-5 yıl arası 14 gün izin
-    } elseif ($yilFarki >= 5 && $yilFarki < 15) {
-        return 20; // 5-15 yıl arası 20 gün izin
-    } else {
-        return 26; // 15 yıldan fazla ise 26 gün izin
-    }
 }
 
 function calculateAnnualLeave($uyeId) {
@@ -650,28 +634,6 @@ function categoryHasProducts($categoryId) {
     ");
     $stmt->execute(['id' => $categoryId]);
     return $stmt->fetchColumn() > 0 ? '1' : '0';
-}
-
-function siparisvarmi($factoryId){
-
-    global $db;
-
-    $query = $db->prepare("SELECT COUNT(*) FROM siparis WHERE urun_fabrika_id = '{$factoryId}'");
-    $query->execute();
-    $count = $query->fetchColumn();
-
-    return ($count == '0') ? '0' : '1';
-}
-
-function teklifvarmi($firmaid){
-
-    global $db;
-
-    $sorgu = $db->prepare("SELECT COUNT(*) FROM teklif WHERE tverilenfirma = '{$firmaid}'");
-    $sorgu->execute();
-    $say = $sorgu->fetchColumn();
-
-    return ($say == '0') ? '0' : '1';
 }
 
 function yollaf($veri){
