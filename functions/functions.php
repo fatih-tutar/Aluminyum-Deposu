@@ -1,4 +1,10 @@
 <?php
+function getMoldNumber($productId, $factoryId)
+{
+    global $db;
+    $moldNumber = $db->query("SELECT * FROM mold_numbers WHERE factory_id = {$factoryId} AND product_id = {$productId}");
+    return $moldNumber->fetch(PDO::FETCH_OBJ);
+}
 function getFactories($companyId) {
     global $db;
     $factories = $db->query("SELECT * FROM factories WHERE company_id = {$companyId} ORDER BY name ASC");

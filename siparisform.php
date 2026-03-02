@@ -30,9 +30,9 @@
 
 			$siparisleripatlat = explode(",", $siparisler);
 
-			$fabrikaid = $formbilgileri['fabrikaid'];
+			$factoryId = $formbilgileri['fabrikaid'];
 
-			$factory = getFactory($fabrikaid);
+			$factory = getFactory($factoryId);
 
 			$saniye = $formbilgileri['saniye'];
 
@@ -148,16 +148,13 @@
 		<div class="row" style="padding: 20px;">
 			
 			<div class="col-md-1"><b>S.No</b></div>
-
-			<div class="col-md-3"><b>Malzemenin Cinsi</b></div>
-
-			<div class="col-md-2"><b>Boy</b></div>
-
-			<div class="col-md-2"><b>Miktar Adet</b></div>	
-
-			<div class="col-md-2"><b>Kilo</b></div>	
-
-			<div class="col-md-2"><b>Kategori</b></div>			
+			<div class="col-md-1"><b>Kalıp No</b></div>
+			<div class="col-md-4"><b>Malzemenin Cinsi</b></div>
+			<div class="col-md-1"><b>Boy</b></div>
+			<div class="col-md-1"><b>Adet</b></div>
+			<div class="col-md-2"><b>Paketleme Adedi</b></div>
+			<div class="col-md-1"><b>Palet</b></div>
+			<div class="col-md-1"><b>Kilo</b></div>
 
 		</div>
 
@@ -197,6 +194,8 @@
 
 				$urun_birimkg = $urunbilcek['urun_birimkg'];
 
+                $packQuantity = $urunbilcek['pack_quantity'];
+
 				$katadcek = $db->query("SELECT * FROM categories WHERE id = '{$kategori_bir}'")->fetch(PDO::FETCH_ASSOC);
 
 				$kategori_bir_adi = $katadcek['name'];
@@ -208,6 +207,10 @@
 				$kilo = $urun_siparis_aded * $urun_birimkg;
 
 				$toplamkilo += $kilo;
+                
+                $moldNumber = getMoldNumber($urun_id, $factoryId);
+
+                $palet = $siparisbilgileri['palet'];
 
 			?>
 
@@ -216,17 +219,16 @@
 				<div class="row" style="padding: 20px;">
 		
 					<div class="col-md-1"><?= $a; ?></div>
+					<div class="col-md-1"><?= $moldNumber->number ?? null; ?></div>
 
-					<div class="col-md-3"><?= $urun_adi." ".$kategori_iki_adi; ?></div>
+					<div class="col-md-4"><?= $urun_adi." ".$kategori_iki_adi.' / '.$kategori_bir_adi; ?></div>
 
-					<div class="col-md-2"><?= $siparisboy; ?></div>
+					<div class="col-md-1"><?= $siparisboy; ?></div>
 
-					<div class="col-md-2"><?= $urun_siparis_aded." adet "; ?></div>
-
-					<div class="col-md-2"><?= $kilo." KG"; ?></div>
-
-					<div class="col-md-2"><?= $kategori_bir_adi; ?></div>
-
+					<div class="col-md-1"><?= $urun_siparis_aded." adet "; ?></div>
+					<div class="col-md-2"><?= $packQuantity == 0 ? '---------------------' : $packQuantity." adetli sarılsın "; ?></div>
+                    <div class="col-md-1"><?= $palet == 0 ? '-------' : $palet." palet "; ?></div>
+					<div class="col-md-1"><?= number_format($kilo, 1, ',', '.')." KG"; ?></div>
 				</div>
 
 			<?php
@@ -239,9 +241,9 @@
 
 		<div class="row" style="padding: 20px;">
 			
-			<div class="col-md-8" style="text-align:right; font-size:18px;"><b>Toplam Kilo : </b></div>
+			<div class="col-md-9" style="text-align:right; font-size:18px;"></div>
 
-			<div class="col-md-4" style="font-size:18px;"><b><?= $toplamkilo." KG"; ?></b></div>			
+			<div class="col-md-3" style="text-align:right; font-size:18px;"><b>Toplam Kilo : </b><b><?= number_format($toplamkilo, 1, ',', '.')." KG"; ?></b></div>
 
 		</div>
 

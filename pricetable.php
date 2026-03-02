@@ -72,21 +72,22 @@ if (!isLoggedIn()) {
 
                     <tr style="color:#003566">
                             <th>Fabrika</th>
-                            <th>Fiyat 1</th>
-                            <th>Fiyat 2</th>
+                            <th>İşçilik</th>
+                            <th>İnce İşçilik</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                             foreach ($factories as $factory):
                                 $laborCost = $factory->labor_cost;
+                                $fineLaborCost = $factory->fine_labor_cost;
                                 $price = ($companyLme + $laborCost) * $companyDolar / 1000;
-                                $otherPrice = floor($price * 100 / 100 * 102) / 100;
+                                $otherPrice = ($companyLme + $fineLaborCost) * $companyDolar / 1000;
                         ?>
                         <tr>
                             <td><?= $factory->name ?></td>
-                            <td><?= number_format($price, 2)."₺" ?></td>
-                            <td><?= number_format($otherPrice, 2)."₺" ?></td>
+                            <td><?= $laborCost == 0 ? '------' : number_format($price, 2)."₺" ?></td>
+                            <td><?= $fineLaborCost == 0 ? '-----' : number_format($otherPrice, 2)."₺" ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>

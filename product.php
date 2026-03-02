@@ -113,28 +113,32 @@ if (!isLoggedIn()) {
     }
 
     if (isset($_POST['add_purchase_orders'])) {
+        $moldNumber = guvenlik($_POST['mold_number']);
+        $productId = guvenlik($_POST['product_id']);
+        $factoryId = guvenlik($_POST['factory']);
         $length = guvenlik($_POST['length']);
         $preparedBy = guvenlik($_POST['prepared_by']);
-        $factory = guvenlik($_POST['factory']);
         $contactPerson = guvenlik($_POST['contact_person']);
         $defaultOrderQuantity = guvenlik($_POST['default_order_quantity']);
-        $productId = guvenlik($_POST['product_id']);
         $dueDate = guvenlik($_POST['due_date']);
         $palletQuantity = guvenlik($_POST['pallet_quantity']);
         $terminsaniye = strtotime($dueDate);
+        $moldNumberObj = getMoldNumber($productId,$factoryId);
         if(empty($preparedBy) || empty($contactPerson)) {
             $error = '<div class="alert alert-danger">Lütfen sipariş formunda boş alan bırakmayınız.</div>';
         }else{
             $uruninfo = $db->query("SELECT * FROM urun WHERE urun_id = '{$productId}' AND sirketid = '{$user->company_id}'")->fetch(PDO::FETCH_ASSOC);
-
             $urun_adi = $uruninfo['urun_adi'];
-
             $query = $db->prepare("INSERT INTO siparis SET terminsaniye = ?, siparisboy = ?, hazirlayankisi = ?, urun_fabrika_id = ?, ilgilikisi = ?, urun_id = ?, urun_adi = ?, urun_siparis_aded = ?, taslak = ?, siparissaniye = ?, formda = ?, sirketid = ?, silik = ?, palet = ?");
-
-            $insert = $query->execute(array($terminsaniye,$length,$preparedBy,$factory,$contactPerson,$productId,$urun_adi,$defaultOrderQuantity,'1',time(),'0',$user->company_id,'0',$palletQuantity));
-
+            $insert = $query->execute(array($terminsaniye,$length,$preparedBy,$factoryId,$contactPerson,$productId,$urun_adi,$defaultOrderQuantity,'1',time(),'0',$user->company_id,'0',$palletQuantity));
+            if($moldNumberObj) {
+                $query = $db->prepare("UPDATE mold_numbers SET number = ? WHERE product_id = ? AND factory_id = ?");
+                $update = $query->execute(array($moldNumber,$productId, $factoryId));
+            }else{
+                $query = $db->prepare("INSERT INTO mold_numbers SET number = ?, product_id = ?, factory_id = ?");
+                $insert = $query->execute(array($moldNumber,$productId,$factoryId));
+            }
             header("Location:product.php?id=".$categoryId."&u=".$productId."&sipariseklendi#".$productId);
-
             exit();
         }
 
@@ -247,6 +251,8 @@ if (!isLoggedIn()) {
 
         $urun_yeni_sira = guvenlik($_POST['urun_yeni_sira']);
 
+        $packQuantity = guvenlik($_POST['pack_quantity']);
+
         // SIRALAMA AYARI BURADA GÜNCELLEME İLE ALAKALI SIRALAMADAN BAŞKA BİR ŞEY YOK
 
         if ($urun_eski_sira < $urun_yeni_sira) {
@@ -317,9 +323,9 @@ if (!isLoggedIn()) {
 
         // BÜTÜN BİLGİLER BURADA GÜNCELLENİYOR
 
-        $query = $db->prepare("UPDATE urun SET urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, satis = ?, urun_fabrika = ?, urun_aciklama = ?, urun_stok = ?, musteri_ismi = ?,urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, tarih = ?, termin = ? WHERE urun_id = ?");
+        $query = $db->prepare("UPDATE urun SET urun_kodu = ?, urun_adi = ?, urun_adet = ?, urun_palet = ?, urun_depo_adet = ?, urun_raf = ?, urun_birimkg = ?, urun_boy_olcusu = ?, urun_alis = ?, satis = ?, urun_fabrika = ?, urun_aciklama = ?, urun_stok = ?, musteri_ismi = ?,urun_uyari_stok_adedi = ?, urun_depo_uyari_adet = ?, urun_sira = ?, tarih = ?, termin = ?, pack_quantity = ? WHERE urun_id = ?");
 
-        $guncelle = $query->execute(array($urun_kodu,$urun_adi,$urun_adet,$urun_palet,$urun_depo_adet,$urun_raf,$urun_birimkg,$urun_boy_olcusu,$urun_alis,$satis,$factory,$urun_aciklama,$defaultOrderQuantity,$musteri_ismi,$urun_uyari_stok_adedi,$urun_depo_uyari_adet,$urun_yeni_sira,$tarih,$termin,$productId));
+        $guncelle = $query->execute(array($urun_kodu,$urun_adi,$urun_adet,$urun_palet,$urun_depo_adet,$urun_raf,$urun_birimkg,$urun_boy_olcusu,$urun_alis,$satis,$factory,$urun_aciklama,$defaultOrderQuantity,$musteri_ismi,$urun_uyari_stok_adedi,$urun_depo_uyari_adet,$urun_yeni_sira,$tarih,$termin,$packQuantity,$productId));
 
         if ($urun_adet != $eskiadet) {
 
@@ -882,6 +888,7 @@ if (!isLoggedIn()) {
             $urun_uyari_stok_adedi = $orw['urun_uyari_stok_adedi'];
 
             $urun_depo_uyari_adet = $orw['urun_depo_uyari_adet'];
+            $packQuantity = $orw['pack_quantity'];
 
             $urun_sira = $orw['urun_sira'];
 
@@ -892,6 +899,8 @@ if (!isLoggedIn()) {
             $termin = $orw['termin'];
 
             $urunterminsaniye = strtotime($termin);
+
+            $moldNumber = getMoldNumber($productId, $factory);
 
             if (empty($tarih)) {$tarih = $tarihf2;}
 
@@ -1274,6 +1283,12 @@ if (!isLoggedIn()) {
                             <span class="close" onclick="closeModal()">&times;</span>
                             <h4><b>Sipariş Formu</b></h4>
                             <form action="" method="POST" class="mt-3">
+                                <b>Kalıp No</b>
+                                <input type="text"
+                                       name="mold_number"
+                                       class="form-control mb-2 moldNumberInput"
+                                       placeholder="Kalıp numarasını giriniz"
+                                       value="<?= $moldNumber->number ?? '' ?>">
                                 <b>Hazırlayan Kişi</b>
                                 <select name="prepared_by" class="form-control mb-2">
                                     <option selected>Hazırlayan Kişiyi Seçiniz</option>
@@ -1283,7 +1298,7 @@ if (!isLoggedIn()) {
                                     <?php } ?>
                                 </select>
                                 <b>Talep Edilen Fabrika</b>
-                                <select name="factory" class="form-control mb-2">
+                                <select name="factory" class="form-control mb-2 factorySelect" data-product-id="<?= $productId ?>">
                                     <option selected value="<?= $factory == 0 ? 0 : $factory ?>" >
                                         <?= $factory == 0 ? 'Fabrika Seçiniz' : $factoryName ?>
                                     </option>
@@ -1303,7 +1318,7 @@ if (!isLoggedIn()) {
                                 <input type="date" name="due_date" class="form-control mb-2">
                                 <b>Palet Adedi</b>
                                 <input type="text" name="pallet_quantity" class="form-control mb-2" placeholder="Palet adedini giriniz.">
-                                <input type="hidden" name="product_id" value="<?= $productId; ?>">
+                                <input type="hidden" name="product_id" value="<?= $productId ?>">
                                 <button type="submit" class="btn btn-primary btn-block" name="add_purchase_orders">Sipariş Listesine Ekle</button>
                             </form>
                         </div>
@@ -1741,10 +1756,10 @@ if (!isLoggedIn()) {
 
                                             <?php if(in_array('order_quantity', $activeColumns)){?><div class="col-md-1 col-12"><b><small>Sipariş Adedi</small></b><input type="text" class="form-control" name="urun_stok" value="<?= $defaultOrderQuantity; ?>"></div><?php } ?>
 
-                                            <?php if(in_array('warning_count', $activeColumns)){?><div class="col-md-1 col-12 p-0"><b>Uyarı Adet</b><input type="text" class="form-control" name="urun_uyari_stok_adedi" value="<?= $urun_uyari_stok_adedi; ?>"></div><?php } ?>
+                                            <?php if(in_array('warning_count', $activeColumns)){?><div class="col-md-1 col-12"><b>Uyarı Adet</b><input type="text" class="form-control" name="urun_uyari_stok_adedi" value="<?= $urun_uyari_stok_adedi; ?>"></div><?php } ?>
 
-                                            <?php if(in_array('warehouse_warning_count', $activeColumns)){?><div class="col-md-1 col-12 p-0"><b>Depo Uyarı</b><input type="text" class="form-control" name="urun_depo_uyari_adet" value="<?= $urun_depo_uyari_adet; ?>"></div><?php } ?>
-
+                                            <?php if(in_array('warehouse_warning_count', $activeColumns)){?><div class="col-md-1 col-12 px-2"><b>Depo Uyarı</b><input type="text" class="form-control" name="urun_depo_uyari_adet" value="<?= $urun_depo_uyari_adet; ?>"></div><?php } ?>
+                                            <div class="col-md-2 col-12"><b>Paketleme Adedi</b><input type="text" class="form-control" name="pack_quantity" value="<?= $packQuantity; ?>"></div>
                                             <div class="col-md-1 col-12">
 
                                                 <b>Liste Sıra</b>
@@ -1858,6 +1873,35 @@ if (!isLoggedIn()) {
                     </div>
 
                     <?php include 'template/script.php'; ?>
+                    <script>
+                        document.querySelectorAll(".factorySelect").forEach(function(select){
 
+                            select.addEventListener("change", function(){
+
+                                let factoryId = this.value;
+                                let productId = this.dataset.productId;
+
+                                console.log(factoryId);
+
+                                // aynı form içindeki input'u bul
+                                let form = this.closest("form");
+                                let moldInput = form.querySelector(".moldNumberInput");
+
+                                fetch("get-mold-number.php", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/x-www-form-urlencoded"
+                                    },
+                                    body: "product_id=" + productId + "&factory_id=" + factoryId
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        moldInput.value = data.number || "";
+                                    });
+
+                            });
+
+                        });
+                    </script>
 </body>
 </html>

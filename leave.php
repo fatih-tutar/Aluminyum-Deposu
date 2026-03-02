@@ -261,7 +261,7 @@ if (!isLoggedIn()) {
                             <?php }
                         if ($leaveCounter == 0) { ?>
                             <tr>
-                                <td colspan="5" style="text-align: center; color: #003566; font-weight: bold;">
+                                <td colspan="6" style="text-align: center; color: #003566; font-weight: bold;">
                                     Hiç izin kaydınız yoktur.
                                 </td>
                             </tr>
@@ -270,7 +270,7 @@ if (!isLoggedIn()) {
                     </table>
                 </div>
             </div>
-            <div class="row pl-4 pr-1 pt-4 pr-3" style="border-bottom: 1px solid #f4f4f4;">
+            <div class="pl-4 pr-1 pt-4 pr-3" style="border-bottom: 1px solid #f4f4f4;">
                 <h5 style="font-weight: bold; color: #003566">İZİN KULLANIM KURALLARI</h5>
                 <ul style="font-size:12px; padding-left: 0; list-style-position: inside; ">
                     <li>İzin talepleri, 1 Ocak ile 31 Mart tarihleri arasında oluşturulmalı ve bu taleplerin yönetim onayı beklenmelidir; bu tarih aralığı dışında kesinlikle izin talep edilemez.</li>
