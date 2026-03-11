@@ -190,7 +190,7 @@
 
 								<div><textarea name="firmaadres" class="form-control" rows="3" placeholder="Firma adresini yazınız." style="margin-bottom: 10px;"></textarea></div>
 
-								<div><button type="submit" class="btn btn-primary btn-block" name="firma_ekleme_formu">Firma Ekle</button></div>
+                                <div><button type="submit" class="btn btn-primary w-100" name="firma_ekleme_formu">Firma Ekle</button></div>
 
 							</form>
 
@@ -264,13 +264,13 @@
 
 								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $firmaid; ?>');"><button class="btn btn-primary btn-sm btn-block">Düzenle</button></a>
+                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('duzenlemedivi<?= $firmaid; ?>');"><button class="btn btn-primary btn-sm w-100">Düzenle</button></a>
 									
 								</div>
 
 								<div class="col-md-1 col-6" style="margin-top: 7px;">
 
-									<a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $firmaid; ?>');"><button class="btn btn-danger btn-sm btn-block">Sil</button></a>
+                                    <a href="#" onclick="return false" onmousedown="javascript:ackapa('silmedivi<?= $firmaid; ?>');"><button class="btn btn-danger btn-sm w-100">Sil</button></a>
 									
 								</div>
 
@@ -326,7 +326,7 @@
 
 										<div class="col-md-1 col-12" style="margin-top: 7px;">
 											
-											<button class="btn btn-warning btn-sm btn-block" type="submit" name="firmabilgileriguncelle">Güncelle</button>
+                                        <button class="btn btn-warning btn-sm w-100" type="submit" name="firmabilgileriguncelle">Güncelle</button>
 
 										</div>
 
@@ -454,7 +454,7 @@
 
 														<input type="hidden" name="teklifid" value="<?= $teklifid; ?>">
 														
-														<button type="submit" class="btn btn-danger btn-sm btn-block" name="teklifsil" style="margin-bottom: 5px;">Sil</button>
+                                                    <button type="submit" class="btn btn-danger btn-sm w-100" name="teklifsil" style="margin-bottom: 5px;">Sil</button>
 
 													</form>
 

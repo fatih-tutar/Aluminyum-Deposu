@@ -46,13 +46,35 @@
 			$phone_2 = guvenlik($_POST['phone_2']);
 			$address = guvenlik($_POST['address']);
 			$hireDate = guvenlik($_POST['hire_date']);
+
+            // Mevcut dosya adlarını sakla (eski dosyaları silebilmek için)
+            $oldPhoto      = $profil_foto;
+            $oldIdentity   = $nufus_cuzdani;
+            $oldAppForm    = $is_basvuru_formu;
+            $oldResidence  = $ikametgah_belgesi;
+            $oldHealth     = $saglik_raporu;
+
 			if (!empty($_FILES['uploadfile']['name'])) {
 				$temp = explode(".", $_FILES['uploadfile']['name']);
 				$dosyaadi = $temp[0];
 				$extension = end($temp);
 				$randomsayi = rand(0,10000);;
 				$upload_file = $dosyaadi.$randomsayi.".".$extension;
-				move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/pp/".$upload_file);
+                $targetPhoto = "files/profile/".$upload_file;
+                if (move_uploaded_file($_FILES['uploadfile']['tmp_name'], $targetPhoto)) {
+                    if (!empty($oldPhoto)) {
+                        $candidates = [
+                            "files/profile/".$oldPhoto,
+                            "files/img/pp/".$oldPhoto,
+                        ];
+                        foreach ($candidates as $path) {
+                            if (file_exists($path)) {
+                                @unlink($path);
+                                break;
+                            }
+                        }
+                    }
+                }
 			}else{
 				$upload_file = $profil_foto;
 			}
@@ -62,7 +84,21 @@
 				$extension = end($temp);
 				$randomsayi = rand(0,10000);;
 				$nufuscuzdani = $dosyaadi.$randomsayi.".".$extension;
-				move_uploaded_file($_FILES['nufuscuzdani']['tmp_name'], "img/belgeler/".$nufuscuzdani);
+                $target = "files/documents/".$nufuscuzdani;
+                if (move_uploaded_file($_FILES['nufuscuzdani']['tmp_name'], $target)) {
+                    if (!empty($oldIdentity)) {
+                        $candidates = [
+                            "files/documents/".$oldIdentity,
+                            "files/img/belgeler/".$oldIdentity,
+                        ];
+                        foreach ($candidates as $path) {
+                            if (file_exists($path)) {
+                                @unlink($path);
+                                break;
+                            }
+                        }
+                    }
+                }
 			}else{
 				$nufuscuzdani = $nufus_cuzdani;
 			}
@@ -72,7 +108,21 @@
 				$extension = end($temp);
 				$randomsayi = rand(0,10000);;
 				$isbasvuruformu = $dosyaadi.$randomsayi.".".$extension;
-				move_uploaded_file($_FILES['isbasvuruformu']['tmp_name'], "img/belgeler/".$isbasvuruformu);
+                $target = "files/documents/".$isbasvuruformu;
+                if (move_uploaded_file($_FILES['isbasvuruformu']['tmp_name'], $target)) {
+                    if (!empty($oldAppForm)) {
+                        $candidates = [
+                            "files/documents/".$oldAppForm,
+                            "files/img/belgeler/".$oldAppForm,
+                        ];
+                        foreach ($candidates as $path) {
+                            if (file_exists($path)) {
+                                @unlink($path);
+                                break;
+                            }
+                        }
+                    }
+                }
 			}else{
 				$isbasvuruformu = $is_basvuru_formu;
 			}
@@ -82,7 +132,21 @@
 				$extension = end($temp);
 				$randomsayi = rand(0,10000);;
 				$ikametgahbelgesi = $dosyaadi.$randomsayi.".".$extension;
-				move_uploaded_file($_FILES['ikametgahbelgesi']['tmp_name'], "img/belgeler/".$ikametgahbelgesi);
+                $target = "files/documents/".$ikametgahbelgesi;
+                if (move_uploaded_file($_FILES['ikametgahbelgesi']['tmp_name'], $target)) {
+                    if (!empty($oldResidence)) {
+                        $candidates = [
+                            "files/documents/".$oldResidence,
+                            "files/img/belgeler/".$oldResidence,
+                        ];
+                        foreach ($candidates as $path) {
+                            if (file_exists($path)) {
+                                @unlink($path);
+                                break;
+                            }
+                        }
+                    }
+                }
 			}else{
 				$ikametgahbelgesi = $ikametgah_belgesi;
 			}
@@ -92,7 +156,21 @@
 				$extension = end($temp);
 				$randomsayi = rand(0,10000);;
 				$saglikraporu = $dosyaadi.$randomsayi.".".$extension;
-				move_uploaded_file($_FILES['saglikraporu']['tmp_name'], "img/belgeler/".$saglikraporu);
+                $target = "files/documents/".$saglikraporu;
+                if (move_uploaded_file($_FILES['saglikraporu']['tmp_name'], $target)) {
+                    if (!empty($oldHealth)) {
+                        $candidates = [
+                            "files/documents/".$oldHealth,
+                            "files/img/belgeler/".$oldHealth,
+                        ];
+                        foreach ($candidates as $path) {
+                            if (file_exists($path)) {
+                                @unlink($path);
+                                break;
+                            }
+                        }
+                    }
+                }
 			}else{
 				$saglikraporu = $saglik_raporu;
 			}
@@ -204,12 +282,41 @@
 
         if (isset($_POST['kullanicisil'])) {
 
-            $query = $db->prepare("UPDATE users SET is_deleted = ? WHERE id = ?");
+            // Mevcut kullanıcının dosyalarını al
+            $stmt = $db->prepare("SELECT photo, identity_card, application_form, residence_certificate, health_report FROM users WHERE id = ?");
+            $stmt->execute([$profil_id]);
+            $userFiles = $stmt->fetch(PDO::FETCH_ASSOC);
 
+            if ($userFiles) {
+                $fileFields = [
+                    'photo'               => 'files/profile/',
+                    'identity_card'       => 'files/documents/',
+                    'application_form'    => 'files/documents/',
+                    'residence_certificate'=> 'files/documents/',
+                    'health_report'       => 'files/documents/',
+                ];
+
+                foreach ($fileFields as $field => $baseDir) {
+                    $val = $userFiles[$field] ?? '';
+                    if (empty($val)) continue;
+                    $candidates = [
+                        $baseDir.$val,
+                        'files/img/belgeler/'.$val,
+                        'files/img/pp/'.$val,
+                    ];
+                    foreach ($candidates as $path) {
+                        if (file_exists($path)) {
+                            @unlink($path);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            $query = $db->prepare("UPDATE users SET is_deleted = ? WHERE id = ?");
             $update = $query->execute(array('1',$profil_id));
 
             header("Location:yonetim.php");
-
             exit();
 
         }
@@ -259,8 +366,8 @@
 
 		<div class="div4" style="padding:10px;">
 			<div class="row">
-				<div class="col-md-2 col-12" style="display:flex; justify-content:center; align-items:center;">
-					<img src="img/<?= empty($profil_foto) ? 'pp.png' : 'pp/'.$profil_foto ?>" alt="<?= $profil_adi ?> Profil Fotoğrafı" class="pp">
+                <div class="col-md-2 col-12" style="display:flex; justify-content:center; align-items:center;">
+                    <img src="files/<?= empty($profil_foto) ? 'profile/pp.png' : 'profile/'.$profil_foto ?>" alt="<?= $profil_adi ?> Profil Fotoğrafı" class="pp">
 				</div>
 				<div class="col-md-5 col-7 pt-3 pr-0">
 					<h4><b><?= $profil_adi ?></b></h4>
@@ -277,10 +384,10 @@
 							<?= (new DateTime($hireDate))->format('d.m.Y') ?></h6>
 						<h6>
 							<i class="fas fa-id-card mr-2"></i>
-							<?php if(empty($nufus_cuzdani)){ ?>
+                                <?php if(empty($nufus_cuzdani)){ ?>
 								Nüfus Cüzdanı Fotokopisi
-							<?php }else{ ?>
-								<a href="img/belgeler/<?= $nufus_cuzdani ?>" target="_blank">
+                                <?php }else{ ?>
+                                <a href="files/documents/<?= $nufus_cuzdani ?>" target="_blank">
 									Nüfus Cüzdanı Fotokopisi
 								</a>
 							<?php } ?>
@@ -289,8 +396,8 @@
 							<i class="fas fa-file-alt mr-2"></i>
 							<?php if(empty($is_basvuru_formu)){ ?>
 								İş Başvuru Formu
-							<?php }else{ ?>
-								<a href="img/belgeler/<?= $is_basvuru_formu ?>" target="_blank">
+                                <?php }else{ ?>
+                                <a href="files/documents/<?= $is_basvuru_formu ?>" target="_blank">
 									İş Başvuru Formu
 								</a>
 							<?php } ?>
@@ -299,8 +406,8 @@
 							<i class="fas fa-map-marker-alt mr-2"></i>
 							<?php if(empty($ikametgah_belgesi)){ ?>
 								İkâmetgâh Belgesi
-							<?php }else{ ?>
-								<a href="img/belgeler/<?= $ikametgah_belgesi ?>" target="_blank">
+                                <?php }else{ ?>
+                                <a href="files/documents/<?= $ikametgah_belgesi ?>" target="_blank">
 									İkâmetgâh Belgesi
 								</a>
 							<?php } ?>
@@ -309,8 +416,8 @@
 							<i class="fas fa-file-medical mr-2"></i>
 							<?php if(empty($saglik_raporu)){ ?>
 								Sağlık Raporu
-							<?php }else{ ?>
-								<a href="img/belgeler/<?= $saglik_raporu ?>" target="_blank">
+                                <?php }else{ ?>
+                                <a href="files/documents/<?= $saglik_raporu ?>" target="_blank">
 									Sağlık Raporu
 								</a>
 							<?php } ?>
@@ -358,17 +465,17 @@
 									<input type="date" class="form-control form-control-sm mb-1" name="hire_date" value="<?= $hireDate ?>">	
 								<?php } ?>
 								<h6 class="mt-2"><b>Belgeler</b></h6>
-								<a href="<?= empty($nufus_cuzdani) ? '#' : 'img/belgeler/'.$nufus_cuzdani ?>" target="_blank" class="btn btn-<?= empty($nufus_cuzdani) ? 'secondary' : 'primary' ?> btn-sm mb-1">Nüfus Cüzdanı Fotokopisi</a>
+                                <a href="<?= empty($nufus_cuzdani) ? '#' : 'files/documents/'.$nufus_cuzdani ?>" target="_blank" class="btn btn-<?= empty($nufus_cuzdani) ? 'secondary' : 'primary' ?> btn-sm mb-1">Nüfus Cüzdanı Fotokopisi</a>
 								<input type="file" name="nufuscuzdani" style="margin-bottom: 10px;"><br/>
-								<a href="<?= empty($is_basvuru_formu) ? '#' : 'img/belgeler/'.$is_basvuru_formu ?>" target="_blank" class="btn btn-<?= empty($is_basvuru_formu) ? 'secondary' : 'primary' ?> btn-sm mb-1">İş Başvuru Formu</a>
+                                <a href="<?= empty($is_basvuru_formu) ? '#' : 'files/documents/'.$is_basvuru_formu ?>" target="_blank" class="btn btn-<?= empty($is_basvuru_formu) ? 'secondary' : 'primary' ?> btn-sm mb-1">İş Başvuru Formu</a>
 								<input type="file" name="isbasvuruformu" style="margin-bottom: 10px;"><br/>
-								<a href="<?= empty($ikametgah_belgesi) ? '#' : 'img/belgeler/'.$ikametgah_belgesi ?>" target="_blank" class="btn btn-<?= empty($ikametgah_belgesi) ? 'secondary' : 'primary' ?> btn-sm mb-1">İkametgah Belgesi</a>
+                                <a href="<?= empty($ikametgah_belgesi) ? '#' : 'files/documents/'.$ikametgah_belgesi ?>" target="_blank" class="btn btn-<?= empty($ikametgah_belgesi) ? 'secondary' : 'primary' ?> btn-sm mb-1">İkametgah Belgesi</a>
 								<input type="file" name="ikametgahbelgesi" style="margin-bottom: 10px;"><br/>
-								<a href="<?= empty($saglik_raporu) ? '#' : 'img/belgeler/'.$saglik_raporu ?>" target="_blank" class="btn btn-<?= empty($saglik_raporu) ? 'secondary' : 'primary' ?> btn-sm mb-1">Sağlık Raporu</a>
+                                <a href="<?= empty($saglik_raporu) ? '#' : 'files/documents/'.$saglik_raporu ?>" target="_blank" class="btn btn-<?= empty($saglik_raporu) ? 'secondary' : 'primary' ?> btn-sm mb-1">Sağlık Raporu</a>
 								<input type="file" name="saglikraporu" style="margin-bottom: 10px;"><br/>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-success btn-block" name="bilgilerimiguncelle">Bilgileri Güncelle</button>
+						<button type="submit" class="btn btn-success w-100" name="bilgilerimiguncelle">Bilgileri Güncelle</button>
 			    	</form>
 
 			    </div>
@@ -389,7 +496,7 @@
 
 			    		<input type="password" class="form-control" style="margin-bottom: 10px;" name="sifre_tekrar" placeholder="Yeni şifreyi tekrar ediniz.">
 
-			    		<button type="submit" class="btn btn-primary btn-block" name="sifreyidegistir">Şifreyi Güncelle</button>
+			    		<button type="submit" class="btn btn-primary w-100" name="sifreyidegistir">Şifreyi Güncelle</button>
 
 			    	</form>
 
@@ -504,13 +611,13 @@
                         <div class="col-md-2 col-4">
                         </div>
 						<div class="col-md-2 col-4">
-							<button type="submit" class="btn btn-warning btn-sm btn-block" name="yetkileriguncelle">Kaydet</button>
+							<button type="submit" class="btn btn-warning btn-sm w-100" name="yetkileriguncelle">Kaydet</button>
 						</div>
 						<div class="col-md-2 col-4" style="text-align:right;">						
-							<button type="submit" class="btn btn-secondary btn-sm btn-block" name="pasiflestir">Pasifleştir</button>
+							<button type="submit" class="btn btn-secondary btn-sm w-100" name="pasiflestir">Pasifleştir</button>
 						</div>
 						<div class="col-md-2 col-4" style="text-align:right;">						
-						<button type="submit" name="kullanicisil" class="btn btn-danger btn-sm btn-block" onclick="return confirmForm('Bu kullanıcıyı geri dönüşü olmayacak şekilde sileceksiniz, emin misiniz?');">Kullanıcıyı Sil</button>
+						<button type="submit" name="kullanicisil" class="btn btn-danger btn-sm w-100" onclick="return confirmForm('Bu kullanıcıyı geri dönüşü olmayacak şekilde sileceksiniz, emin misiniz?');">Kullanıcıyı Sil</button>
 						</div>
 					</div>
 				</form>

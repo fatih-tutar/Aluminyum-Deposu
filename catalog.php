@@ -63,16 +63,16 @@
 			$temp1 = explode(".", $_FILES['uploadfile1']['name']);
 			$dosyaadi1 = $temp1[0];
 			$extension1 = end($temp1);
-			$randomsayi1 = rand(0,10000);
-			$upload_file1 = $dosyaadi1.$randomsayi1.".".$extension1;
-			move_uploaded_file($_FILES['uploadfile1']['tmp_name'], "img/fiyatlar/".$upload_file1);
+            $randomsayi1 = rand(0,10000);
+            $upload_file1 = $dosyaadi1.$randomsayi1.".".$extension1;
+            move_uploaded_file($_FILES['uploadfile1']['tmp_name'], "files/prices/".$upload_file1);
 
 			$temp2 = explode(".", $_FILES['uploadfile2']['name']);
 			$dosyaadi2 = $temp2[0];
 			$extension2 = end($temp2);
-			$randomsayi2 = rand(0,10000);
-			$upload_file2 = $dosyaadi2.$randomsayi2.".".$extension2;
-			move_uploaded_file($_FILES['uploadfile2']['tmp_name'], "img/fiyatlar/".$upload_file2);
+            $randomsayi2 = rand(0,10000);
+            $upload_file2 = $dosyaadi2.$randomsayi2.".".$extension2;
+            move_uploaded_file($_FILES['uploadfile2']['tmp_name'], "files/prices/".$upload_file2);
 
 			//satırların doluluğunu kontrol ederek insert into işlemini kaç kere tekrarlayacağımıza karar vereceğiz
 
@@ -118,24 +118,47 @@
 
 			$urun_yeni_sira = guvenlik($_POST['urun_yeni_sira']);
 
-			$temp1 = explode(".", $_FILES['uploadfile1']['name']);
+      $temp1 = explode(".", $_FILES['uploadfile1']['name']);
       $dosyaadi1 = $temp1[0];
       $extension1 = end($temp1);
-      echo "<br/>extension : ".$extension1;
       $randomsayi1 = rand(0,10000);
     	$upload_file1 = $dosyaadi1.$randomsayi1.".".$extension1;
-      move_uploaded_file($_FILES['uploadfile1']['tmp_name'], "img/fiyatlar/".$upload_file1);
-
-      if(empty($extension1)){ $upload_file1 = $resim1; }
+      if (!empty($extension1)) {
+          $target1 = "files/prices/".$upload_file1;
+          if (move_uploaded_file($_FILES['uploadfile1']['tmp_name'], $target1)) {
+              if (!empty($resim1)) {
+                  $old1 = "files/prices/".$resim1;
+                  if (file_exists($old1)) {
+                      @unlink($old1);
+                  }
+              }
+          } else {
+              $upload_file1 = $resim1;
+          }
+      } else {
+          $upload_file1 = $resim1;
+      }
 
       $temp2 = explode(".", $_FILES['uploadfile2']['name']);
       $dosyaadi2 = $temp2[0];
       $extension2 = end($temp2);
       $randomsayi2 = rand(0,10000);
     	$upload_file2 = $dosyaadi2.$randomsayi2.".".$extension2;
-      move_uploaded_file($_FILES['uploadfile2']['tmp_name'], "img/fiyatlar/".$upload_file2);
-
-      if(empty($extension2)){ $upload_file2 = $resim2; }
+      if (!empty($extension2)) {
+          $target2 = "files/prices/".$upload_file2;
+          if (move_uploaded_file($_FILES['uploadfile2']['tmp_name'], $target2)) {
+              if (!empty($resim2)) {
+                  $old2 = "files/prices/".$resim2;
+                  if (file_exists($old2)) {
+                      @unlink($old2);
+                  }
+              }
+          } else {
+              $upload_file2 = $resim2;
+          }
+      } else {
+          $upload_file2 = $resim2;
+      }
 
       $urun_eski_sira = guvenlik($_POST['urun_eski_sira']);
 
@@ -345,9 +368,9 @@
     				<div class="col-md-6 col-12">
     					<form action="" method="POST">
     						<?php if($companyPriceList == 0){ ?>
-    							<button type="submit" name="fiyatgizle" class="btn btn-danger btn-block btn-sm">Fiyatları Gizle</button>
+    							<button type="submit" name="fiyatgizle" class="btn btn-danger w-100 btn-sm">Fiyatları Gizle</button>
     						<?php }else{ ?> 
-    							<button type="submit" name="fiyatgoster" class="btn btn-success btn-block btn-sm">Fiyatları Göster</button>
+    							<button type="submit" name="fiyatgoster" class="btn btn-success w-100 btn-sm">Fiyatları Göster</button>
     						<?php } ?>
     					</form>
     				</div>
@@ -489,13 +512,13 @@
 		    		
 		    		<div class="col-6">
 		    			
-		    			<button type="submit" name="fiyatekle" class="btn btn-primary btn-block btn-sm">Kaydet</button>
+		    			<button type="submit" name="fiyatekle" class="btn btn-primary w-100 btn-sm">Kaydet</button>
 
 		    		</div>
 
 		    		<div class="col-6">
 		    			
-		    			<a href="fiyatlistesi.php" target="_blank"><button type="button" class="btn btn-info btn-block btn-sm">Fiyat Listesi</button></a>
+		    			<a href="fiyatlistesi.php" target="_blank"><button type="button" class="btn btn-info w-100 btn-sm">Fiyat Listesi</button></a>
 
 		    		</div>
 
@@ -569,7 +592,7 @@
 					    		
 					    		<div class="col-2">
 
-					    			<img src="img/fiyatlar/<?= $resim1; ?>" style="width: 100%; height: auto;"><br/>
+                            <img src="files/prices/<?= $resim1; ?>" style="width: 100%; height: auto;"><br/>
 
 					    			<input type="file" name="uploadfile1" style="margin-bottom: 10px;">
 
@@ -661,7 +684,7 @@
 
 							    	<div class="row" style="margin-top: 5px;">							    		
 
-							    		<div class="col-4"><button type="submit" name='guncelle' class="btn btn-success btn-block btn-sm">Güncelle</button></div>
+							    		<div class="col-4"><button type="submit" name='guncelle' class="btn btn-success w-100 btn-sm">Güncelle</button></div>
 
 							    		<div class="col-4">
 							    			
@@ -692,7 +715,7 @@
 
 							    		<div class="col-4">
 
-							    			<button type="submit" name="sil" class="btn btn-secondary btn-block btn-sm">Sil</button>
+							    			<button type="submit" name="sil" class="btn btn-secondary w-100 btn-sm">Sil</button>
 
 							    		</div>
 
@@ -702,7 +725,7 @@
 
 					    		<div class="col-2">
 
-					    			<img src="img/fiyatlar/<?= $resim2; ?>" style="width: 100%; height: auto;">
+                            <img src="files/prices/<?= $resim2; ?>" style="width: 100%; height: auto;">
 
 					    			<input type="file" name="uploadfile2" style="margin-bottom: 10px;">
 

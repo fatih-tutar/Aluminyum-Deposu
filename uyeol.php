@@ -132,8 +132,8 @@
 
 							<div class="input-group mb-3">
 								
-								<button type="submit" class="btn btn-danger btn-block" name="uyeol">Üye Ol</button>
-
+								<button type="submit" class="btn btn-danger w-100" name="uyeol">Üye Ol</button>
+							
 							</div>
 						
 						</form>

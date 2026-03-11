@@ -54,7 +54,7 @@ if (!isLoggedIn()) {
 
                         </div>
 
-                        <button type="submit" name="hesapla" class="btn btn-primary btn-block btn-sm mt-3" style="background-color:black;">Hesapla</button>
+                        <button type="submit" name="hesapla" class="btn btn-primary w-100 btn-sm mt-3" style="background-color:black;">Hesapla</button>
 
                     </form>
 

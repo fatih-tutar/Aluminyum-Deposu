@@ -59,7 +59,7 @@
 
 		<div class="row">
 			
-			<div class="col-md-4" style="text-align: center; padding: 5px;"><img src="img/doga.jpg" style="width: 170px; height: auto;"></div>
+            <div class="col-md-4" style="text-align: center; padding: 5px;"><img src="files/img/doga.jpg" style="width: 170px; height: auto;"></div>
 
 			<div class="col-md-8" style="padding: 30px 0px 30px 0px; text-align: center;"><p style="color:green; font-size: 18px; font-weight: bolder;">Gerçekten ihtiyacınız yoksa bu mesajı kağıda basmayınız.</p></div>
 
@@ -67,7 +67,7 @@
 
 		<div class="row">
 			
-			<div class="col-md-4" style="text-align: center;"><img src="img/file/<?= $company->photo; ?>" style="width: 370px; height: auto;"></div>
+            <div class="col-md-4" style="text-align: center;"><img src="files/company/<?= $company->photo; ?>" style="width: 370px; height: auto;"></div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
@@ -277,7 +277,7 @@
 
 					<input type="hidden" name="siparislistesi" value="<?= $siparislistesi; ?>">
 					
-					<button type="submit" name="formkaydet" class="btn btn-warning btn-lg btn-block">Formu Kaydet</button>
+                    <button type="submit" name="formkaydet" class="btn btn-warning btn-lg w-100">Formu Kaydet</button>
 
 				</form>
 
@@ -287,7 +287,7 @@
 				
 				<a href="siparisyazdir.php?id=<?= $urun_fabrika_id; ?>" target="_blank">
 					
-					<button type="submit" class="btn btn-danger btn-lg btn-block">Yazdırma Sayfasına Git</button>
+                    <button type="submit" class="btn btn-danger btn-lg w-100">Yazdırma Sayfasına Git</button>
 
 				</a>
 

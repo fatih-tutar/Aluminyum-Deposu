@@ -24,20 +24,30 @@
 
         // Kasko PDF dosyası yüklendiyse
         if (isset($_FILES['casco_pdf']) && $_FILES['casco_pdf']['error'] == 0) {
-          $cascoPdf = $uploadDir . uniqid() . "_" . $_FILES['casco_pdf']['name'];
-          move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $cascoPdf);
+          $cascoFileName = uniqid() . "_" . basename($_FILES['casco_pdf']['name']);
+          $cascoTarget   = $uploadDir . $cascoFileName;
+          if (move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $cascoTarget)) {
+              // Veritabanında sadece dosya adını tut
+              $cascoPdf = $cascoFileName;
+          }
         }
 
         // Sigorta PDF dosyası yüklendiyse
         if (isset($_FILES['insurance_pdf']) && $_FILES['insurance_pdf']['error'] == 0) {
-          $insurancePdf = $uploadDir . uniqid() . "_" . $_FILES['insurance_pdf']['name'];
-          move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $insurancePdf);
+          $insuranceFileName = uniqid() . "_" . basename($_FILES['insurance_pdf']['name']);
+          $insuranceTarget   = $uploadDir . $insuranceFileName;
+          if (move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $insuranceTarget)) {
+              $insurancePdf = $insuranceFileName;
+          }
         }
 
         // Ruhsat PDF dosyası yüklendiyse
         if (isset($_FILES['registration_pdf']) && $_FILES['registration_pdf']['error'] == 0) {
-            $registrationPdf = $uploadDir . uniqid() . "_" . $_FILES['registration_pdf']['name'];
-            move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $registrationPdf);
+            $registrationFileName = uniqid() . "_" . basename($_FILES['registration_pdf']['name']);
+            $registrationTarget   = $uploadDir . $registrationFileName;
+            if (move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $registrationTarget)) {
+                $registrationPdf = $registrationFileName;
+            }
         }
 
         $query = $db->prepare("INSERT INTO vehicles SET name = ?, license_plate = ?, casco_end_date = ?, insurance_end_date = ?, casco_pdf = ?, insurance_pdf = ?, inspection_date = ?, driver = ?, registration_pdf = ?, description = ?, is_transport = ?, time = ?, is_deleted = ?");
@@ -69,26 +79,81 @@
         $isTransport = '0';
         if(isset($_POST['is_transport'])){ $isTransport = '1'; }
 
+        // Mevcut kayıtları al (eski PDF'leri silebilmek için)
+        $existing = $db->prepare("SELECT casco_pdf, insurance_pdf, registration_pdf FROM vehicles WHERE id = ?");
+        $existing->execute([$id]);
+        $existingFiles = $existing->fetch(PDO::FETCH_ASSOC) ?: ['casco_pdf' => null, 'insurance_pdf' => null, 'registration_pdf' => null];
+
         // Dosya yükleme işlemleri
         $uploads = [];
         $upload_dir = 'files/vehicles/';
 
         if (!empty($_FILES['casco_pdf']['name'])) {
           $unique_name = uniqid() . '-' . basename($_FILES['casco_pdf']['name']);
-          $uploads['casco_pdf'] = $upload_dir . $unique_name;
-          move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $uploads['casco_pdf']);
+          $target      = $upload_dir . $unique_name;
+          if (move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $target)) {
+              // eski dosyayı sil
+              $old = $existingFiles['casco_pdf'] ?? '';
+              if (!empty($old)) {
+                  $candidates = [];
+                  if (strpos($old, 'files/') === 0) {
+                      $candidates[] = $old;
+                  }
+                  $candidates[] = $upload_dir . $old;
+                  foreach ($candidates as $path) {
+                      if (file_exists($path)) {
+                          @unlink($path);
+                          break;
+                      }
+                  }
+              }
+              // sadece dosya adını sakla
+              $uploads['casco_pdf'] = $unique_name;
+          }
         }
 
         if (!empty($_FILES['insurance_pdf']['name'])) {
           $unique_name = uniqid() . '-' . basename($_FILES['insurance_pdf']['name']);
-          $uploads['insurance_pdf'] = $upload_dir . $unique_name;
-          move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $uploads['insurance_pdf']);
+          $target      = $upload_dir . $unique_name;
+          if (move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $target)) {
+              $old = $existingFiles['insurance_pdf'] ?? '';
+              if (!empty($old)) {
+                  $candidates = [];
+                  if (strpos($old, 'files/') === 0) {
+                      $candidates[] = $old;
+                  }
+                  $candidates[] = $upload_dir . $old;
+                  foreach ($candidates as $path) {
+                      if (file_exists($path)) {
+                          @unlink($path);
+                          break;
+                      }
+                  }
+              }
+              $uploads['insurance_pdf'] = $unique_name;
+          }
         }
 
         if (!empty($_FILES['registration_pdf']['name'])) {
           $unique_name = uniqid() . '-' . basename($_FILES['registration_pdf']['name']);
-          $uploads['registration_pdf'] = $upload_dir . $unique_name;
-          move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $uploads['registration_pdf']);
+          $target      = $upload_dir . $unique_name;
+          if (move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $target)) {
+              $old = $existingFiles['registration_pdf'] ?? '';
+              if (!empty($old)) {
+                  $candidates = [];
+                  if (strpos($old, 'files/') === 0) {
+                      $candidates[] = $old;
+                  }
+                  $candidates[] = $upload_dir . $old;
+                  foreach ($candidates as $path) {
+                      if (file_exists($path)) {
+                          @unlink($path);
+                          break;
+                      }
+                  }
+              }
+              $uploads['registration_pdf'] = $unique_name;
+          }
         }
 
         // SQL sorgusunu oluştur
@@ -105,9 +170,9 @@
         // Dosya alanlarını kontrol et ve SQL sorgusuna ekle
         $params = [$name, $licensePlate, $driver, $cascoEndDate, $insuranceEndDate, $inspectionDate, $description, $isTransport];
 
-        foreach ($uploads as $key => $path) {
+        foreach ($uploads as $key => $fileName) {
           $sql .= ", $key = ?";
-          $params[] = $path;
+          $params[] = $fileName;
         }
 
         $sql .= " WHERE id = ?";
@@ -219,8 +284,8 @@
           <div class="col-md-12 col-12 mb-2">
             <textarea name="description" id="aciklama" placeholder="Bu alan not girebilirsiniz." class="form-control form-control-sm"></textarea>
           </div>
-          <div class="col-md-12">
-            <button type="submit" name="add_vehicle" class="btn btn-primary btn-block btn-sm">Araç Ekle</button>
+        <div class="col-md-12">
+            <button type="submit" name="add_vehicle" class="btn btn-primary w-100 btn-sm">Araç Ekle</button>
           </div>
         </div>
       </form>
@@ -284,29 +349,59 @@
                 <!-- Kasko PDF -->
                 <div class="col-md-1 col-12">
                     <span class="d-md-none font-weight-bold">Kasko PDF: </span>
-                    <a href="<?= guvenlik($vehicle->casco_pdf) ?>" target="_blank">Kasko PDF</a>
+                    <?php
+                    $cascoValue = $vehicle->casco_pdf;
+                    $cascoUrl = $cascoValue
+                        ? (strpos($cascoValue, 'files/') === 0
+                            ? $cascoValue
+                            : 'files/vehicles/' . $cascoValue)
+                        : '';
+                    ?>
+                    <?php if ($cascoUrl): ?>
+                        <a href="<?= guvenlik($cascoUrl) ?>" target="_blank">Kasko PDF</a>
+                    <?php endif; ?>
                 </div>
                 <!-- Sigorta PDF -->
                 <div class="col-md-1 col-12">
                     <span class="d-md-none font-weight-bold">Sigorta PDF: </span>
-                    <a href="<?= guvenlik($vehicle->insurance_pdf) ?>" target="_blank">Sigorta PDF</a>
+                    <?php
+                    $insuranceValue = $vehicle->insurance_pdf;
+                    $insuranceUrl = $insuranceValue
+                        ? (strpos($insuranceValue, 'files/') === 0
+                            ? $insuranceValue
+                            : 'files/vehicles/' . $insuranceValue)
+                        : '';
+                    ?>
+                    <?php if ($insuranceUrl): ?>
+                        <a href="<?= guvenlik($insuranceUrl) ?>" target="_blank">Sigorta PDF</a>
+                    <?php endif; ?>
                 </div>
                 <!-- Ruhsat PDF -->
                 <div class="col-md-1 col-12">
                     <span class="d-md-none font-weight-bold">Ruhsat PDF: </span>
-                    <a href="<?= guvenlik($vehicle->registration_pdf) ?>" target="_blank">Ruhsat PDF</a>
+                    <?php
+                    $registrationValue = $vehicle->registration_pdf;
+                    $registrationUrl = $registrationValue
+                        ? (strpos($registrationValue, 'files/') === 0
+                            ? $registrationValue
+                            : 'files/vehicles/' . $registrationValue)
+                        : '';
+                    ?>
+                    <?php if ($registrationUrl): ?>
+                        <a href="<?= guvenlik($registrationUrl) ?>" target="_blank">Ruhsat PDF</a>
+                    <?php endif; ?>
                 </div>
                 <div class="col-md-1 col-12">
                   <div class="row">
                     <div class="col-md-6 col-6">
                       <a href="#" onclick="return false" onmousedown="javascript:ackapa('edit-div-<?= $vehicle->id ?>');">
-                        <button class="btn btn-success btn-block btn-sm"><i class="fas fa-pen"></i></button>
+                        <button class="btn btn-success w-100 btn-sm"><i class="fas fa-pen"></i></button>
                       </a>
                     </div>
                     <div class="col-md-6 col-6">
                         <form action="" method="POST">
                           <input type="hidden" name="id" value="<?= $vehicle->id ?>">
-                          <button type="submit" name="delete_vehicle" class="btn btn-secondary btn-block btn-sm" onclick="return confirmForm('Aracı silmek istediğinize emin misiniz?');">
+                          <button type="submit" name="delete_vehicle" class="btn btn-secondary w-100 btn-sm" onclick="return confirmForm('Aracı silmek istediğinize emin misiniz?');">
                             <i class="fas fa-trash"></i>
                           </button>
                         </form>
@@ -387,7 +482,7 @@
                         <input type="hidden" name="id" value="<?= $vehicle->id ?>">
                         <input type="checkbox" id="transportCheckbox" name="is_transport" <?= $vehicle->is_transport == '1' ? 'checked' : '' ?>>
                         <label for="transportCheckbox">Nakliye Aracı</label>
-                        <button type="submit" name="edit_vehicle" class="btn btn-primary btn-block btn-sm">Kaydet</button>
+                        <button type="submit" name="edit_vehicle" class="btn btn-primary w-100 btn-sm">Kaydet</button>
                     </div>
                   </div>
                 </form>

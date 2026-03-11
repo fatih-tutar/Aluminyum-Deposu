@@ -167,7 +167,7 @@ if (!isLoggedIn()) {
                         <input type="date" id="return_date" name="return_date" class="form-control mb-2">
                         <b>İzinli Gün Sayısı</b><br/>
                         <input type="text" id="leave_days" name="leave_days" class="form-control mb-2" readonly>
-                        <button type="submit" class="btn btn-primary btn-block" name="add_leave">İzni Kaydet</button>
+                        <button type="submit" class="btn btn-primary w-100" name="add_leave">İzni Kaydet</button>
                     </form>
             </div>
             <div class="row pl-3 pb-4 pr-3 bb-grey">
@@ -245,7 +245,7 @@ if (!isLoggedIn()) {
                                                     <?php } ?>
                                                     <input type="hidden" name="id" value="<?= $leave->id ?>">
                                                     <input type="hidden" name="user_id" value="<?= $leave->user_id ?>">
-                                                    <button type="submit" class="btn btn-primary btn-block" name="edit_leave">İzni Güncelle</button>
+                                                    <button type="submit" class="btn btn-primary w-100" name="edit_leave">İzni Güncelle</button>
                                                 </form>
                                             </div>
                                         </div>

@@ -39,10 +39,20 @@ if (isset($_POST['save_organization'])) {
             $ext = pathinfo($fileData['name'][$index]['uploadfile'], PATHINFO_EXTENSION);
             $photo = uniqid('org_', true) . '.' . $ext;
 
-            move_uploaded_file(
+            // Eski fotoğrafı al
+            $oldPhoto = $users[$index]['photo'] ?? null;
+
+            if (move_uploaded_file(
                 $fileData['tmp_name'][$index]['uploadfile'],
-                "img/organizasyon/" . $photo
-            );
+                "files/organization/" . $photo
+            )) {
+                if (!empty($oldPhoto)) {
+                    $oldPath = "files/organization/" . $oldPhoto;
+                    if (file_exists($oldPath)) {
+                        @unlink($oldPath);
+                    }
+                }
+            }
         }
 
         if ($photo) {
@@ -61,13 +71,13 @@ if (isset($_POST['save_organization'])) {
 /* ---------- CARD RENDER ---------- */
 function renderOrgCard(int $i, array $users, $user, string $extraClass = '', string $fileClass = 'upload-button')
 {
-    $photo = empty($users[$i]['photo']) ? 'pp.png' : 'organizasyon/' . $users[$i]['photo'];
+    $photo = empty($users[$i]['photo']) ? 'profile/pp.png' : 'organization/' . $users[$i]['photo'];
     $title = $users[$i]['title'] ?? '';
     $name = $users[$i]['name'] ?? '';
     ?>
     <div class="org-card <?= $extraClass ?> relative">
         <div class="bg1 white label ortali relative">
-            <img src="img/<?= $photo ?>" alt="profile picture" class="profile-pic">
+            <img src="files/<?= $photo ?>" alt="profile picture" class="profile-pic">
             <?php if ($user->type == 2) { ?>
                 <input type="text" name="organization[<?= $i ?>][title]" value="<?= $title ?>">
             <?php } else { ?>

@@ -94,9 +94,10 @@ if(!isLoggedIn()){
                 goto end;
             }
 
-            $factoryPdfPath = $factoryPdfTargetFile;
-            $clientPdfPath = $clientPdfTargetFile;
-            $contractPdfPath = $contractPdfTargetFile;
+            // Veritabanında sadece dosya adlarını tut
+            $factoryPdfPath = $factoryPdfFileName;
+            $clientPdfPath = $clientPdfFileName;
+            $contractPdfPath = $contractPdfFileName;
 
             // client_id alma
             $client_id = getClientId($client);
@@ -191,7 +192,7 @@ if(!isLoggedIn()){
                 goto updateEnd;
             }
 
-            // Mevcut kalıp verisini al (PDF yollarını korumak için)
+            // Mevcut kalıp verisini al (eski PDF dosyalarını silebilmek için)
             $stmt = $db->prepare("SELECT factory_pdf, client_pdf, contract_pdf FROM molds WHERE id = :id");
             $stmt->execute([':id' => $id]);
             $existing = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -206,13 +207,29 @@ if(!isLoggedIn()){
             }
 
             // PDF dosyaları kontrol ve yükleme (varsa)
+            // Artık veritabanında sadece dosya adını tutuyoruz.
             $factoryPdfPath = $existing['factory_pdf'];
             if (!empty($_FILES['factory_pdf_file']['name'])) {
                 $factoryPdfFileName = uniqid() . '-' . basename($_FILES['factory_pdf_file']['name']);
                 $factoryPdfTargetFile = $uploadDir . $factoryPdfFileName;
 
                 if (move_uploaded_file($_FILES['factory_pdf_file']['tmp_name'], $factoryPdfTargetFile)) {
-                    $factoryPdfPath = $factoryPdfTargetFile;
+                    // Eski dosyayı sil
+                    if (!empty($existing['factory_pdf'])) {
+                        $old = $existing['factory_pdf'];
+                        $candidates = [];
+                        if (strpos($old, 'files/') === 0 || strpos($old, 'img/') === 0) {
+                            $candidates[] = $old;
+                        }
+                        $candidates[] = $uploadDir . $old;
+                        foreach ($candidates as $path) {
+                            if (file_exists($path)) {
+                                @unlink($path);
+                                break;
+                            }
+                        }
+                    }
+                    $factoryPdfPath = $factoryPdfFileName;
                 } else {
                     $error = '<div class="alert alert-danger" role="alert">Fabrika PDF dosyası yüklenemedi.</div>';
                     goto updateEnd;
@@ -225,7 +242,21 @@ if(!isLoggedIn()){
                 $clientPdfTargetFile = $uploadDir . $clientPdfFileName;
 
                 if (move_uploaded_file($_FILES['client_pdf_file']['tmp_name'], $clientPdfTargetFile)) {
-                    $clientPdfPath = $clientPdfTargetFile;
+                    if (!empty($existing['client_pdf'])) {
+                        $old = $existing['client_pdf'];
+                        $candidates = [];
+                        if (strpos($old, 'files/') === 0 || strpos($old, 'img/') === 0) {
+                            $candidates[] = $old;
+                        }
+                        $candidates[] = $uploadDir . $old;
+                        foreach ($candidates as $path) {
+                            if (file_exists($path)) {
+                                @unlink($path);
+                                break;
+                            }
+                        }
+                    }
+                    $clientPdfPath = $clientPdfFileName;
                 } else {
                     $error = '<div class="alert alert-danger" role="alert">Firma PDF dosyası yüklenemedi.</div>';
                     goto updateEnd;
@@ -238,7 +269,21 @@ if(!isLoggedIn()){
                 $contractPdfTargetFile = $uploadDir . $contractPdfFileName;
 
                 if (move_uploaded_file($_FILES['contract_pdf_file']['tmp_name'], $contractPdfTargetFile)) {
-                    $contractPdfPath = $contractPdfTargetFile;
+                    if (!empty($existing['contract_pdf'])) {
+                        $old = $existing['contract_pdf'];
+                        $candidates = [];
+                        if (strpos($old, 'files/') === 0 || strpos($old, 'img/') === 0) {
+                            $candidates[] = $old;
+                        }
+                        $candidates[] = $uploadDir . $old;
+                        foreach ($candidates as $path) {
+                            if (file_exists($path)) {
+                                @unlink($path);
+                                break;
+                            }
+                        }
+                    }
+                    $contractPdfPath = $contractPdfFileName;
                 } else {
                     $error = '<div class="alert alert-danger" role="alert">Sözleşme PDF dosyası yüklenemedi.</div>';
                     goto updateEnd;
@@ -301,16 +346,26 @@ if(!isLoggedIn()){
             }
 
             // PDF dosyalarını sil
-            if (!empty($mold['factory_pdf']) && file_exists($mold['factory_pdf'])) {
-                unlink($mold['factory_pdf']);
-            }
+            $pdfFields = ['factory_pdf', 'client_pdf', 'contract_pdf'];
+            foreach ($pdfFields as $field) {
+                $value = $mold[$field] ?? '';
+                if (empty($value)) {
+                    continue;
+                }
+                $candidates = [];
+                // Eski kayıtlar tam yol tutuyor olabilir
+                if (strpos($value, 'files/') === 0 || strpos($value, 'img/') === 0) {
+                    $candidates[] = $value;
+                }
+                // Normalize edilmiş kayıtlar sadece dosya adını tutuyor
+                $candidates[] = 'files/molds/' . $value;
 
-            if (!empty($mold['client_pdf']) && file_exists($mold['client_pdf'])) {
-                unlink($mold['client_pdf']);
-            }
-
-            if (!empty($mold['contract_pdf']) && file_exists($mold['contract_pdf'])) {
-                unlink($mold['contract_pdf']);
+                foreach ($candidates as $path) {
+                    if (file_exists($path)) {
+                        unlink($path);
+                        break;
+                    }
+                }
             }
 
             // Veritabanında is_deleted = 1 yap
@@ -446,7 +501,7 @@ if(!isLoggedIn()){
                         <input type="text" name="contact_person" class="form-control form-control-sm mb-2" placeholder="İlgili firma yetkilisini yazınız." value="<?= htmlspecialchars($_POST['contact_person'] ?? '') ?>"/>
                         <b>Açıklama</b>
                         <textarea class="form-control form-control-sm mb-2" name="description"><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
-                        <button type="submit" class="btn btn-primary btn-block" name="add_mold">Kaydet</button>
+                        <button type="submit" class="btn btn-primary w-100" name="add_mold">Kaydet</button>
                     </form>
                 </div>
                 <div class="d-flex justify-content-between align-items-center p-2">
@@ -495,7 +550,7 @@ if(!isLoggedIn()){
                         // Fabrika adı al
                         $factoryName = getFactoryNameById($factories, $item->factory_id);
 
-                        // PDF dosya yolu
+                        // PDF dosya değeri (veritabanında dosya adı veya eski tam yol olabilir)
                         $factoryPdfPath = $item->factory_pdf;
                         $clientPdfPath = $item->client_pdf;
                         $contractPdfPath = $item->contract_pdf;
@@ -510,23 +565,40 @@ if(!isLoggedIn()){
                             <td><?= htmlspecialchars($item->client_offer_price) ?></td>
                             <td><?= htmlspecialchars($item->factory_offer_price) ?></td>
                             <td><?= htmlspecialchars($item->due_date) ?></td>
+                            <?php
+                            $factoryPdfUrl = $factoryPdfPath
+                                ? (strpos($factoryPdfPath, 'files/') === 0 || strpos($factoryPdfPath, 'img/') === 0
+                                    ? $factoryPdfPath
+                                    : 'files/molds/' . $factoryPdfPath)
+                                : '';
+                            $clientPdfUrl = $clientPdfPath
+                                ? (strpos($clientPdfPath, 'files/') === 0 || strpos($clientPdfPath, 'img/') === 0
+                                    ? $clientPdfPath
+                                    : 'files/molds/' . $clientPdfPath)
+                                : '';
+                            $contractPdfUrl = $contractPdfPath
+                                ? (strpos($contractPdfPath, 'files/') === 0 || strpos($contractPdfPath, 'img/') === 0
+                                    ? $contractPdfPath
+                                    : 'files/molds/' . $contractPdfPath)
+                                : '';
+                            ?>
                             <td>
-                                <?php if ($factoryPdfPath && file_exists($factoryPdfPath)): ?>
-                                    <a href="<?= htmlspecialchars($factoryPdfPath) ?>" target="_blank">Fabrika PDF</a>
+                                <?php if ($factoryPdfUrl && file_exists($factoryPdfUrl)): ?>
+                                    <a href="<?= htmlspecialchars($factoryPdfUrl) ?>" target="_blank">Fabrika PDF</a>
                                 <?php else: ?>
                                     -
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php if ($clientPdfPath && file_exists($clientPdfPath)): ?>
-                                    <a href="<?= htmlspecialchars($clientPdfPath) ?>" target="_blank">Firma PDF</a>
+                                <?php if ($clientPdfUrl && file_exists($clientPdfUrl)): ?>
+                                    <a href="<?= htmlspecialchars($clientPdfUrl) ?>" target="_blank">Firma PDF</a>
                                 <?php else: ?>
                                     -
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php if ($contractPdfPath && file_exists($contractPdfPath)): ?>
-                                    <a href="<?= htmlspecialchars($contractPdfPath) ?>" target="_blank">Sözleşme PDF</a>
+                                <?php if ($contractPdfUrl && file_exists($contractPdfUrl)): ?>
+                                    <a href="<?= htmlspecialchars($contractPdfUrl) ?>" target="_blank">Sözleşme PDF</a>
                                 <?php else: ?>
                                     -
                                 <?php endif; ?>
@@ -609,7 +681,7 @@ if(!isLoggedIn()){
                                         <b>Açıklama</b>
                                         <textarea class="form-control form-control-sm mb-2" name="description"><?= htmlspecialchars($item->description) ?></textarea>
                                         <input type="hidden" name="id" value="<?= $item->id ?>">
-                                        <button type="submit" class="btn btn-primary btn-block" name="update_mold">Güncelle</button>
+                                        <button type="submit" class="btn btn-primary w-100" name="update_mold">Güncelle</button>
                                     </form>
                                 </div>
                                 <div id="factory_pdfdivi<?= $item->id; ?>" class="pdf-preview-wrapper" style="display: none;">
@@ -621,7 +693,12 @@ if(!isLoggedIn()){
                                             </button>
                                         </div>
                                         <?php if (!empty($item->factory_pdf)): ?>
-                                            <object width="100%" height="500" type="application/pdf" data="<?= $item->factory_pdf; ?>">
+                                            <?php
+                                            $factoryObjectUrl = (strpos($item->factory_pdf, 'files/') === 0 || strpos($item->factory_pdf, 'img/') === 0)
+                                                ? $item->factory_pdf
+                                                : 'files/molds/' . $item->factory_pdf;
+                                            ?>
+                                            <object width="100%" height="500" type="application/pdf" data="<?= $factoryObjectUrl; ?>">
                                                 <p>Fabrika PDF dokümanı yüklenemedi.</p>
                                             </object>
                                         <?php else: ?>
@@ -640,7 +717,12 @@ if(!isLoggedIn()){
                                             </button>
                                         </div>
                                         <?php if (!empty($item->client_pdf)): ?>
-                                            <object width="100%" height="500" type="application/pdf" data="<?= $item->client_pdf; ?>">
+                                            <?php
+                                            $clientObjectUrl = (strpos($item->client_pdf, 'files/') === 0 || strpos($item->client_pdf, 'img/') === 0)
+                                                ? $item->client_pdf
+                                                : 'files/molds/' . $item->client_pdf;
+                                            ?>
+                                            <object width="100%" height="500" type="application/pdf" data="<?= $clientObjectUrl; ?>">
                                                 <p>Firma PDF dokümanı yüklenemedi.</p>
                                             </object>
                                         <?php else: ?>
@@ -659,7 +741,12 @@ if(!isLoggedIn()){
                                             </button>
                                         </div>
                                         <?php if (!empty($item->contract_pdf)): ?>
-                                            <object width="100%" height="500" type="application/pdf" data="<?= $item->contract_pdf; ?>">
+                                            <?php
+                                            $contractObjectUrl = (strpos($item->contract_pdf, 'files/') === 0 || strpos($item->contract_pdf, 'img/') === 0)
+                                                ? $item->contract_pdf
+                                                : 'files/molds/' . $item->contract_pdf;
+                                            ?>
+                                            <object width="100%" height="500" type="application/pdf" data="<?= $contractObjectUrl; ?>">
                                                 <p>Kalıp sözleşmesi yüklenemedi.</p>
                                             </object>
                                         <?php else: ?>

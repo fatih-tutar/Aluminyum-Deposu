@@ -12,11 +12,11 @@
             foreach( $query as $row ){
                 $kategori_id = $row['id'];
                 $kategori_adi = $row['name'];
-                $resim = "img/kategoriler/".$row['image'];
+                $resim = "files/categories/".$row['image'];
                 $i++;
     ?>
             <div class="card">
-                <div class="sidebar-font" style="background-color: white; cursor:pointer;" data-toggle="collapse" data-target="#collapse<?= $i; ?>" aria-expanded="true" aria-controls="collapse<?= $i; ?>">
+                <div class="sidebar-font" style="background-color: white; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapse<?= $i; ?>" aria-expanded="true" aria-controls="collapse<?= $i; ?>">
                     <div class="row pl-1">
                         <div class="col-md-3 col-2">
                             <img src="<?= $resim ?>" alt="<?= $kategori_adi ?>" width="40" height="40">
@@ -26,14 +26,14 @@
                         </div>
                     </div>							
                 </div>
-                <div id="collapse<?= $i; ?>" class="collapse px-2" style="border-top:1px solid grey; font-size:11px;" aria-labelledby="heading<?= $i; ?>" data-parent="#accordion">
+                <div id="collapse<?= $i; ?>" class="collapse px-2" style="border-top:1px solid grey; font-size:11px;" aria-labelledby="heading<?= $i; ?>" data-bs-parent="#accordion">
         <?php
             $cek = $db->query("SELECT * FROM categories WHERE parent_id = '{$kategori_id}' AND type = '1' AND company_id = '{$user->company_id}' AND is_deleted = '0'", PDO::FETCH_ASSOC);
             if ( $cek->rowCount() ){
                 foreach( $cek as $wor ){
                     $alt_kategori_id = $wor['id'];
                     $alt_kategori_adi = $wor['name'];
-                    $alt_kategori_resim = "img/kategoriler/".$wor['image'];
+                    $alt_kategori_resim = "files/categories/".$wor['image'];
         ?>		
                     <a href="product.php?id=<?= $alt_kategori_id; ?>">
                         <div class="row pl-1">
@@ -59,7 +59,7 @@
         <a href="customorder.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/kategoriler/unnamed39509908.jpg" alt="" width="35" height="35">
+                    <img src="files/categories/unnamed39509908.jpg" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     ÖZEL SİPARİŞLER
@@ -71,7 +71,7 @@
         <a href="fiyatlistesi.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/aydinlatma_fiyat.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/aydinlatma_fiyat.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     AYDINLATMA FİYAT
@@ -83,7 +83,7 @@
         <a href="tekliflistesi.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/urun_sorgulama.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/urun_sorgulama.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     ÜRÜN SORGULAMA
@@ -95,7 +95,7 @@
         <a href="pricetable.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/anlik_fiyatlama.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/anlik_fiyatlama.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     FİYAT TABLOSU
@@ -107,7 +107,7 @@
         <a href="agirlikhesaplama.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/agirlik_hesaplama.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/agirlik_hesaplama.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     AĞIRLIK HESAPLAMA
@@ -119,7 +119,7 @@
         <a href="factory.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/fabrikalar.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/fabrikalar.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     FABRİKALAR
@@ -131,7 +131,7 @@
         <a href="client.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/clients.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/clients.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     FİRMALAR
@@ -143,7 +143,7 @@
         <a href="mold.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/kaliplar.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/kaliplar.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     KALIPLAR
@@ -155,7 +155,7 @@
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('isplanidivi','agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi');" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/is_plani.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/is_plani.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     İŞ PLANI
@@ -167,7 +167,7 @@
         <a href="leave.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/izin.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/izin.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     İZİNLER
@@ -179,7 +179,7 @@
         <a href="organization.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/organizasyon.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/organizasyon.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     ORGANİZASYON
@@ -191,7 +191,7 @@
         <a href="sevkiyatplan.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/sevkiyat_plani.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/sevkiyat_plani.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     SEVKİYAT PLANI
@@ -203,7 +203,7 @@
         <a href="sevkiyatarsiv.php" class="sidebar-font">
             <div class="row pl-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
-                    <img src="img/sidebar/sevkiyat_arsivi.png" alt="" width="35" height="35">
+                    <img src="files/sidebar/sevkiyat_arsivi.png" alt="" width="35" height="35">
                 </div>
                 <div class="col-md-9 col-9 d-flex align-items-center">
                     SEVKİYAT ARŞİVİ

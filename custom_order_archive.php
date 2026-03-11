@@ -160,7 +160,7 @@ if (!isLoggedIn()) {
                     </select>
                     <b>Açıklama</b>
                     <textarea class="form-control form-control-sm mb-2" name="description"><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
-                    <button type="submit" class="btn btn-primary btn-block" name="add_custom_order">Kaydet</button>
+                    <button type="submit" class="btn btn-primary w-100" name="add_custom_order">Kaydet</button>
                 </form>
             </div>
             <div class="row pl-3 pb-4 pr-3 bb-grey">

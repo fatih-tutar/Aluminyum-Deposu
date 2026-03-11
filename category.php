@@ -54,9 +54,9 @@
 
 					$alt_kategori_id = $wor['id'];
 
-					$alt_kategori_adi = $wor['name'];
+                    $alt_kategori_adi = $wor['name'];
 
-					$resim = "img/kategoriler/".$wor['image'];
+                    $resim = "files/categories/".$wor['image'];
 
 		?>
 						
@@ -66,7 +66,7 @@
 
 							<img src="<?= $resim; ?>" class="img-thumbnail" style="width: 100%; height: auto; padding: 20px;">
 
-							<button class="btn btn-dark btn-sm btn-block" style="background-color: black;"><?= $alt_kategori_adi; ?></button>
+							<button class="btn btn-dark btn-sm w-100" style="background-color: black;"><?= $alt_kategori_adi; ?></button>
 
 							<!--<div style="border-radius: 50px; text-align: center; background-color: <?= $renkarrayi[$sayac]; ?>; color: white; font-weight: bolder; text-align: center; height: 90%; padding: 30% 20% 30% 20%; margin-bottom: 20px; font-size: 25px;">
 

@@ -22,11 +22,11 @@
 
     	<div style="padding: 0px;">
 
-			<div class="row">
-    		
-    		<div class="col-6" style="padding-top: 4%; text-align: center;"><img src="img/osmanlilogo.jpg" style="width: 75%; height: auto;"></div>
+            <div class="row">
+            
+            <div class="col-6" style="padding-top: 4%; text-align: center;"><img src="files/img/osmanlilogo.jpg" style="width: 75%; height: auto;"></div>
 
-    		<div class="col-6" style="text-align: center; padding: 3px;"><img src="img/aydinlatmalogo.jpg" style="width: 75%; height: auto;"></div>
+            <div class="col-6" style="text-align: center; padding: 3px;"><img src="files/img/aydinlatmalogo.jpg" style="width: 75%; height: auto;"></div>
 
     	</div>	
 
@@ -101,13 +101,13 @@
 				    		
 				    		<div class="col-sm-2 col-6" style="border:1px solid darkblue;">
 
-				    			<img src="img/fiyatlar/<?= $resim1; ?>" style="width: 100%; height: auto;">
+                    <img src="files/prices/<?= $resim1; ?>" style="width: 100%; height: auto;">
 
 				    		</div>
 
 				    		<div class="col-6 d-block d-sm-none" style="border:1px solid darkblue;">
 
-				    			<img src="img/fiyatlar/<?= $resim2; ?>" style="width: 100%; height: auto;">
+                    <img src="files/prices/<?= $resim2; ?>" style="width: 100%; height: auto;">
 
 				    		</div>
 
@@ -203,7 +203,7 @@
 
 				    		</div>	
 
-				    		<div class="col-2 d-none d-sm-block" style="border:1px solid darkblue;"><img src="img/fiyatlar/<?= $resim2; ?>" style="width: 100%; height: auto;"></div>
+                        <div class="col-2 d-none d-sm-block" style="border:1px solid darkblue;"><img src="files/prices/<?= $resim2; ?>" style="width: 100%; height: auto;"></div>
 
 				    	</div>
 

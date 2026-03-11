@@ -203,7 +203,7 @@
                                         <input type="text" name="phone" class="form-control mb-2" placeholder="Telefon numarasını giriniz">
                                         <input type="text" name="email" class="form-control mb-2" placeholder="E-posta adresini yazınız.">
                                         <textarea name="address" class="form-control mb-2" rows="3" placeholder="Firma adresini yazınız."></textarea>
-                                        <button type="submit" class="btn btn-primary btn-block" name="add_client">Kaydet</button>
+                                        <button type="submit" class="btn btn-primary w-100" name="add_client">Kaydet</button>
                                     </form>
                                 </div>
                             <?php } ?>
@@ -254,7 +254,7 @@
                                                         <textarea name="address" class="form-control mb-2" rows="3" placeholder="Firma adresini yazınız."><?= $client->address ?></textarea>
                                                         <input type="hidden" name="id" value="<?= $client->id ?>"/>
                                                         <input type="hidden" name="order_id" value="<?= $clientKey ?>"/>
-                                                        <button type="submit" class="btn btn-primary btn-block" name="update_client">Güncelle</button>
+                                                        <button type="submit" class="btn btn-primary w-100" name="update_client">Güncelle</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -291,15 +291,15 @@
                             <!-- Sekmeler -->
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="offer-tab" data-toggle="tab" href="#offer" role="tab"
+                                    <a class="nav-link active" id="offer-tab" data-bs-toggle="tab" href="#offer" role="tab"
                                        aria-controls="offer" aria-selected="false">Teklifler</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-order-tab" data-toggle="tab" href="#custom-order" role="tab"
+                                    <a class="nav-link" id="custom-order-tab" data-bs-toggle="tab" href="#custom-order" role="tab"
                                        aria-controls="custom-order" aria-selected="false">Özel Siparişler</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="mold-tab" data-toggle="tab" href="#mold" role="tab"
+                                    <a class="nav-link" id="mold-tab" data-bs-toggle="tab" href="#mold" role="tab"
                                        aria-controls="mold" aria-selected="true">Kalıplar</a>
                                 </li>
                             </ul>
@@ -551,23 +551,40 @@
                                                 <td><?= htmlspecialchars($item->client_offer_price) ?></td>
                                                 <td><?= htmlspecialchars($item->factory_offer_price) ?></td>
                                                 <td><?= htmlspecialchars($item->due_date) ?></td>
+                                                <?php
+                                                $factoryPdfUrl = $factoryPdfPath
+                                                    ? (strpos($factoryPdfPath, 'files/') === 0 || strpos($factoryPdfPath, 'img/') === 0
+                                                        ? $factoryPdfPath
+                                                        : 'files/molds/' . $factoryPdfPath)
+                                                    : '';
+                                                $clientPdfUrl = $clientPdfPath
+                                                    ? (strpos($clientPdfPath, 'files/') === 0 || strpos($clientPdfPath, 'img/') === 0
+                                                        ? $clientPdfPath
+                                                        : 'files/molds/' . $clientPdfPath)
+                                                    : '';
+                                                $contractPdfUrl = $contractPdfPath
+                                                    ? (strpos($contractPdfPath, 'files/') === 0 || strpos($contractPdfPath, 'img/') === 0
+                                                        ? $contractPdfPath
+                                                        : 'files/molds/' . $contractPdfPath)
+                                                    : '';
+                                                ?>
                                                 <td>
-                                                    <?php if ($factoryPdfPath && file_exists($factoryPdfPath)): ?>
-                                                        <a href="<?= htmlspecialchars($factoryPdfPath) ?>" target="_blank">Fabrika PDF</a>
+                                                    <?php if ($factoryPdfUrl && file_exists($factoryPdfUrl)): ?>
+                                                        <a href="<?= htmlspecialchars($factoryPdfUrl) ?>" target="_blank">Fabrika PDF</a>
                                                     <?php else: ?>
                                                         -
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($clientPdfPath && file_exists($clientPdfPath)): ?>
-                                                        <a href="<?= htmlspecialchars($clientPdfPath) ?>" target="_blank">Firma PDF</a>
+                                                    <?php if ($clientPdfUrl && file_exists($clientPdfUrl)): ?>
+                                                        <a href="<?= htmlspecialchars($clientPdfUrl) ?>" target="_blank">Firma PDF</a>
                                                     <?php else: ?>
                                                         -
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($contractPdfPath && file_exists($contractPdfPath)): ?>
-                                                        <a href="<?= htmlspecialchars($contractPdfPath) ?>" target="_blank">Sözleşme PDF</a>
+                                                    <?php if ($contractPdfUrl && file_exists($contractPdfUrl)): ?>
+                                                        <a href="<?= htmlspecialchars($contractPdfUrl) ?>" target="_blank">Sözleşme PDF</a>
                                                     <?php else: ?>
                                                         -
                                                     <?php endif; ?>
@@ -595,7 +612,12 @@
                                                                 </button>
                                                             </div>
                                                             <?php if (!empty($item->factory_pdf)): ?>
-                                                                <object width="100%" height="500" type="application/pdf" data="<?= $item->factory_pdf; ?>">
+                                                                <?php
+                                                                $factoryObjectUrl = (strpos($item->factory_pdf, 'files/') === 0 || strpos($item->factory_pdf, 'img/') === 0)
+                                                                    ? $item->factory_pdf
+                                                                    : 'files/molds/' . $item->factory_pdf;
+                                                                ?>
+                                                                <object width="100%" height="500" type="application/pdf" data="<?= $factoryObjectUrl; ?>">
                                                                     <p>Fabrika PDF dokümanı yüklenemedi.</p>
                                                                 </object>
                                                             <?php else: ?>
@@ -614,7 +636,12 @@
                                                                 </button>
                                                             </div>
                                                             <?php if (!empty($item->client_pdf)): ?>
-                                                                <object width="100%" height="500" type="application/pdf" data="<?= $item->client_pdf; ?>">
+                                                                <?php
+                                                                $clientObjectUrl = (strpos($item->client_pdf, 'files/') === 0 || strpos($item->client_pdf, 'img/') === 0)
+                                                                    ? $item->client_pdf
+                                                                    : 'files/molds/' . $item->client_pdf;
+                                                                ?>
+                                                                <object width="100%" height="500" type="application/pdf" data="<?= $clientObjectUrl; ?>">
                                                                     <p>Firma PDF dokümanı yüklenemedi.</p>
                                                                 </object>
                                                             <?php else: ?>
@@ -633,7 +660,12 @@
                                                                 </button>
                                                             </div>
                                                             <?php if (!empty($item->contract_pdf)): ?>
-                                                                <object width="100%" height="500" type="application/pdf" data="<?= $item->contract_pdf; ?>">
+                                                                <?php
+                                                                $contractObjectUrl = (strpos($item->contract_pdf, 'files/') === 0 || strpos($item->contract_pdf, 'img/') === 0)
+                                                                    ? $item->contract_pdf
+                                                                    : 'files/molds/' . $item->contract_pdf;
+                                                                ?>
+                                                                <object width="100%" height="500" type="application/pdf" data="<?= $contractObjectUrl; ?>">
                                                                     <p>Sözleşme PDF dokümanı yüklenemedi.</p>
                                                                 </object>
                                                             <?php else: ?>

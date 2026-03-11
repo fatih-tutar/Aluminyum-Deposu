@@ -184,7 +184,7 @@ if (!isLoggedIn()) {
 
                                 <div class="row"><div class="col-3"><b>Adet</b></div><div class="col-9"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
 
-                                <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px; background-color: black;" name="levhahesapla">Hesapla</button>
+                                <button type="submit" class="btn btn-primary w-100 btn-sm" style="margin-bottom: 5px; background-color: black;" name="levhahesapla">Hesapla</button>
 
                             </form>
 
@@ -212,7 +212,7 @@ if (!isLoggedIn()) {
 
                                 <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
 
-                                <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="kosebenthesapla">Hesapla</button>
+                                <button type="submit" class="btn btn-primary w-100 btn-sm" style="margin-bottom: 5px;" name="kosebenthesapla">Hesapla</button>
 
                             </form>
 
@@ -236,7 +236,7 @@ if (!isLoggedIn()) {
 
                                 <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['a'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
 
-                                <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="cubukhesapla">Hesapla</button>
+                                <button type="submit" class="btn btn-primary w-100 btn-sm" style="margin-bottom: 5px;" name="cubukhesapla">Hesapla</button>
 
                             </form>
 
@@ -264,7 +264,7 @@ if (!isLoggedIn()) {
 
                                 <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
 
-                                <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="kutuhesapla">Hesapla</button>
+                                <button type="submit" class="btn btn-primary w-100 btn-sm" style="margin-bottom: 5px;" name="kutuhesapla">Hesapla</button>
 
                             </form>
 
@@ -292,7 +292,7 @@ if (!isLoggedIn()) {
 
                                             <div class="row"><div class="col-4"><b>Adet</b></div><div class="col-8"><?php if(isset($_GET['adet'])){ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" value="<?= $adet; ?>"><?php }else{ ?><input type="text" class="form-control" style="margin-bottom: 5px;" name="adet" placeholder="ADET"><?php } ?></div></div>
 
-                                            <button type="submit" class="btn btn-primary btn-block btn-sm" style="margin-bottom: 5px;" name="boruhesapla">Hesapla</button>
+                                            <button type="submit" class="btn btn-primary w-100 btn-sm" style="margin-bottom: 5px;" name="boruhesapla">Hesapla</button>
 
                                         </form>
 

@@ -206,7 +206,7 @@
 
 	    			<div class="col-md-2" style="margin-top:30px;">
 	    				
-	    				<button type="submit" name="teklifkaydet" class="btn btn-dark btn-block">Kaydet</button>
+	    				<button type="submit" name="teklifkaydet" class="btn btn-dark w-100">Kaydet</button>
 
 	    			</div>
 
@@ -336,19 +336,19 @@
 
 				    				<input type="hidden" name="teklifid" value="<?= $teklifid; ?>">
 				    				
-				    				<button type="submit" name="teklifguncelle" class="btn btn-dark btn-block">Güncelle</button>
+				    				<button type="submit" name="teklifguncelle" class="btn btn-dark w-100">Güncelle</button>
 
 				    			</div>
 
 				    			<div class="col-md-1">
 				    				
-				    				<button type="submit" name="arsivarti" class="btn btn-success btn-block"><i class="fas fa-plus"></i> Arşiv</button>
+				    				<button type="submit" name="arsivarti" class="btn btn-success w-100"><i class="fas fa-plus"></i> Arşiv</button>
 
 				    			</div>
 
 				    			<div class="col-md-1">
 				    				
-				    				<button type="submit" name="arsiveksi" class="btn btn-danger btn-block"><i class="fas fa-times"></i> Arşiv</button>
+				    				<button type="submit" name="arsiveksi" class="btn btn-danger w-100"><i class="fas fa-times"></i> Arşiv</button>
 
 				    			</div>
 

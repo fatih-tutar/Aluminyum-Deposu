@@ -212,16 +212,16 @@
 									<div class="col-md-6 col-6 p-0">
 									<?php if($ozet == 0){ ?>
 
-										<a href="gelengiden.php?ozet=1"><button class="btn btn-info btn-block btn-sm">Özet Göster</button></a>
+										<a href="gelengiden.php?ozet=1"><button class="btn btn-info w-100 btn-sm">Özet Göster</button></a>
 
 									<?php }else{ ?>
 
-										<a href="gelengiden.php?ozet=0"><button class="btn btn-info btn-block btn-sm">Özeti Kapat</button></a>
+										<a href="gelengiden.php?ozet=0"><button class="btn btn-info w-100 btn-sm">Özeti Kapat</button></a>
 
 									<?php } ?>
 									</div>
 									<div class="col-md-6 col-6">
-										<a href="movement-report.php" target="_blank"><button class="btn btn-secondary btn-sm btn-block">Rapor</button></a>
+										<a href="movement-report.php" target="_blank"><button class="btn btn-secondary btn-sm w-100">Rapor</button></a>
 									</div>
 								</div>
 
@@ -237,9 +237,7 @@
     					
 	    					<div class="col-md-2 col-12" style="font-weight: bold;">
 								
-									<input type="text" id="tarih" name="tarih" value="<?= $tarihf2; ?>" class="form-control form-control-lg">
-
-									<input type="hidden" id="tarih-db" name="tarih2">
+									<input type="date" id="tarih" name="tarih" value="<?= !empty($tarihf2) ? date('Y-m-d', strtotime($tarihf2)) : ''; ?>" class="form-control form-control-lg">
 
 	    					</div>
 
@@ -251,7 +249,7 @@
 
 	    					<div class="col-md-2 col-12" style="font-weight: bold;"><input type="text" name="alkop_gelen" placeholder="SADECE SAYI GİRİNİZ." class="form-control form-control-lg"></div>
 
-	    					<div class="col-md-2 col-12"><button type="submit" name="gelengidenkayit" class="btn btn-success btn-block btn-sm">Bugünü Kaydet</button></div>
+	    					<div class="col-md-2 col-12"><button type="submit" name="gelengidenkayit" class="btn btn-success w-100 btn-sm">Bugünü Kaydet</button></div>
 
 	    				</div>
 
@@ -426,7 +424,7 @@
 
 					    						<input type="hidden" name="id" value="<?= $id; ?>">
 
-					    						<button type="submit" name="gelengidenguncelle" class="btn btn-primary btn-block btn-lg">Düzenle</button></div>
+					    						<button type="submit" name="gelengidenguncelle" class="btn btn-primary w-100 btn-lg">Düzenle</button></div>
 
 					    				</div>
 

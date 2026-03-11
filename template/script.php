@@ -1,40 +1,11 @@
-<script src="js/jquery-3.3.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
 
-<script src="js/popper.min.js"></script>
-
-<script src="js/bootstrap.min.js"></script>
-
-<script src="js/jquery-2.2.4.min.js" type="text/javascript"></script>
-
-<script src="js/jquery-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script type="text/javascript">
 
-    $( function() {
-
-        for (var id = 1; id < 1000; id++) {
-
-             $( "#tarih"+id ).datepicker({
-
-                dateFormat: "dd-mm-yy",
-
-                altFormat: "yy-mm-dd",
-
-                altField:"#tarih-db",
-
-                monthNames: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],
-
-                dayNamesMin: [ "Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct" ],
-
-                firstDay:1
-
-            });
-
-        }
-
-    } );
-
-	
 	$(document).ready(function(){
 
         var p = 0;

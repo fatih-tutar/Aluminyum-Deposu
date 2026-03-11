@@ -38,24 +38,39 @@
 
                 $allow = array('pdf');
 
+                // Mevcut logoyu al
+                $currentCompany = $db->prepare("SELECT photo FROM companies WHERE id = ?");
+                $currentCompany->execute([$user->company_id]);
+                $current = $currentCompany->fetch(PDO::FETCH_ASSOC);
+                $oldLogo = $current['photo'] ?? null;
+
                 $temp = explode(".", $_FILES['uploadfile']['name']);
-
                 $dosyaadi = $temp[0];
-
                 $extension = end($temp);
-
                 $randomsayi = rand(0,10000);;
-
                 $upload_file = $dosyaadi.$randomsayi.".".$extension;
 
-                move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/file/".$upload_file);
+                $target = "files/company/".$upload_file;
+                if (move_uploaded_file($_FILES['uploadfile']['tmp_name'], $target)) {
+                    // Eski logoyu sil
+                    if (!empty($oldLogo)) {
+                        $candidates = [
+                            "files/company/".$oldLogo,
+                            "files/img/file/".$oldLogo, // eski yol ihtimali
+                        ];
+                        foreach ($candidates as $path) {
+                            if (file_exists($path)) {
+                                @unlink($path);
+                                break;
+                            }
+                        }
+                    }
 
-                $query = $db->prepare("UPDATE companies SET photo = ? WHERE id = ?");
-
-                $guncelle = $query->execute(array($upload_file,$user->company_id));
+                    $query = $db->prepare("UPDATE companies SET photo = ? WHERE id = ?");
+                    $guncelle = $query->execute(array($upload_file,$user->company_id));
+                }
 
                 header("Location:yonetim.php");
-
                 exit();
 
             }
@@ -153,8 +168,8 @@
 							?>
 										<div class="col-6 my-2">
 											<a href="profil.php?id=<?= $kullanici_id ?>">
-												<div class="dikey-ortala">
-													<img src="img/pp.png" alt="" style="width:60px; border-radius:50%;">
+                                                <div class="dikey-ortala">
+                                                    <img src="files/profile/pp.png" alt="" style="width:60px; border-radius:50%;">
 													<div>
 														<?= $kullanici_adi ?><br/><small><?= $kullanici_unvan ?></small>
 													</div>
@@ -181,7 +196,7 @@
 									<input type="text" name="email" placeholder="Kullanıcının E-Posta Adresini Giriniz" class="form-control" style="margin-bottom: 10px;">
 								</div>					
 								<div class="col-md-2 col-12">
-									<button type="submit" class="btn btn-primary btn-block" style="margin-bottom: 10px;" name="uye_ekle">Ekle</button>
+									<button type="submit" class="btn btn-primary w-100" style="margin-bottom: 10px;" name="uye_ekle">Ekle</button>
 								</div>
 								<div class="col-md-12 col-12">
 									<div class="alert alert-info">				
@@ -227,7 +242,7 @@
 						
 						<form action="" method="POST">
 
-							<button name="yedekal" class="btn btn-info btn-block" type="submit" style="margin-bottom: 7px;">
+							<button name="yedekal" class="btn btn-info w-100" type="submit" style="margin-bottom: 7px;">
 
 								Veritabanı Yedeğini Al
 
@@ -237,7 +252,7 @@
 
 						<a href="stock-activity.php">
 							
-							<button class="btn btn-secondary btn-block" style="margin-bottom: 7px;">İşlem Kayıtlarına Bak</button>
+							<button class="btn btn-secondary w-100" style="margin-bottom: 7px;">İşlem Kayıtlarına Bak</button>
 
 						</a>
 

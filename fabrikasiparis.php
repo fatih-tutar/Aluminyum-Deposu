@@ -51,12 +51,12 @@
     			</div>
     			<div class="col-md-2 col-12">
     				<a href="fabsipcikti.php?id=<?= $fabrika_id; ?>">
-    					<button class="btn btn-secondary btn-block">Çıktı Sayfası</button>
+                    <button class="btn btn-secondary w-100">Çıktı Sayfası</button>
     				</a>
     			</div>
     			<div class="col-md-2 col-12">
     				<a href="#" onclick="return false" onmousedown="javascript:ackapa('kilodivi');">
-    					<button class="btn btn-info btn-block">Geçmiş Siparişler</button>
+                    <button class="btn btn-info w-100">Geçmiş Siparişler</button>
     				</a>
     			</div>
 

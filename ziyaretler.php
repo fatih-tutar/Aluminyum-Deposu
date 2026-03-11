@@ -201,11 +201,11 @@
                                 <div class="col-12 mb-2"><input type="text" name="musteriismi" class="form-control" placeholder="Müşteri İsmi"></div>
                                 <div class="col-12 mb-2"><input type="text" name="yetkilikisi" class="form-control" placeholder="Yetkili Kişi"></div>
                                 <div class="col-12 mb-2"><input type="text" name="telefon" class="form-control" placeholder="Telefon"></div>
-                                <div class="col-12 mb-2"><input type="text" id="tarih1" name="ziyarettarihi" placeholder="Son Ziyaret Tarihi" class="form-control"></div>
-                                <div class="col-12 mb-2"><input type="text" id="tarih2" name="planlanantarih" placeholder="Planlanan Ziyaret Tarihi" class="form-control"></div>
+                                <div class="col-12 mb-2"><input type="date" id="tarih1" name="ziyarettarihi" class="form-control"></div>
+                                <div class="col-12 mb-2"><input type="date" id="tarih2" name="planlanantarih" class="form-control"></div>
                                 <div class="col-12 mb-2"><textarea name="acikadres" id="" class="form-control" rows="1" placeholder="Açık Adres"></textarea></div>
                                 <div class="col-12 mb-2"><textarea name="ziyaretnotu" id="" class="form-control" rows="1" placeholder="Ziyaret Notu"></textarea></div>
-                                <div class="col-12 mb-2"><button type="submit" class="btn btn-primary btn-block" name="ziyaretkayit">Kaydet</button></div>
+                                <div class="col-12 mb-2"><button type="submit" class="btn btn-primary w-100" name="ziyaretkayit">Kaydet</button></div>
 
                             </div>
 
@@ -222,7 +222,7 @@
                                     <input type="text" class="form-control" name="iskoluadi" placeholder="İş kolunu giriniz.">
                                 </div>
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary btn-block" name="iskolukayit">Kaydet</button>
+                                    <button type="submit" class="btn btn-primary w-100" name="iskolukayit">Kaydet</button>
                                 </div>           
                             </div>         
                         </form>
@@ -250,10 +250,10 @@
                                         </div>
                                         <div class="col-6">
                                             <input type="hidden" name="iskoluid" value="<?= $iskoluid; ?>">
-                                            <button type="submit" class="btn btn-primary btn-block" name="iskoluguncelle">Güncelle</button>
+                                            <button type="submit" class="btn btn-primary w-100" name="iskoluguncelle">Güncelle</button>
                                         </div>   
                                         <div class="col-6">
-                                            <button type="submit" class="btn btn-danger btn-block" name="iskolusil">Sil</button>
+                                            <button type="submit" class="btn btn-danger w-100" name="iskolusil">Sil</button>
                                         </div>          
                                     </div>         
                                 </form>        
@@ -371,22 +371,22 @@
                             <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" name="telefon" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" placeholder="Telefon" value="<?= $telefon; ?>"></div>
                             
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Ziyaret Tarihi</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih1<?= $id; ?>" name="ziyarettarihi" placeholder="Son Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?= $ziyarettarihi; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="date" id="tarih1<?= $id; ?>" name="ziyarettarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?= !empty($ziyarettarihi) ? date('Y-m-d', strtotime($ziyarettarihi)) : ''; ?>"></div>
                            
                             <div class="col-4 d-sm-none pr-0 pt-2" style="text-align:left;"><b>Planlanan Tarih</b></div>
-                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="text" id="tarih2<?= $id; ?>" name="planlanantarih" placeholder="Planlanan Ziyaret Tarihi" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?= $planlanantarih; ?>"></div>
+                            <div class="col-md-1 col-8 px-1" style="border-right:1px solid black;"><input type="date" id="tarih2<?= $id; ?>" name="planlanantarih" class="form-control p-1" style="font-size: 16px; font-weight:bold; border:none; border-radius:0; background-color: <?= $i%2 == 0 ? 'white' : '#c4c4c4'; ?>;" value="<?= !empty($planlanantarih) ? date('Y-m-d', strtotime($planlanantarih)) : ''; ?>"></div>
                             
                             <div class="col-md-1 col-3 px-1 py-2">
-                                <button class="btn btn-success btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3('adresdivi<?= $id; ?>','notdivi<?= $id; ?>');">Adres</button>
+                                <button class="btn btn-success w-100 btn-sm" onclick="return false" onmousedown="javascript:ackapa3('adresdivi<?= $id; ?>','notdivi<?= $id; ?>');">Adres</button>
                             </div>
                             <div class="col-md-1 col-3 px-1 py-2">
-                                <button class="btn btn-info btn-block btn-sm" onclick="return false" onmousedown="javascript:ackapa3('notdivi<?= $id; ?>','adresdivi<?= $id; ?>');">Not</button>
+                                <button class="btn btn-info w-100 btn-sm" onclick="return false" onmousedown="javascript:ackapa3('notdivi<?= $id; ?>','adresdivi<?= $id; ?>');">Not</button>
                             </div>
                             <div class="col-md-1 col-3 px-1 py-2">
-                                <button type="submit" class="btn btn-warning btn-block btn-sm" name="ziyaretguncelle">Güncelle</button>
+                                <button type="submit" class="btn btn-warning w-100 btn-sm" name="ziyaretguncelle">Güncelle</button>
                             </div>
                             <div class="col-md-1 col-3 px-1 py-2">
-                                <button type="submit" class="btn btn-danger btn-block btn-sm" name="ziyaretsil">Sil</button>
+                                <button type="submit" class="btn btn-danger w-100 btn-sm" name="ziyaretsil">Sil</button>
                             </div>
                             <div id="adresdivi<?= $id; ?>" class="col-md-12 mb-1 px-1" style="display:none;"><textarea name="acikadres" id="" class="form-control" rows="1" placeholder="Açık Adres"><?= $acikadres; ?></textarea></div>
                             <div id="notdivi<?= $id; ?>" class="col-md-12 mb-1 px-1" style="display:none;"><textarea name="ziyaretnotu" id="" class="form-control" rows="1" placeholder="Ziyaret Notu"><?= $ziyaretnotu; ?></textarea></div>

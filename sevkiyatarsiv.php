@@ -125,10 +125,10 @@
                                         <div class="col-md-1 col-8"><?= $tarih." / ".$saat ?></div>
                                         <div class="col-md-1 col-6">
                                             <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
-                                            <button type="submit" name="faturasikesilenegerial" class="btn btn-dark btn-block btn-sm">Geri Al</button>
+                                        <button type="submit" name="faturasikesilenegerial" class="btn btn-dark w-100 btn-sm">Geri Al</button>
                                         </div>
                                         <div class="col-md-1 col-6">
-                                            <a href="sevkiyatformu.php?id=<?= $sevkiyatID ?>" target="_blank" class="btn btn-dark btn-block btn-sm">
+                                        <a href="sevkiyatformu.php?id=<?= $sevkiyatID ?>" target="_blank" class="btn btn-dark w-100 btn-sm">
                                                 Yazdır
                                             </a>
                                         </div>

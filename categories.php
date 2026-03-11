@@ -34,7 +34,7 @@ if (!isLoggedIn()) {
             $extension = strtolower(end($temp));
             $randomNum = rand(0, 10000);
             $uploadFile = $filename . $randomNum . "." . $extension;
-            move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/kategoriler/" . $uploadFile);
+            move_uploaded_file($_FILES['uploadfile']['tmp_name'], "files/categories/" . $uploadFile);
         }
 
         $manualSalesSelected = false;
@@ -128,7 +128,22 @@ if (!isLoggedIn()) {
             $extension = end($temp);
             $randomNum = rand(0,10000);
             $uploadFile = $filename.$randomNum.".".$extension;
-            move_uploaded_file($_FILES['uploadfile']['tmp_name'], "img/kategoriler/".$uploadFile);
+            $target = "files/categories/".$uploadFile;
+            if (move_uploaded_file($_FILES['uploadfile']['tmp_name'], $target)) {
+                // Eski kategori görselini sil
+                if (!empty($image)) {
+                    $candidates = [
+                        "files/categories/".$image,
+                        "files/img/kategoriler/".$image,
+                    ];
+                    foreach ($candidates as $path) {
+                        if (file_exists($path)) {
+                            @unlink($path);
+                            break;
+                        }
+                    }
+                }
+            }
         } else {
             $uploadFile = $image;
         }
@@ -299,7 +314,7 @@ if (!isLoggedIn()) {
 
                         <div class="row form-group">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-warning btn-block" name="add_product">Ürün Ekle</button>
+                                <button type="submit" class="btn btn-warning w-100" name="add_product">Ürün Ekle</button>
                             </div>
                         </div>
                     </form>

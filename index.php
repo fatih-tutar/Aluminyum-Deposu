@@ -120,7 +120,7 @@
 			<div class="row">
                 <div id="sidebar" class="sidebar col-md-2 pr-0">
                     <a href="#" onclick="openModal('form-div')">
-                        <button class="btn btn-primary btn-block mb-2 mt-2" style="background-color: #003566; border-color: #003566;">
+                        <button class="btn btn-primary w-100 mb-2 mt-2" style="background-color: #003566; border-color: #003566;">
                             <i class="fas fa-file mr-2"></i>
                             Sipariş Formu
                         </button>
@@ -131,7 +131,7 @@
 				<div class="col-md-10">
                     <div class="d-block d-md-none">
                         <a href="#" onclick="openModal('form-div')">
-                            <button class="btn btn-primary btn-block mb-2 mt-2" style="background-color: #003566; border-color: #003566;">
+                            <button class="btn btn-primary w-100 mb-2 mt-2" style="background-color: #003566; border-color: #003566;">
                                 <i class="fas fa-file mr-2"></i>
                                 Sipariş Formu
                             </button>

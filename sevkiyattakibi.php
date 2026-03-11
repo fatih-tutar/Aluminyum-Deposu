@@ -219,7 +219,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
         </div>
         <div>
             <br/>
-            <button class="btn btn-warning btn-block" name="sevkiyatkaydet">Kaydet</button>
+            <button class="btn btn-warning w-100" name="sevkiyatkaydet">Kaydet</button>
         </div>
     </form>
 </div>
@@ -332,17 +332,17 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                         </div>
                         <div class="row">
                             <div class="col-md-2 col-2 pr-0">
-                                <button type="submit" name="sevkiyatsil" class="btn btn-danger btn-block btn-sm">Sil</button>
+                                <button type="submit" name="sevkiyatsil" class="btn btn-danger w-100 btn-sm">Sil</button>
                             </div>
                             <div class="col-md-5 col-5 mb-2">
-                                <a href="sevkiyatformu.php?id=<?= $sevkiyatID ?>" target="_blank" class="btn btn-light btn-block btn-sm">
+                                <a href="sevkiyatformu.php?id=<?= $sevkiyatID ?>" target="_blank" class="btn btn-light w-100 btn-sm">
                                     Siparişi yazdır
                                 </a>
                             </div>
                             <div class="col-md-5 col-5">
                                 <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
                                 <input type="hidden" name="malzemeAdeti" value="<?= $malzemeAdeti ?>">
-                                <button type="submit" name="sevkiyathazir" class="btn btn-light btn-block btn-sm">Sevkiyat Hazır</button>
+                                <button type="submit" name="sevkiyathazir" class="btn btn-light w-100 btn-sm">Sevkiyat Hazır</button>
                             </div>
                         </div>
                     </div>
@@ -459,11 +459,11 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                         <div class="row">
                             <div class="col-md-6 col-6">
                                 <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
-                                <button type="submit" name="alinanagerial" class="btn btn-light btn-block btn-sm">Geri Al</button>
+                                <button type="submit" name="alinanagerial" class="btn btn-light w-100 btn-sm">Geri Al</button>
                             </div>
                             <div class="col-md-6 col-6">
                                 <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
-                                <button type="submit" name="faturahazir" class="btn btn-light btn-block btn-sm">Fatura Hazır</button>
+                                <button type="submit" name="faturahazir" class="btn btn-light w-100 btn-sm">Fatura Hazır</button>
                             </div>
                         </div>
                     </div>
@@ -585,11 +585,11 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                         <div class="row">
                             <div class="col-md-6 col-6">
                                 <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
-                                <button type="submit" name="hazirlananagerial" class="btn btn-light btn-block btn-sm">Geri Al</button>
+                                <button type="submit" name="hazirlananagerial" class="btn btn-light w-100 btn-sm">Geri Al</button>
                             </div>
                             <div class="col-md-6 col-6">
                                 <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
-                                <button type="submit" name="arsivegonder" class="btn btn-light btn-block btn-sm">Arşive Gönder</button>
+                                <button type="submit" name="arsivegonder" class="btn btn-light w-100 btn-sm">Arşive Gönder</button>
                             </div>
                         </div>
                     </div>

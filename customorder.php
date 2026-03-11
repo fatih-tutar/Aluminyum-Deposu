@@ -358,7 +358,7 @@ if (!isLoggedIn()) {
                     </select>
                     <b>Açıklama</b>
                     <textarea class="form-control form-control-sm mb-2" name="description"><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
-                    <button type="submit" class="btn btn-primary btn-block" name="add_custom_order">Kaydet</button>
+                    <button type="submit" class="btn btn-primary w-100" name="add_custom_order">Kaydet</button>
                 </form>
             </div>
                 <div class="d-flex justify-content-between align-items-center">
@@ -431,7 +431,7 @@ if (!isLoggedIn()) {
                                             <b>Termin Tarihi</b>
                                             <input type="date" name="due_date" class="form-control form-control-sm mb-2" value="<?= $_POST['due_date'] ?? '' ?>"/>
                                             <input type="hidden" name="custom_order_id" value="<?= $order->id ?>" />
-                                            <button type="submit" class="btn btn-primary btn-block" name="add_item_custom_order">Kaydet</button>
+                                            <button type="submit" class="btn btn-primary w-100" name="add_item_custom_order">Kaydet</button>
                                         </form>
                                     </div>
                                     <div id="edit-div-<?= $order->id ?>" class="modal">
@@ -461,7 +461,7 @@ if (!isLoggedIn()) {
                                                     <?= $order->description ?>
                                                 </textarea>
                                                 <input type="hidden" name="id" value="<?= $order->id ?>" />
-                                                <button type="submit" class="btn btn-primary btn-block" name="edit_custom_order">Güncelle</button>
+                                                <button type="submit" class="btn btn-primary w-100" name="edit_custom_order">Güncelle</button>
                                             </form>
                                     </div>
                                     <!-- CLIENT LIST OPENABLE DIVISIONS END -->
@@ -525,7 +525,7 @@ if (!isLoggedIn()) {
                                                                     <b>Termin Tarihi</b>
                                                                     <input type="date" name="due_date" class="form-control form-control-sm mb-2" value="<?= $item->due_date ?>"/>
                                                                     <input type="hidden" name="id" value="<?= $item->id ?>" />
-                                                                    <button type="submit" class="btn btn-primary btn-block" name="edit_custom_order_item">Güncelle</button>
+                                                                    <button type="submit" class="btn btn-primary w-100" name="edit_custom_order_item">Güncelle</button>
                                                                 </form>
                                                             </div>
                                                         </td>

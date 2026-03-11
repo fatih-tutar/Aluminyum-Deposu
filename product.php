@@ -601,7 +601,7 @@ if (!isLoggedIn()) {
 
                     <a href="category.php?id=<?= $ust_kategori_id; ?>" style="color: white;">
 
-                        <button class="btn btn-info btn-sm btn-block">
+                        <button class="btn btn-info btn-sm w-100">
 
                             <i class="fas fa-backward"></i>&nbsp;&nbsp;&nbsp;<?= $ust_kategori_adi; ?>
 
@@ -615,7 +615,7 @@ if (!isLoggedIn()) {
 
                     <a href="#" onclick="return false" onmousedown="javascript:ackapa('inventory-div');">
 
-                        <button class="btn btn-primary btn-sm btn-block">
+                        <button class="btn btn-primary btn-sm w-100">
 
                             HAZIR KALIPLAR
 
@@ -665,7 +665,7 @@ if (!isLoggedIn()) {
 
                             <a href="category.php?id=<?= $ust_kategori_id; ?>" style="color: white;">
 
-                                <button class="btn btn-info btn-sm btn-block">
+                                <button class="btn btn-info btn-sm w-100">
 
                                     <i class="fas fa-backward"></i>&nbsp;&nbsp;&nbsp;<?= $ust_kategori_adi; ?>
 
@@ -679,7 +679,7 @@ if (!isLoggedIn()) {
 
                             <a href="#" onclick="return false" onmousedown="javascript:ackapa('inventory-div');">
 
-                                <button class="btn btn-primary btn-sm btn-block">
+                                <button class="btn btn-primary btn-sm w-100">
 
                                     HAZIR KALIPLAR
 
@@ -757,7 +757,7 @@ if (!isLoggedIn()) {
 
                         <div class="col-md-2 col-3" style="padding: 0px;"><input type="text" name="factory_name" class="form-control form-control-sm" placeholder="FABRİKA"></div>
 
-                        <div class="col-md-1 col-1" style="padding: 0px;"><button type="submit" name="add_inventory" class="btn btn-block btn-warning btn-sm" ><i class="fas fa-plus"></i></button></div>
+                        <div class="col-md-1 col-1" style="padding: 0px;"><button type="submit" name="add_inventory" class="btn w-100 btn-warning btn-sm" ><i class="fas fa-plus"></i></button></div>
 
                     </div>
 
@@ -791,7 +791,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-md-2 col-3" style="padding: 0px;"><input type="text" name="factory_name" class="form-control form-control-sm" value="<?= $inventory->factory_name; ?>"></div>
 
-                            <div class="col-md-1 col-1" style="padding: 0px;"><button type="submit" name="update_inventory" class="btn btn-block btn-primary btn-sm"><i class="fas fa-check"></i></button></div>
+                            <div class="col-md-1 col-1" style="padding: 0px;"><button type="submit" name="update_inventory" class="btn w-100 btn-primary btn-sm"><i class="fas fa-check"></i></button></div>
 
                         </div>
 
@@ -958,7 +958,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-4 d-block d-sm-none">Adet : </div>
 
-                            <div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-warning btn-sm btn-block"><b><?= $urun_adet; ?></b></button></div>
+                            <div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-warning btn-sm w-100"><b><?= $urun_adet; ?></b></button></div>
 
                         <?php } ?>
 
@@ -966,7 +966,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-4 d-block d-sm-none">Palet : </div>
 
-                            <div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-dark btn-sm btn-block"><b><?= $urun_palet; ?></b></button></div>
+                            <div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-dark btn-sm w-100"><b><?= $urun_palet; ?></b></button></div>
 
                         <?php } ?>
 
@@ -974,7 +974,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-4 d-block d-sm-none">Alkop Adet : </div>
 
-                            <div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-info btn-sm btn-block"><b><?= $urun_depo_adet; ?></b></button></div>
+                            <div class="col-md-2 col-8" style="text-align: left;"><button class="btn btn-info btn-sm w-100"><b><?= $urun_depo_adet; ?></b></button></div>
 
                         <?php } ?>
 
@@ -998,7 +998,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-4 d-block d-sm-none">Sipariş Kilo : </div>
 
-                            <div class="col-md-2 col-8" style="text-align: center;"><button class="btn btn-danger btn-sm btn-block"><b><?= $urun_birimkg." kg"; ?></b></button></div>
+                            <div class="col-md-2 col-8" style="text-align: center;"><button class="btn btn-danger btn-sm w-100"><b><?= $urun_birimkg." kg"; ?></b></button></div>
 
                         <?php } ?>
 
@@ -1062,7 +1062,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-md-3 col-3 p-1">
 
-                                <a href="#" onclick="return false" onmousedown="javascript:ackapa4('teklifdivi<?= $productId; ?>','siparisdiv<?= $productId; ?>','editdiv<?= $productId; ?>','sevkiyatdiv<?= $productId; ?>');"><button class="btn btn-warning btn-sm btn-block">Teklif</button></a>
+                                <a href="#" onclick="return false" onmousedown="javascript:ackapa4('teklifdivi<?= $productId; ?>','siparisdiv<?= $productId; ?>','editdiv<?= $productId; ?>','sevkiyatdiv<?= $productId; ?>');"><button class="btn btn-warning btn-sm w-100">Teklif</button></a>
 
                             </div>
 
@@ -1073,7 +1073,7 @@ if (!isLoggedIn()) {
                             <div class="col-md-3 col-3 p-1">
 
                                 <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('siparisdiv<?= $productId; ?>','teklifdivi<?= $productId; ?>','editdiv<?= $productId; ?>','sevkiyatdiv<?= $productId; ?>');">
-                                    <button class="btn btn-<?= $isDeadlineOverdue == 0 ? 'info' : 'danger' ?> btn-sm btn-block">
+                                    <button class="btn btn-<?= $isDeadlineOverdue == 0 ? 'info' : 'danger' ?> btn-sm w-100">
                                         <b>Sipariş</b>
                                     </button>
                                 </a>
@@ -1086,7 +1086,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-md-3 col-3 p-1">
 
-                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('sevkiyatdiv<?= $productId; ?>','editdiv<?= $productId; ?>','siparisdiv<?= $productId; ?>','teklifdivi<?= $productId; ?>');"><button class="btn btn-dark btn-sm btn-block"><b>Sevkiyat</b></button></a>
+                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('sevkiyatdiv<?= $productId; ?>','editdiv<?= $productId; ?>','siparisdiv<?= $productId; ?>','teklifdivi<?= $productId; ?>');"><button class="btn btn-dark btn-sm w-100"><b>Sevkiyat</b></button></a>
 
                             </div>
 
@@ -1096,7 +1096,7 @@ if (!isLoggedIn()) {
 
                             <div class="col-md-3 col-3 p-1">
 
-                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('editdiv<?= $productId; ?>','siparisdiv<?= $productId; ?>','teklifdivi<?= $productId; ?>','sevkiyatdiv<?= $productId; ?>');"><button class="btn btn-success btn-sm btn-block"><b>Düzenle</b></button></a>
+                                <a href="#" id="btn1" onclick="return false" onmousedown="javascript:ackapa4('editdiv<?= $productId; ?>','siparisdiv<?= $productId; ?>','teklifdivi<?= $productId; ?>','sevkiyatdiv<?= $productId; ?>');"><button class="btn btn-success btn-sm w-100"><b>Düzenle</b></button></a>
 
                             </div>
 
@@ -1319,7 +1319,7 @@ if (!isLoggedIn()) {
                                 <b>Palet Adedi</b>
                                 <input type="text" name="pallet_quantity" class="form-control mb-2" placeholder="Palet adedini giriniz.">
                                 <input type="hidden" name="product_id" value="<?= $productId ?>">
-                                <button type="submit" class="btn btn-primary btn-block" name="add_purchase_orders">Sipariş Listesine Ekle</button>
+                                <button type="submit" class="btn btn-primary w-100" name="add_purchase_orders">Sipariş Listesine Ekle</button>
                             </form>
                         </div>
 
@@ -1804,7 +1804,7 @@ if (!isLoggedIn()) {
 
                                             </div>
 
-                                            <div class="col-md-2 col-12"><br/><button type="submit" class="btn btn-info btn-block" name="guncellemeformu">Güncelle</button></div>
+                                            <div class="col-md-2 col-12"><br/><button type="submit" class="btn btn-info w-100" name="guncellemeformu">Güncelle</button></div>
 
                                         </div>
 
@@ -1814,9 +1814,9 @@ if (!isLoggedIn()) {
 
                                             <?php if(in_array('customer_name', $activeColumns)){?><div class="col-md-2 col-12"><b>Müşteri İsmi</b><input type="text" class="form-control" name="musteri_ismi" value="<?= $musteri_ismi; ?>"></div><?php } ?>
 
-                                            <?php if(in_array('date', $activeColumns)){?><div class="col-md-2 col-12"><b>Tarih</b><input type="text" id="tarih<?= ($urunlistesira+500); ?>" name="tarih" value="<?= $tarih; ?>" class="form-control form-control-sm"></div><?php } ?>
+                                            <?php if(in_array('date', $activeColumns)){?><div class="col-md-2 col-12"><b>Tarih</b><input type="date" id="tarih<?= ($urunlistesira+500); ?>" name="tarih" value="<?= !empty($tarih) ? date('Y-m-d', strtotime($tarih)) : ''; ?>" class="form-control form-control-sm"></div><?php } ?>
 
-                                            <?php if(in_array('due_date', $activeColumns)){?><div class="col-md-2 col-12"><b>Termin</b><input type="text" id="tarih<?= $urunlistesira; ?>" name="termin" value="<?= $termin; ?>" class="form-control form-control-sm"></div><?php } ?>
+                                            <?php if(in_array('due_date', $activeColumns)){?><div class="col-md-2 col-12"><b>Termin</b><input type="date" id="tarih<?= $urunlistesira; ?>" name="termin" value="<?= !empty($termin) ? date('Y-m-d', strtotime($termin)) : ''; ?>" class="form-control form-control-sm"></div><?php } ?>
 
                                         </div>
 

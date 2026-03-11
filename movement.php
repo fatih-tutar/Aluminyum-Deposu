@@ -121,7 +121,7 @@ if (!isLoggedIn()) {
                                 <input type="text" name="warehouse_outgoing" class="form-control form-control-sm mb-2" placeholder="Sadece sayı giriniz" value="<?= htmlspecialchars($_POST['warehouse_outgoing'] ?? '') ?>"/>
                                 <b>Alkop Gelen</b>
                                 <input type="text" name="warehouse_incoming" class="form-control form-control-sm mb-2" placeholder="Sadece sayı giriniz" value="<?= htmlspecialchars($_POST['warehouse_incoming'] ?? '') ?>"/>
-                                <button type="submit" class="btn btn-primary btn-block" name="add_movement">Kaydet</button>
+                                <button type="submit" class="btn btn-primary w-100" name="add_movement">Kaydet</button>
                             </form>
                         </div>
                     </div>
@@ -141,11 +141,11 @@ if (!isLoggedIn()) {
                                 <th>
                                     <div class="d-flex justify-content-around">
                                         <?php if($weeklyMode == 0){ ?>
-                                            <a href="movement.php?weekly_mode=1"><button class="btn btn-info btn-block btn-sm">Haftalık Mod</button></a>
+                                            <a href="movement.php?weekly_mode=1"><button class="btn btn-info w-100 btn-sm">Haftalık Mod</button></a>
                                         <?php }else{ ?>
-                                            <a href="movement.php?weekly_mode=0"><button class="btn btn-info btn-block btn-sm">Günlük Mod</button></a>
+                                            <a href="movement.php?weekly_mode=0"><button class="btn btn-info w-100 btn-sm">Günlük Mod</button></a>
                                         <?php } ?>
-                                        <a href="movement-report.php" target="_blank"><button class="btn btn-secondary btn-sm btn-block ml-2">Rapor</button></a>
+                                        <a href="movement-report.php" target="_blank"><button class="btn btn-secondary btn-sm w-100 ml-2">Rapor</button></a>
                                     </div>
                                 </th>
                             </tr>
@@ -270,7 +270,7 @@ if (!isLoggedIn()) {
                                                         <b>Alkop Gelen</b>
                                                         <input type="text" name="warehouse_incoming" class="form-control form-control-sm mb-2" placeholder="Sadece sayı giriniz" value="<?= $movement->warehouse_incoming ?>"/>
                                                         <input type="hidden" name="id" value="<?= $movement->id ?>" />
-                                                        <button type="submit" class="btn btn-primary btn-block" name="update_movement">Güncelle</button>
+                                                        <button type="submit" class="btn btn-primary w-100" name="update_movement">Güncelle</button>
                                                     </form>
                                                 </div>
                                                 <form action="" method="POST">

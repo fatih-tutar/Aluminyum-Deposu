@@ -35,21 +35,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-1 col-6"><button type="submit" class="btn btn-primary btn-block btn-sm my-1" name="plan_duzenle" >Düzenle</button></div>
+                    <div class="col-md-1 col-6"><button type="submit" class="btn btn-primary w-100 btn-sm my-1" name="plan_duzenle" >Düzenle</button></div>
                     <div class="col-md-2 col-6">
                         <div id="delete_div<?= $job->id; ?>">
                             <a href="#" onclick="return false" onmousedown="javascript:ackapa2('delete_approving_div<?= $job->id; ?>','delete_div<?= $job->id; ?>');">
-                                <button class="btn btn-danger btn-block btn-sm my-1">Sil</button>
+                                <button class="btn btn-danger w-100 btn-sm my-1">Sil</button>
                             </a>
                         </div>
                         <div id="delete_approving_div<?= $job->id; ?>" style="display:none;">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <button type="submit" name="delete_job" class="btn btn-success btn-sm btn-block my-1">Evet</button>
+                                    <button type="submit" name="delete_job" class="btn btn-success btn-sm w-100 my-1">Evet</button>
                                 </div>
                                 <div class="col-md-6">
                                     <a href="#" onclick="return false" onmousedown="javascript:ackapa2('delete_div<?= $job->id; ?>','delete_approving_div<?= $job->id; ?>');">
-                                        <button class="btn btn-danger btn-block btn-sm my-1">Hayır</button>
+                                        <button class="btn btn-danger w-100 btn-sm my-1">Hayır</button>
                                     </a>
                                 </div>
                             </div>

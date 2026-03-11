@@ -1,20 +1,56 @@
 <?php if(isLoggedIn()){ ?>
 
+    <?php
+    if(isset($_POST['save_rate'])) {
+        $dolarPost = guvenlik($_POST['dolarkuru']);
+        $lmePost = guvenlik($_POST['lme']);
+
+        if($dolarPost != $companyDolar || $lmePost != $companyLme){
+            $query = $db->prepare("UPDATE companies SET dolar = ?, lme = ? WHERE id = ?");
+            $guncelle = $query->execute(array($dolarPost,$lmePost,$authUser->company_id));
+        }
+        header("Location:index.php");
+        exit();
+    }
+    ?>
+
     <div class="container-fluid" style="position: fixed; z-index: 5; background-color: black;">
 
         <div class="row">
 
-            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-5 col-7" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
+            <div class="col-md-2 col-7" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
 
-                <a href="index.php"><img src="img/file/<?= $company->photo; ?>" class="img-responsive" alt="Alüminyum Deposu" width="70%" height="auto"></a>
+                <a href="index.php"><img src="files/company/<?= $company->photo; ?>" class="img-responsive" alt="Alüminyum Deposu" width="70%" height="auto"></a>
 
             </div>
 
-            <div class="col-xl-10 col-lg-9 col-md-8 col-sm-7 col-5 d-flex align-items-center justify-content-end" style="text-align: right;">
+            <div class="col-md-3 offset-md-5 d-none d-md-block">
+                <form action="" method="POST">
+                    <div class="row mt-3 align-items-center" style="border-right: 1px solid #cdcdcd">
+                        <div class="col-4">
+                            <div class="d-flex align-items-center">
+                                <span class="mr-2" style="color: #cdcdcd;">Dolar:</span>
+                                <input type="text" style="background-color: black; color: #cdcdcd; border:none;" class="form-control form-control-sm" name="dolarkuru" value="<?= $companyDolar ?>">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex align-items-center">
+                                <span class="mr-2" style="color: #cdcdcd;">LME:</span>
+                                <input type="text" style="background-color: black; color: #cdcdcd; border:none;" class="form-control form-control-sm" name="lme" value="<?= $companyLme ?>">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-sm" style="color:#cdcdcd;" name="save_rate"><i class="fa fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-2 col-5 d-flex align-items-center justify-content-end" style="text-align: right;">
 
                 <div class="dropdown" style="margin: 10px;">
 
-                    <button class="btn btn-primary dropdown-toggle" style="background-color:black; border-style: none;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-primary dropdown-toggle" style="background-color:black; border-style: none;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
                         <?= $user->name ?>
 
@@ -98,7 +134,7 @@
 
             <div class="col-xl-10 col-lg-8 col-md-6 col-sm-6 col-6" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
 
-                <a href="index.php"><img src="img/defaultlogo.png" class="img-responsive" alt="Alüminyum Deposu" width="236" height="85"></a>
+                <a href="index.php"><img src="files/img/defaultlogo.png" class="img-responsive" alt="Alüminyum Deposu" width="236" height="85"></a>
 
             </div>
 

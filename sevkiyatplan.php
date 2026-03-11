@@ -114,7 +114,7 @@
                         </div>
                         <div class="col-3">
                             <a href="aracsevkiyat.php?id=<?=$arac->id?>" target="_blank">
-                                <button class="btn btn-primary btn-block btn-sm">
+                                <button class="btn btn-primary w-100 btn-sm">
                                     Çıktı Al
                                 </button>
                             </a>
@@ -122,7 +122,7 @@
                         <div class="col-3">
                             <form action="" method="POST">
                                 <input type="hidden" name="arac_id" value="<?= $arac->id; ?>">
-                                <button type="submit" class="btn btn-secondary btn-block btn-sm" name="sevkiyattoplusil" onclick="return confirmForm('Bu araca ait sevkiyat planını toplu olarak silmek istediğinize emin misiniz?')">
+                                <button type="submit" class="btn btn-secondary w-100 btn-sm" name="sevkiyattoplusil" onclick="return confirmForm('Bu araca ait sevkiyat planını toplu olarak silmek istediğinize emin misiniz?')">
                                     Toplu Sil
                                 </button>
                             </form>
@@ -196,7 +196,7 @@
                             <div class="col-md-3 col-12">
                                 <br/>
                                 <input type="hidden" name="arac_id" value="<?=$arac->id?>">
-                                <button type="submit" name="manuelSevkiyatKaydet" class="btn btn-primary btn-block btn-sm">Kaydet</button>
+                                <button type="submit" name="manuelSevkiyatKaydet" class="btn btn-primary w-100 btn-sm">Kaydet</button>
                             </div>
                             <div class="col-12 pt-2">
                                 <textarea class="form-control" name="aciklama" placeholder="Sevkiyat ile alakalı açıklama girebilirsiniz."></textarea>

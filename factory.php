@@ -114,7 +114,7 @@ if (!isLoggedIn()) {
                         <input type="text" name="fine_labor_cost" class="form-control mb-2" placeholder="İnce işçilik ücretini yazınız." value="<?= $_POST['fine_labor_cost'] ?? '' ?>">
                         <b>Adres</b>
                         <textarea name="address" class="form-control mb-2" rows="3" placeholder="Fabrika adresini yazınız."><?= $_POST['address'] ?? '' ?></textarea>
-                        <button type="submit" class="btn btn-primary btn-block" name="add_factory">Kaydet</button>
+                        <button type="submit" class="btn btn-primary w-100" name="add_factory">Kaydet</button>
                     </form>
                 </div>
             </div>
@@ -125,6 +125,8 @@ if (!isLoggedIn()) {
                         <th>Fabrika</th>
                         <th>İşçilik</th>
                         <th>İnce İşçilik</th>
+                        <th>Fiyat</th>
+                        <th>Fiyat İnce</th>
                         <th>Telefon</th>
                         <th>E-posta</th>
                         <th>İşlemler</th>
@@ -136,6 +138,8 @@ if (!isLoggedIn()) {
                             <td><?= $factory->name ?></td>
                             <td><?= $factory->labor_cost == 0 ? '' : $factory->labor_cost ?></td>
                             <td><?= $factory->fine_labor_cost == 0 ? '' : $factory->fine_labor_cost ?></td>
+                            <td><?= $factory->labor_cost == 0 ? '' : (($companyLme + $factory->labor_cost) * $companyDolar / 1000).'₺' ?></td>
+                            <td><?= $factory->fine_labor_cost == 0 ? '' : (($companyLme + $factory->fine_labor_cost) * $companyDolar / 1000).'₺' ?></td>
                             <td><?= $factory->phone ?></td>
                             <td><?= $factory->email ?></td>
                             <td>
@@ -173,7 +177,7 @@ if (!isLoggedIn()) {
                                             <textarea name="address" class="form-control mb-2" rows="3" placeholder="Fabrika adresini yazınız."><?= $factory->address ?></textarea>
                                             <input type="hidden" name="id" value="<?= $factory->id ?>"/>
                                             <input type="hidden" name="order_id" value="<?= $factoryKey ?>"/>
-                                            <button type="submit" class="btn btn-primary btn-block" name="update_factory">Güncelle</button>
+                                            <button type="submit" class="btn btn-primary w-100" name="update_factory">Güncelle</button>
                                         </form>
                                     </div>
                                 </div>
