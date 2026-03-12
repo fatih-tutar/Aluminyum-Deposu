@@ -1,2 +1,25 @@
-RewriteRule .* - [E=noconntimeout:1]
-RewriteRule .* - [E=noabort:1]
+# Pretty URL'ler ve eski .php URL'leri birlikte çalışsın
+RewriteEngine On
+RewriteBase /
+
+# Gerçek dosya/klasör varsa dokunma
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Ana sayfa
+RewriteRule ^$ pages/index.php [L]
+
+# /product/25 -> pages/product.php?id=25
+# /client/42  -> pages/client.php?id=42
+RewriteRule ^([^/]+)/([0-9]+)/?$ pages/$1.php?id=$2 [L,QSA]
+
+# /mold -> pages/mold.php
+# /product -> pages/product.php
+RewriteRule ^([^/]+)/?$ pages/$1.php [L,QSA]
+
+# Eski /mold.php?id=5 gibi URL'ler de çalışsın (geri uyum)
+RewriteRule ^([^/]+\.php)$ pages/$1 [L,QSA]
+
+RewriteRule .* - [E=noconntimeout:1]
+RewriteRule .* - [E=noabort:1]

@@ -1,4 +1,6 @@
 <?php
+	define('ROOT_PATH', dirname(__DIR__));
+
 	session_start();
 	ob_start();
     setlocale(LC_TIME, 'tr_TR.UTF-8');
@@ -11,8 +13,12 @@
     $currentPage = basename($_SERVER['PHP_SELF']);
     $currentYear = date("Y");
 
-    include 'database.php';
-	include 'functions.php';
+    $dbFile = __DIR__ . '/database.php';
+    if (!is_file($dbFile)) {
+        $dbFile = dirname(__DIR__) . '/functions/database.php';
+    }
+    include $dbFile;
+	include __DIR__ . '/functions.php';
 
     $dbInstance = new Database();
     $db = $dbInstance->getConnection();

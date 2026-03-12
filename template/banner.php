@@ -9,7 +9,7 @@
             $query = $db->prepare("UPDATE companies SET dolar = ?, lme = ? WHERE id = ?");
             $guncelle = $query->execute(array($dolarPost,$lmePost,$authUser->company_id));
         }
-        header("Location:index.php");
+        header("Location:/");
         exit();
     }
     ?>
@@ -20,7 +20,7 @@
 
             <div class="col-md-2 col-7" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
 
-                <a href="index.php"><img src="files/company/<?= $company->photo; ?>" class="img-responsive" alt="Alüminyum Deposu" width="70%" height="auto"></a>
+                <a href="/"><img src="/files/company/<?= $company->photo; ?>" class="img-responsive" alt="Alüminyum Deposu" width="70%" height="auto"></a>
 
             </div>
 
@@ -58,9 +58,9 @@
 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                        <a class="dropdown-item" href="index.php"><b>ANA SAYFA</b></a>
+                        <a class="dropdown-item" href="/"><b>ANA SAYFA</b></a>
 
-                        <a class="dropdown-item" href="profil.php?id=<?= $user->id; ?>"><b>PROFİL</b></a>
+                        <a class="dropdown-item" href="/profil/<?= $user->id; ?>"><b>PROFİL</b></a>
 
                         <?php if($user->type == '2' || $user->type == '1' || $user->type == '3'){?>
 
@@ -68,11 +68,11 @@
 
                                 <hr class="m-1"/>
 
-                                <a class="dropdown-item" href="catalog.php"><b>FİYATLAR</b></a>
+                                <a class="dropdown-item" href="/catalog"><b>FİYATLAR</b></a>
 
-                                <a class="dropdown-item" href="job.php"><b>PLAN</b></a>
+                                <a class="dropdown-item" href="/job"><b>PLAN</b></a>
 
-                                <a class="dropdown-item" href="yonetim.php"><b>YÖNETİM</b></a>
+                                <a class="dropdown-item" href="/yonetim"><b>YÖNETİM</b></a>
 
                                 <hr class="m-1"/>
 
@@ -80,41 +80,41 @@
 
                             <?php if($user->permissions->visit == '1'){?>
 
-                                <a class="dropdown-item" href="ziyaretler.php"><b>ZİYARETLER</b></a>
+                                <a class="dropdown-item" href="/ziyaretler"><b>ZİYARETLER</b></a>
 
                             <?php } ?>
 
                             <?php if($user->permissions->stock_flow == '1'){?>
 
-                                <a class="dropdown-item" href="movement.php"><b>GELEN/GİDEN</b></a>
+                                <a class="dropdown-item" href="/movement"><b>GELEN/GİDEN</b></a>
 
                             <?php } ?>
 
                             <?php if($user->permissions->transaction == '1'){?>
 
-                                <a class="dropdown-item" href="stock-activity.php"><b>İŞLEMLER</b></a>
+                                <a class="dropdown-item" href="/stock-activity"><b>İŞLEMLER</b></a>
 
                             <?php } ?>
 
                             <?php if($user->permissions->vehicle == '1'){?>
 
-                                <a class="dropdown-item" href="vehicle.php"><b>ARAÇLAR</b></a>
+                                <a class="dropdown-item" href="/vehicle"><b>ARAÇLAR</b></a>
 
                             <?php } ?>
 
                             <?php if($user->type == '2' || $user->type == '1' || $user->type == '3'){?>
 
-                                <a class="dropdown-item" href="categories.php"><b>KATEGORİLER</b></a>
+                                <a class="dropdown-item" href="/categories"><b>KATEGORİLER</b></a>
 
                             <?php } ?>
 
                             <hr class="m-1"/>
 
-                            <a class="dropdown-item" href="guide.php"><b>YARDIM</b></a>
+                            <a class="dropdown-item" href="/guide"><b>YARDIM</b></a>
 
                         <?php } ?>
 
-                        <a class="dropdown-item" href="logout.php"><b>ÇIKIŞ</b></a>
+                        <a class="dropdown-item" href="/logout"><b>ÇIKIŞ</b></a>
 
                     </div>
 
@@ -134,7 +134,7 @@
 
             <div class="col-xl-10 col-lg-8 col-md-6 col-sm-6 col-6" style="text-align: left; padding-top: 10px; padding-bottom: 10px;">
 
-                <a href="index.php"><img src="files/img/defaultlogo.png" class="img-responsive" alt="Alüminyum Deposu" width="236" height="85"></a>
+                <a href="/"><img src="/files/img/defaultlogo.png" class="img-responsive" alt="Alüminyum Deposu" width="236" height="85"></a>
 
             </div>
 
