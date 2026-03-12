@@ -131,7 +131,7 @@ if (!isLoggedIn()) {
 <?php include ROOT_PATH.'/template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="sidebar col-md-2 pr-0">
+        <div id="sidebar" class="sidebar col-md-2 pe-0">
             <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
         </div>
@@ -143,7 +143,7 @@ if (!isLoggedIn()) {
                     </div>
                 </div><br/>
             <?php } ?>
-                <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm mr-2">
+                <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm me-2">
                     <i class="fas fa-bars"></i> Menü
                 </button>
                 <div id="agirlikhesaplamadivi" class="col-md-4 col-12 mt-2 mb-4">

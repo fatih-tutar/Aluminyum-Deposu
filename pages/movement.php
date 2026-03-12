@@ -92,19 +92,19 @@ if (!isLoggedIn()) {
         <?php include ROOT_PATH.'/template/banner.php' ?>
         <div class="container-fluid">
             <div class="row">
-                <div id="sidebar" class="sidebar col-md-2 pr-0">
+                <div id="sidebar" class="sidebar col-md-2 pe-0">
                     <button id="closeSidebar" class="close-btn">&times;</button>
                     <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
                 </div>
                 <div id="mainCol" class="col-md-10 col-12">
                     <?= isset($error) ? $error : ''; ?>
                     <div class="d-flex justify-content-between">
-                        <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm mr-2 mb-2">
+                        <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm me-2 mb-2">
                             <i class="fas fa-bars"></i> Menü
                         </button>
                         <a onclick="openModal('form-div')">
                             <button class="btn btn-primary btn-sm mb-2" style="background-color: #003566; border-color: #003566;">
-                                <i class="fas fa-pen mr-2"></i> Yeni Kayıt
+                                <i class="fas fa-pen me-2"></i> Yeni Kayıt
                             </button>
                         </a>
                         <div id="form-div" class="modal">
@@ -145,7 +145,7 @@ if (!isLoggedIn()) {
                                         <?php }else{ ?>
                                             <a href="/movement?weekly_mode=0"><button class="btn btn-info w-100 btn-sm">Günlük Mod</button></a>
                                         <?php } ?>
-                                        <a href="/movement-report" target="_blank"><button class="btn btn-secondary btn-sm w-100 ml-2">Rapor</button></a>
+                                        <a href="/movement-report" target="_blank"><button class="btn btn-secondary btn-sm w-100 ms-2">Rapor</button></a>
                                     </div>
                                 </th>
                             </tr>
@@ -252,7 +252,7 @@ if (!isLoggedIn()) {
                                             <div class="d-flex justify-content-around">
                                                 <a onclick="openModal('edit-div-<?= $movement->id ?>')">
                                                     <button class="btn btn-primary btn-sm">
-                                                        <i class="fas fa-pen mr-2"></i> Düzenle
+                                                        <i class="fas fa-pen me-2"></i> Düzenle
                                                     </button>
                                                 </a>
                                                 <div id="edit-div-<?= $movement->id ?>" class="modal">
@@ -276,7 +276,7 @@ if (!isLoggedIn()) {
                                                 <form action="" method="POST">
                                                     <input type="hidden" name="id" value="<?= $movement->id ?>"/>
                                                     <button type="submit" name="delete_movement" class="btn btn-secondary btn-sm" onclick="return confirmForm('<?= (new DateTime($movement->date))->format('d/m/Y') ?> gününe ait kaydı silmek istediğinize emin misiniz?')">
-                                                        <i class="fas fa-trash mr-2"></i> Sil
+                                                        <i class="fas fa-trash me-2"></i> Sil
                                                     </button>
                                                 </form>
                                             </div>

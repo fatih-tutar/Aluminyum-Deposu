@@ -447,7 +447,7 @@ if(!isLoggedIn()){
 
     <div class="container-fluid">
         <div class="row">
-            <div id="sidebar" class="sidebar col-md-2 pr-0">
+            <div id="sidebar" class="sidebar col-md-2 pe-0">
                 <button id="closeSidebar" class="close-btn">&times;</button>
                 <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
             </div>
@@ -513,12 +513,12 @@ if(!isLoggedIn()){
                     <div>
                         <a href="/mold-archive" target="_blank">
                             <button class="btn btn-primary btn-sm mb-2" style="background-color: #6c757d; border-color: #545b62;">
-                                <i class="fas fa-archive mr-2"></i> Arşiv
+                                <i class="fas fa-archive me-2"></i> Arşiv
                             </button>
                         </a>
                         <a onclick="openModal('form-div')">
                             <button class="btn btn-primary btn-sm mb-2" style="background-color: #003566; border-color: #003566;">
-                                <i class="fas fa-pen mr-2"></i> Yeni Kalıp Girişi
+                                <i class="fas fa-pen me-2"></i> Yeni Kalıp Girişi
                             </button>
                         </a>
                     </div>
@@ -609,22 +609,22 @@ if(!isLoggedIn()){
                             </td>
                             <td class="display-flex">
                                 <a onclick="openModal('edit-div-<?= $item->id ?>')">
-                                    <i class="fas fa-pen mr-3" style="color:#004a8e"></i>
+                                    <i class="fas fa-pen me-3" style="color:#004a8e"></i>
                                 </a>
                                 <form action="" method="POST">
                                     <input type="hidden" name="id" value="<?= $item->id ?>">
                                     <button type="submit" name="archive_mold" class="icon-button" style="width: 32px; padding-left:0" onclick="return confirmForm('<?= $item->number ?> kodlu kalıbı arşive göndermek istediğinize emin misiniz?')">
-                                        <i class="fas fa-archive mr-3" style="color:#5a5a5a;"></i>
+                                        <i class="fas fa-archive me-3" style="color:#5a5a5a;"></i>
                                     </button>
                                 </form>
                                 <form action="" method="POST">
                                     <input type="hidden" name="id" value="<?= $item->id ?>">
                                     <button type="submit" name="delete_mold" class="icon-button" style="width: 32px; padding-left:0" onclick="return confirmForm('<?= $item->number ?> kodlu kalıbı silmek istediğinize emin misiniz?')">
-                                        <i class="fas fa-trash mr-3" style="color:#ca0000;"></i>
+                                        <i class="fas fa-trash me-3" style="color:#ca0000;"></i>
                                     </button>
                                 </form>
                                 <a href="#" onclick="return false" onmousedown="javascript:ackapa('factory_pdfdivi<?= $item->id; ?>');">
-                                    <i class="fas fa-industry mr-3"></i>
+                                    <i class="fas fa-industry me-3"></i>
                                 </a>
                                 <a href="#" onclick="return false" onmousedown="javascript:ackapa('client_pdfdivi<?= $item->id; ?>');">
                                     <i class="fas fa-building"></i>

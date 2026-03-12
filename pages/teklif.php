@@ -195,7 +195,7 @@
             <form action="" method="POST" onsubmit="syncExplanation()">
                 <input type="hidden" name="offer_list" value="<?= $offerList; ?>">
                 <input type="hidden" name="explanation" id="hiddenExplanation">
-                <button type="submit" name="save" class="btn btn-primary btn-lg mt-3 mr-3">Formu Kaydet</button>
+                <button type="submit" name="save" class="btn btn-primary btn-lg mt-3 me-3">Formu Kaydet</button>
             </form>
         </div>
         <?php include ROOT_PATH.'/template/script.php'; ?>

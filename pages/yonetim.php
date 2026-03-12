@@ -187,7 +187,7 @@
 
 						<form action="" method="POST">
 
-							<h4 class="pl-1 pt-1">Yeni Kullanıcı Ekleme</h4>
+							<h4 class="ps-1 pt-1">Yeni Kullanıcı Ekleme</h4>
 							<div class="row">
 								<div class="col-md-5 col-12">
 									<input type="text" name="name" placeholder="Kullanıcı Adı Giriniz" class="form-control" style="margin-bottom: 10px;">

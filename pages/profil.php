@@ -369,21 +369,21 @@
                 <div class="col-md-2 col-12" style="display:flex; justify-content:center; align-items:center;">
                     <img src="files/<?= empty($profil_foto) ? 'profile/pp.png' : 'profile/'.$profil_foto ?>" alt="<?= $profil_adi ?> Profil Fotoğrafı" class="pp">
 				</div>
-				<div class="col-md-5 col-7 pt-3 pr-0">
+				<div class="col-md-5 col-7 pt-3 pe-0">
 					<h4><b><?= $profil_adi ?></b></h4>
 					<h6><?= $unvan ?></h6>
-					<h6><i class="fas fa-envelope mr-2"></i><?= $profil_mail ?></h6>
-					<h6><i class="fas fa-mobile-alt mr-2" ></i><?= $profil_tel ?></h6>
-					<h6><i class="fas fa-phone mr-2"></i><?= $profil_phone_2 ?></h6>
-					<p class="mb-1"><i class="fas fa-map-marker mr-2"></i><?= $address ?></p>
+					<h6><i class="fas fa-envelope me-2"></i><?= $profil_mail ?></h6>
+					<h6><i class="fas fa-mobile-alt me-2" ></i><?= $profil_tel ?></h6>
+					<h6><i class="fas fa-phone me-2"></i><?= $profil_phone_2 ?></h6>
+					<p class="mb-1"><i class="fas fa-map-marker me-2"></i><?= $address ?></p>
 				</div>
-				<div class="col-md-5 col-5 pt-3 pl-0" style="display:flex; justify-content:end; align-items:end;">
+				<div class="col-md-5 col-5 pt-3 ps-0" style="display:flex; justify-content:end; align-items:end;">
 					<div style="text-align:right;">
 						<h6>
-							<i class="fas fa-calendar-alt mr-2"></i>
+							<i class="fas fa-calendar-alt me-2"></i>
 							<?= (new DateTime($hireDate))->format('d.m.Y') ?></h6>
 						<h6>
-							<i class="fas fa-id-card mr-2"></i>
+							<i class="fas fa-id-card me-2"></i>
                                 <?php if(empty($nufus_cuzdani)){ ?>
 								Nüfus Cüzdanı Fotokopisi
                                 <?php }else{ ?>
@@ -393,7 +393,7 @@
 							<?php } ?>
 						</h6>
 						<h6>
-							<i class="fas fa-file-alt mr-2"></i>
+							<i class="fas fa-file-alt me-2"></i>
 							<?php if(empty($is_basvuru_formu)){ ?>
 								İş Başvuru Formu
                                 <?php }else{ ?>
@@ -403,7 +403,7 @@
 							<?php } ?>
 						</h6>
 						<h6>
-							<i class="fas fa-map-marker-alt mr-2"></i>
+							<i class="fas fa-map-marker-alt me-2"></i>
 							<?php if(empty($ikametgah_belgesi)){ ?>
 								İkâmetgâh Belgesi
                                 <?php }else{ ?>
@@ -413,7 +413,7 @@
 							<?php } ?>
 						</h6>
 						<h6>
-							<i class="fas fa-file-medical mr-2"></i>
+							<i class="fas fa-file-medical me-2"></i>
 							<?php if(empty($saglik_raporu)){ ?>
 								Sağlık Raporu
                                 <?php }else{ ?>
@@ -427,8 +427,8 @@
 			</div>
 			<hr/>
 			<div style="display:flex; justify-content:end;">
-				<button class="btn btn-success btn-sm mr-2" onclick="return false" onmousedown="javascript:ackapa3('duzenlemedivi','sifredivi','yetkidivi');">Düzenle</button>
-				<button class="btn btn-secondary btn-sm mr-2" onclick="return false" onmousedown="javascript:ackapa3('sifredivi','duzenlemedivi','yetkidivi');">Şifre Değiştir</button>
+				<button class="btn btn-success btn-sm me-2" onclick="return false" onmousedown="javascript:ackapa3('duzenlemedivi','sifredivi','yetkidivi');">Düzenle</button>
+				<button class="btn btn-secondary btn-sm me-2" onclick="return false" onmousedown="javascript:ackapa3('sifredivi','duzenlemedivi','yetkidivi');">Şifre Değiştir</button>
 				<?php if($user->type == 2) { ?>
 					<button class="btn btn-warning btn-sm" onclick="return false" onmousedown="javascript:ackapa3('yetkidivi','sifredivi','duzenlemedivi');">Yetkiler</button>
 				<?php } ?> 
@@ -441,7 +441,7 @@
     			
     			<div class="div4" id="duzenlemedivi" style="display:none;">
     	
-			    	<form action="" method="POST" class="ml-1" enctype="multipart/form-data">
+			    	<form action="" method="POST" class="ms-1" enctype="multipart/form-data">
 						<div class="row">
 							<div class="col-md-6">
 								<b>Fotoğraf</b>
@@ -582,7 +582,7 @@
 								<label for="toplamCheckbox">Toplam Görme</label>
 							</div>
 						</div>
-						<div class="col-md-2 col-4 pr-0">
+						<div class="col-md-2 col-4 pe-0">
 							<div class="form-group">
 								<input type="checkbox" id="gelengidenCheckbox" name="gelengidenigorme" <?= $profil_yetkileri_arrayi[6] == '1' ? 'checked' : '' ?>>
 								<label for="gelengidenCheckbox">Gelen Giden</label>

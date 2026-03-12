@@ -174,7 +174,7 @@
 		<?php include ROOT_PATH.'/template/banner.php' ?>
 		<div class="container-fluid">
 			<div class="row">
-                <div id="sidebar" class="sidebar col-md-2 pr-0">
+                <div id="sidebar" class="sidebar col-md-2 pe-0">
                     <button id="closeSidebar" class="close-btn">&times;</button>
                     <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
                 </div>
@@ -183,10 +183,10 @@
 
                     <div class="row">
                         <div class="<?= $isProfile ? 'col-md-12' : 'col-md-8' ?> col-12 d-flex align-items-start pt-3">
-                            <button id="menuToggleBtn" class="btn btn-outline-primary mr-2">
+                            <button id="menuToggleBtn" class="btn btn-outline-primary me-2">
                                 <i class="fas fa-bars"></i> Menü
                             </button>
-                            <div class="client-search-box flex-grow-1 position-relative mr-2">
+                            <div class="client-search-box flex-grow-1 position-relative me-2">
                                 <input name="firma" id="firmainputu" type="text" class="form-control" autocomplete="off" placeholder="🔍  Firma Ara...">
                                 <ul class="list-group clientliveresult" id="firmasonuc" style="position: absolute; z-index: 1;"></ul>
                             </div>
@@ -237,7 +237,7 @@
                                         <td>
                                             <div class="d-flex">
                                                 <a onclick="openModal('edit-div-<?= $client->id ?>')">
-                                                    <button class="btn btn-warning btn-sm mr-1">Düzenle</button>
+                                                    <button class="btn btn-warning btn-sm me-1">Düzenle</button>
                                                 </a>
                                                 <form action="" method="POST">
                                                     <input type="hidden" name="id" value="<?= $client->id ?>"/>
@@ -278,13 +278,13 @@
                     <?php }else{ ?>
 
                         <h5 class="mt-3 bold">
-                            <i class="fa fa-building mr-2"></i><?= $client->name ?>
+                            <i class="fa fa-building me-2"></i><?= $client->name ?>
                         </h5>
 
                         <p>
-                            <i class="fa fa-phone mr-2 mt-2"></i><?= $client->phone ?><br/>
-                            <i class="fa fa-envelope mr-2 mt-2"></i><?= $client->email ?><br/>
-                            <i class="fa fa-map-marker mr-2 mt-2"></i><?= $client->address ?><br/>
+                            <i class="fa fa-phone me-2 mt-2"></i><?= $client->phone ?><br/>
+                            <i class="fa fa-envelope me-2 mt-2"></i><?= $client->email ?><br/>
+                            <i class="fa fa-map-marker me-2 mt-2"></i><?= $client->address ?><br/>
                         </p>
 
                         <div class="mt-4">
@@ -595,13 +595,13 @@
                                                 </td>
                                                 <td class="display-flex">
                                                     <a href="#" onclick="return false" onmousedown="javascript:ackapa('factory_pdfdivi<?= $item->id; ?>');">
-                                                        <i class="fas fa-industry mr-3"></i>
+                                                        <i class="fas fa-industry me-3"></i>
                                                     </a>
                                                     <a href="#" onclick="return false" onmousedown="javascript:ackapa('client_pdfdivi<?= $item->id; ?>');">
-                                                        <i class="fas fa-building mr-3"></i>
+                                                        <i class="fas fa-building me-3"></i>
                                                     </a>
                                                     <a href="#" onclick="return false" onmousedown="javascript:ackapa('contract_pdfdivi<?= $item->id; ?>');">
-                                                        <i class="fas fa-paper mr-3"></i>
+                                                        <i class="fas fa-paper me-3"></i>
                                                     </a>
                                                     <div id="factory_pdfdivi<?= $item->id; ?>" class="pdf-preview-wrapper" style="display: none;">
                                                         <div class="pdf-preview">

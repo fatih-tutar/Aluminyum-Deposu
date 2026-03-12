@@ -21,11 +21,11 @@
     ?>
             <div class="card sidebar-item">
                 <div class="sidebar-font" style="background-color: white; cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#collapse<?= $i; ?>" aria-expanded="true" aria-controls="collapse<?= $i; ?>">
-                    <div class="row pl-1">
+                    <div class="row ps-1">
                         <div class="col-md-3 col-2">
                             <img src="<?= $resim ?>" alt="<?= $kategori_adi ?>" width="40" height="40">
                         </div>
-                        <div class="col-md-9 col-10 d-flex align-items-center pl-4 pl-md-0">
+                        <div class="col-md-9 col-10 d-flex align-items-center ps-4 ps-md-0">
                             <?= $kategori_adi; ?>
                         </div>
                     </div>							
@@ -40,11 +40,11 @@
                     $alt_kategori_resim = "files/categories/".$wor['image'];
         ?>		
                     <a href="/product/<?= $alt_kategori_id; ?>">
-                        <div class="row pl-1">
+                        <div class="row ps-1">
                             <div class="col-md-3 col-2 offset-md-0 ">
                                 <img src="<?= $alt_kategori_resim ?>" alt="<?= $alt_kategori_adi ?>" width="35" height="35">
                             </div>
-                            <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                            <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                                 <?= $alt_kategori_adi; ?>
                             </div>
                         </div>
@@ -61,11 +61,11 @@
     ?>
     <div class="card sidebar-item ">
         <a href="/customorder" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/categories/unnamed39509908.jpg" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     ÖZEL SİPARİŞLER
                 </div>
             </div>
@@ -73,11 +73,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/fiyatlistesi" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/aydinlatma_fiyat.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     AYDINLATMA FİYAT
                 </div>
             </div>
@@ -85,11 +85,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/tekliflistesi" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/urun_sorgulama.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     ÜRÜN SORGULAMA
                 </div>
             </div>
@@ -97,11 +97,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/pricetable" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/anlik_fiyatlama.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     FİYAT TABLOSU
                 </div>
             </div>
@@ -109,11 +109,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/agirlikhesaplama" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/agirlik_hesaplama.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     AĞIRLIK HESAPLAMA
                 </div>
             </div>
@@ -121,11 +121,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/factory" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/fabrikalar.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     FABRİKALAR
                 </div>
             </div>
@@ -133,11 +133,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/client" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/clients.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     FİRMALAR
                 </div>
             </div>
@@ -145,11 +145,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/mold" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/kaliplar.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     KALIPLAR
                 </div>
             </div>
@@ -157,11 +157,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="#" onclick="return false" onmousedown="javascript:ackapa4('isplanidivi','agirlikhesaplamadivi','anlikfiyatlamadivi','fiyathesaplamadivi');" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/is_plani.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     İŞ PLANI
                 </div>
             </div>
@@ -169,11 +169,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/leave" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/izin.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     İZİNLER
                 </div>
             </div>
@@ -181,11 +181,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/organization" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/organizasyon.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     ORGANİZASYON
                 </div>
             </div>
@@ -193,11 +193,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/sevkiyatplan" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/sevkiyat_plani.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     SEVKİYAT PLANI
                 </div>
             </div>
@@ -205,11 +205,11 @@
     </div>
     <div class="card sidebar-item ">
         <a href="/sevkiyatarsiv" class="sidebar-font">
-            <div class="row pl-1">
+            <div class="row ps-1">
                 <div class="col-md-3 col-2 offset-md-0 ">
                     <img src="/files/sidebar/sevkiyat_arsivi.png" alt="" width="35" height="35">
                 </div>
-                <div class="col-md-9 col-9 d-flex align-items-center pl-4 pl-md-0">
+                <div class="col-md-9 col-9 d-flex align-items-center ps-4 ps-md-0">
                     SEVKİYAT ARŞİVİ
                 </div>
             </div>

@@ -126,7 +126,7 @@ if (!isLoggedIn()) {
 <?php include ROOT_PATH.'/template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="sidebar col-md-2 pr-0">
+        <div id="sidebar" class="sidebar col-md-2 pe-0">
             <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
         </div>
@@ -170,16 +170,16 @@ if (!isLoggedIn()) {
                         <button type="submit" class="btn btn-primary w-100" name="add_leave">İzni Kaydet</button>
                     </form>
             </div>
-            <div class="row pl-3 pb-4 pr-3 bb-grey">
+            <div class="row ps-3 pb-4 pe-3 bb-grey">
                 <div style="text-align: right; display: block; width: 100%;" class="d-none d-md-block">
                     <a href="#" onclick="openModal('form-div')">
                         <button class="btn btn-primary btn mb-2" style="background-color: #003566; border-color: #003566;">
-                            <i class="fas fa-pen mr-2"></i>
+                            <i class="fas fa-pen me-2"></i>
                             Yeni İzin Girişi
                         </button>
                     </a>
                 </div>
-                <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm mr-2">
+                <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm me-2">
                     <i class="fas fa-bars"></i> Menü
                 </button>
                 <div class="table-responsive mt-2">
@@ -221,7 +221,7 @@ if (!isLoggedIn()) {
                                     <?php if($authUser->type == 2){ ?>
                                     <td style="display: flex; justify-content: space-evenly;">
                                         <a href="#" onclick="openModal('edit-div-<?= $leave->id ?>')">
-                                            <i class="fas fa-pen mr-3" style="color:#003566"></i>
+                                            <i class="fas fa-pen me-3" style="color:#003566"></i>
                                         </a>
                                         <div id="edit-div-<?= $leave->id ?>" class="modal">
                                             <span class="close" onclick="closeModal()">&times;</span>
@@ -270,7 +270,7 @@ if (!isLoggedIn()) {
                     </table>
                 </div>
             </div>
-            <div class="pl-4 pr-1 pt-4 pr-3" style="border-bottom: 1px solid #f4f4f4;">
+            <div class="ps-4 pe-1 pt-4 pe-3" style="border-bottom: 1px solid #f4f4f4;">
                 <h5 style="font-weight: bold; color: #003566">İZİN KULLANIM KURALLARI</h5>
                 <ul style="font-size:12px; padding-left: 0; list-style-position: inside; ">
                     <li>İzin talepleri, 1 Ocak ile 31 Mart tarihleri arasında oluşturulmalı ve bu taleplerin yönetim onayı beklenmelidir; bu tarih aralığı dışında kesinlikle izin talep edilemez.</li>
@@ -281,7 +281,7 @@ if (!isLoggedIn()) {
                     <li>Yönetimin inisiyatifiyle belirlediği mücbir sebepler hariç, bu kurallar dışına çıkılamaz; tüm çalışanların bu kurallara uyması beklenmektedir.</li>
                 </ul>
             </div>
-            <div class="row pl-4 pr-1 pt-4 pr-3">
+            <div class="row ps-4 pe-1 pt-4 pe-3">
                 <?php if($user->type == 2){ ?>
                     <div class="table-responsive">
                         <table class="table table-bordered">

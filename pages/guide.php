@@ -1,61 +1,58 @@
 <?php 
+    require_once __DIR__.'/../config/init.php';
 
-	require_once __DIR__.'/../config/init.php';
-
-	if (!isLoggedIn()) {
-		
-		header("Location:/login");
-
-		exit();
-
-	}else{
-
-
-	}
-
+    if (!isLoggedIn()) {
+        header("Location:/login");
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
-
 <html>
-
   <head>
-
-    <title>Alüminyum Deposu</title>
-
+    <title>Kılavuz</title>
     <?php include ROOT_PATH.'/template/head.php'; ?>
-
   </head>
-
-  <body>
-
+  <body class="body-white">
     <?php include ROOT_PATH.'/template/banner.php' ?>
 
-    <div class="container">
-    	
-    	<div class="div4">
-    		
-    		<div class="row">
-    			
-    			<div class="col-12">
-    				
-    				<ul>
-    					
-    					<li style="margin: 10px 0px 10px 0px;">Sipariş butonunun kırmızı yanması, sipariş listesindeki bir ürünün termin tarihi geçmesine rağmen hâlâ teslim alınmadığını gösterir.</li>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="sidebar" class="sidebar col-md-2 pe-0">
+          <button id="closeSidebar" class="close-btn">&times;</button>
+          <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
+        </div>
 
-    					<li style="margin: 10px 0px 10px 0px;">Ürün adı kırmızı yanıyorsa ürünün stokta az kaldığını gösterir. Ürüne dair stok uyarı adedini düzenle butonuna tıklayıp açılan düzenleme formundaki Uyarı Adedi kısmından değiştirebilirsiniz.</li>
+        <div id="mainCol" class="col-md-10 col-12">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm d-md-none">
+              <i class="fas fa-bars"></i> Menü
+            </button>
+            <h3 class="d-none d-md-block" style="margin-top:.3rem; margin-bottom:0; font-weight: bold;">
+              Kılavuz
+            </h3>
+            <div></div>
+          </div>
 
-    				</ul>
-
-    			</div>
-
-    		</div>
-
-    	</div>
-
+          <div class="card">
+            <div class="card-body">
+              <ul class="mb-0">
+                <li class="mb-2">
+                  Sipariş butonunun kırmızı yanması, sipariş listesindeki bir ürünün termin tarihi geçmesine rağmen hâlâ teslim alınmadığını gösterir.
+                </li>
+                <li class="mb-2">
+                  Ürün adı kırmızı yanıyorsa ürünün stokta az kaldığını gösterir. Ürüne dair stok uyarı adedini düzenle butonuna tıklayıp açılan düzenleme formundaki
+                  <strong>Uyarı Adedi</strong> kısmından değiştirebilirsiniz.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <?php include ROOT_PATH.'/template/script.php'; ?>
+    <br/><br/><br/><br/><br/><br/>
 
-</body>
+    <?php include ROOT_PATH.'/template/script.php'; ?>
+  </body>
 </html>

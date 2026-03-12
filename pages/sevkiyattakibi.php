@@ -297,7 +297,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                                     <div class="col-4 d-block d-sm-none">Adet : </div>
                                     <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
                                     <div class="col-4 d-block d-sm-none">Kilo : </div>
-                                    <div class="col-md-2 col-8 pl-0"><input type="text" name="kilo_<?= $key ?>" class="form-control form-control-sm" style="height:25px;" value="<?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?>"></div>
+                                    <div class="col-md-2 col-8 ps-0"><input type="text" name="kilo_<?= $key ?>" class="form-control form-control-sm" style="height:25px;" value="<?= strpos($kilolar,",") ? $kiloArray[$key] : '' ?>"></div>
                                     <div class="col-4 d-block d-sm-none">Fiyat : </div>
                                     <div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
                                 </div>
@@ -331,7 +331,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                             <div class="col-12"><b>Açıklama: </b><?= $aciklama ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 col-2 pr-0">
+                            <div class="col-md-2 col-2 pe-0">
                                 <button type="submit" name="sevkiyatsil" class="btn btn-danger w-100 btn-sm">Sil</button>
                             </div>
                             <div class="col-md-5 col-5 mb-2">

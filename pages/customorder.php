@@ -309,7 +309,7 @@ if (!isLoggedIn()) {
 <?php include ROOT_PATH.'/template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="sidebar col-md-2 pr-0">
+        <div id="sidebar" class="sidebar col-md-2 pe-0">
             <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
         </div>
@@ -362,13 +362,13 @@ if (!isLoggedIn()) {
                 </form>
             </div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm mr-2">
+                    <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm me-2">
                         <i class="fas fa-bars"></i> Menü
                     </button>
                     <h3 class="d-none d-md-block" style="margin-top:.3rem; margin-bottom:0; font-weight: bold;">Özel Siparişler</h3>
                     <div>
-                        <a href="/custom_order_archive" target="_blank" class="btn btn-secondary btn-sm mr-2">Arşiv</a>
-                        <a href="/custom_orders_report" target="_blank" class="btn btn-info btn-sm text-white mr-2">Rapor</a>
+                        <a href="/custom_order_archive" target="_blank" class="btn btn-secondary btn-sm me-2">Arşiv</a>
+                        <a href="/custom_orders_report" target="_blank" class="btn btn-info btn-sm text-white me-2">Rapor</a>
                         <a onclick="openModal('form-div')" class="btn btn-primary btn-sm text-white" style="background-color: #003566; border-color: #003566;">Sipariş Girişi</a>
                     </div>
                 </div>
@@ -380,27 +380,27 @@ if (!isLoggedIn()) {
                                 $clientName = getClientName($order->client_id);
                         ?>
                             <tr style="border-top:2px solid black">
-                                <td><i class="fas fa-building mr-2" style="color:#004a8e;"></i><b><?= $clientName ?></b></td>
-                                <td><i class="fas fa-truck mr-2" style="color:#004a8e"></i><?= $order->delivery_type_name ?></td>
-                                <td><i class="fas fa-clock mr-2" style="color:#004a8e"></i><?= formatDateAndTime($order->datetime) ?></td>
+                                <td><i class="fas fa-building me-2" style="color:#004a8e;"></i><b><?= $clientName ?></b></td>
+                                <td><i class="fas fa-truck me-2" style="color:#004a8e"></i><?= $order->delivery_type_name ?></td>
+                                <td><i class="fas fa-clock me-2" style="color:#004a8e"></i><?= formatDateAndTime($order->datetime) ?></td>
                                 <td class="display-flex">
                                     <!-- CLIENT LIST BUTTONS START -->
                                     <a onclick="openModal('add-item-div-<?= $order->id ?>')">
-                                        <i class="fas fa-plus mr-3" style="color:green"></i>
+                                        <i class="fas fa-plus me-3" style="color:green"></i>
                                     </a>
                                     <a onclick="openModal('edit-div-<?= $order->id ?>')">
-                                        <i class="fas fa-pen mr-3" style="color:#004a8e"></i>
+                                        <i class="fas fa-pen me-3" style="color:#004a8e"></i>
                                     </a>
                                     <form action="" method="POST">
                                         <input type="hidden" name="id" value="<?= $order->id ?>">
                                         <button type="submit" name="archive_custom_order" class="icon-button" style="width: 32px; padding-left:0" onclick="return confirmForm('<?= $clientName ?> adlı firmaya ait siparişi arşive gönderiyorsunuz, emin misiniz?')">
-                                            <i class="fas fa-archive mr-3" style="color:#5a5a5a;"></i>
+                                            <i class="fas fa-archive me-3" style="color:#5a5a5a;"></i>
                                         </button>
                                     </form>
                                     <form action="" method="POST">
                                         <input type="hidden" name="id" value="<?= $order->id ?>">
                                         <button type="submit" name="delete_custom_order" class="icon-button" style="width: 32px; padding-left:0" onclick="return confirmForm('<?= $clientName ?> adlı firmaya ait siparişi silmek istediğinize emin misiniz?')">
-                                            <i class="fas fa-trash mr-3" style="color:#ca0000;"></i>
+                                            <i class="fas fa-trash me-3" style="color:#ca0000;"></i>
                                         </button>
                                     </form>
                                     <!-- CLIENT LIST BUTTONS END -->
@@ -493,12 +493,12 @@ if (!isLoggedIn()) {
                                                         <td><?= formatDate($item->due_date) ?></td>
                                                         <td class="display-flex">
                                                             <a onclick="openModal('edit-items-div-<?= $item->id ?>')">
-                                                                <i class="fas fa-pen mr-3" style="color:#003566"></i>
+                                                                <i class="fas fa-pen me-3" style="color:#003566"></i>
                                                             </a>
                                                             <form action="" method="POST">
                                                                 <input type="hidden" name="id" value="<?= $item->id ?>" />
                                                                 <button type="submit" name="delete_custom_order_item" class="icon-button" onclick="return confirm('Sipariş içindeki <?= $item->quantity ?> adet <?= $item->product ?> ürününü silmek istediğinize emin misiniz?')">
-                                                                    <i class="fas fa-trash mr-3" style="color:#505050"></i>
+                                                                    <i class="fas fa-trash me-3" style="color:#505050"></i>
                                                                 </button>
                                                             </form>
                                                             <div id="edit-items-div-<?= $item->id ?>" class="modal" style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%); z-index: 999;">

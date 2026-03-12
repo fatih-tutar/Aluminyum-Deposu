@@ -113,7 +113,7 @@ if (!isLoggedIn()) {
 <?php include ROOT_PATH.'/template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="sidebar col-md-2 pr-0">
+        <div id="sidebar" class="sidebar col-md-2 pe-0">
             <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
         </div>
@@ -163,7 +163,7 @@ if (!isLoggedIn()) {
                     <button type="submit" class="btn btn-primary w-100" name="add_custom_order">Kaydet</button>
                 </form>
             </div>
-            <div class="row pl-3 pb-4 pr-3 bb-grey">
+            <div class="row ps-3 pb-4 pe-3 bb-grey">
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <tbody>
@@ -172,9 +172,9 @@ if (!isLoggedIn()) {
                         $clientName = getClientName($order->client_id);
                         ?>
                         <tr style="border-top:2px solid black">
-                            <td><i class="fas fa-building mr-2" style="color:#004a8e;"></i><b><?= $clientName ?></b></td>
-                            <td><i class="fas fa-truck mr-2" style="color:#004a8e"></i><?= $order->delivery_type_name ?></td>
-                            <td><i class="fas fa-clock mr-2" style="color:#004a8e"></i><?= formatDateAndTime($order->datetime) ?></td>
+                            <td><i class="fas fa-building me-2" style="color:#004a8e;"></i><b><?= $clientName ?></b></td>
+                            <td><i class="fas fa-truck me-2" style="color:#004a8e"></i><?= $order->delivery_type_name ?></td>
+                            <td><i class="fas fa-clock me-2" style="color:#004a8e"></i><?= formatDateAndTime($order->datetime) ?></td>
                             <td>
                                 <form action="" method="POST">
                                     <input type="hidden" name="id" value="<?= $order->id ?>">

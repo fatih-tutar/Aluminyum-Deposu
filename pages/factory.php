@@ -84,13 +84,13 @@ if (!isLoggedIn()) {
 
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="sidebar col-md-2 pr-0">
+        <div id="sidebar" class="sidebar col-md-2 pe-0">
             <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
         </div>
         <div id="mainCol" class="col-md-10 col-12">
             <div class="d-flex justify-content-between">
-                <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm mr-2 mb-2">
+                <button id="menuToggleBtn" class="btn btn-outline-primary btn-sm me-2 mb-2">
                     <i class="fas fa-bars"></i> Menü
                 </button>
                 <h3 class="d-none d-md-block"><b>Fabrikalar</b></h3>
@@ -144,15 +144,15 @@ if (!isLoggedIn()) {
                             <td><?= $factory->email ?></td>
                             <td>
                                 <div class="d-flex">
-                                    <button class="btn btn-primary btn-sm mr-1" onclick="openModal('orders-div-<?= $factory->id ?>')">Açılan Siparişler</button>
+                                    <button class="btn btn-primary btn-sm me-1" onclick="openModal('orders-div-<?= $factory->id ?>')">Açılan Siparişler</button>
                                     <a href="/fabrikasiparis/<?= $factory->id ?>" target="_blank">
-                                        <button class="btn btn-info btn-sm mr-1">Bekleyen Sipariş</button>
+                                        <button class="btn btn-info btn-sm me-1">Bekleyen Sipariş</button>
                                     </a>
                                     <a href="/order-form-archive/<?= $factory->id ?>" target="_blank">
-                                        <button class="btn btn-success btn-sm mr-1">Form Arşivi</button>
+                                        <button class="btn btn-success btn-sm me-1">Form Arşivi</button>
                                     </a>
                                     <a onclick="openModal('edit-div-<?= $factory->id ?>')">
-                                        <button class="btn btn-warning btn-sm mr-1">Düzenle</button>
+                                        <button class="btn btn-warning btn-sm me-1">Düzenle</button>
                                     </a>
                                     <form action="" method="POST">
                                         <input type="hidden" name="id" value="<?= $factory->id ?>"/>

@@ -85,7 +85,7 @@
 <?php include ROOT_PATH.'/template/banner.php' ?>
 <div class="container-fluid">
     <div class="row">
-        <div id="sidebar" class="sidebar col-md-2 pr-0">
+        <div id="sidebar" class="sidebar col-md-2 pe-0">
             <button id="closeSidebar" class="close-btn">&times;</button>
             <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
         </div>
@@ -98,7 +98,7 @@
         }
         $column = 12 / count($araclar);
         ?>
-            <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm mr-2">
+            <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm me-2">
                 <i class="fas fa-bars"></i> Menü
             </button>
         <div class="row div4" style="padding-top: 10px; padding-bottom:10px;">

@@ -29,13 +29,13 @@
                     <div class="row mt-3 align-items-center" style="border-right: 1px solid #cdcdcd">
                         <div class="col-4">
                             <div class="d-flex align-items-center">
-                                <span class="mr-2" style="color: #cdcdcd;">Dolar:</span>
+                                <span class="me-2" style="color: #cdcdcd;">Dolar:</span>
                                 <input type="text" style="background-color: black; color: #cdcdcd; border:none;" class="form-control form-control-sm" name="dolarkuru" value="<?= $companyDolar ?>">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="d-flex align-items-center">
-                                <span class="mr-2" style="color: #cdcdcd;">LME:</span>
+                                <span class="me-2" style="color: #cdcdcd;">LME:</span>
                                 <input type="text" style="background-color: black; color: #cdcdcd; border:none;" class="form-control form-control-sm" name="lme" value="<?= $companyLme ?>">
                             </div>
                         </div>

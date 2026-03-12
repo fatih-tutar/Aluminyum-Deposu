@@ -95,7 +95,7 @@ if(!isLoggedIn()){
 
     <div class="container-fluid">
         <div class="row">
-            <div id="sidebar" class="sidebar col-md-2 pr-0">
+            <div id="sidebar" class="sidebar col-md-2 pe-0">
                 <button id="closeSidebar" class="close-btn">&times;</button>
                 <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
             </div>
@@ -110,7 +110,7 @@ if(!isLoggedIn()){
                     <div>
                         <a href="/mold">
                             <button class="btn btn-primary btn-sm mb-2" style="background-color: #003566; border-color: #003566;">
-                                <i class="fas fa-list mr-2"></i> Kalıp Listesi
+                                <i class="fas fa-list me-2"></i> Kalıp Listesi
                             </button>
                         </a>
                     </div>
@@ -211,13 +211,13 @@ if(!isLoggedIn()){
                                                 </td>
                                                 <td class="display-flex">
                                                     <a href="#" onclick="return false" onmousedown="javascript:ackapa('factory_pdfdivi<?= $item->id; ?>');">
-                                                        <i class="fas fa-industry mr-3"></i>
+                                                        <i class="fas fa-industry me-3"></i>
                                                     </a>
                                                     <a href="#" onclick="return false" onmousedown="javascript:ackapa('client_pdfdivi<?= $item->id; ?>');">
-                                                        <i class="fas fa-building mr-3"></i>
+                                                        <i class="fas fa-building me-3"></i>
                                                     </a>
                                                     <a href="#" onclick="return false" onmousedown="javascript:ackapa('contract_pdfdivi<?= $item->id; ?>');">
-                                                        <i class="fas fa-paper mr-3"></i>
+                                                        <i class="fas fa-paper me-3"></i>
                                                     </a>
                                                     <form action="" method="POST">
                                                         <input type="hidden" name="id" value="<?= $item->id ?>">
