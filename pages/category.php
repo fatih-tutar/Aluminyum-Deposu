@@ -56,7 +56,7 @@
 
                     $alt_kategori_adi = $wor['name'];
 
-                    $resim = "files/categories/".$wor['image'];
+                    $resim = "/files/categories/".$wor['image'];
 
 		?>
 						

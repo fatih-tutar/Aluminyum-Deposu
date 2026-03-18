@@ -2,6 +2,9 @@
 RewriteEngine On
 RewriteBase /
 
+# Eski fiyatlistesi.php'yi uzantısız URL'ye yönlendir
+RewriteRule ^fiyatlistesi\.php$ /fiyatlistesi [L,R=301]
+
 # Gerçek dosya/klasör varsa dokunma
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d

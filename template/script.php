@@ -20,7 +20,7 @@
 
             if(inputVal.length < 10){
 
-                $.get('live-search.php', {term: inputVal}).done(function(data){
+                $.get('/pages/live-search.php', {term: inputVal}).done(function(data){
 
                     /* Gelen sonucu ekrana yazdırıyoruz. */
 
@@ -69,7 +69,7 @@
 
             if(inputVal.length < 10){
 
-                $.get('urun-live-search.php', {term: inputVal}).done(function(data){
+                $.get('/pages/urun-live-search.php', {term: inputVal}).done(function(data){
 
                     /* Gelen sonucu ekrana yazdırıyoruz. */
 
@@ -118,7 +118,7 @@
 
             if(inputVal.length < 10){
 
-                $.get('client-live-search.php', {term: inputVal}).done(function(data){
+                $.get('/pages/client-live-search.php', {term: inputVal}).done(function(data){
 
                     /* Gelen sonucu ekrana yazdırıyoruz. */
 

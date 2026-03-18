@@ -80,7 +80,7 @@
 
                             <?php if($user->permissions->visit == '1'){?>
 
-                                <a class="dropdown-item" href="/ziyaretler"><b>ZİYARETLER</b></a>
+                                <a class="dropdown-item" href="/customer-visits"><b>ZİYARETLER</b></a>
 
                             <?php } ?>
 

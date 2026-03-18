@@ -733,6 +733,11 @@ function backupDatabaseSave($db, $dbInstance)
 {
     $config = ['dbname' => $dbInstance->getDbConfig()['dbname']];
     $backupDir = __DIR__ . "/../backups";
+    if (!is_dir($backupDir)) {
+        if (!@mkdir($backupDir, 0755, true)) {
+            return false;
+        }
+    }
     $backupFile = $backupDir . "/backup_" . date("Y-m-d_H-i-s") . ".sql";
     $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
     $sqlDump = "-- Veritabanı Yedeği: {$config['dbname']}\n-- Tarih: " . date("Y-m-d H:i:s") . "\n\n";
@@ -748,7 +753,9 @@ function backupDatabaseSave($db, $dbInstance)
             $sqlDump .= "\n";
         }
     }
-    file_put_contents($backupFile, $sqlDump);
+    if (file_put_contents($backupFile, $sqlDump) === false) {
+        return false;
+    }
 
     return true;
 }

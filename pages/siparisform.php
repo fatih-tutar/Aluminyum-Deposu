@@ -57,19 +57,27 @@
 		
 		<div class="row">
 			
-            <div class="col-md-4" style="text-align: center; padding: 5px;"><img src="files/img/doga.jpg" style="width: 170px; height: auto;"></div>***
+            <div class="col-md-4" style="text-align: center; padding: 5px;">
+                <img src="/files/img/doga.jpg" style="width: 150px; height: auto;">
+            </div>
 
-			<div class="col-md-8" style="padding: 30px 0px 30px 0px; text-align: center;"><p style="color:green; font-size: 18px; font-weight: bolder;">Gerçekten ihtiyacınız yoksa bu mesajı kağıda basmayınız.</p></div>
+			<div class="col-md-8" style="padding: 20px 0px 20px 0px; text-align: center;">
+                <p style="color:green; font-size: 15px; font-weight: bolder; margin-bottom: 0;">
+                    Gerçekten ihtiyacınız yoksa bu mesajı kağıda basmayınız.
+                </p>
+            </div>
 
 		</div>
 
 		<div class="row">
 			
-            <div class="col-md-4" style="text-align: center;"><img src="files/company/<?= $company->photo; ?>" style="width: 370px; height: auto;"></div>
+            <div class="col-md-4" style="text-align: center;">
+                <img src="/files/company/<?= $company->photo; ?>" style="width: 240px; height: auto;">
+            </div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
-				<p style="font-size: 15px;">
+				<p style="font-size: 11px; line-height: 1.3;">
 			
 					<?= str_replace("\n", "<br/>", $company->description); ?>
 
@@ -145,7 +153,7 @@
 
 		</div>
 
-		<div class="row" style="padding: 20px;">
+		<div class="row my-2">
 			
 			<div class="col-md-1"><b>S.No</b></div>
 			<div class="col-md-1"><b>Kalıp No</b></div>
@@ -216,19 +224,19 @@
 
 				<hr style="border:1px black solid;" />
 
-				<div class="row" style="padding: 20px;">
+				<div class="row my-2">
 		
-					<div class="col-md-1"><?= $a; ?></div>
-					<div class="col-md-1"><?= $moldNumber->number ?? null; ?></div>
+					<div class="col-md-1 px-1"><?= $a; ?></div>
+					<div class="col-md-1 px-1"><?= $moldNumber->number ?? null; ?></div>
 
-					<div class="col-md-4"><?= $urun_adi." ".$kategori_iki_adi.' / '.$kategori_bir_adi; ?></div>
+					<div class="col-md-4 px-1"><?= $urun_adi." ".$kategori_iki_adi.' / '.$kategori_bir_adi; ?></div>
 
-					<div class="col-md-1"><?= $siparisboy; ?></div>
+					<div class="col-md-1 px-1"><?= $siparisboy; ?></div>
 
-					<div class="col-md-1"><?= $urun_siparis_aded." adet "; ?></div>
-					<div class="col-md-2"><?= $packQuantity == 0 ? '---------------------' : $packQuantity." adetli sarılsın "; ?></div>
-                    <div class="col-md-1"><?= $palet == 0 ? '-------' : $palet." palet "; ?></div>
-					<div class="col-md-1"><?= number_format($kilo, 1, ',', '.')." KG"; ?></div>
+					<div class="col-md-1 px-1"><?= $urun_siparis_aded." adet "; ?></div>
+					<div class="col-md-2 px-1"><?= $packQuantity == 0 ? '---------------------' : $packQuantity." adetli sarılsın "; ?></div>
+                    <div class="col-md-1 px-1"><?= $palet == 0 ? '-------' : $palet." palet "; ?></div>
+					<div class="col-md-1 px-0"><?= number_format($kilo, 1, ',', '.')." <small>KG</small>"; ?></div>
 				</div>
 
 			<?php
@@ -239,11 +247,11 @@
 
 		<hr/>
 
-		<div class="row" style="padding: 20px;">
+		<div class="row my-2">
 			
-			<div class="col-md-9" style="text-align:right; font-size:18px;"></div>
+			<div class="col-md-8"></div>
 
-			<div class="col-md-3" style="text-align:right; font-size:18px;"><b>Toplam Kilo : </b><b><?= number_format($toplamkilo, 1, ',', '.')." KG"; ?></b></div>
+			<div class="col-md-4" style="text-align: right; font-size:18px;"><b>Toplam Kilo : </b><b><?= number_format($toplamkilo, 1, ',', '.')." KG"; ?></b></div>
 
 		</div>
 

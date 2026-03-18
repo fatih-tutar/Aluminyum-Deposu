@@ -4,3 +4,4 @@ config/database.php
 error_log
 files/
 img/
+.DS_Store

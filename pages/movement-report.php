@@ -40,12 +40,14 @@
         <?php include ROOT_PATH.'/template/head.php'; ?>
     </head>
     <body>
-	    <div class="container" style="background: white;">
+	    <div class="container-fluid" style="background: white;">
             <br/><br/>
             <div class="row">
-                <div class="col-md-4" style="text-align: center;"><img src="files/company/<?= $company->photo; ?>" style="width: 350px; height: auto;"></div>
+                <div class="col-md-4" style="text-align: center;">
+                    <img src="/files/company/<?= $company->photo; ?>" style="width: 240px; height: auto;">
+                </div>
                 <div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
-                    <p style="font-size: 15px;">
+                    <p style="font-size: 11px; line-height: 1.3;">
                         <?= str_replace("\n", "<br/>", $company->description); ?>
                     </p>
                 </div>

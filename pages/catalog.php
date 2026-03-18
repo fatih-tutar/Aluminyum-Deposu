@@ -592,7 +592,7 @@
 					    		
 					    		<div class="col-2">
 
-                            <img src="files/prices/<?= $resim1; ?>" style="width: 100%; height: auto;"><br/>
+                            <img src="/files/prices/<?= $resim1; ?>" style="width: 100%; height: auto;"><br/>
 
 					    			<input type="file" name="uploadfile1" style="margin-bottom: 10px;">
 
@@ -725,7 +725,7 @@
 
 					    		<div class="col-2">
 
-                            <img src="files/prices/<?= $resim2; ?>" style="width: 100%; height: auto;">
+                            <img src="/files/prices/<?= $resim2; ?>" style="width: 100%; height: auto;">
 
 					    			<input type="file" name="uploadfile2" style="margin-bottom: 10px;">
 

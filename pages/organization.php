@@ -77,7 +77,7 @@ function renderOrgCard(int $i, array $users, $user, string $extraClass = '', str
     ?>
     <div class="org-card <?= $extraClass ?> relative">
         <div class="bg1 white label ortali relative">
-            <img src="files/<?= $photo ?>" alt="profile picture" class="profile-pic">
+            <img src="/files/<?= $photo ?>" alt="profile picture" class="profile-pic">
             <?php if ($user->type == 2) { ?>
                 <input type="text" name="organization[<?= $i ?>][title]" value="<?= $title ?>">
             <?php } else { ?>

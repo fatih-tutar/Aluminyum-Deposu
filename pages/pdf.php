@@ -2,19 +2,26 @@
 
 	require_once __DIR__.'/../config/init.php';
 
+    // Fabrika ID'si güvenli şekilde alınıyor
+    if (!isset($_GET['id']) || empty($_GET['id'])) {
+        // Geçersiz erişim durumunda fabrika listesine yönlendirelim
+        header("Location:/factory");
+        exit();
+    }
+
 	$urun_fabrika_id = guvenlik($_GET['id']);
 
-	$query = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$urun_fabrika_id}' AND silik = '0' ORDER BY siparis_id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+    // Son siparişi güvenli şekilde çek
+	$lastOrder = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$urun_fabrika_id}' AND silik = '0' ORDER BY siparis_id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 
-	$hazirlayankisi = $query['hazirlayankisi'];
+    $hazirlayankisi = $lastOrder ? $lastOrder['hazirlayankisi'] : '';
+	$ilgilikisi     = $lastOrder ? $lastOrder['ilgilikisi']     : '';
 
 	$siparistarih = date("d-m-Y", time());
 
-	$adcek = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}'")->fetch(PDO::FETCH_ASSOC);
-
-	$urun_fabrika_adi = $adcek['name'];
-
-	$ilgilikisi = $query['ilgilikisi'];
+    // Fabrika bilgisini güvenli şekilde çek
+	$factoryRow = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}'")->fetch(PDO::FETCH_ASSOC);
+	$urun_fabrika_adi = $factoryRow ? $factoryRow['name'] : '';
 
     if($user->type != '3'){
 
@@ -55,24 +62,28 @@
 	</script>
 </head>
 <body>
-	<div class="container" style="background: white;">
+	<div class="container-fluid" style="background: white;">
 
 		<div class="row">
-			
-            <div class="col-md-4" style="text-align: center; padding: 5px;"><img src="files/img/doga.jpg" style="width: 170px; height: auto;"></div>
-
-			<div class="col-md-8" style="padding: 30px 0px 30px 0px; text-align: center;"><p style="color:green; font-size: 18px; font-weight: bolder;">Gerçekten ihtiyacınız yoksa bu mesajı kağıda basmayınız.</p></div>
-
+            <div class="col-md-4" style="text-align: center; padding: 5px;">
+                <img src="/files/img/doga.jpg" style="width: 130px; height: auto;">
+            </div>
+			<div class="col-md-8" style="padding: 15px 0px 15px 0px; text-align: center;">
+                <p style="color:green; font-size: 13px; font-weight: bolder; margin-bottom: 0;">
+                    Gerçekten ihtiyacınız yoksa bu mesajı kağıda basmayınız.
+                </p>
+            </div>
 		</div>
 
 		<div class="row">
-			
-            <div class="col-md-4" style="text-align: center;"><img src="files/company/<?= $company->photo; ?>" style="width: 370px; height: auto;"></div>
+            <div class="col-md-4" style="text-align: center;">
+                <img src="/files/company/<?= $company->photo; ?>" style="width: 240px; height: auto;">
+            </div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
-				<p style="font-size: 15px;">
-			
+				<p style="font-size: 11px; line-height: 1.3;">
+
 					<?= str_replace("\n", "<br/>", $company->description); ?>
 
 				</p>

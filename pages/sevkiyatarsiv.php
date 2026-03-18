@@ -1,202 +1,223 @@
-<?php 
+<?php
 
 	require_once __DIR__.'/../config/init.php';
 
 	if (!isLoggedIn()) {
-		
 		header("Location:/login");
-
 		exit();
-
-	}else{
-
-        if(isset($_POST['faturasikesilenegerial'])){
-			$sevkiyatID = guvenlik($_POST['sevkiyatID']);
-			$query = $db->prepare("UPDATE sevkiyat SET durum = ? WHERE id = ?");
-			$update = $query->execute(array('2',$sevkiyatID));
-			header("Location: index.php");
-			exit();
-		}
-
 	}
 
+	if (isset($_POST['faturasikesilenegerial'])) {
+		$sevkiyatID = guvenlik($_POST['sevkiyatID']);
+		$query = $db->prepare("UPDATE sevkiyat SET durum = ? WHERE id = ?");
+		$update = $query->execute(array('2', $sevkiyatID));
+		header("Location:/sevkiyatplan");
+		exit();
+	}
+
+	$sevkiyatListesi = $db->query("SELECT * FROM sevkiyat WHERE durum = '3' AND sirket_id = '{$user->company_id}' AND silik = '0' AND manuel = '0' ORDER BY saniye DESC LIMIT 200")->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
-
 <!DOCTYPE html>
-
 <html>
-
   <head>
-
-    <title>Alüminyum Deposu</title>
-
+    <title>Sevkiyat Arşivi</title>
     <?php include ROOT_PATH.'/template/head.php'; ?>
-
   </head>
-
   <body class="body-white">
-  <?php include ROOT_PATH.'/template/banner.php' ?>
-  <div class="container-fluid">
-      <div class="row">
-          <div id="sidebar" class="sidebar col-md-2 pe-0">
-              <button id="closeSidebar" class="close-btn">&times;</button>
-              <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
-          </div>
-          <div id="mainCol" class="col-md-10 col-12">
-              <?= isset($error) ? $error : ''; ?>
-              <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm me-2">
-                  <i class="fas fa-bars"></i> Menü
-              </button>
-            <div class="div4 d-none d-sm-block">
-                <div class="row">
-                    <div class="col-md-2">Firma</div>
-                    <div class="col-md-1">Ürünler</div>
-                    <div class="col-md-1">Kilo</div>
-                    <div class="col-md-5">
-                        <div class="row">
-                            <div class="col-md-4">Oluşturan</div>
-                            <div class="col-md-4">Hazırlayan</div>
-                            <div class="col-md-4">Faturalayan</div>
-                        </div>
-                    </div>
-                    <div class="col-md-1">Tarih</div>
-                    <div class="col-md-2"></div>
-                </div>
-            </div>
+    <?php include ROOT_PATH.'/template/banner.php'; ?>
 
-            <div class="div4">
-                <?php
-                    $yeniSevkiyatlar = $db->query("SELECT * FROM sevkiyat WHERE durum = '3' AND sirket_id = '{$user->company_id}' AND silik = '0' AND manuel = '0' ORDER BY saniye DESC LIMIT 200", PDO::FETCH_ASSOC);
-                    if($yeniSevkiyatlar->rowCount()){
-                        foreach($yeniSevkiyatlar as $sevkiyat){
-                            $sevkiyatID = guvenlik($sevkiyat['id']);
-                            $urunler = guvenlik($sevkiyat['urunler']);
-                            $urunArray = explode(",",$urunler);
-                            $firmaId = guvenlik($sevkiyat['firma_id']);
-                            $firmaAdi = getClientName($firmaId);
-                            $adetler = guvenlik($sevkiyat['adetler']);
-                            $adetArray = explode(",",$adetler);
-                            $kilolar = guvenlik($sevkiyat['kilolar']);
-                            if (strpos($kilolar, ',')) {
-                                $kiloArray = array_map('trim', explode(",", $kilolar)); // Boşlukları temizle
-                                $toplamkg = 0;
-                                foreach ($kiloArray as $kilo) {
-                                    if (is_numeric($kilo)) {
-                                        $toplamkg += $kilo;
-                                    }
-                                }
-                            }
-                            $fiyatlar = guvenlik($sevkiyat['fiyatlar']);
-                            $fiyatArray = explode("-",$fiyatlar);
-                            $olusturan = guvenlik($sevkiyat['olusturan']);
-                            $hazirlayan = guvenlik($sevkiyat['hazirlayan']);
-                            $faturaci = guvenlik($sevkiyat['faturaci']);
-                            $sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
-                            $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
-                            $aciklama = guvenlik($sevkiyat['aciklama']);
-                            $saniye = guvenlik($sevkiyat['saniye']);
-                            $tarih = getdmY($saniye);
-                            $saat = getHis($saniye);
-                ?>
-                            <div class="p-2">
-                                <form action="" method="POST">
-                                    <div class="row">
-                                        <div class="col-4 d-block d-sm-none"><b>Firma</b></div>
-                                        <div class="col-md-2 col-8"><?= $firmaAdi ?></div>
-                                        <div class="col-4 d-block d-sm-none"><b>Ürün</b></div>
-                                        <div class="col-md-1 col-8">
-                                            <a href="#" onclick="return false" onmousedown="javascript:ackapa4('faturali-siparis-<?= $sevkiyatID ?>');">
-                                                Ürünler
-                                            </a>
-                                        </div>
-                                        <div class="col-4 d-block d-sm-none"><b>Kilo</b></div>
-                                        <div class="col-md-1 col-8"><?= strpos($kilolar,",") ? $toplamkg : $kilolar ?></div>
-                                        <div class="col-md-5">
-                                            <div class="row">
-                                                <div class="col-4 d-block d-sm-none"><b>Oluşturan</b></div>
-                                                <div class="col-md-4 col-8"><?= getUsername($olusturan) ?></div>
-                                                <div class="col-4 d-block d-sm-none"><b>Hazırlayan</b></div>
-                                                <div class="col-md-4 col-8"><?= getUsername($hazirlayan) ?></div>
-                                                <div class="col-4 d-block d-sm-none"><b>Faturacı</b></div>
-                                                <div class="col-md-4 col-8"><?= getUsername($faturaci) ?></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4 d-block d-sm-none"><b>Tarih / Saat</b></div>
-                                        <div class="col-md-1 col-8"><?= $tarih." / ".$saat ?></div>
-                                        <div class="col-md-1 col-6">
-                                            <input type="hidden" name="sevkiyatID" value="<?= $sevkiyatID ?>">
-                                        <button type="submit" name="faturasikesilenegerial" class="btn btn-dark w-100 btn-sm">Geri Al</button>
-                                        </div>
-                                        <div class="col-md-1 col-6">
-                                        <a href="/sevkiyatformu/<?= $sevkiyatID ?>" target="_blank" class="btn btn-dark w-100 btn-sm">
-                                                Yazdır
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div id="faturali-siparis-<?= $sevkiyatID ?>" style="display:none;">
-                                        <hr class="my-1" style="border-top:1px solid white;"/>
-                                        <div class="d-none d-sm-block">
-                                            <div class="row">
-                                                <div class="col-md-4"><b>Ürün</b></div>
-                                                <div class="col-md-2"><b>Cinsi</b></div>
-                                                <div class="col-md-2"><b>Adet</b></div>
-                                                <div class="col-md-2"><b>Kg</b></div>
-                                                <div class="col-md-2"><b>Fiyat</b></div>
-                                            </div>
-                                            <hr class="my-1" style="border-top:1px solid white;"/>
-                                        </div>
-                                        <?php
-                                            $totalWeight = 0;
-                                            $totalPrice = 0;
-                                            $malzemeAdeti = 0;
-                                            foreach($urunArray as $key => $urunId){
-                                                $urun = getUrunInfo($urunId);
-                                                if($urun !== false){
-                                        ?>
-                                                    <div class="row mb-1">
-                                                        <div class="col-4 d-block d-sm-none">Ürün Adı : </div>
-                                                        <div class="col-md-4 col-8"><?= $urun['urun_adi'] ?></div>
-                                                        <div class="col-4 d-block d-sm-none">Cinsi : </div>
-                                                        <div class="col-md-2 col-8"><?= getCategoryShortName($urun['kategori_bir']) ?></div>
-                                                        <div class="col-4 d-block d-sm-none">Adet : </div>
-                                                        <div class="col-md-2 col-8"><?= $adetArray[$key] ?></div>
-                                                        <div class="col-4 d-block d-sm-none">Kilo : </div>
-                                                        <div class="col-md-2 col-8">
-                                                            <?= strpos($kilolar, ",") && isset($kiloArray[$key]) ? $kiloArray[$key] : '' ?>
-                                                        </div>
-                                                        <div class="col-4 d-block d-sm-none">Fiyat : </div>
-                                                        <div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
-                                                    </div>
-                                                    <hr class="my-1" style="border-top:1px solid white;"/>
-                                        <?php
-                                                    $malzemeAdeti++;
-                                                }
-                                            }
-                                        ?>
-                                        <div class="row">
-                                            <div class="col-md-6 col-12"></div>
-                                            <div class="col-md-2 col-4"><b>Toplam</b></div>
-                                            <div class="col-md-4 col-4"><?= strpos($kilolar,",") ? $toplamkg.' KG' : $kilolar.' KG' ?></div>
-                                        </div>
-                                        <hr class="my-1" style="border-top:1px solid white;"/>
-                                        <div class="row">
-                                            <div class="col-md-3 col-12"><b>Sevk Tipi: </b><?= $sevkTipleri[$sevkTipi] ?></div>
-                                            <div class="col-md-9 col-12"><b>Açıklama: </b><?= $aciklama ?></div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <hr class="m-1"/>
-                <?php
-                        }
-                    }
-                ?>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="sidebar" class="sidebar col-md-2 pe-0">
+          <button id="closeSidebar" class="close-btn">&times;</button>
+          <?php include ROOT_PATH.'/template/sidebar2.php'; ?>
+        </div>
+
+        <div id="mainCol" class="col-md-10 col-12">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <div class="d-flex align-items-center">
+              <button id="menuToggleBtn" type="button" class="btn btn-outline-primary btn-sm d-md-none me-2">
+                <i class="fas fa-bars"></i> Menü
+              </button>
+              <h3 class="d-none d-md-block mb-0 mt-2" style="font-weight: bold;">Sevkiyat Arşivi</h3>
+            </div>
+            <div>
+              <a href="/sevkiyatplan" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-arrow-left me-2"></i> Geri Dön
+              </a>
             </div>
           </div>
+
+          <!-- Geri Al onay modalı -->
+          <div id="gerial-modal" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h5 class="mb-3"><b>Bu sevkiyatı geri almak istediğinize emin misiniz?</b></h5>
+            <form action="" method="POST" class="mt-3">
+              <input type="hidden" name="sevkiyatID" id="gerial-sevkiyatid" value="">
+              <div class="d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Vazgeç</button>
+                <button type="submit" name="faturasikesilenegerial" class="btn btn-primary">Geri Al</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="table-responsive mt-3">
+            <table class="table table-bordered td-vertical-align-middle">
+              <thead>
+                <tr style="background-color:#f8f9fa; color:#003566;">
+                  <th>Firma</th>
+                  <th>Ürünler</th>
+                  <th>Kilo</th>
+                  <th>Oluşturan</th>
+                  <th>Hazırlayan</th>
+                  <th>Faturalayan</th>
+                  <th>Tarih / Saat</th>
+                  <th>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+              <?php
+              if ($sevkiyatListesi) {
+                  $sevkTipleri = ['Müşteri Çağlayan', 'Müşteri Alkop', 'Tarafımızca sevk', 'Ambara tarafımızca sevk'];
+                  foreach ($sevkiyatListesi as $sevkiyat) {
+                      $sevkiyatID = (int) $sevkiyat['id'];
+                      $urunler = $sevkiyat['urunler'];
+                      $urunArray = explode(",", $urunler);
+                      $firmaId = $sevkiyat['firma_id'];
+                      $firmaAdi = getClientName($firmaId);
+                      $adetler = $sevkiyat['adetler'];
+                      $adetArray = explode(",", $adetler);
+                      $kilolar = $sevkiyat['kilolar'];
+                      $kiloArray = [];
+                      $toplamkg = 0;
+                      if (strpos($kilolar, ',') !== false) {
+                          $kiloArray = array_map('trim', explode(",", $kilolar));
+                          foreach ($kiloArray as $k) {
+                              if (is_numeric($k)) $toplamkg += (float) $k;
+                          }
+                      } else {
+                          $toplamkg = is_numeric($kilolar) ? (float) $kilolar : 0;
+                      }
+                      $fiyatlar = $sevkiyat['fiyatlar'];
+                      $fiyatArray = explode("-", $fiyatlar);
+                      $olusturan = getUsername($sevkiyat['olusturan']);
+                      $hazirlayan = getUsername($sevkiyat['hazirlayan']);
+                      $faturaci = getUsername($sevkiyat['faturaci']);
+                      $sevkTipi = (int) ($sevkiyat['sevk_tipi'] ?? 0);
+                      $aciklama = guvenlik($sevkiyat['aciklama'] ?? '');
+                      $saniye = $sevkiyat['saniye'];
+                      $tarih = getdmY($saniye);
+                      $saat = getHis($saniye);
+              ?>
+                <tr>
+                  <td class="text-truncate" style="max-width: 160px;" title="<?= htmlspecialchars($firmaAdi) ?>"><?= htmlspecialchars($firmaAdi) ?></td>
+                  <td>
+                    <button type="button" class="btn btn-outline-secondary btn-sm py-0 toggle-detail" data-target="detail-<?= $sevkiyatID ?>" aria-expanded="false">Ürünler</button>
+                  </td>
+                  <td><?= strpos($kilolar, ',') !== false ? $toplamkg : $kilolar ?></td>
+                  <td><?= htmlspecialchars($olusturan) ?></td>
+                  <td><?= htmlspecialchars($hazirlayan) ?></td>
+                  <td><?= htmlspecialchars($faturaci) ?></td>
+                  <td><?= $tarih ?> / <?= $saat ?></td>
+                  <td>
+                    <div class="d-flex flex-wrap gap-1">
+                      <button type="button" class="btn btn-primary btn-sm gerial-btn" title="Geri al" data-sevkiyatid="<?= $sevkiyatID ?>"><i class="fas fa-undo"></i></button>
+                      <a href="/sevkiyatformu/<?= $sevkiyatID ?>" target="_blank" class="btn btn-secondary btn-sm" title="Yazdır"><i class="fas fa-print"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr id="detail-<?= $sevkiyatID ?>" class="detail-row bg-light" style="display: none;">
+                  <td colspan="8" class="p-3">
+                    <div class="small">
+                      <table class="table table-sm table-bordered mb-2">
+                        <thead>
+                          <tr>
+                            <th>Ürün</th>
+                            <th>Cinsi</th>
+                            <th>Adet</th>
+                            <th>Kg</th>
+                            <th>Fiyat</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($urunArray as $key => $urunId) {
+                            $urun = getUrunInfo($urunId);
+                            if ($urun !== false) {
+                                $kgVal = (strpos($kilolar, ',') !== false && isset($kiloArray[$key])) ? $kiloArray[$key] : '';
+                                $fiyatVal = isset($fiyatArray[$key]) ? $fiyatArray[$key] . ' TL' : '';
+                        ?>
+                          <tr>
+                            <td><?= htmlspecialchars($urun['urun_adi']) ?></td>
+                            <td><?= htmlspecialchars(getCategoryShortName($urun['kategori_bir'])) ?></td>
+                            <td><?= htmlspecialchars($adetArray[$key] ?? '') ?></td>
+                            <td><?= $kgVal ?></td>
+                            <td><?= $fiyatVal ?></td>
+                          </tr>
+                        <?php
+                            }
+                        }
+                        ?>
+                        </tbody>
+                      </table>
+                      <div class="mb-1"><b>Toplam:</b> <?= (strpos($kilolar, ',') !== false ? $toplamkg : $kilolar) ?> KG</div>
+                      <div class="mb-1"><b>Sevk Tipi:</b> <?= $sevkTipleri[$sevkTipi] ?? '-' ?></div>
+                      <div><b>Açıklama:</b> <?= htmlspecialchars($aciklama) ?></div>
+                    </div>
+                  </td>
+                </tr>
+              <?php
+                  }
+              } else {
+              ?>
+                <tr>
+                  <td colspan="8" class="text-center text-muted">Arşivde sevkiyat bulunamadı.</td>
+                </tr>
+              <?php } ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-  </div>
+    </div>
+
+    <br/><br/><br/><br/><br/><br/>
 
     <?php include ROOT_PATH.'/template/script.php'; ?>
-
-</body>
+    <script>
+      (function() {
+        var menuToggle = document.getElementById('menuToggleBtn');
+        var sidebar = document.getElementById('sidebar');
+        var mainCol = document.getElementById('mainCol');
+        var closeSidebar = document.getElementById('closeSidebar');
+        if (menuToggle) menuToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('sidebar-open');
+          mainCol.classList.toggle('sidebar-open');
+        });
+        if (closeSidebar) closeSidebar.addEventListener('click', function() {
+          sidebar.classList.remove('sidebar-open');
+          mainCol.classList.remove('sidebar-open');
+        });
+        document.querySelectorAll('.toggle-detail').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var id = this.getAttribute('data-target');
+            var row = id ? document.getElementById(id) : null;
+            if (row) {
+              var show = row.style.display === 'none';
+              row.style.display = show ? 'table-row' : 'none';
+              this.setAttribute('aria-expanded', show ? 'true' : 'false');
+              this.textContent = show ? 'Ürünler ▲' : 'Ürünler';
+            }
+          });
+        });
+        document.querySelectorAll('.gerial-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            document.getElementById('gerial-sevkiyatid').value = this.dataset.sevkiyatid || '';
+            if (typeof openModal === 'function') openModal('gerial-modal');
+          });
+        });
+      })();
+    </script>
+  </body>
 </html>

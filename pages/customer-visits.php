@@ -34,7 +34,7 @@
                 $query = $db->prepare("INSERT INTO ziyaretler SET il = ?, ilce = ?, iskolu = ?, musteriismi = ?, yetkilikisi = ?, telefon = ?, ziyarettarihi = ?, planlanantarih = ?, acikadres = ?, ziyaretnotu = ?, saniye = ?, silik = ? ");
                 $insert = $query->execute(array($il,$ilce,$iskolu,$musteriismi,$yetkilikisi,$telefon,$ziyarettarihi,$planlanantarih,$acikadres,$ziyaretnotu,time(),'0'));
 
-                header("Location:/ziyaretler");
+                header("Location:/customer-visits");
                 exit();
 
             }
@@ -54,7 +54,7 @@
                 $query = $db->prepare("UPDATE ziyaretler SET il = ?, musteriismi = ?, yetkilikisi = ?, telefon = ?, ziyarettarihi = ?, planlanantarih = ?, acikadres = ?, ziyaretnotu = ?, saniye = ?, silik = ? WHERE id = ?");
                 $insert = $query->execute(array($il,$musteriismi,$yetkilikisi,$telefon,$ziyarettarihi,$planlanantarih,$acikadres,$ziyaretnotu,time(),'0',$ziyaretid));
 
-                header("Location:/ziyaretler"); exit();
+                header("Location:/customer-visits"); exit();
 
             }
 
@@ -65,7 +65,7 @@
                 $query = $db->prepare("UPDATE ziyaretler SET silik = ? WHERE id = ?");
                 $insert = $query->execute(array('1',$ziyaretid));
 
-                header("Location:/ziyaretler"); exit();
+                header("Location:/customer-visits"); exit();
 
             }
 
@@ -73,11 +73,11 @@
 
                 $iskoluadi = guvenlik($_POST['iskoluadi']);
 
-                $query = $db->prepare("INSERT INTO ziyaret_kategori SET adi = ?, saniye = ?, silik = ?, sirketid = ?");
+                $query = $db->prepare("INSERT INTO customer_visit_categories SET name = ?, date = ?, is_deleted = ?, company_id = ?");
 
-                $insert = $query->execute(array($iskoluadi,time(),'0',$user->company_id));
+                $insert = $query->execute(array($iskoluadi,date('Y-m-d'),0,$user->company_id));
 
-                header("Location:/ziyaretler"); exit();
+                header("Location:/customer-visits"); exit();
 
             }
 
@@ -87,11 +87,11 @@
 
                 $iskoluadi = guvenlik($_POST['iskoluadi']);
 
-                $query = $db->prepare("UPDATE ziyaret_kategori SET adi = ? WHERE id = ?"); 
+                $query = $db->prepare("UPDATE customer_visit_categories SET name = ? WHERE id = ?"); 
 
                 $guncelle = $query->execute(array($iskoluadi,$iskoluid));
 
-                header("Location:/ziyaretler"); exit();
+                header("Location:/customer-visits"); exit();
 
             }
 
@@ -99,11 +99,11 @@
 
                 $iskoluid = guvenlik($_POST['iskoluid']);
 
-                $query = $db->prepare("UPDATE ziyaret_kategori SET silik = ? WHERE id = ?"); 
+                $query = $db->prepare("UPDATE customer_visit_categories SET is_deleted = ? WHERE id = ?"); 
 
-                $guncelle = $query->execute(array('1',$iskoluid));
+                $guncelle = $query->execute(array(1,$iskoluid));
 
-                header("Location:/ziyaretler"); exit();
+                header("Location:/customer-visits"); exit();
 
             }
 
@@ -180,11 +180,11 @@
                   <select name="iskolu" id="iskolu" class="form-control">
                     <option value="0">Kategori</option>
                     <?php
-                      $ziyaret_kategori_list = $db->query("SELECT * FROM ziyaret_kategori WHERE silik = '0' ORDER BY adi ASC", PDO::FETCH_ASSOC);
+                      $ziyaret_kategori_list = $db->query("SELECT * FROM customer_visit_categories WHERE is_deleted = 0 ORDER BY name ASC", PDO::FETCH_ASSOC);
                       if ( $ziyaret_kategori_list->rowCount() ){
                         foreach( $ziyaret_kategori_list as $zkl ){
                           $iskolulisteid = guvenlik($zkl['id']);
-                          $iskolulisteadi = guvenlik($zkl['adi']);
+                          $iskolulisteadi = guvenlik($zkl['name']);
                     ?>
                           <option value="<?= $iskolulisteid; ?>"><?= $iskolulisteadi; ?></option>
                     <?php
@@ -258,11 +258,11 @@
                 </thead>
                 <tbody>
                 <?php
-                  $ziyaret_kategori_cek = $db->query("SELECT * FROM ziyaret_kategori WHERE silik = '0' ORDER BY adi ASC", PDO::FETCH_ASSOC);
+                  $ziyaret_kategori_cek = $db->query("SELECT * FROM customer_visit_categories WHERE is_deleted = 0 ORDER BY name ASC", PDO::FETCH_ASSOC);
                   if ( $ziyaret_kategori_cek->rowCount() ){
                     foreach( $ziyaret_kategori_cek as $zkc ){
                       $iskoluid = guvenlik($zkc['id']);
-                      $iskoluadi = guvenlik($zkc['adi']);
+                      $iskoluadi = guvenlik($zkc['name']);
                 ?>
                   <tr>
                     <td><?= $iskoluadi; ?></td>
@@ -380,8 +380,8 @@
                     $il = guvenlik($row['il']);
                     $ilce = guvenlik($row['ilce']);
                     $iskolu = guvenlik($row['iskolu']);
-                    $iskoluadicek = $db->query("SELECT * FROM ziyaret_kategori WHERE id = '{$iskolu}'")->fetch(PDO::FETCH_ASSOC);
-                    $iskoluadi = guvenlik($iskoluadicek['adi'] ?? null);
+                    $iskoluadicek = $db->query("SELECT * FROM customer_visit_categories WHERE id = '{$iskolu}'")->fetch(PDO::FETCH_ASSOC);
+                    $iskoluadi = guvenlik($iskoluadicek['name'] ?? null);
                     $musteriismi = guvenlik($row['musteriismi']);
                     $yetkilikisi = guvenlik($row['yetkilikisi']);
                     $telefon = guvenlik($row['telefon']);
@@ -392,8 +392,8 @@
               ?>
                 <tr>
                   <td><?= $il; ?></td>
-                  <td><a href="/ziyaretler?ilce=<?= $ilce; ?>"><?= $ilce; ?></a></td>
-                  <td><a href="/ziyaretler?iskolu=<?= $iskolu; ?>"><?= $iskoluadi; ?></a></td>
+                  <td><a href="/customer-visits?ilce=<?= $ilce; ?>"><?= $ilce; ?></a></td>
+                  <td><a href="/customer-visits?iskolu=<?= $iskolu; ?>"><?= $iskoluadi; ?></a></td>
                   <td style="max-width: 250px;">
                     <div class="text-truncate" style="max-width: 250px;"><?= $musteriismi; ?></div>
                   </td>

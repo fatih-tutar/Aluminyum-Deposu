@@ -169,7 +169,7 @@
 										<div class="col-6 my-2">
 											<a href="/profil/<?= $kullanici_id ?>">
                                                 <div class="dikey-ortala">
-                                                    <img src="files/profile/pp.png" alt="" style="width:60px; border-radius:50%;">
+                                                    <img src="/files/profile/pp.png" alt="" style="width:60px; border-radius:50%;">
 													<div>
 														<?= $kullanici_adi ?><br/><small><?= $kullanici_unvan ?></small>
 													</div>

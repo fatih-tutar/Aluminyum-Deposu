@@ -9,18 +9,19 @@
 
 		$urun_fabrika_id = guvenlik($_GET['id']);
 
-		$query = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$urun_fabrika_id}' AND silik = '0' ORDER BY siparis_id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+        // Son siparişi güvenli şekilde çek
+		$lastOrder = $db->query("SELECT * FROM siparis WHERE urun_fabrika_id = '{$urun_fabrika_id}' AND silik = '0' ORDER BY siparis_id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 
-		$hazirlayankisi = $query['hazirlayankisi'];
+		$hazirlayankisi = $lastOrder ? $lastOrder['hazirlayankisi'] : '';
+		$ilgilikisi     = $lastOrder ? $lastOrder['ilgilikisi']     : '';
 
 		$siparistarih = date("d-m-Y", time());
 
+        // Fabrika bilgisini güvenli şekilde çek
 		$factoryInfo = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}'")->fetch(PDO::FETCH_ASSOC);
 
-		$factoryId = $factoryInfo['id'];
-		$urun_fabrika_adi = $factoryInfo['name'];
-
-		$ilgilikisi = $query['ilgilikisi'];
+		$factoryId = $factoryInfo ? $factoryInfo['id']   : null;
+		$urun_fabrika_adi = $factoryInfo ? $factoryInfo['name'] : '';
 
 		if (isset($_POST['formkaydet'])) {
 
@@ -62,23 +63,31 @@
 		
 		<div class="row">
 			
-            <div class="col-md-4" style="text-align: center; padding: 5px;"><img src="files/img/doga.jpg" style="width: 170px; height: auto;"></div>
+            <div class="col-md-4" style="text-align: center; padding: 5px;">
+                <img src="/files/img/doga.jpg" style="width: 130px; height: auto;">
+            </div>
 
-			<div class="col-md-8" style="padding: 30px 0px 30px 0px; text-align: center;"><p style="color:green; font-size: 18px; font-weight: bolder;">Gerçekten ihtiyacınız yoksa bu mesajı kağıda basmayınız.</p></div>
+			<div class="col-md-8" style="padding: 15px 0px 15px 0px; text-align: center;">
+                <p style="color:green; font-size: 13px; font-weight: bolder; margin-bottom: 0;">
+                    Gerçekten ihtiyacınız yoksa bu mesajı kağıda basmayınız.
+                </p>
+            </div>
 
 		</div>
 
 		<div class="row">
 			
-            <div class="col-md-4" style="text-align: center;"><img src="files/company/<?= $company->photo; ?>" style="width: 370px; height: auto;"></div>
+            <div class="col-md-4" style="text-align: center;">
+                <img src="/files/company/<?= $company->photo; ?>" style="width: 240px; height: auto;">
+            </div>
 
 			<div class="col-md-8" style="text-align: center; padding: 0px 30px 0px 30px;">
 
-				<p style="font-size: 15px;">
+			<p style="font-size: 11px; line-height: 1.3;">
 			
-					<?= str_replace("\n", "<br/>", $company->description); ?>
+				<?= str_replace("\n", "<br/>", $company->description); ?>
 
-				</p>
+			</p>
 
 			</div>
 
@@ -150,7 +159,7 @@
 
 		</div>
 
-		<div class="row" style="padding: 20px;">
+		<div class="row my-2 mx-1">
 			
 			<div class="col-md-1 p-0"><b>S.No</b></div>
             <div class="col-md-1 p-0"><b>Kalıp</b></div>
@@ -159,7 +168,7 @@
 			<div class="col-md-1 p-0"><b>Adet</b></div>
 			<div class="col-md-2 p-0"><b>Paketleme Adedi</b></div>
             <div class="col-md-1 p-0"><b>Palet</b></div>
-            <div class="col-md-1 p-0"><b>Tahmini Kg</b></div>
+            <div class="col-md-1 p-0"><b>Tahmini <small>Kg</small></b></div>
 
 		</div>
 
@@ -241,7 +250,7 @@
 							<div class="col-1 p-0"><?= $urun_siparis_aded." adet "; ?></div>
 							<div class="col-2 p-0"><?= $packQuantity == 0 ? '---------------------' : $packQuantity." adetli sarılsın "; ?></div>
                             <div class="col-1 p-0"><?= $palet == 0 ? '-------' : $palet." palet "; ?></div>
-                            <div class="col-1 p-0"><?= number_format($kilo, 1, ',', '.')." KG"; ?></div>
+                            <div class="col-1 p-0"><?= number_format($kilo, 1, ',', '.')." <small>KG</small>"; ?></div>
 
 						</div>
 
@@ -255,15 +264,15 @@
 
         <hr/>
 
-        <div class="row" style="padding: 20px;">
+        <div class="row my-2 mx-1">
 
-            <div class="col-md-9" style="text-align:right; font-size:18px;"></div>
+            <div class="col-md-8"></div>
 
-            <div class="col-md-3" style="text-align:right; font-size:18px;"><b>Toplam Kilo : </b><b><?= number_format($toplamkilo, 1, ',', '.')." KG"; ?></b></div>
+            <div class="col-md-4" style="text-align:right; font-size:18px;"><b>Toplam Kilo : </b><b><?= number_format($toplamkilo, 1, ',', '.')." KG"; ?></b></div>
 
         </div>
 
-		<div class="row" style="padding: 20px;">
+		<div class="row my-2 mx-1">
 			
 			<div class="col-md-12">
 				

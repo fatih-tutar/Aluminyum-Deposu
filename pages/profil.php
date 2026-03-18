@@ -367,7 +367,7 @@
 		<div class="div4" style="padding:10px;">
 			<div class="row">
                 <div class="col-md-2 col-12" style="display:flex; justify-content:center; align-items:center;">
-                    <img src="files/<?= empty($profil_foto) ? 'profile/pp.png' : 'profile/'.$profil_foto ?>" alt="<?= $profil_adi ?> Profil Fotoğrafı" class="pp">
+                    <img src="/files/<?= empty($profil_foto) ? 'profile/pp.png' : 'profile/'.$profil_foto ?>" alt="<?= $profil_adi ?> Profil Fotoğrafı" class="pp">
 				</div>
 				<div class="col-md-5 col-7 pt-3 pe-0">
 					<h4><b><?= $profil_adi ?></b></h4>

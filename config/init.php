@@ -13,11 +13,7 @@
     $currentPage = basename($_SERVER['PHP_SELF']);
     $currentYear = date("Y");
 
-    $dbFile = __DIR__ . '/database.php';
-    if (!is_file($dbFile)) {
-        $dbFile = dirname(__DIR__) . '/functions/database.php';
-    }
-    include $dbFile;
+    include __DIR__ . '/database.php';
 	include __DIR__ . '/functions.php';
 
     $dbInstance = new Database();

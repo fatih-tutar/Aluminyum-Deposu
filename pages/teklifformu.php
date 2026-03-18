@@ -20,11 +20,13 @@ if($user->type == '0'){
     </script>
 </head>
 <body>
-<div class="container mt-5 p-4" style="background: white;">
+<div class="container-fluid mt-5 p-4" style="background: white;">
     <div class="row">
-        <div class="col-md-4" style="text-align: center;"><img src="files/company/<?= $company->photo; ?>" style="width: 350px; height: auto;"></div>
+        <div class="col-md-4" style="text-align: center;">
+            <img src="/files/company/<?= $company->photo; ?>" style="width: 240px; height: auto;">
+        </div>
         <div class="col-md-8" style="text-align: center; padding: 10px 30px 0px 30px;">
-            <p style="font-size: 14px;">
+            <p style="font-size: 11px; line-height: 1.3;">
                 <?= str_replace("\n", "<br/>", $company->description); ?>
             </p>
         </div>

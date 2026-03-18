@@ -247,64 +247,56 @@ if (!isLoggedIn()) {
 
         $urun_depo_uyari_adet = guvenlik($_POST['urun_depo_uyari_adet']);
 
-        $urun_eski_sira = guvenlik($_POST['urun_eski_sira']);
+        $urun_eski_sira = (int) guvenlik($_POST['urun_eski_sira']);
 
-        $urun_yeni_sira = guvenlik($_POST['urun_yeni_sira']);
+        $urun_yeni_sira = (int) guvenlik($_POST['urun_yeni_sira']);
 
         $packQuantity = guvenlik($_POST['pack_quantity']);
 
-        // SIRALAMA AYARI BURADA GÜNCELLEME İLE ALAKALI SIRALAMADAN BAŞKA BİR ŞEY YOK
+        // SIRALAMA AYARI: ürünün sırası değiştiyse, ilgili kategorideki
+        // tüm ürünlerin sıralamasını 1..N olacak şekilde yeniden düzenle.
+        if ($urun_eski_sira !== $urun_yeni_sira) {
+            // İlgili kategorideki tüm ürünleri mevcut sıraya göre çek
+            $products = $db->query("
+                SELECT urun_id 
+                FROM urun 
+                WHERE kategori_iki = '{$categoryId}' 
+                  AND sirketid = '{$user->company_id}' 
+                  AND silik = '0'
+                ORDER BY urun_sira ASC, urun_id ASC
+            ")->fetchAll(PDO::FETCH_COLUMN);
 
-        if ($urun_eski_sira < $urun_yeni_sira) {
+            if ($products) {
+                // Mevcut ürünün listedeki index'ini bul
+                $currentIndex = array_search($productId, $products, false);
 
-            $kayacakurunsayisi = $urun_yeni_sira - $urun_eski_sira;
+                if ($currentIndex !== false) {
+                    // Mevcut ürünü listeden çıkar
+                    array_splice($products, $currentIndex, 1);
 
-            $kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $urun_eski_sira,$kayacakurunsayisi", PDO::FETCH_ASSOC);
+                    // Yeni index (0-based) hesapla ve sınırla
+                    $newIndex = max(0, min(count($products), $urun_yeni_sira - 1));
 
-            if ( $kaycaklaricek->rowCount() ){
+                    // Ürünü yeni konuma ekle
+                    array_splice($products, $newIndex, 0, [$productId]);
 
-                foreach( $kaycaklaricek as $kuc ){
-
-                    $kayan_urun_id = $kuc['urun_id'];
-
-                    $kayan_urun_sira = $kuc['urun_sira'];
-
-                    $kayan_urun_sira--;
-
-                    $sira_guncelle = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?");
-
-                    $kaymaguncelle = $sira_guncelle->execute(array($kayan_urun_sira,$kayan_urun_id));
-
+                    // Veritabanında sıraları güncelle
+                    $db->beginTransaction();
+                    try {
+                        $stmt = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?");
+                        foreach ($products as $index => $id) {
+                            $stmt->execute([$index + 1, $id]);
+                        }
+                        $db->commit();
+                        // Sonraki UPDATE için güncel sıra değerini kullan
+                        $urun_yeni_sira = $newIndex + 1;
+                    } catch (Exception $e) {
+                        $db->rollBack();
+                        // Hata durumunda eski sırayı koru
+                        $urun_yeni_sira = $urun_eski_sira;
+                    }
                 }
-
             }
-
-        }elseif ($urun_eski_sira > $urun_yeni_sira) {
-
-            $kayacakurunsayisi = $urun_eski_sira - $urun_yeni_sira;
-
-            $bionce = $urun_yeni_sira - 1;
-
-            $kaycaklaricek = $db->query("SELECT * FROM urun WHERE kategori_iki = '{$categoryId}' AND sirketid = '{$user->company_id}' ORDER BY urun_sira ASC LIMIT $bionce,$kayacakurunsayisi", PDO::FETCH_ASSOC);
-
-            if ( $kaycaklaricek->rowCount() ){
-
-                foreach( $kaycaklaricek as $kuc ){
-
-                    $kayan_urun_id = $kuc['urun_id'];
-
-                    $kayan_urun_sira = $kuc['urun_sira'];
-
-                    $kayan_urun_sira++;
-
-                    $sadece = $db->prepare("UPDATE urun SET urun_sira = ? WHERE urun_id = ?");
-
-                    $benzeme = $sadece->execute(array($kayan_urun_sira,$kayan_urun_id));
-
-                }
-
-            }
-
         }
 
         // SIRALAMA AYARI BİTİŞ

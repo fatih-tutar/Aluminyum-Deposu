@@ -353,7 +353,7 @@
                                         <a href="/teklif/<?= $client->id; ?>" target="_blank">
                                             <button class="btn btn-primary btn-sm mb-3">%20 KDV'li Teklif Formuna Git</button>
                                         </a>
-                                        <a href="/teklif/<?= $client->id; ?>&withholding=true" target="_blank">
+                                        <a href="/teklif/<?= $client->id; ?>?withholding=true" target="_blank">
                                             <button class="btn btn-secondary btn-sm mb-3">Tevkifatlı Teklif Formuna Git</button>
                                         </a>
                                         <?php } ?>

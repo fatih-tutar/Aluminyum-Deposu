@@ -16,7 +16,7 @@
             foreach( $query as $row ){
                 $kategori_id = $row['id'];
                 $kategori_adi = $row['name'];
-                $resim = "files/categories/".$row['image'];
+                $resim = "/files/categories/".$row['image'];
                 $i++;
     ?>
             <div class="card sidebar-item">
@@ -37,7 +37,7 @@
                 foreach( $cek as $wor ){
                     $alt_kategori_id = $wor['id'];
                     $alt_kategori_adi = $wor['name'];
-                    $alt_kategori_resim = "files/categories/".$wor['image'];
+                    $alt_kategori_resim = "/files/categories/".$wor['image'];
         ?>		
                     <a href="/product/<?= $alt_kategori_id; ?>">
                         <div class="row ps-1">
