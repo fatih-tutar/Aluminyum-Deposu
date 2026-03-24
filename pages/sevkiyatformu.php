@@ -31,7 +31,7 @@
         $hazirlayan = guvenlik($sevkiyat['hazirlayan']);
         $faturaci = guvenlik($sevkiyat['faturaci']);
         $sevkTipi = guvenlik($sevkiyat['sevk_tipi']);
-        $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
+        $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk','Kargo Teslim'];
         $aciklama = guvenlik($sevkiyat['aciklama']);
         $saniye = guvenlik($sevkiyat['saniye']);
         $tarih = getdmY($saniye);

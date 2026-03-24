@@ -1578,6 +1578,7 @@ if (!isLoggedIn()) {
                                                 <option value="1">Müşteri Alkop</option>
                                                 <option value="2">Tarafımızca sevk</option>
                                                 <option value="3">Ambara tarafımızca sevk</option>
+                                                <option value="4">Kargo Teslim</option>
 
                                             </select>
 

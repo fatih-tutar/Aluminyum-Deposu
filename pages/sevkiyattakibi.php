@@ -202,6 +202,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                 <option value="1">Müşteri Alkop</option>
                 <option value="2">Tarafımızca sevk</option>
                 <option value="3">Ambara tarafımızca sevk</option>
+                <option value="4">Kargo Teslim</option>
             </select>
         </div>
         <div>
@@ -252,7 +253,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
             $olusturan = guvenlik($alinanSiparis->olusturan);
             $hazirlayan = guvenlik($alinanSiparis->hazirlayan);
             $sevkTipi = guvenlik($alinanSiparis->sevk_tipi);
-            $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
+            $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk','Kargo Teslim'];
             $arac_id = guvenlik($alinanSiparis->arac_id);
             $filtered = array_filter($araclar, fn($arac) => $arac->id == $arac_id);
             $arac = reset($filtered);
@@ -261,7 +262,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
             $saniye = guvenlik($alinanSiparis->saniye);
             $tarih = getdmY($saniye);
             ?>
-            <div class="<?= $sevkTipi == '0' ? 'sevkCardDarkBlue' : 'sevkCardBlue' ?> p-2 pb-2 pb-sm-0">
+            <div class="<?= ($sevkTipi == '0' || $sevkTipi == '4') ? 'sevkCardDarkBlue' : 'sevkCardBlue' ?> p-2 pb-2 pb-sm-0">
                 <form action="" method="POST">
                     <a href="#" onclick="return false" onmousedown="javascript:ackapa4('alinan-siparis-<?= $sevkiyatID ?>');">
                         <div class="row">
@@ -380,7 +381,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
             $olusturan = guvenlik($hazirlananSiparis->olusturan);
             $hazirlayan = guvenlik($hazirlananSiparis->hazirlayan);
             $sevkTipi = guvenlik($hazirlananSiparis->sevk_tipi);
-            $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
+            $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk','Kargo Teslim'];
             $arac_id = guvenlik($hazirlananSiparis->arac_id);
             $filtered = array_filter($araclar, fn($arac) => $arac->id == $arac_id);
             $arac = reset($filtered);
@@ -389,7 +390,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
             $saniye = guvenlik($hazirlananSiparis->saniye);
             $tarih = getdmY($saniye);
             ?>
-            <div class="sevkCardYellow p-2">
+            <div class="<?= ($sevkTipi == '0' || $sevkTipi == '4') ? 'sevkCardDarkBlue' : 'sevkCardYellow' ?> p-2">
                 <form action="" method="POST">
                     <a href="#" onclick="return false" onmousedown="javascript:ackapa4('hazirlanan-siparis-<?= $sevkiyatID ?>');">
                         <div class="row">
@@ -502,7 +503,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
             $hazirlayan = guvenlik($faturasiKesilen->hazirlayan);
             $faturaci = guvenlik($faturasiKesilen->faturaci);
             $sevkTipi = guvenlik($faturasiKesilen->sevk_tipi);
-            $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk'];
+            $sevkTipleri = ['Müşteri Çağlayan','Müşteri Alkop','Tarafımızca sevk','Ambara tarafımızca sevk','Kargo Teslim'];
             $arac_id = guvenlik($faturasiKesilen->arac_id);
             $stmt = $db->prepare("SELECT * FROM vehicles WHERE id = :id");
             $stmt->execute(['id' => $arac_id]);
@@ -512,7 +513,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
             $saniye = guvenlik($faturasiKesilen->saniye);
             $tarih = getdmY($saniye);
             ?>
-            <div class="sevkCardGreen p-2">
+            <div class="<?= ($sevkTipi == '0' || $sevkTipi == '4') ? 'sevkCardDarkBlue' : 'sevkCardGreen' ?> p-2">
                 <form action="" method="POST">
                     <a href="#" onclick="return false" onmousedown="javascript:ackapa4('faturali-siparis-<?= $sevkiyatID ?>');">
                         <div class="row">
