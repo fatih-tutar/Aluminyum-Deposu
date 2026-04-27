@@ -271,7 +271,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                         </div>
                     </a>
                     <div id="alinan-siparis-<?= $sevkiyatID ?>" style="display:none;">
-                        <hr class="my-1" style="border-top:1px solid white;"/>
+                        <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                         <div class="d-none d-sm-block">
                             <div class="row">
                                 <div class="col-md-4"><b>Ürün</b></div>
@@ -280,7 +280,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                                 <div class="col-md-2"><b>Kg</b></div>
                                 <div class="col-md-2"><b>Fiyat</b></div>
                             </div>
-                            <hr class="my-1" style="border-top:1px solid white;"/>
+                            <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                         </div>
                         <?php
                         $totalWeight = 0;
@@ -307,7 +307,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                                         <button type="submit" name="sevkiyattanurunsil" value="<?= $malzemeAdeti ?>" style="border-style:none; background-color:#17a2b8;">Sil</button>
                                     </div>
                                 </div>
-                                <hr class="my-1" style="border-top:1px solid white;"/>
+                                <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                                 <?php
                                 $malzemeAdeti++;
                             }
@@ -318,7 +318,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                             <div class="col-md-2 col-4"><b>Toplam</b></div>
                             <div class="col-md-4 col-8"><input type="text" class="form-control form-control-sm" placeholder="TOPLAM KG" name="kilolar" value="<?= strpos($kilolar,",") ? $toplamkg : $kilolar ?>"></div>
                         </div>
-                        <hr class="my-1" style="border-top:1px solid white;"/>
+                        <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                         <div class="row">
                             <div class="col-12"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
                         </div>
@@ -399,7 +399,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                         </div>
                     </a>
                     <div id="hazirlanan-siparis-<?= $sevkiyatID ?>" style="display:none;">
-                        <hr class="my-1" style="border-top:1px solid white;"/>
+                        <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                         <div class="d-none d-sm-block">
                             <div class="row">
                                 <div class="col-md-4"><b>Ürün</b></div>
@@ -408,7 +408,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                                 <div class="col-md-2"><b>Kg</b></div>
                                 <div class="col-md-2"><b>Fiyat</b></div>
                             </div>
-                            <hr class="my-1" style="border-top:1px solid white;"/>
+                            <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                         </div>
                         <?php
                         $totalWeight = 0;
@@ -430,7 +430,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                                     <div class="col-4 d-block d-sm-none">Fiyat : </div>
                                     <div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
                                 </div>
-                                <hr class="my-1" style="border-top:1px solid white;"/>
+                                <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                                 <?php
                                 $malzemeAdeti++;
                             }
@@ -441,7 +441,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                             <div class="col-md-2 col-4"><b>Toplam</b></div>
                             <div class="col-md-4 col-4"><?= strpos($kilolar,",") ? $toplamkg.' KG' : $kilolar.' KG' ?></div>
                         </div>
-                        <hr class="my-1" style="border-top:1px solid white;"/>
+                        <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                         <div class="row">
                             <div class="col-12"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
                         </div>
@@ -522,7 +522,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                         </div>
                     </a>
                     <div id="faturali-siparis-<?= $sevkiyatID ?>" style="display:none;">
-                        <hr class="my-1" style="border-top:1px solid white;"/>
+                        <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                         <div class="d-none d-sm-block">
                             <div class="row">
                                 <div class="col-md-4"><b>Ürün</b></div>
@@ -531,7 +531,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                                 <div class="col-md-2"><b>Kg</b></div>
                                 <div class="col-md-2"><b>Fiyat</b></div>
                             </div>
-                            <hr class="my-1" style="border-top:1px solid white;"/>
+                            <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                         </div>
                         <?php
                         $totalWeight = 0;
@@ -553,7 +553,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                                     <div class="col-4 d-block d-sm-none">Fiyat : </div>
                                     <div class="col-md-2 col-8 px-3 px-sm-0"><?= $fiyatArray[$key].' TL' ?></div>
                                 </div>
-                                <hr class="my-1" style="border-top:1px solid white;"/>
+                                <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                                 <?php
                                 $malzemeAdeti++;
                             }
@@ -564,7 +564,7 @@ $clients = $db->query("SELECT * FROM clients WHERE is_deleted = '0'")->fetchAll(
                             <div class="col-md-2 col-4"><b>Toplam</b></div>
                             <div class="col-md-4 col-4"><?= strpos($kilolar,",") ? $toplamkg.' KG' : $kilolar.' KG' ?></div>
                         </div>
-                        <hr class="my-1" style="border-top:1px solid white;"/>
+                        <hr class="my-1" style="border:0; border-top:1px solid #000; opacity:1;"/>
                         <div class="row">
                             <div class="col-12"><b>Siparişi Oluşturan : </b><?= getUsername($olusturan) ?></div>
                         </div>

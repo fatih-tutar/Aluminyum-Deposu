@@ -1,6 +1,11 @@
 <?php 
 	require_once __DIR__.'/../config/init.php';
 
+    $vehiclesUploadDirFs = ROOT_PATH . '/files/vehicles/';
+    if (!is_dir($vehiclesUploadDirFs)) {
+        @mkdir($vehiclesUploadDirFs, 0755, true);
+    }
+
     if (isset($_POST['add_vehicle'])) {
         // Formdan gelen verileri alalım
         $name = $_POST['name'];
@@ -19,33 +24,33 @@
         $insurancePdf = '';
         $registrationPdf = '';
 
-        // Dosyaların kaydedileceği klasör
-        $uploadDir = 'files/vehicles/';
+        // Dosyaların kaydedileceği klasör (mutlak yol — CWD'ye bağlı kalma)
+        $uploadDir = $vehiclesUploadDirFs;
 
         // Kasko PDF dosyası yüklendiyse
-        if (isset($_FILES['casco_pdf']) && $_FILES['casco_pdf']['error'] == 0) {
+        if (isset($_FILES['casco_pdf']) && $_FILES['casco_pdf']['error'] == UPLOAD_ERR_OK) {
           $cascoFileName = uniqid() . "_" . basename($_FILES['casco_pdf']['name']);
           $cascoTarget   = $uploadDir . $cascoFileName;
-          if (move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $cascoTarget)) {
+          if (is_uploaded_file($_FILES['casco_pdf']['tmp_name']) && move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $cascoTarget)) {
               // Veritabanında sadece dosya adını tut
               $cascoPdf = $cascoFileName;
           }
         }
 
         // Sigorta PDF dosyası yüklendiyse
-        if (isset($_FILES['insurance_pdf']) && $_FILES['insurance_pdf']['error'] == 0) {
+        if (isset($_FILES['insurance_pdf']) && $_FILES['insurance_pdf']['error'] == UPLOAD_ERR_OK) {
           $insuranceFileName = uniqid() . "_" . basename($_FILES['insurance_pdf']['name']);
           $insuranceTarget   = $uploadDir . $insuranceFileName;
-          if (move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $insuranceTarget)) {
+          if (is_uploaded_file($_FILES['insurance_pdf']['tmp_name']) && move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $insuranceTarget)) {
               $insurancePdf = $insuranceFileName;
           }
         }
 
         // Ruhsat PDF dosyası yüklendiyse
-        if (isset($_FILES['registration_pdf']) && $_FILES['registration_pdf']['error'] == 0) {
+        if (isset($_FILES['registration_pdf']) && $_FILES['registration_pdf']['error'] == UPLOAD_ERR_OK) {
             $registrationFileName = uniqid() . "_" . basename($_FILES['registration_pdf']['name']);
             $registrationTarget   = $uploadDir . $registrationFileName;
-            if (move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $registrationTarget)) {
+            if (is_uploaded_file($_FILES['registration_pdf']['tmp_name']) && move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $registrationTarget)) {
                 $registrationPdf = $registrationFileName;
             }
         }
@@ -84,73 +89,54 @@
         $existing->execute([$id]);
         $existingFiles = $existing->fetch(PDO::FETCH_ASSOC) ?: ['casco_pdf' => null, 'insurance_pdf' => null, 'registration_pdf' => null];
 
-        // Dosya yükleme işlemleri
+        // Dosya yükleme işlemleri (mutlak dosya yolu)
         $uploads = [];
-        $upload_dir = 'files/vehicles/';
+        $upload_dir = $vehiclesUploadDirFs;
 
-        if (!empty($_FILES['casco_pdf']['name'])) {
+        $resolveVehiclePdfPath = function ($stored) use ($upload_dir) {
+            if (empty($stored)) {
+                return null;
+            }
+            if (strpos($stored, 'files/') === 0) {
+                return ROOT_PATH . '/' . $stored;
+            }
+            return $upload_dir . basename($stored);
+        };
+
+        if (isset($_FILES['casco_pdf']) && $_FILES['casco_pdf']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['casco_pdf']['tmp_name'])) {
           $unique_name = uniqid() . '-' . basename($_FILES['casco_pdf']['name']);
           $target      = $upload_dir . $unique_name;
           if (move_uploaded_file($_FILES['casco_pdf']['tmp_name'], $target)) {
-              // eski dosyayı sil
               $old = $existingFiles['casco_pdf'] ?? '';
-              if (!empty($old)) {
-                  $candidates = [];
-                  if (strpos($old, 'files/') === 0) {
-                      $candidates[] = $old;
-                  }
-                  $candidates[] = $upload_dir . $old;
-                  foreach ($candidates as $path) {
-                      if (file_exists($path)) {
-                          @unlink($path);
-                          break;
-                      }
-                  }
+              $oldPath = $resolveVehiclePdfPath($old);
+              if ($oldPath && is_file($oldPath)) {
+                  @unlink($oldPath);
               }
-              // sadece dosya adını sakla
               $uploads['casco_pdf'] = $unique_name;
           }
         }
 
-        if (!empty($_FILES['insurance_pdf']['name'])) {
+        if (isset($_FILES['insurance_pdf']) && $_FILES['insurance_pdf']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['insurance_pdf']['tmp_name'])) {
           $unique_name = uniqid() . '-' . basename($_FILES['insurance_pdf']['name']);
           $target      = $upload_dir . $unique_name;
           if (move_uploaded_file($_FILES['insurance_pdf']['tmp_name'], $target)) {
               $old = $existingFiles['insurance_pdf'] ?? '';
-              if (!empty($old)) {
-                  $candidates = [];
-                  if (strpos($old, 'files/') === 0) {
-                      $candidates[] = $old;
-                  }
-                  $candidates[] = $upload_dir . $old;
-                  foreach ($candidates as $path) {
-                      if (file_exists($path)) {
-                          @unlink($path);
-                          break;
-                      }
-                  }
+              $oldPath = $resolveVehiclePdfPath($old);
+              if ($oldPath && is_file($oldPath)) {
+                  @unlink($oldPath);
               }
               $uploads['insurance_pdf'] = $unique_name;
           }
         }
 
-        if (!empty($_FILES['registration_pdf']['name'])) {
+        if (isset($_FILES['registration_pdf']) && $_FILES['registration_pdf']['error'] === UPLOAD_ERR_OK && is_uploaded_file($_FILES['registration_pdf']['tmp_name'])) {
           $unique_name = uniqid() . '-' . basename($_FILES['registration_pdf']['name']);
           $target      = $upload_dir . $unique_name;
           if (move_uploaded_file($_FILES['registration_pdf']['tmp_name'], $target)) {
               $old = $existingFiles['registration_pdf'] ?? '';
-              if (!empty($old)) {
-                  $candidates = [];
-                  if (strpos($old, 'files/') === 0) {
-                      $candidates[] = $old;
-                  }
-                  $candidates[] = $upload_dir . $old;
-                  foreach ($candidates as $path) {
-                      if (file_exists($path)) {
-                          @unlink($path);
-                          break;
-                      }
-                  }
+              $oldPath = $resolveVehiclePdfPath($old);
+              if ($oldPath && is_file($oldPath)) {
+                  @unlink($oldPath);
               }
               $uploads['registration_pdf'] = $unique_name;
           }
@@ -307,35 +293,29 @@
                   <td><?= guvenlik((new DateTime($vehicle->inspection_date))->format('d/m/Y')) ?></td>
                   <td>
                     <?php
-                      $cascoValue = $vehicle->casco_pdf;
-                      $cascoUrl = $cascoValue
-                        ? (strpos($cascoValue, 'files/') === 0 ? $cascoValue : 'files/vehicles/' . $cascoValue)
-                        : '';
+                      $cascoFile = $vehicle->casco_pdf ? basename(str_replace('\\', '/', $vehicle->casco_pdf)) : '';
+                      $cascoUrl = $cascoFile !== '' ? '/files/vehicles/' . rawurlencode($cascoFile) : '';
                     ?>
                     <?php if ($cascoUrl): ?>
-                      <a href="<?= guvenlik($cascoUrl) ?>" target="_blank">Görüntüle</a>
+                      <a href="<?= htmlspecialchars($cascoUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Görüntüle</a>
                     <?php endif; ?>
                   </td>
                   <td>
                     <?php
-                      $insuranceValue = $vehicle->insurance_pdf;
-                      $insuranceUrl = $insuranceValue
-                        ? (strpos($insuranceValue, 'files/') === 0 ? $insuranceValue : 'files/vehicles/' . $insuranceValue)
-                        : '';
+                      $insuranceFile = $vehicle->insurance_pdf ? basename(str_replace('\\', '/', $vehicle->insurance_pdf)) : '';
+                      $insuranceUrl = $insuranceFile !== '' ? '/files/vehicles/' . rawurlencode($insuranceFile) : '';
                     ?>
                     <?php if ($insuranceUrl): ?>
-                      <a href="<?= guvenlik($insuranceUrl) ?>" target="_blank">Görüntüle</a>
+                      <a href="<?= htmlspecialchars($insuranceUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Görüntüle</a>
                     <?php endif; ?>
                   </td>
                   <td>
                     <?php
-                      $registrationValue = $vehicle->registration_pdf;
-                      $registrationUrl = $registrationValue
-                        ? (strpos($registrationValue, 'files/') === 0 ? $registrationValue : 'files/vehicles/' . $registrationValue)
-                        : '';
+                      $registrationFile = $vehicle->registration_pdf ? basename(str_replace('\\', '/', $vehicle->registration_pdf)) : '';
+                      $registrationUrl = $registrationFile !== '' ? '/files/vehicles/' . rawurlencode($registrationFile) : '';
                     ?>
                     <?php if ($registrationUrl): ?>
-                      <a href="<?= guvenlik($registrationUrl) ?>" target="_blank">Görüntüle</a>
+                      <a href="<?= htmlspecialchars($registrationUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Görüntüle</a>
                     <?php endif; ?>
                   </td>
                   <td><?= guvenlik($vehicle->description) ?></td>

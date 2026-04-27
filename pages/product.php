@@ -1874,22 +1874,32 @@ if (!isLoggedIn()) {
                                 let factoryId = this.value;
                                 let productId = this.dataset.productId;
 
-                                console.log(factoryId);
-
                                 // aynı form içindeki input'u bul
                                 let form = this.closest("form");
-                                let moldInput = form.querySelector(".moldNumberInput");
+                                let moldInput = form ? form.querySelector(".moldNumberInput") : null;
+                                if (!moldInput) {
+                                    return;
+                                }
 
-                                fetch("get-mold-number.php", {
+                                // Göreli URL /product/123 altında /product/get-mold-number.php'ye gider ve 404 olur; kök mutlak yol kullan.
+                                fetch("/get-mold-number.php", {
                                     method: "POST",
                                     headers: {
                                         "Content-Type": "application/x-www-form-urlencoded"
                                     },
-                                    body: "product_id=" + productId + "&factory_id=" + factoryId
+                                    body: "product_id=" + encodeURIComponent(productId) + "&factory_id=" + encodeURIComponent(factoryId)
                                 })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        moldInput.value = data.number || "";
+                                    .then(function (response) {
+                                        if (!response.ok) {
+                                            throw new Error("Kalıp bilgisi alınamadı");
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(function (data) {
+                                        moldInput.value = (data && data.number) ? data.number : "";
+                                    })
+                                    .catch(function () {
+                                        moldInput.value = "";
                                     });
 
                             });

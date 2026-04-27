@@ -22,6 +22,7 @@
     // Fabrika bilgisini güvenli şekilde çek
 	$factoryRow = $db->query("SELECT * FROM factories WHERE id = '{$urun_fabrika_id}'")->fetch(PDO::FETCH_ASSOC);
 	$urun_fabrika_adi = $factoryRow ? $factoryRow['name'] : '';
+	$factoryId = $factoryRow ? (int) $factoryRow['id'] : (int) $urun_fabrika_id;
 
     if($user->type != '3'){
 
@@ -160,15 +161,19 @@
 
 		<div class="row" style="padding: 20px;">
 			
-			<div class="col-md-1"><b>S.No</b></div>
+			<div class="col-md-1 p-0"><b>S.No</b></div>
 
-			<div class="col-md-3"><b>Malzemenin Cinsi</b></div>
+			<div class="col-md-1 p-0"><b>Kalıp</b></div>
 
-			<div class="col-md-2"><b>Boy</b></div>
+			<div class="col-md-2 p-0"><b>Malzemenin Cinsi</b></div>
 
-			<div class="col-md-2"><b>Miktar Adet</b></div>
+			<div class="col-md-2 p-0"><b>Boy</b></div>
 
-			<div class="col-md-2"><b>Palet Adet</b></div>
+			<div class="col-md-2 p-0"><b>Miktar Adet</b></div>
+
+			<div class="col-md-2 p-0"><b>Palet Adet</b></div>
+
+			<div class="col-md-2 p-0"><b>Kategori</b></div>
 
 		</div>
 
@@ -228,23 +233,27 @@
 
                     $palet = $row['palet'];
 
+					$moldNumber = getMoldNumber($urun_id, $factoryId);
+
 			?>
 
 						<hr style="border:1px black solid;" />
 
 						<div class="row" style="padding: 20px;">
 				
-							<div class="col-md-1"><?= $a; ?></div>
+							<div class="col-md-1 p-0"><?= $a; ?></div>
 
-							<div class="col-md-3"><?= $urun_adi." ".$kategori_iki_adi; ?></div>
+							<div class="col-md-1 p-0"><?= $moldNumber ? ($moldNumber->number ?? '') : ''; ?></div>
 
-							<div class="col-2"><?= $siparisboy." boyunda "; ?></div>
+							<div class="col-md-2 p-0"><?= $urun_adi." ".$kategori_iki_adi; ?></div>
 
-							<div class="col-2"><?= $urun_siparis_aded." adet "; ?></div>
+							<div class="col-md-2 p-0"><?= $siparisboy." boyunda "; ?></div>
 
-							<div class="col-2"><?= $palet == 0 ? '-------' : $palet." palet "; ?></div>
+							<div class="col-md-2 p-0"><?= $urun_siparis_aded." adet "; ?></div>
 
-							<div class="col-2"><?= $kategori_bir_adi; ?></div>
+							<div class="col-md-2 p-0"><?= $palet == 0 ? '-------' : $palet." palet "; ?></div>
+
+							<div class="col-md-2 p-0"><?= $kategori_bir_adi; ?></div>
 
 						</div>
 

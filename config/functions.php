@@ -740,22 +740,27 @@ function backupDatabaseSave($db, $dbInstance)
     }
     $backupFile = $backupDir . "/backup_" . date("Y-m-d_H-i-s") . ".sql";
     $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
-    $sqlDump = "-- Veritabanı Yedeği: {$config['dbname']}\n-- Tarih: " . date("Y-m-d H:i:s") . "\n\n";
-    foreach ($tables as $table) {
-        $createTableStmt = $db->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
-        $sqlDump .= "DROP TABLE IF EXISTS `$table`;\n" . $createTableStmt['Create Table'] . ";\n\n";
-        $rows = $db->query("SELECT * FROM `$table`")->fetchAll(PDO::FETCH_ASSOC);
-        if ($rows) {
-            foreach ($rows as $row) {
-                $values = array_map([$db, 'quote'], array_values($row));
-                $sqlDump .= "INSERT INTO `$table` VALUES (" . implode(", ", $values) . ");\n";
-            }
-            $sqlDump .= "\n";
-        }
-    }
-    if (file_put_contents($backupFile, $sqlDump) === false) {
+
+    $fp = fopen($backupFile, 'wb');
+    if ($fp === false) {
         return false;
     }
+
+    fwrite($fp, "-- Veritabanı Yedeği: {$config['dbname']}\n-- Tarih: " . date("Y-m-d H:i:s") . "\n\n");
+
+    foreach ($tables as $table) {
+        $createTableStmt = $db->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
+        fwrite($fp, "DROP TABLE IF EXISTS `$table`;\n" . $createTableStmt['Create Table'] . ";\n\n");
+
+        $stmt = $db->query("SELECT * FROM `$table`");
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $values = array_map([$db, 'quote'], array_values($row));
+            fwrite($fp, "INSERT INTO `$table` VALUES (" . implode(", ", $values) . ");\n");
+        }
+        fwrite($fp, "\n");
+    }
+
+    fclose($fp);
 
     return true;
 }
@@ -768,27 +773,29 @@ function backupDatabaseDownload($db, $dbInstance)
     $zipFile = tempnam(sys_get_temp_dir(), 'backup_') . ".zip"; // Geçici bir ZIP dosyası oluşturuluyor
     $zip = new ZipArchive();
 
-    // Veritabanı yedeğini al
+    // Veritabanı yedeğini satır satır yaz (bellek taşmasını önlemek için)
     $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
-    $sqlDump = "-- Veritabanı Yedeği: {$config['dbname']}\n-- Tarih: " . date("Y-m-d H:i:s") . "\n\n";
+    $tempSqlFile = tempnam(sys_get_temp_dir(), 'backup_sql_') . ".sql";
+    $fp = fopen($tempSqlFile, 'wb');
+    if ($fp === false) {
+        echo "SQL dosyası oluşturulamadı!";
+        return;
+    }
+
+    fwrite($fp, "-- Veritabanı Yedeği: {$config['dbname']}\n-- Tarih: " . date("Y-m-d H:i:s") . "\n\n");
 
     foreach ($tables as $table) {
         $createTableStmt = $db->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
-        $sqlDump .= "DROP TABLE IF EXISTS `$table`;\n" . $createTableStmt['Create Table'] . ";\n\n";
+        fwrite($fp, "DROP TABLE IF EXISTS `$table`;\n" . $createTableStmt['Create Table'] . ";\n\n");
 
-        $rows = $db->query("SELECT * FROM `$table`")->fetchAll(PDO::FETCH_ASSOC);
-        if ($rows) {
-            foreach ($rows as $row) {
-                $values = array_map([$db, 'quote'], array_values($row));
-                $sqlDump .= "INSERT INTO `$table` VALUES (" . implode(", ", $values) . ");\n";
-            }
-            $sqlDump .= "\n";
+        $stmt = $db->query("SELECT * FROM `$table`");
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $values = array_map([$db, 'quote'], array_values($row));
+            fwrite($fp, "INSERT INTO `$table` VALUES (" . implode(", ", $values) . ");\n");
         }
+        fwrite($fp, "\n");
     }
-
-    // SQL yedeğini geçici bir dosyaya yaz
-    $tempSqlFile = sys_get_temp_dir() . "/backup.sql";
-    file_put_contents($tempSqlFile, $sqlDump);
+    fclose($fp);
 
     // ZIP dosyasını oluştur ve SQL dosyasını ekle
     if ($zip->open($zipFile, ZipArchive::CREATE) === TRUE) {
@@ -796,6 +803,7 @@ function backupDatabaseDownload($db, $dbInstance)
         $zip->close();
         unlink($tempSqlFile); // SQL dosyasını geçici dosyadan sil
     } else {
+        @unlink($tempSqlFile);
         echo "ZIP dosyası oluşturulamadı!";
         return;
     }
