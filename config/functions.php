@@ -768,21 +768,26 @@ function backupDatabaseSave($db, $dbInstance)
 function backupDatabaseDownload($db, $dbInstance)
 {
     $config = ['dbname' => $dbInstance->getDbConfig()['dbname']];
+    // Dosya adı: kısa önek + tarih + saat:dakika (saniye yok)
+    $namePrefix = 'al_depo_db_';
+    $downloadName = $namePrefix . date('Y-m-d_Hi') . '.sql';
 
-    // Yedekleme dosyasını kaydetme işlemini kaldırdık, sadece indirme işlemi yapılacak
-    $zipFile = tempnam(sys_get_temp_dir(), 'backup_') . ".zip"; // Geçici bir ZIP dosyası oluşturuluyor
-    $zip = new ZipArchive();
+    $tmpDir = sys_get_temp_dir();
+    $tempSqlFile = $tmpDir . DIRECTORY_SEPARATOR . $downloadName;
+    $suffix = 0;
+    while (is_file($tempSqlFile)) {
+        $suffix++;
+        $tempSqlFile = $tmpDir . DIRECTORY_SEPARATOR . $namePrefix . date('Y-m-d_Hi') . '_' . $suffix . '.sql';
+    }
 
-    // Veritabanı yedeğini satır satır yaz (bellek taşmasını önlemek için)
     $tables = $db->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
-    $tempSqlFile = tempnam(sys_get_temp_dir(), 'backup_sql_') . ".sql";
     $fp = fopen($tempSqlFile, 'wb');
     if ($fp === false) {
         echo "SQL dosyası oluşturulamadı!";
         return;
     }
 
-    fwrite($fp, "-- Veritabanı Yedeği: {$config['dbname']}\n-- Tarih: " . date("Y-m-d H:i:s") . "\n\n");
+    fwrite($fp, "-- Veritabanı Yedeği: {$config['dbname']}\n-- Tarih: " . date("Y-m-d H:i") . "\n\n");
 
     foreach ($tables as $table) {
         $createTableStmt = $db->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
@@ -797,23 +802,15 @@ function backupDatabaseDownload($db, $dbInstance)
     }
     fclose($fp);
 
-    // ZIP dosyasını oluştur ve SQL dosyasını ekle
-    if ($zip->open($zipFile, ZipArchive::CREATE) === TRUE) {
-        $zip->addFile($tempSqlFile, basename($tempSqlFile));
-        $zip->close();
-        unlink($tempSqlFile); // SQL dosyasını geçici dosyadan sil
-    } else {
-        @unlink($tempSqlFile);
-        echo "ZIP dosyası oluşturulamadı!";
-        return;
+    $size = filesize($tempSqlFile);
+    $finalName = basename($tempSqlFile);
+    header('Content-Type: application/octet-stream; charset=utf-8');
+    header('Content-Disposition: attachment; filename="' . $finalName . '"');
+    if ($size !== false) {
+        header('Content-Length: ' . $size);
     }
-
-    // ZIP dosyasını indir
-    header('Content-Type: application/zip');
-    header('Content-Disposition: attachment; filename="' . basename($zipFile) . '"');
-    header('Content-Length: ' . filesize($zipFile));
-    readfile($zipFile);
-    unlink($zipFile); // ZIP dosyasını da sil
+    readfile($tempSqlFile);
+    @unlink($tempSqlFile);
     exit;
 }
 

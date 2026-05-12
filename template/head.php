@@ -1,3 +1,8 @@
+<?php
+// CSS önbelleğini kırmak için dosya değişim zamanı (dosyayı her kaydettiğinde URL değişir)
+$mainCssFile = ROOT_PATH . '/css/style.css';
+$mainCssVersion = is_file($mainCssFile) ? filemtime($mainCssFile) : time();
+?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <meta http-equiv="Content-Language" content="tr" />
@@ -18,7 +23,7 @@
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-<link rel="stylesheet" type="text/css" href="/css/main10.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=<?= (int) $mainCssVersion ?>">
 
 <script language="javascript" type="text/javascript">
 

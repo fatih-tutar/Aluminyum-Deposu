@@ -119,7 +119,8 @@ a {
    Modals & Overlays
    ====================================== */
 
-.modal {
+/* Eski özel popup'lar (.modal, .fade yok). Bootstrap 5 .modal.fade ile çakışmasın — yoksa backdrop üstte kalır. */
+.modal:not(.fade) {
     display: none;
     position: fixed;
     top: 50%;
@@ -302,7 +303,7 @@ td.truncate-cell-150 {
         z-index: 1;
     }
 
-    .modal {
+    .modal:not(.fade) {
         width: 96%;
         left: 2%;
         transform: translate(0, -50%);
