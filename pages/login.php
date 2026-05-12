@@ -15,11 +15,11 @@
 		$sifre = guvenlik($_POST['sifre']);
 		$sifreli = md5($sifre);
 		if (empty($name) === true) {
-			$error = '<div class="alert alert-danger" role="alert">E-posta kısmını boş bıraktınız.</div>';
+			$error = '<div class="alert alert-danger" role="alert">Kullanıcı adı kısmını boş bıraktınız.</div>';
 		}elseif(empty($sifre) === true){
 			$error = '<div class="alert alert-danger" role="alert">Şifre kısmını boş bıraktınız.</div>';
 		}elseif(giris($name,$sifreli) === false){
-			$error = '<div class="alert alert-danger" role="alert">E-posta veya şifreyi yanlış girdiniz.</div>';
+			$error = '<div class="alert alert-danger" role="alert">Kullanıcı adı veya şifreyi yanlış girdiniz.</div>';
 		}elseif(pasifmi($name) == '1'){
 			$error = '<div class="alert alert-danger" role="alert">Üyeliğiniz pasifleştirilmiştir.</div>';
 		}else{
