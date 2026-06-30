@@ -29,7 +29,7 @@ if (!isLoggedIn()) {
         }else{
             $query = $db->prepare("INSERT INTO leaves SET user_id = ?, start_date = ?, return_date = ?, leave_days = ?, status = ?, office = ?, company_id = ?, is_deleted = ?, time = ?");
             $insert = $query->execute(array($userId, $startDate, $returnDate, $leaveDays, '0', $office, $authUser->company_id, '0', time()));
-            header("Location: leave.php");
+            header("Location:/leave");
             exit();
         }
     }
@@ -61,7 +61,7 @@ if (!isLoggedIn()) {
         }else{
             $query = $db->prepare("UPDATE leaves SET start_date = ?, return_date = ?, leave_days = ?, status = ? WHERE id = ?");
             $update = $query->execute(array($startDate,$returnDate,$leaveDays,$status,$id));
-            header("Location: leave.php");
+            header("Location:/leave");
             exit();
         }
     }
@@ -70,7 +70,7 @@ if (!isLoggedIn()) {
         $id = guvenlik($_POST['id']);
         $query = $db->prepare("UPDATE leaves SET is_deleted = ? WHERE id = ?");
         $update = $query->execute(array('1',$id));
-        header("Location:leave.php");
+        header("Location:/leave");
         exit();
     }
 
@@ -104,6 +104,26 @@ if (!isLoggedIn()) {
         ")->fetchAll( PDO::FETCH_OBJ);
 
     $leaveStatuses = ['Onay Bekleniyor','Onaylandı','Reddedildi'];
+
+    function formatDateTurkishLong(string $dateValue): string
+    {
+        $dateObj = new DateTime($dateValue);
+        $months = [
+            1 => 'Ocak', 2 => 'Subat', 3 => 'Mart', 4 => 'Nisan', 5 => 'Mayis', 6 => 'Haziran',
+            7 => 'Temmuz', 8 => 'Agustos', 9 => 'Eylul', 10 => 'Ekim', 11 => 'Kasim', 12 => 'Aralik',
+        ];
+        $days = [
+            1 => 'Pazartesi', 2 => 'Sali', 3 => 'Carsamba', 4 => 'Persembe',
+            5 => 'Cuma', 6 => 'Cumartesi', 7 => 'Pazar',
+        ];
+
+        $day = (int) $dateObj->format('j');
+        $month = $months[(int) $dateObj->format('n')] ?? '';
+        $year = $dateObj->format('Y');
+        $weekDay = $days[(int) $dateObj->format('N')] ?? '';
+
+        return $day . ' ' . $month . ' ' . $year . ' ' . $weekDay;
+    }
 }
 ?>
 
@@ -201,8 +221,8 @@ if (!isLoggedIn()) {
                         foreach( $leaves as $leave){
                                 $leaveCounter++;
                                 $leaveUser = getUser($leave->user_id);
-                                $startDate = strftime('%e %B %Y %A', (new DateTime($leave->start_date))->getTimestamp());
-                                $returnDate = strftime('%e %B %Y %A', (new DateTime($leave->return_date))->getTimestamp());
+                                $startDate = formatDateTurkishLong($leave->start_date);
+                                $returnDate = formatDateTurkishLong($leave->return_date);
                                 $oldLeavesCounter = $leave->return_date <= $date ? ($oldLeavesCounter + 1) : $oldLeavesCounter;
                                 ?>
                                 <?php if($oldLeavesCounter == 1){ ?>
